@@ -1,6 +1,6 @@
 # miGarden
 
-miGarden là hệ thống chăm sóc vườn thật, tích hợp giao diện, API và lưu trữ với microSched. MVP hướng tới **tưới chung Zone A từ xa và theo lịch deterministic đã duyệt**, có local START/STOP tại nguồn. MG-H1 cung cấp tài liệu, harness và project skills để tiếp tục requirements/design; firmware, scene, simulator và water deployment chưa được triển khai trong batch này.
+miGarden là hệ thống chăm sóc vườn thật, tích hợp giao diện, API và lưu trữ với microSched. MVP hướng tới **tưới chung Zone A từ xa và theo lịch deterministic đã duyệt**, có local START/STOP tại nguồn. **MG-H1 đã bàn giao project/harness và ba skills** để tiếp tục requirements/design; firmware, scene, simulator và water deployment chưa được triển khai trong batch này.
 
 ## Bắt đầu từ một chat mới
 
@@ -20,4 +20,4 @@ Raw ảnh/video, frames/contact sheets, transcripts/ledger/receipts và đườn
 
 ## Trạng thái kiểm chứng
 
-Document/link/hash/private-separation checks và independent review đã thực hiện; fresh-root Codex đã chứng minh discovery/selection ở một task handoff. [Báo cáo MG-H1](docs/reports/2026-oct-22-mg-h1.md) phân biệt worker claims, PM reconciliation và giới hạn. Tại review snapshot, remote publication/canonical cutover còn pending; kết quả thực thi được PM ghi riêng sau khi kiểm chứng. Device/toolchain/app/DB/flash/field tests **NOT_RUN**. Có tài liệu/skill không chứng minh hardware workflow đã hoạt động. Xem [operations](docs/operations.md) để tiếp tục đúng plane.
+Document/link/hash/private-separation checks và independent review đã thực hiện; fresh-root Codex đã chứng minh discovery/selection ở một task handoff. **Repo public trên nhánh `develop` và canonical cutover đã hoàn tất**, có receipts local sau review. [Báo cáo MG-H1](docs/reports/2026-oct-22-mg-h1.md) phân biệt worker claims, PM reconciliation và giới hạn. Device/toolchain/app/DB/flash/field tests **NOT_RUN**. Có tài liệu/skill không chứng minh hardware workflow đã hoạt động. Xem [operations](docs/operations.md) để tiếp tục đúng plane.

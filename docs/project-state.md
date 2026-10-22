@@ -21,7 +21,7 @@ Snapshot dẫn xuất ngày **2026-10-22, Asia/Saigon**, cập nhật sau integr
 
 ## Grant hiện tại và trạng thái delivery
 
-MG-H1 đã được duyệt cho setup/selective migration/handoff, project skills và public repository qua PM. Writer lane này chỉ tạo staged docs/copies/manifest và local self-checks. PM giữ canonical writer, actual-root integration, effective-pin verification, independent review, runtime proof, GitHub release và cutover. Những grant đó không tự cấp quyền cho chat tiếp theo làm product, flash, DB, network probe hoặc water.
+MG-H1 đã hoàn tất setup/selective migration/handoff, project skills và public repository qua PM. Canonical ledger mới nằm trong phần local của miGarden; nguồn cur_docs giữ lịch sử và redirect, không còn là nơi append quyết định mới. PM giữ receipts của root integration, effective pins, independent review, runtime proof, public GitHub release và cutover. Grant MG-H1 đã hoàn thành không tự cấp quyền cho chat tiếp theo làm product, flash, DB, network probe hoặc water.
 
 | Plane | Evidence hiện có / còn thiếu |
 |---|---|
@@ -29,7 +29,7 @@ MG-H1 đã được duyệt cho setup/selective migration/handoff, project skill
 | Product code inventory | Cached surveyed microSched `develop` SHA `ddba8d367d575c91f8e355bb9a21fa408d6fea0c` chưa thấy committed miGarden implementation. Đây là dated source observation, không live branch/production claim. |
 | Target-root/skills | 3/3 installed; fresh CLI đúng root/pin, catalog discovery và selection đủ ba được PM quan sát. Planning/handoff là scope đã chứng minh; renderer/toolchain/device workflow runtime vẫn **NOT_RUN**. |
 | App/DB/firmware/device | Build/simulator/USB/flash/LED/button/clock/RF/water/production **NOT_RUN** trong batch này. |
-| Release/cutover | [Review report](reports/2026-oct-22-mg-h1.md) giữ candidate/acceptance evidence. Tại review snapshot, remote publication và canonical cutover pending/NOT_RUN; PM ghi receipt khi thực sự hoàn tất. Local locator là nơi đọc current cutover status. Source snapshot không được tự nâng canonical. |
+| Release/cutover | Public repo `NguyenHaiHung0510/miGarden`, default `develop`, đã push và kiểm exact remote SHA/tree. Canonical cutover đã hoàn tất một lần sau sync, giữ source history. [Review report](reports/2026-oct-22-mg-h1.md) giữ kết quả theo từng stage; local locator/receipts giữ current canonical state. |
 
 ## Việc tiếp theo
 

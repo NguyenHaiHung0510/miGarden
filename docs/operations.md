@@ -10,6 +10,8 @@ Classify the next task: inquiry/design, docs-only change, simulator/build, dry L
 
 ## MG-H1 staging → actual root → cutover (PM-owned)
 
+MG-H1 đã thực hiện quy trình này và public initial release trên `develop`; canonical ledger đã chuyển một lần, source cũ giữ redirect. Đọc current local locator/continuity và receipt trước khi dùng phần bên dưới như lịch sử hoặc rollback, không tự chạy lại một batch đã hoàn thành.
+
 1. Assemble main and skill lanes without overwriting either write set. Freeze owned file list, source/target SHA-256 and public candidate; review `.local/migration-manifest.json` and lane receipts.
 2. Verify `.gitignore` against representative private/media/secret paths and allowed finished geometry. Check actual staged Git tree/history; ignore rules cannot remove files already tracked. No raw media/private ledger/transcript/credential may enter public history.
 3. Copy the reviewed candidate, including ignored private context locally, into the actual root. Preserve source bytes; do not move/delete originals. Resolve owner-machine locators only in `.local/`.
