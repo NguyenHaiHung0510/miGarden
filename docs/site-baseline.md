@@ -1,12 +1,12 @@
 # Site baseline and evidence limits
 
-Public derivative of the approved survey/media inputs, reconciled 2026-10-22. Actual house geometry/drawings/3D/COLMAP may be public; this document carries source readings without raw captures or private account identifiers. Exact source filenames/bytes/hashes, frames and contact sheets are in the ignored local manifest. The original survey remains immutable privately.
+Preliminary survey readings and source coverage, as of 2026-10-22. Source IDs below support the design without exposing raw captures; see [content and source handling](representation.md#public-content-and-private-sources).
 
-## Source inventory and approval
+## Source coverage
 
-23 source images (A01–A11, B01–B12) + V01 video, **42,747,201 bytes** in the recorded inventory; A11 is an earlier Owner annotation derivative retained as a source input. Source use was approved; that does not calibrate measurements or determine every XYZ/endpoint. Directory dates are evidence grouping dates, not verified capture dates.
+23 source images (A01–A11, B01–B12) + V01 video, **42,747,201 bytes** in the recorded inventory; A11 is an earlier Owner annotation derivative retained as a source input. These inputs do not calibrate measurements or determine every XYZ/endpoint. Directory dates are evidence grouping dates, not verified capture dates.
 
-V01 metadata recorded 720×1280, 30 fps, 1,981 decoded frames, about 66.03 s. Review v2 sampled **24 PNG frames**, 0.000–66.000 s, gap ≤2.90 s, and prepared 11 source-image groups + 6 video groups = **17 sheets**. Review v1's 3 sheets remain privately for provenance. Audio and continuous motion were **NOT_REVIEWED** in the source review; migration does not add review. A contact sheet helps locate evidence; open the native source for small text. Grouping creates no additional photogrammetry overlap.
+V01 metadata recorded 720×1280, 30 fps, 1,981 decoded frames, about 66.03 s. The source review sampled **24 PNG frames**, 0.000–66.000 s, gap ≤2.90 s, and prepared 11 source-image groups + 6 video groups = **17 sheets**. Audio and continuous motion were **NOT_REVIEWED**. A contact sheet helps locate evidence; open the native source for small text. Grouping creates no additional photogrammetry overlap.
 
 ## Anchors and preliminary route readings
 
@@ -54,6 +54,6 @@ There is a pressure-boosting pump that may start on water demand; partially open
 | Room PC → AP estimated 0–2 m | Candidate supervised-bench placement, not permanent-host choice. |
 | Optional balcony soil radio → room estimated 3–6 m through ~10 cm wall | Historical optional sensing context only; HOLD remains in force. |
 
-Field ESP32 is expected at the source using LAN/Wi-Fi; USB-C is for supervised dry bench/programming/debug, not a room-to-roof runtime cable. Required real-board network gates are preserved in the spec and operations, all **NOT_RUN** here.
+Field ESP32 is expected at the source using LAN/Wi-Fi; USB-C is for supervised dry bench/programming/debug, not a room-to-roof runtime cable. Required real-board network gates are preserved in the spec and operations, all remain **NOT_RUN**.
 
-Next useful measurements: Owner identifies exact faucet/anchors and changed placements; dimensions/scale/elevation where A+B needs them; safe manual flow measurements and pump states; drainage/route/weather/electricity details appropriate to the next approved water/hardware batch. Do not repeat source-use approval or invent endpoints to make a complete model.
+Next useful measurements: Owner identifies exact faucet/anchors and changed placements; dimensions/scale/elevation where A+B needs them; safe manual flow measurements and pump states; drainage/route/weather/electricity details appropriate to the next approved water/hardware batch. Do not invent endpoints to make a complete model.

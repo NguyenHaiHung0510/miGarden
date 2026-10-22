@@ -1,30 +1,28 @@
-# miGarden — implementation specification
+# miGarden — system specification
 
-Public derivative, **2026-10-22, Asia/Saigon**, for the MG-H1 system project. Full detailed contract retained from the source spec; original bytes and hashes remain in private snapshots. This is an unimplemented design, not runtime/device acceptance or an implementation grant. [Current state](project-state.md), [architecture](architecture.md), [site baseline](site-baseline.md) and [provenance](provenance.md) explain its inputs.
+Thiết kế hiện hành ngày **2026-10-22, Asia/Saigon**. Repository chưa có firmware, simulator, viewer hoặc microSched adapter chạy được. Specification mô tả hành vi cần triển khai và kiểm chứng; các ví dụ API/layout không phải executable đã có.
 
-Current reconciliations: system root miGarden + microSched web/API/DB adapter; P1A arrived per Owner report but identity/bench NOT_RUN; Zone A shared circuit, dynamic pots and optional per-pot extension; soil/Zigbee HOLD indefinitely; A/SVG+B/Three.js selected, scene build outside MG-H1. Local schedule/source START/STOP decisions and detailed safety/cost gates below remain in force. Sensing/calibration/recommendation material is a conditional design for a later reopened lane, never a current purchase or MVP blocker. Dry-profile semantics remain OPEN; do not bypass water flags with fabricated numeric policy.
-
-Private canonical decisions supersede historical wording; this document is a derived technical specification, not a second grant ledger. Shared Owner authority is not copied into public documents. Finished actual-site geometry/drawings/3D/COLMAP may be public; raw capture/video/frames/sheets, credentials, transcripts, exact grants and private paths stay local. No measured reconstruction is claimed here. Previous PASS_FINAL_DOC applied to an earlier source revision only.
+[Product decisions](#20-product-decisions) tổng hợp lựa chọn hiện tại và những chi tiết còn mở. Các phần chi tiết bên dưới áp dụng cùng lựa chọn đó: sensing HOLD, A/SVG+B/Three.js, local deterministic schedule và system repo miGarden riêng với microSched adapter. Xem [architecture](architecture.md), [site baseline](site-baseline.md) và [provenance](provenance.md) cho ranh giới và nguồn thiết kế. [Content policy](representation.md#public-content-and-private-sources) quy định dữ liệu/asset công khai.
 
 ## 1. Cách đọc trạng thái quyết định
 
-- **[CHỐT]**: owner đã xác nhận; executor không được tự mở lại.
-- **[MỞ]**: chưa có Owner decision hoặc product/evidence đủ mạnh; spec nêu cách đo/default để code/simulate nhưng không nâng default thành quyết định hardware.
+- **[CHỐT]**: lựa chọn thiết kế hiện hành; thay đổi cần nêu tác động và rationale rõ ràng.
+- **[MỞ]**: chưa đủ thiết kế/evidence để chốt; baseline cho simulator không tự trở thành cấu hình hardware hoặc production.
 - **[LOẠI]**: không thuộc MVP hoặc đã bị loại vì tạo rủi ro/complexity không có evidence biện minh.
 - **MUST / MUST NOT**: acceptance bắt buộc của implementation.
 - **SHOULD**: mặc định kỹ thuật; muốn làm khác phải ghi trade-off và evidence.
 
 Các con số sampling, timeout, retention và threshold được ghi là **baseline cấu hình được**, không phải đặc tính đã đo của board hay cây. Hardware acceptance chỉ có giá trị sau khi chạy probe bằng chính board/sensor dự kiến.
 
-### 1.1 Quy ước staging sau review Lớp 1
+### 1.1 Các giai đoạn thiết kế và kiểm chứng
 
-- **Foundation lane** (tên cũ trong spec: `Phase 1`): inventory động, generic telemetry/device management, dashboard, watering history và optional sensing/recommendation capability.
-- **Controlled-irrigation lane** (tên cũ trong spec: `Phase 2`): owner chủ động preview/confirm tưới từ xa, command/ack và local safety; lane này **thuộc product MVP**, nhưng field enable bị chặn tới khi `G0-WATER-SAFETY` PASS.
-- **Automation lane**: Owner đã chọn deterministic owner-configured schedule thuộc product MVP; **enable vẫn bị chặn** tới khi water-safety evidence và schedule-specific fault tests PASS. Controller tại nhà được tiếp tục lịch hợp lệ khi mất Internet nhưng còn điện/nước. Adaptive soil/rule/AI watering nằm ngoài MVP hiện tại.
+- **Foundation**: inventory động, generic device/telemetry management, dashboard và watering history. Soil sensing/recommendation là conditional capability, hiện HOLD.
+- **Controlled irrigation**: remote preview/confirm, command/ack và local safety. Đây là product MVP; field enable chờ `G0-WATER-SAFETY` PASS.
+- **Local deterministic schedule**: đã chọn trong MVP, cloud quản lý/version, controller thực thi khi mất Internet nhưng còn điện và trusted time/config/ledger/safety. Field enable chờ water-safety và schedule fault tests. Adaptive soil/rule/AI watering nằm ngoài MVP hiện tại.
 
-Các nhãn `Phase 1`/`Phase 2` còn lại ở phần chi tiết chỉ mô tả thứ tự rollout, không còn là ranh giới sản phẩm hay mốc trước/sau BTL. Exact hydraulic/electrical/connectivity design vẫn `[MỞ]`; không được suy từ việc controlled irrigation đã thuộc MVP thành một quyết định mua linh kiện.
+Các nhãn R1–R4 dùng cho tiến trình dry bench → khảo sát vật lý → phát triển/thử có giám sát → field acceptance; chúng không tự chứng minh giai đoạn nào đã hoàn tất. Exact hydraulic/electrical/connectivity design còn mở. Dry-profile semantics cũng còn mở, không được bypass water flags bằng numeric policy tự đặt.
 
-## 2. Product outcome và course outcome
+## 2. Product outcome
 
 ### 2.1 Product outcome
 
@@ -36,24 +34,13 @@ Các nhãn `Phase 1`/`Phase 2` còn lại ở phần chi tiết chỉ mô tả t
 
 **[CHỐT] MVP core:** inventory/map/history, device/telemetry foundation, **remote controlled irrigation và deterministic schedule do Owner duyệt**. “Controlled” nghĩa là mọi lần mở nước phải nằm trong safety envelope local, dù do Owner bấm hay do lịch hợp lệ kích hoạt. Soil sensing/recommendation là optional lane; lịch không đồng nghĩa soil-based automation. Schedule chỉ được field-enable sau controlled-irrigation safety gate và test mất mạng/thời gian/reboot.
 
-**[CHỐT] Đường tiến hóa:** deterministic schedule đã được Owner chọn nhưng chỉ triển khai sau water-safety field evidence; adaptive soil/rule/AI watering cần thêm trusted data/eval. Exact actuator/hydraulic design vẫn phải qua network, flow/source behavior, fail-closed, manual shutoff, leak detection và residual-flow gates.
+**[CHỐT] Đường tiến hóa:** deterministic schedule đã được chọn; simulator/dry development đi trước, field enable chỉ sau water-safety evidence và schedule fault tests; adaptive soil/rule/AI watering cần thêm trusted data/eval. Exact actuator/hydraulic design vẫn phải qua network, flow/source behavior, fail-closed, manual shutoff, leak detection và residual-flow gates.
 
-### 2.2 Course outcome có thể trình bày và chấm
+### 2.2 Yêu cầu dẫn xuất
 
-| ID | Sau BTL, sinh viên phải chứng minh được | Artifact/receipt |
-|---|---|---|
-| `CO-01` | Phân rã một IoT system theo device - connectivity - edge/gateway - cloud/platform - application/user | sơ đồ public ở §4, mapping trách nhiệm |
-| `CO-02` | Thu nhận sensor data, giữ raw value, unit, timestamp, identity, calibration và quality | firmware/simulator log + telemetry API + DB query |
-| `CO-03` | Giải thích upstream telemetry và downstream command/ack, kể cả failure path | sequence/state machine ở §14 |
-| `CO-04` | So sánh HTTPS request-response với MQTT publish-subscribe và chọn protocol theo constraint đo được | protocol decision record ở §10 |
-| `CO-05` | Quản lý device identity, credential, config, firmware và lifecycle | registry/config/firmware screens + audit |
-| `CO-06` | Xử lý intermittent connectivity bằng buffering, idempotency, staleness và recovery | failure-injection receipts |
-| `CO-07` | Biến data thành dashboard, alert và recommendation giải thích được | UI + heuristic evaluation |
-| `CO-08` | Chứng minh safety boundary khi digital decision có physical consequence | controlled actuator command/ack + fail-closed/invariant receipts; bench proof không thay field proof |
+Inventory động cần identity và lịch sử assignment; mạng chập chờn cần buffering, idempotency và freshness; tác động vật lý cần command/ack, feedback và fail-closed. Device lifecycle, upstream/downstream flow và protocol comparison phục vụ các yêu cầu này. Một rubric hoặc demo không tự tạo requirement mua sensor, broker hay thêm service.
 
-Course trace bám [Chapter 1](design-inputs.md) (IoT là system, device lifecycle, gateway/edge/cloud, smart irrigation), [Chapter 2](design-inputs.md) (metadata, buffering, data lifecycle, local safety) và [Chapter 3](design-inputs.md) (lossy network, protocol selection, MQTT QoS/ACL/lifecycle).
-
-**Authority rule:** đề BTL/lab là nguồn trace và trao đổi với giảng viên, không là product architecture authority. Với từng criterion, Owner chọn `FOLLOW`, `ADAPT/EXTENSION`, `NEGOTIATE` hoặc `OMIT WITH RATIONALE`. Assignment yêu cầu ít nhất một physical sensor type; product có thể đáp ứng bằng flow/leak/valve-state/environment sensing có ích thật, hoặc Owner chủ động thương lượng/deviate. Không mua soil probe chỉ để tick rubric.
+Soil sensing hiện HOLD. Flow/leak/valve-state feedback vẫn thuộc thiết kế safety khi field irrigation được enable, không bị hoãn cùng soil sensing.
 
 ## 3. Scope và non-scope
 
@@ -61,9 +48,9 @@ Course trace bám [Chapter 1](design-inputs.md) (IoT là system, device lifecycl
 
 - Registry động cho `GardenArea`, `Pot`, placement, planting episode, gateway/device, sensor channel, irrigation outlet và các assignment có thời hạn.
 - Logical contract hỗ trợ pot-level identity/history, optional sensing assignment và zone/outlet actuation từ đầu. Contract giữ extension point cho per-pot actuation tương lai nhưng không buộc MVP có soil probe hay valve cho mỗi pot.
-- Firmware hoặc simulator gửi telemetry qua HTTPS; buffer và replay khi offline.
+- Firmware hoặc simulator gửi generic device telemetry qua HTTPS; buffer và replay khi offline. Soil-specific channels chỉ xuất hiện nếu sensing được mở lại.
 - FastAPI ingestion, PostgreSQL/Neon storage, config revision và audit.
-- Dashboard/map trên microSched bám layout thật: current state, age/stale, history, device health, alert, recommendation, watering history và inventory/layout management.
+- Dashboard/map trên microSched bám layout thật: current state, age/stale, history, device health, alert, watering history và inventory/layout management; soil recommendation chỉ khi conditional lane active.
 - Nếu soil/recommendation lane được enable: heuristic có version, reason code và evaluation dataset; nếu không, UI/API không dựng empty/error workflow giả.
 - Provision/rotate/revoke credential; ghi firmware/config version và lifecycle state.
 - Controlled-irrigation command/ack với preview + explicit confirm, local fail-closed policy và physical feedback sau khi gate an toàn PASS.
@@ -72,27 +59,28 @@ Course trace bám [Chapter 1](design-inputs.md) (IoT là system, device lifecycl
 
 ### 3.2 Ngoài product MVP hiện tại
 
-- **[LOẠI]** Adaptive rule/soil/model tự phát lệnh mở nước trước khi có field evidence và decision record mới. Deterministic schedule **đã thuộc MVP theo `D-L2-29`** nhưng field-enable còn gated; không được claim soil-driven.
+- **[LOẠI]** Adaptive rule/soil/model tự phát lệnh mở nước trước khi có field evidence và decision record mới. Deterministic schedule **đã thuộc MVP** nhưng field-enable còn gated; không được claim soil-driven.
 - **[LOẠI]** Mua đồng loạt sensor/valve cho toàn inventory trước calibration, hydraulic và staged-pilot evidence.
 - **[LOẠI]** MQTT broker chỉ để “đủ công nghệ” khi chưa có owner, ACL, QoS, retention và vận hành.
 - **[LOẠI]** Microservices, Redis/Celery, một database IoT riêng hoặc một cloud dashboard song song với microSched.
-- **[LOẠI]** Repository/runtime/release line riêng chỉ để mô phỏng cây thư mục môn học.
-- **[LOẠI]** Công khai credential, token/private key hoặc dữ liệu người thứ ba chưa được phép. Ảnh/layout/topology nhà **không** nằm trong lệnh cấm chung này.
+- **[LOẠI]** Thêm runtime/backend/database chỉ để mô phỏng cây thư mục môn học; miGarden system repo riêng là thiết kế hiện hành.
+- **[LOẠI]** Phát hành dữ liệu trái [content policy](representation.md#public-content-and-private-sources).
 - **[LOẠI]** Kết luận board đạt SLA từ phone speed test.
 
-### 3.3 Canonical repositories and submission package
+### 3.3 Canonical repositories and release package
 
-- miGarden owns system source, firmware/local arbiter, simulator, spatial source and hardware lifecycle. microSched owns the human web/API/storage adapter under its existing modular-monolith/same-origin/one-Postgres boundary. The older all-components-in-microSched repository clause is superseded for MG-H1.
-- Contracts and scene data have one canonical producer, explicit versions and exact system + adapter refs with a compatibility receipt; no competing editable scene copies or second DB/backend by default. Product surveys use microSched develop; main is release-tag history.
-- A submission/release is an explicit allowlisted manifest from exact source refs/tags, with hashes/provenance, no symlink/junction escape or undeclared files. No new archive builder is implemented by MG-H1.
-- Raw house source photos/video and private ledgers/transcripts/receipts remain ignored local data. Finished actual-site drawings/3D/COLMAP may be public, with provenance and secret/metadata/third-party review as applicable; no synthetic-only requirement. Original source bytes are preserved.
+- miGarden owns system source, firmware/local arbiter, simulator, spatial source and hardware lifecycle. microSched owns the human web/API/storage adapter under its modular-monolith/same-origin/one-Postgres boundary.
+- Contracts and scene data have one canonical producer, explicit versions and exact system + adapter refs with a compatibility receipt. Product code surveys use microSched develop; main retains release-tag history.
+- A release uses an explicit allowlisted manifest from exact refs/tags, with hashes/provenance and no symlink/junction escape or undeclared files. A release builder is planned, not implemented.
+- Published assets follow the [content policy](representation.md#public-content-and-private-sources).
+
 ## 4. System architecture and microSched adapter
 
 ```mermaid
 flowchart LR
   subgraph FIELD["Vùng trồng cây"]
     P["GardenArea + Pot + versioned placement"]
-    S1["Sensor channels\nassignment theo Pot"]
+    S1["Optional soil channels — HOLD\nassignment theo Pot"]
     Z["IrrigationZone\nZone A active; Zone B deferred"]
     A1["IrrigationOutlet\nendpoint điều khiển/feedback"]
     H["Direct-faucet source node\nready 2 zones; exact hydraulics OPEN"]
@@ -105,8 +93,8 @@ flowchart LR
   subgraph CLOUD["microSched deployment"]
     API["FastAPI IoT module\ndevice API + human API"]
     DB["Neon PostgreSQL\ndomain + registry + telemetry + audit"]
-    REC["Heuristic recommendation"]
-    UI["React fixed-view garden map\nmanagement + alerts + control"]
+    REC["Conditional soil recommendation — HOLD"]
+    UI["Planned SVG + Three.js garden views\nmanagement + alerts + control"]
   end
 
   P --> S1
@@ -138,7 +126,7 @@ flowchart LR
 
 ### 4.2 Seam tích hợp microSched
 
-Implementation sau khi được duyệt MUST giữ kiến trúc hiện có của microSched: FastAPI modular monolith, SPA cùng origin, PostgreSQL/Neon duy nhất, SQLModel + Alembic, UUIDv7, `timestamptz`, enum bằng `TEXT + CHECK`, index tối thiểu và audit. Khi triển khai adapter, đọc current repository rules/architecture/schema tại microSched; cached refs không chứng minh current runtime. Xem [architecture](design-inputs.md).
+Implementation sau khi được duyệt MUST giữ kiến trúc hiện có của microSched: FastAPI modular monolith, SPA cùng origin, PostgreSQL/Neon duy nhất, SQLModel + Alembic, UUIDv7, `timestamptz`, enum bằng `TEXT + CHECK`, index tối thiểu và audit. Khi triển khai adapter, đọc current repository rules/architecture/schema tại microSched; cached refs không chứng minh current runtime. Xem [architecture](architecture.md).
 
 Human routes tiếp tục nằm dưới `/api` và dùng session dependency hiện có. Device routes MUST dùng dependency `require_iot_device` riêng; không nhét sensor vào Google OAuth/session cookie. Router device phải được mount tường minh trước unknown-API catch-all.
 
@@ -150,17 +138,16 @@ P1A đã về theo Owner report; exact unit/USB/flash/bench chưa được verif
 
 | Gate | Cần đo/biết | Cách đo tối thiểu | Pass để mở bước sau | Nếu fail |
 |---|---|---|---|---|
-| `G0-RUBRIC-DISPOSITION` | yêu cầu BTL + trao đổi giảng viên | trace mỗi criterion thành `FOLLOW|ADAPT|NEGOTIATE|OMIT`, rationale và extension path | Owner duyệt disposition; không mâu thuẫn safety/product lock | không tự sửa product để tick rubric; trình Owner điểm cần thương lượng |
 | `G0-SITE-REFRESH` | source/vòi/bơm/ren/flow/drainage/power/route và pot context | chạy [home-field measurement plan](site-baseline.md); ảnh + bucket-flow repeat + tool inventory | dữ kiện đủ chọn category/BOM tiếp theo; uncertainty còn lại ghi rõ | không mua/cắt water hardware; không dùng ảnh tổng thể để đoán ren/pressure |
-| `G0-SENSING-STRATEGY` | sensing có tạo product value đủ bù cost/time/maintenance không | Owner chọn `NONE`, `LOCAL_EXPLORATORY`, `NATIVE_1_THEN_SCALE` hoặc later fallback; ghi stop-loss | strategy + budget/learning bound được Owner duyệt | controller/water lane vẫn tiếp tục; không mua coordinator/probe theo basket cũ |
+| `G0-SENSING-STRATEGY` (HOLD; conditional nếu mở lại) | sensing có tạo product value đủ bù cost/time/maintenance không | Owner chọn `NONE`, `LOCAL_EXPLORATORY`, `NATIVE_1_THEN_SCALE` hoặc later fallback; ghi stop-loss | strategy + budget/learning bound được Owner duyệt | controller/water lane vẫn tiếp tục; không mua coordinator/probe theo basket cũ |
 | `G0-SENSING-PILOT` (conditional) | inventory/placement và vị trí probe nếu strategy != `NONE` | inventory cây/giá thể/nắng/thoát nước; chọn 1 exploratory hoặc vị trí đại diện; không bắt manual log | stable identity/assignment; exact unit pass identity/pair/decode/semantic/rejoin trước scale | giữ pot độc lập; không bulk sensor/outlet; có thể quay về `NONE` |
 | `G0-BOARD-BUY` | board class đủ cho probe | checklist USB debug, interface sensor, TLS/HTTPS, non-volatile buffer, power, Wi-Fi nếu thử direct Wi-Fi, support firmware | một board development + phụ kiện tối thiểu được owner duyệt | đổi category; không kéo theo actuator purchase |
-| `G0-SENSOR-BENCH` | sensor có repeatability và calibration usable | đọc raw ở reference conditions; lặp tối thiểu 10 lần/condition; log noise, drift, disconnect | phân biệt được trạng thái mục tiêu với margin lớn hơn noise; raw/calibration reproducible | đổi sensor/placement/sampling; không “sửa” bằng threshold tùy ý |
+| `G0-SENSOR-BENCH` (conditional sensing) | sensor có repeatability và calibration usable | đọc raw ở reference conditions; lặp tối thiểu 10 lần/condition; log noise, drift, disconnect | phân biệt được trạng thái mục tiêu với margin lớn hơn noise; raw/calibration reproducible | đổi sensor/placement/sampling; không “sửa” bằng threshold tùy ý |
 | `G0-NET-24H` | board thật có truyền ổn ở vị trí dự kiến | heartbeat 60 s trong 24 h; log RSSI nếu có, expected/received, gap, disconnect, reconnect, AP-reboot test | baseline tạm: receipt >=98%, không gap liên tục >10 phút, tự reconnect <=5 phút sau reboot, buffer replay không nhân đôi | direct Wi-Fi chưa đạt; thử placement/antenna hợp lệ rồi chuyển wired/LoRa/mesh gate |
 | `G0-NET-7D` | reliability qua biến động ngày/đêm | giữ workload foundation/controlled-irrigation tương ứng trong 7 ngày, không can thiệp tay | baseline tạm: receipt >=99%, không outage không giải thích >30 phút, recovery không mất sample ngoài capacity contract | không dùng direct Wi-Fi cho hop đó |
 | `G0-NEON-COST` | cadence ingest/heartbeat có giữ DB compute hoạt động và vượt budget không; `measurement_period`, `cu_hours_cap_per_period`, `row_growth_cap_per_period`, `index_growth_cap_per_period` đều đang `OPEN - unset` | owner phải duyệt bốn trường cap/period trước; runner qua target guard §5.2; chạy workload simulator/pilot ít nhất 7 ngày trên `local|throwaway`; đọc CU-hours và row/index growth thực theo đúng period | mọi cap có value+unit+owner approval; số đo không vượt cap; cadence không tạo wakeup thừa; receipt chứng minh không dùng production target | gate không được PASS khi cap còn unset; coalesce heartbeat/telemetry, đổi cadence+jitter hoặc retention rồi đo lại trước khi production ingest |
 | `G0-POWER-ENV` | nguồn, weather exposure, cable/connector | đo nguồn và duty cycle; inspection điểm đặt; thử enclosure/cable route không cần public topology | nguồn ổn định; low-voltage boundary; enclosure/cable plan có serviceability | đưa gateway vào vùng bảo vệ/đổi power hoặc topology |
-| `G0-DATA-PILOT` | threshold/heuristic có ý nghĩa | ít nhất 4 chu kỳ khô - tưới - ổn định trên mỗi pot pilot + owner label | có calibration version, no-data/stale behavior và confusion table baseline | chỉ hiển thị monitoring; recommendation giữ `INSUFFICIENT_DATA` |
+| `G0-DATA-PILOT` (conditional sensing) | threshold/heuristic có ý nghĩa | ít nhất 4 chu kỳ khô - tưới - ổn định trên mỗi pot pilot + owner label | có calibration version, no-data/stale behavior và confusion table baseline | chỉ hiển thị monitoring; recommendation giữ `INSUFFICIENT_DATA` |
 | `G0-WATER-SAFETY` | trước mọi field irrigation: source states, flow/pressure, valve fail state, manual shutoff, leak detection, hydraulic inertia và cumulative water limits | đo direct faucet ở các mức mở/trạng thái bơm; bench fail-power/reboot/stuck command; đo residual/siphon/drain-down; lập numeric safety envelope §15.3 | owner phê duyệt mọi field §15.3; receipt chứng minh edge enforce; Zone A contained/field circuit có valve/flow/leak feedback và affected-pot snapshot | field actuation bị chặn; chỉ simulator/bench dry hoặc contained-water test được tiếp tục |
 
 Các tỷ lệ trên là acceptance baseline của workload telemetry nhỏ, không phải tuyên bố chuẩn công nghiệp. Sau pilot, owner có thể siết/nới threshold theo consequence thực; thay đổi phải version trong decision record. Riêng các cost cap và water-safety value đang ghi `OPEN - unset` không phải threshold ngầm: executor không được tự điền hay tự PASS gate.
@@ -197,9 +184,9 @@ Nếu evidence chưa đủ để group, pot giữ `UNCLASSIFIED`. Sensor đại 
 ### 6.3 Pilot và scale
 
 - **[CHỐT]** Logical model hỗ trợ pot-level identity/sensing/history, `PotZoneAssignment`, và current actuation target theo zone/outlet. Per-pot actuation là future extension, không là current MVP constraint.
-- **[CHỐT HƯỚNG]** Sensing pilot dùng ba battery wireless probes ở ba pot đại diện sau `G0-SENSING-PILOT`; Zone A field pilot là shared-circuit run, không phải ba irrigation channels.
+- **[HOLD]** Kế hoạch ba battery wireless probes là phương án lịch sử, không phải requirement hoặc số lượng hiện hành. Nếu mở lại sensing, chọn strategy và pilot quantity theo `G0-SENSING-STRATEGY` trước, rồi mới áp `G0-SENSING-PILOT`. Zone A field pilot vẫn là một shared-circuit run.
 - Mở rộng hardware theo evidence calibration, hydraulic capacity, maintenance và blast radius; không mua theo cardinality snapshot.
-- Ban công mini là area mở rộng thật, nhưng geometry/elevation/drainage/exposure/load route còn phải đo ở Lớp 2.
+- Ban công mini là area mở rộng thật, nhưng geometry/elevation/drainage/exposure/load route còn phải đo trong khảo sát vật lý.
 
 ## 7. Device identity, registry, credential và lifecycle
 
@@ -264,9 +251,9 @@ Gateway báo `reported_config_version`, checksum, `applied_at`, `status=applied|
 Registry firmware gồm `firmware_version`, `build_id`, `git_commit` nếu có, target board class, build time, SHA-256 artifact, signature status, minimum bootloader/config schema, release state và rollback notes.
 
 - Foundation lane cho phép update qua USB/serial và ghi receipt version sau boot.
-- **[MỞ - SAU R1, xem lại trước R4]** OTA không phải điều kiện R1 hay yêu cầu bắt buộc trong đề bài môn học. Owner muốn đường cập nhật thường xuyên khi hệ còn thay đổi: giữ firmware metadata và xác minh flash/partition của board 16MB khi hàng về; USB/serial update là đường R1–R3. OTA chỉ được enable nếu image integrity/authenticity, TLS, device eligibility, safe-idle/valve closed, power-loss/reboot/rollback và báo kết quả đã được bench trên exact board. Không tự động update khi tưới; không mở route firmware deployment chỉ vì registry đã có metadata. Multi-device rollout chưa thuộc MVP.
+- **[MỞ - SAU R1, xem lại trước R4]** OTA không phải điều kiện R1 hay yêu cầu bắt buộc trong đề bài môn học. Owner muốn đường cập nhật thường xuyên khi hệ còn thay đổi: giữ firmware metadata và xác minh flash/partition của board 16MB khi bench exact unit; USB/serial update là đường R1–R3. OTA chỉ được enable nếu image integrity/authenticity, TLS, device eligibility, safe-idle/valve closed, power-loss/reboot/rollback và báo kết quả đã được bench trên exact board. Không tự động update khi tưới; không mở route firmware deployment chỉ vì registry đã có metadata. Multi-device rollout chưa thuộc MVP.
 - **[LOẠI]** OTA unsigned, update all-at-once hoặc xóa bản rollback trước health receipt.
-- Rollout post-BTL sau này theo `simulator -> bench device -> one field device -> remaining devices`; mỗi bước cần heartbeat, config ack và telemetry sanity.
+- Rollout sau MVP theo `simulator -> bench device -> one field device -> remaining devices`; mỗi bước cần heartbeat, config ack và telemetry sanity.
 - Retired/revoked device không nhận firmware/config mới.
 
 ## 8. Telemetry contract, time, staleness và calibration
@@ -370,7 +357,7 @@ Server resolve calibration bằng khóa `(channel_id, calibration_version)` và 
 
 Khi calibration hợp lệ, server compute `value_engineering` từ `value_raw` bằng revision đã resolve. Nếu device gửi advisory engineering value, server so với tolerance trong calibration: mismatch gắn `engineering_mismatch`; giá trị persisted/được dùng vẫn là server-computed. Không có đường cho device-supplied engineering value bypass calibration authority.
 
-Soil moisture foundation lane MUST:
+Nếu soil-sensing lane được mở lại, soil moisture implementation MUST:
 
 1. giữ raw ADC/capacitance output;
 2. đo lặp trong ít nhất hai trạng thái reference liên quan đến giá thể thật, SHOULD có dry, field-capacity-after-drain và intermediate;
@@ -379,7 +366,7 @@ Soil moisture foundation lane MUST:
 5. version calibration khi đổi sensor, cable, ADC attenuation, supply, placement hoặc giá thể;
 6. chạy side-by-side/manual label trong `G0-DATA-PILOT`.
 
-[Bài 1 - Cảm biến — archived](design-inputs.md) cung cấp seam học tập lịch sử về raw acquisition, interface, sampling và calibration. DHT11 đo nhiệt độ/độ ẩm **không khí**; MUST NOT dùng humidity của DHT11 như soil moisture.
+DHT11 đo nhiệt độ/độ ẩm **không khí**; MUST NOT dùng humidity của DHT11 như soil moisture.
 
 ## 9. Edge buffering và offline behavior
 
@@ -417,7 +404,7 @@ Mỗi record giữ `sample_id`/`event_id`, `boot_id`, sequence, payload checksum
 - AP/router reboot: gateway tự reconnect; không cần bấm reset.
 - Mất nguồn/reboot: recover queue có checksum; tạo `boot_id` mới; không restore actuator `OPEN`.
 - Server downtime: device không thay đổi threshold/config chỉ vì không gọi được cloud.
-- MVP không có rule/model tự phát watering command. Khi controlled irrigation được enable, local emergency close/interlock vẫn chạy khi cloud mất.
+- MVP không có adaptive soil/rule/model tự phát watering command. Lịch deterministic đã chọn dùng execution path §14.7; local emergency close/interlock vẫn chạy khi cloud mất.
 
 ## 10. Protocol decision gates
 
@@ -427,9 +414,9 @@ Protocol được quyết **theo từng hop**, không chọn một từ “MQTT/
 
 | Hop | MVP baseline | Decision gate | Receipt cần có |
 |---|---|---|---|
-| Sensor -> gateway | interface phù hợp sensor thật; ưu tiên wiring ngắn, bảo trì được | `G0-SENSOR-BENCH`, số channel, cable noise/drop, ADC/interface | raw repeatability + disconnect/error detection |
+| Sensor -> gateway (conditional soil lane) | interface phù hợp sensor thật; ưu tiên wiring ngắn, bảo trì được | `G0-SENSOR-BENCH`, số channel, cable noise/drop, ADC/interface | raw repeatability + disconnect/error detection |
 | Gateway -> microSched | **HTTPS request-response** | TLS memory, batch size, retry, device auth, ingest latency | simulator + board POST/replay receipts |
-| Gateway -> remote node (nếu có) | **[MỞ]** direct Wi-Fi / wired / LoRa / mesh | `G0-NET-*`, power, thi công, downlink need, rubric | decision record §10.2 |
+| Gateway -> remote node (nếu có) | **[MỞ]** direct Wi-Fi / wired / LoRa / mesh | `G0-NET-*`, power, thi công, downlink need | decision record §10.2 |
 | Cloud -> gateway command | transport-independent contract; disabled trong foundation-only mode, gated trong controlled-irrigation mode | latency, broker/long-poll cost, delivery semantics | command/ack failure tests |
 
 ### 10.2 Decision record bắt buộc cho remote connectivity
@@ -455,7 +442,6 @@ MQTT chỉ được mở khi một trong các trigger sau có evidence:
 
 - nhiều publisher/subscriber cần fan-out thực;
 - command/state latency hoặc intermittent session cần broker semantics;
-- rubric bắt buộc publish-subscribe;
 - HTTPS benchmark không đạt energy/latency/reliability dù đã batch/retry đúng.
 
 Trước khi chọn MQTT MUST chốt:
@@ -468,7 +454,7 @@ Trước khi chọn MQTT MUST chốt:
 - reconnect/session persistence, duplicate/out-of-order behavior;
 - bridge vào FastAPI/domain và failure khi broker down.
 
-[Bài 2 - Giao thức — archived](design-inputs.md) là course seam lịch sử để so sánh HTTP request-response với MQTT publish-subscribe; bài lab không tự động biến HiveMQ/ThingSpeak thành production choice của miGarden.
+So sánh HTTP request-response và MQTT publish-subscribe bằng cùng workload và failure cases; demo với một platform khác không chọn platform đó cho production.
 
 ### 10.4 Repeated-interval resource guardrail
 
@@ -493,12 +479,15 @@ Trước khi chọn MQTT MUST chốt:
 Đây là planned layout, không phải claim rằng file đã tồn tại:
 
 ```text
-backend/app/domain/models.py           SQLModel additions, consistent with current repo
-backend/app/domain/iot.py              registry, telemetry, config, recommendation, alert
-backend/app/web/routers/iot.py         human/session API
-backend/app/web/routers/iot_device.py  device-token API
-frontend/src/features/iot/             dashboard and data hooks
-firmware/migarden_gateway/             firmware or simulator contract client
+microSched repository (planned adapter paths):
+  backend/app/domain/models.py           SQLModel additions
+  backend/app/domain/iot.py              registry, telemetry, config, conditional recommendation, alert
+  backend/app/web/routers/iot.py         human/session API
+  backend/app/web/routers/iot_device.py  device-token API
+  frontend/src/features/iot/             dashboard and data hooks
+
+miGarden repository (planned system path):
+  firmware/migarden_gateway/             firmware or simulator contract client
 ```
 
 Nếu repo convention tại thời điểm implement yêu cầu layout khác, giữ domain/API boundary và cập nhật spec task trước khi viết; không tạo web service/database thứ hai chỉ để khớp cây trên; system repo miGarden giữ ownership riêng.
@@ -507,7 +496,7 @@ Nếu repo convention tại thời điểm implement yêu cầu layout khác, gi
 
 Tất cả table nằm trong schema `microsched`, dùng UUIDv7 PK, `created_at`/`updated_at` `timestamptz`, `TEXT + CHECK` cho state và Alembic migration được review. Không partition telemetry trong MVP; chỉ thêm sau row-size/query evidence.
 
-Tên table dưới đây là **candidate baseline sau Lớp 1**, chưa phải schema được duyệt để migrate. Lớp data/API sẽ chốt naming và aggregate boundary sau khi Lớp 2 xác định hydraulic topology; implementer không được giữ `iot_position` chín row từ baseline cũ.
+Tên table dưới đây là **candidate baseline**, chưa phải schema được duyệt để migrate. Data/API design sẽ chốt naming và aggregate boundary sau khi hydraulic topology được xác định; không dùng fixed-position table thay dynamic `Pot` và placement history.
 
 | Table | Lane | Field/constraint chính |
 |---|---|---|
@@ -517,7 +506,7 @@ Tên table dưới đây là **candidate baseline sau Lớp 1**, chưa phải sc
 | `iot_pot_placement` | foundation | pot, area/layout version, geometry/coordinates, `valid_from`, `valid_to`; no overlapping active placement |
 | `iot_planting_episode` | foundation | pot, plant/profile/substrate/drainage metadata, `valid_from`, `valid_to` |
 | `iot_care_group` + membership | foundation | purpose/versioned policy grouping; membership theo thời gian, không thay pot identity |
-| `iot_hydraulic_circuit` | controlled irrigation | source/master/manifold shared boundary; exact fields chờ Lớp 2 |
+| `iot_hydraulic_circuit` | controlled irrigation | source/master/manifold shared boundary; exact fields chờ hydraulic design |
 | `iot_irrigation_zone` | controlled irrigation | stable zone identity, circuit/source relation, isolation/safety state và lifecycle; Zone A current, Zone B deferred |
 | `iot_pot_zone_assignment` | controlled irrigation | zone, pot, `valid_from`, `valid_to`; membership history dùng để resolve affected-pot snapshot, không thay pot identity |
 | `iot_irrigation_outlet` | controlled irrigation | outlet identity, device/channel, fail state/feedback capability, zone/circuit relation, lifecycle; một outlet có thể phục vụ Zone A shared circuit |
@@ -529,7 +518,7 @@ Tên table dưới đây là **candidate baseline sau Lớp 1**, chưa phải sc
 | `iot_config_revision` | foundation | device, version, desired JSON, checksum, created_by/reason; unique `(device_id, version)` |
 | `iot_config_ack` | foundation | revision, device, boot_id, applied time/status/error/reported checksum; unique `(device_id, revision_id, boot_id)` |
 | `iot_firmware_release` | foundation | version/build/hash/signature/target/compatibility/release state |
-| `iot_firmware_deployment` | POST-BTL | release, device, desired/reported state, started/completed/failed time, rollback release/reason |
+| `iot_firmware_deployment` | sau MVP | release, device, desired/reported state, started/completed/failed time, rollback release/reason |
 | `iot_telemetry` | foundation | sample_id/checksum, device/channel/boot/sequence, observed/received/monotonic, applied config version/checksum, ingest state, raw/server engineering value, calibration, clock quality, quality JSON |
 | `iot_ingest_quarantine` | foundation | authenticated device, batch/sample ID + conflicting/unknown checksum, bounded canonical payload, reason, received/resolved time; không vào latest/recommendation |
 | `iot_watering_event` | cả hai | client-generated `event_id` unique + payload checksum, target zone/outlet, assignment revision + affected-pot snapshot, occurred_at, source=`manual|local_button|remote_control|automatic`, circuit-level amount/duration/feedback, actor; `local_button` dùng actor loại `local_physical_operator` nếu không xác thực được người bấm, không tự gán Owner; optional `pot_id` chỉ là context, không giả per-pot delivered volume. Trong MVP, `automatic` chỉ là deterministic local schedule Owner duyệt sau safety gate, không phải soil/adaptive rule. |
@@ -610,7 +599,7 @@ Base path: `/api/iot`; dùng auth/session hiện có.
 | `GET/POST /irrigation-zones` và `POST /irrigation-zones/{id}/pot-assignments` | registry zone + lịch sử pot membership; preview/event resolve affected-pot snapshot theo effective time |
 | `GET/POST /irrigation-outlets` | registry outlet và topology outlet -> zone/circuit; field enable gated, không mặc định outlet -> pot |
 | `GET/POST /firmware/releases` | registry artifact/hash/signature/compatibility; không chứa secret |
-| `POST /devices/{id}/firmware-deployments` | POST-BTL only; absent tại M6; record staged rollout intent/outcome |
+| `POST /devices/{id}/firmware-deployments` | Sau MVP; absent tại M6; record staged rollout intent/outcome |
 | `GET /telemetry/latest` | latest value + `observed_age`/`ingest_age` + stale/replay/quality theo pot/channel |
 | `GET /telemetry/history?channel_id=&from=&to=&bucket=` | bounded time range, server-side aggregation |
 | `POST /watering-events` | manual watering log; client-generated UUIDv7 cho retry idempotent |
@@ -636,9 +625,11 @@ Trước production retention MUST đo row size + index size sau ít nhất 7 ng
 
 ## 12. Dashboard và alert behavior
 
+Các surface soil measurement/calibration/recommendation và sensor-specific alerts bên dưới chỉ hiện khi sensing lane được mở lại. Chúng không là MVP blocker trong trạng thái HOLD; inventory, control, device health và watering history vẫn là core.
+
 ### 12.1 Screens
 
-1. **Fixed-view garden map:** render các `GardenArea`, layout version và pot active theo geometry thật; current state, latest value, `observed_age` + `ingest_age`, stale/replay badge, recommendation và alert count.
+1. **SVG plan/section + Three.js view:** render các `GardenArea`, layout version và pot active từ cùng spatial source theo geometry thật; current state, latest value, `observed_age` + `ingest_age`, stale/replay badge, conditional recommendation và alert count.
 2. **Pot detail:** placement/planting history, trend 24 h/7 d/30 d, watering markers, calibration/version, rule explanation và feedback.
 3. **Device health:** lifecycle, firmware/config desired-vs-reported, last seen, queue depth/drop count, channel error và credential age (không hiện token).
 4. **Irrigation control:** nút **“Tưới ngay”** cho Owner yêu cầu Zone A từ xa khi cần, chọn đúng zone/outlet; preview hiển thị shared-circuit warning, bounded duration, assignment effective time và toàn bộ pot bị ảnh hưởng; explicit confirm, command/ack/physical-feedback history. Nút này không bypass local interlock/cooldown/safety; UI control absent khi actuation gate/flag chưa hợp lệ. Cùng surface có quản lý/version/tạm dừng lịch deterministic, status local-applied và lịch sử execution/unknown outcome; schedule field control cũng absent tới khi gate PASS.
@@ -675,7 +666,7 @@ Alert có `dedupe_key = type + entity_id + rule_version`, lifecycle `OPEN -> ACK
 
 ## 13. Heuristic recommendation baseline và evaluation
 
-Toàn bộ §13 là **conditional capability**: chỉ active khi một trusted soil-sensing lane được chọn và `G0-SENSOR-BENCH/G0-DATA-PILOT` PASS. Với strategy `NONE`, module vẫn hợp lệ; endpoint/widget/job soil recommendation phải disabled/absent thay vì liên tục báo `INSUFFICIENT_DATA`. Schedule/open-loop watering, nếu Owner chọn, là policy riêng và không được giả là soil-driven.
+Toàn bộ §13 là **conditional capability**: chỉ active khi một trusted soil-sensing lane được chọn và `G0-SENSOR-BENCH/G0-DATA-PILOT` PASS. Với strategy `NONE`, module vẫn hợp lệ; endpoint/widget/job soil recommendation phải disabled/absent thay vì liên tục báo `INSUFFICIENT_DATA`. Lịch deterministic đã chọn ở §14.7 là policy riêng và không được giả là soil-driven.
 
 ### 13.1 Inputs và hard gates
 
@@ -710,7 +701,7 @@ ELSE:
 - Sau manual watering, suppress `WATER_RECOMMENDED` trong configurable settle window; vẫn lưu/hiển thị data.
 - Recommendation row bất biến giữ `rule_version`, input sample IDs, thresholds, reason codes, generated/expires time.
 - Reason code ví dụ: `BELOW_DRY_TWO_SAMPLES`, `RECENTLY_WATERED`, `DATA_STALE`, `CALIBRATION_MISSING`, `TREND_DOWN`.
-- Recommendation engine trong MVP chỉ xuất recommendation; không tự phát command. Remote command là hành động riêng do owner preview + confirm.
+- Conditional recommendation engine chỉ xuất recommendation; không tự phát command. Remote command đi qua preview + confirm; lịch deterministic dùng execution path riêng ở §14.7.
 
 ### 13.3 Feedback và evaluation set
 
@@ -810,8 +801,6 @@ Unique `(command_id, ack_sequence)` và terminal result cache ở edge làm idem
 - Command offline chỉ nằm cloud tới TTL; gateway không execute stale command sau reconnect.
 - Reboot/power loss luôn đưa physical default về closed/off; queue không restore state `OPEN`.
 
-[Bài 3 - Điều khiển thiết bị — archived](design-inputs.md) tạo course seam lịch sử cho bidirectional control, dashboard, device/firmware management. Bài lab bật/tắt thành công không thay thế command validity, TTL, feedback, idempotency hay water safety của miGarden.
-
 ### 14.7 Local schedule contract — Owner chọn offline-Internet continuation, field enable còn gated
 
 - Local scheduled occurrence là **một execution path riêng**, không giả làm `/commands/next` cloud command và không cần online server lease/grant tại thời điểm chạy; §14.3 vẫn bắt buộc cho **remote/cloud commands**. Hai path hội tụ tại cùng local safety arbiter, nên không thể mở hai lần đồng thời hoặc bypass interlock. Mỗi occurrence có stable ID từ schedule version + thời điểm dự kiến và local immutable outcome để đồng bộ về cloud.
@@ -826,7 +815,7 @@ Unique `(command_id, ack_sequence)` và terminal result cache ở edge làm idem
 - R1 dùng nút DIP và LED làm dry-run local start/stop; không gọi đó là nút outdoor. Field button chỉ được chọn sau khi Owner chốt vị trí và R2 khảo sát dây/nguồn/weather. Nút start tạo một local watering intent có ID/event riêng, duration bị chặn và cùng interlock/ledger/feedback với lịch và remote; không gửi vòng lên cloud để xin phép rồi mới tưới. Nút stop phải ưu tiên yêu cầu CLOSE, nhưng không thay manual water shutoff độc lập điện/phần mềm.
 - **Placement đã chốt ở product level:** local START/STOP tại source/controller trên tầng thượng thuộc Zone A field baseline. START/STOP thứ hai ở ban công dưới là optional, không phải MVP gate; nếu được thêm, nó chỉ tạo cùng intent và không có quyền bypass. Exact outdoor switch/đèn báo, vị trí lắp, đường dây và cách ingress-protect còn phụ thuộc R2. Nút DIP R1 không được lắp trần ngoài trời.
 - **Balcony option `[MỞ]`:** so dây low-voltage tách khỏi 220 V theo tuyến ngoài trời an toàn với remote pin/radio không phụ thuộc cloud. Dây tránh pin/pairing nhưng cần thi công, bảo vệ và kiểm đường; radio tránh kéo dây nhưng cần đo link tại hai điểm thật, tuổi pin, chống mưa, xác thực/ack/retry và chỉ báo bấm thành công. Một remote STOP không thay manual shutoff tại nguồn; không mặc định mua Zigbee coordinator hoặc edge server cho nút optional.
-- **Delta 2026-09-30:** Owner chọn *chỉ* field button tại nguồn cho vòng triển khai đầu; đây là R3 development/test control khi web chưa hoàn chỉnh và là fallback ít dùng khi production. Ban công vẫn optional và hai hướng dây low-voltage/remote pin được đánh giá ngang hàng khi R3 khảo sát, không stage mua ngay. Nếu dây đi cùng hành lang ống nước, phải có route/bảo vệ riêng phù hợp; không coi việc quấn dây trực tiếp lên ống là phương án đã duyệt. Xem `D-L2-33`.
+- Field button tại nguồn là lựa chọn cho vòng triển khai đầu; đây là R3 development/test control khi web chưa hoàn chỉnh và là fallback ít dùng khi production. Ban công vẫn optional và hai hướng dây low-voltage/remote pin được đánh giá ngang hàng khi R3 khảo sát, không stage mua ngay. Nếu dây đi cùng hành lang ống nước, phải có route/bảo vệ riêng phù hợp; không coi việc quấn dây trực tiếp lên ống là phương án đã duyệt.
 - Local button chỉ có hiệu lực khi field actuation gate đã PASS và local state/time/ledger đủ tin cậy theo §15. Sau reboot offline làm thời gian/ledger không đáng tin, default là từ chối OPEN; offline lâu **không đồng nghĩa** fail nếu controller vẫn có điện, monotonic time và policy/ledger hợp lệ. Thứ tự ưu tiên và recovery mode còn `[MỞ]` để bench.
 - Ghi local event bền vững với `source=local_button`, `boot_id`, thời gian/chất lượng clock, outcome và feedback; khi reconnect đồng bộ idempotently. Khi offline, microSched hiển thị last-seen/stale/unknown, không khẳng định người nhà nào đã bấm hoặc lệnh đã thành công trước khi nhận receipt.
 
@@ -895,25 +884,23 @@ Spec này không shopping product và không khóa SKU. Quantity là pilot envel
 | Category | Pilot quantity | Requirement trước khi chọn exact | Buy gate | No-buy gate |
 |---|---:|---|---|---|
 | Development board/gateway class | 1 chính + optional 1 spare | USB debug, interface sensor, TLS/HTTPS, NVS/buffer, watchdog, power profile; Wi-Fi nếu chạy direct-Wi-Fi probe | `G0-BOARD-BUY` + owner duyệt minimal bench kit | không mua batch trước probe |
-| Soil moisture sensor category | `0` hoặc `1` exploratory trước scale; `1–3` chỉ sau strategy/evidence | raw output, supply/interface, corrosion/weather behavior, calibration repeatability, RF/link | `G0-SENSING-STRATEGY`; generic tối đa một compatibility probe; pass identity/pair/decode/semantic/rejoin + `G0-SENSOR-BENCH` trước scale | strategy `NONE`, hoặc không mua theo toàn inventory trước proof |
-| Environmental sensor | 0-1 | chỉ nếu temperature/humidity/light tạo decision value hoặc rubric yêu cầu | course/demo/eval need rõ | không dùng DHT humidity thay soil moisture |
+| Soil moisture sensor category (HOLD) | `0` hoặc `1` exploratory trước scale; `1–3` chỉ sau strategy/evidence | raw output, supply/interface, corrosion/weather behavior, calibration repeatability, RF/link | `G0-SENSING-STRATEGY`; generic tối đa một compatibility probe; pass identity/pair/decode/semantic/rejoin + `G0-SENSOR-BENCH` trước scale | strategy `NONE`, hoặc không mua theo toàn inventory trước proof |
+| Environmental sensor (conditional) | 0-1 | chỉ nếu temperature/humidity/light tạo decision value | product/eval need rõ | không dùng DHT humidity thay soil moisture |
 | Prototyping/interface | theo bench | breadboard/terminal, resistor, ADC/interface/level compatibility, fuse low-voltage nếu cần | schematic + electrical limit review | không nối sai voltage chỉ vì connector vừa |
 | Power low-voltage | 1 bench + field plan | measured current, cable drop, protected supply, reset/brownout test | `G0-POWER-ENV` | không kéo mains ra ngoài theo demo |
 | Enclosure/connectors/cable protection | sau placement | ingress/UV/serviceability/cable gland/drip loop/conduit | placement + maintenance plan | không mua theo IP label shop đơn lẻ |
 | Network alternative | 0 trước probe | wired cable/interface hoặc radio/gateway category | direct Wi-Fi fail + §10 decision record | không mua LoRa/mesh “phòng khi cần” |
 | Measurement tools | dùng/mượn tối thiểu | timer + bình/xô có vạch; DMM low-voltage nếu thiếu; pressure tool chỉ khi exact design cần | cần để tạo receipt tương ứng | không mua professional toolbox hoặc pressure gauge theo checklist chung |
 | Bench actuator/driver | 1 candidate tối thiểu sau electrical review | fail state, voltage/current, isolation, command/ack/feedback | owner duyệt bench scope; dry/contained test trước | bench receipt không được nâng thành field-water receipt |
-| Field valve/pump/relay/driver | chưa chốt | fail state, voltage/current, pressure/flow rating, manual override, isolation, feedback | exact category/SKU sau Lớp 2 + owner approval; field enable chỉ sau `G0-WATER-SAFETY` | chưa đo safety -> không nối vào nguồn nước thật |
+| Field valve/pump/relay/driver | chưa chốt | fail state, voltage/current, pressure/flow rating, manual override, isolation, feedback | exact category/SKU sau khảo sát vật lý + owner approval; field enable chỉ sau `G0-WATER-SAFETY` | chưa đo safety -> không nối vào nguồn nước thật |
 | Flow/leak/pressure protection | required cho field design | cutoff latency/range/compatibility | cùng controlled-irrigation safety design, trước open-water test | không xem optional chỉ vì lệnh do người bấm |
 | Tubing/fitting/regulator/filter | 0 theo spec này | endpoint/route/diameter/pressure/UV đo thật + margin | field measurement + actuator/hydraulic choice | không cắt/mua theo số sơ bộ/private survey |
 
-### 16.1 Purchase waves
+### 16.1 Bench kit và conditional hardware
 
-- **Wave A1 — universal controller dry bench, Owner đã đặt 2026-09-25, đã về theo Owner report, chưa bench:** một ESP32 board + breadboard/jumper/LED/resistor/button + USB-C data cable. R1 thử local button/LED rồi vertical slice microSched command → simulated valve LED → received/started/terminal ack trong môi trường dev/test, không mount actuation production route hoặc nối nước trước safety gate. Không phụ thuộc soil strategy; exact actuator/field button chưa mua. Receipt `D-L2-31/32`.
-- **Wave A2 — HOÃN theo `D-L2-29`, không nằm trong đợt mua hiện tại:** nếu Owner mở lại Zigbee sensing experiment thì một ZBDongle-P + USB 2 extension và tối đa một local TR002/generic compatibility probe là candidate lịch sử, phải refresh product/value/market/compatibility trước order. Không mua #2/#3 trước identity/pair/decode/semantic/rejoin/closed-door link PASS.
-- **Wave B — conditional sensing scale:** sau `G0-SENSOR-BENCH`, `G0-NET-24H`, `G0-SENSING-PILOT`, mua thêm tối đa hai probe hoặc đổi sang một native fallback theo decision mới; không mặc định three-pack.
-- **Wave C - sau Lớp 2 + `G0-WATER-SAFETY`:** source protection/master/Zone A outlet tối thiểu cho một Zone A shared-circuit contained/field pilot; Zone B chưa build; owner duyệt exact bill trước đặt hàng.
-- **Wave D - scale có điều kiện:** thêm sensor/zone/outlet hoặc ban công mini chỉ theo calibration, hydraulic capacity, maintenance và blast-radius evidence; per-pot independent outlet cần decision riêng, không bulk theo số chậu snapshot.
+- **Dry bench:** P1A đã về theo báo cáo project owner, chưa identity/bench. Planned kit là ESP32 board + breadboard/jumper/LED/resistor/button + USB-C data cable. Thiết kế thử local button/LED rồi microSched command → simulated valve LED → received/started/terminal ack trong dev/test; dry-profile semantics còn mở, không mount production actuation hoặc nối nước trước safety gate.
+- **Sensing HOLD:** ZBDongle-P, USB extension và exploratory wireless probe là candidate lịch sử. Nếu mở lại, refresh value/compatibility và chọn strategy trước; không mua #2/#3 hoặc three-pack mặc định. Scale chỉ sau identity/pair/decode/semantic/rejoin/closed-door link, calibration và field value/maintenance evidence.
+- **Water pilot:** source protection/master/Zone A outlet tối thiểu theo khảo sát vật lý và safety design; exact bill/hardware chưa chọn. Zone B chưa build. Thêm zone/outlet hoặc per-pot independent actuation cần hydraulic capacity, maintenance và blast-radius evidence.
 
 Timeout của một lệnh install/flash không chứng minh board chưa thay đổi. Sau timeout phải kiểm firmware version, serial output, filesystem/flash state và device registry trước khi kết luận.
 
@@ -955,7 +942,7 @@ Không thêm public bearer admin API.
 ### 17.3 Health/observability
 
 - Liveness `/api/healthz` không query DB/device.
-- **Future acceptance gap:** current deployed `/api/readyz` mới có `status` + `commit`; chưa có `db`. Desired future contract mới gồm `status`, exact `commit` và `db`. Cho tới khi gap đóng bằng code + deploy receipt, production acceptance phải dùng exact commit từ readyz và một DB reachability/schema query riêng; không được suy ra DB up từ HTTP 200/status. Đây là gap acceptance tương lai cần đóng, không phải mô tả incident; acceptance phải parse body quan sát được tại thời điểm chạy, không lấy câu này làm runtime receipt.
+- Khi kiểm adapter deployment, parse body `/api/readyz` thực tế và exact deployed commit. Nếu response không có DB evidence, cần DB reachability/schema query riêng; không suy DB up từ HTTP 200/status. Hợp đồng readiness hiện hành thuộc microSched, không được xác lập bằng source survey trong tài liệu này.
 - IoT operational metrics: ingest accepted/duplicate/rejected, API latency, auth failure count, active/offline devices, stale channels, queue drop/replay, config mismatch, recommendation abstain, alert volume.
 - Log structured dùng IDs/reason code; không log bearer token, raw Authorization, SSID/MAC/IP private hoặc full config có secret.
 - Device serial log dùng redaction mode trong demo; credential chỉ hiển thị fingerprint ngắn không reversible nếu thật sự cần đối chiếu.
@@ -971,6 +958,8 @@ Không thêm public bearer admin API.
 ## 18. Test, acceptance và traceability
 
 ### 18.1 Test pyramid trước hardware
+
+Soil/calibration/recommendation fixtures là conditional contract tests; trong HOLD chúng không đòi lắp sensor hoặc mở product surface tương ứng. Simulator có thể kiểm extension contract bằng dữ liệu giả, tách khỏi evidence hardware.
 
 #### Contract/unit
 
@@ -1037,12 +1026,12 @@ Mọi dòng RED/GREEN trên phải xuất receipt đủ mutation, seed/fixture, 
 | 24 h network | **CHƯA VERIFY** | `G0-NET-24H` output thật |
 | 7 d network | **CHƯA VERIFY** | `G0-NET-7D` output thật |
 | Optional soil compatibility probe | **HOÃN / CHƯA VERIFY** | nếu mở lại: exact unit identity, pair/interview, payload decode, semantic response, rejoin và closed-door link |
-| Optional sensing scale | **NOT AUTHORIZED** | first unit PASS + field value/maintenance evidence + Owner quyết số lượng |
+| Optional sensing scale | **HOLD** | first unit PASS + field value/maintenance evidence + Owner quyết số lượng |
 | Outdoor power/enclosure | **CHƯA VERIFY** | `G0-POWER-ENV` inspection + fault test |
 | Bench actuator command/ack | **CHƯA VERIFY - chưa chốt/mua hardware** | electrical review + fail-power/reboot/duplicate/stale-command receipts |
 | Zone A field valve/leak/flow | **CHƯA VERIFY - product MVP nhưng gated** | toàn bộ `G0-WATER-SAFETY` + §15 receipts; một Zone A shared-circuit run trước scale, kèm affected-pot snapshot |
 
-### 18.3 Product MVP acceptance criteria - provisional tới khi Lớp 2 chốt
+### 18.3 Product MVP acceptance criteria - provisional tới khi physical design chốt
 
 Product MVP chỉ được gọi là DONE khi tất cả mục sau có receipt. Do hydraulic/electrical/connectivity design còn `[MỞ]`, danh sách này là acceptance frame chứ chưa phải lệnh implement:
 
@@ -1050,42 +1039,42 @@ Product MVP chỉ được gọi là DONE khi tất cả mục sau có receipt. 
 2. Snapshot chín chậu khảo sát nhập bằng dynamic `Pot`; receipt chứng minh create/move/pause/retire pot và versioned placement/planting history mà không đổi device identity hoặc rewrite telemetry.
 3. Ingest idempotent giữ raw, time/clock quality/calibration/received time; duplicate không tạo row thứ hai.
 4. Offline replay vượt failure test, có drop/queue telemetry và dashboard stale behavior.
-5. Fixed-view map bám layout thật và dashboard hiện inventory, affected-pot/watering history và device/physical-feedback state; optional sensor widget hiện age + quality + history chỉ khi lane tồn tại.
+5. SVG/Three.js views dùng cùng source bám layout thật và dashboard hiện inventory, affected-pot/watering history và device/physical-feedback state; optional sensor widget hiện age + quality + history chỉ khi lane tồn tại.
 6. Nếu sensing/recommendation enabled, heuristic abstain trên stale/invalid data và eval không trộn unlabeled với labeled windows; nếu disabled, endpoint/widget/job tương ứng absent và không block MVP.
 7. Registry cho thấy lifecycle, firmware build observed, config desired-reported và credential rotation/revoke; firmware-deployment route vẫn absent tại M6.
 8. Alert dedupe/lifecycle hoạt động; notification absence không làm mất alert.
 9. Bench command/ack chứng minh exact target, preview/confirm, TTL, duplicate/stale rejection, reboot fail-closed và terminal/physical feedback; bench result không được báo cáo là field irrigation.
 10. Sau `G0-WATER-SAFETY=PASS`, ít nhất một controlled watering run của Zone A được thực hiện với bounded duration/volume ở circuit level, manual shutoff, leak/flow protection, assignment revision + affected-pot snapshot và post-action receipt. Không suy circuit volume thành delivered volume của từng pot. Nếu chưa có receipt này, trạng thái tối đa là **foundation-ready + controlled-irrigation-unverified**, không phải product MVP DONE.
-10a. Lịch deterministic do Owner duyệt có simulation và field receipt: chạy đúng một occurrence khi online và khi mất Internet nhưng còn điện/trusted time; không chạy trùng hoặc catch-up sau reconnect; lịch hết hạn, clock không đáng tin, reboot và interlock chặn OPEN; đồng bộ event lên cloud không được biến `OUTCOME_UNKNOWN` thành `SUCCEEDED` bằng suy đoán. Nếu chưa có receipt, schedule lane chưa DONE và product MVP theo `D-L2-29` chưa DONE.
+10a. Lịch deterministic do Owner duyệt có simulation và field receipt: chạy đúng một occurrence khi online và khi mất Internet nhưng còn điện/trusted time; không chạy trùng hoặc catch-up sau reconnect; lịch hết hạn, clock không đáng tin, reboot và interlock chặn OPEN; đồng bộ event lên cloud không được biến `OUTCOME_UNKNOWN` thành `SUCCEEDED` bằng suy đoán. Nếu chưa có receipt, schedule lane chưa DONE và product MVP chưa DONE.
 11. Strict flag hierarchy và `app.routes`/OpenAPI disabled/enabled matrix pass; HTTPS bad-CA/hostname negative tests pass.
 12. `G0-NEON-COST` PASS với `measurement_period` và ba cap owner-approved, receipt `target_env=local|throwaway`, số đo CU-hours/row/index trong cap và cadence production được owner ghi vào versioned decision; invariant heartbeat coalesce và lane 60 giây không chạm production DSN/host/Neon vẫn giữ.
-13. Migration/CI/security/release checks pass; submission artifact truy vết tới exact system + microSched adapter refs/tags, không chứa secret và mọi ảnh/topology được owner chọn + review metadata/nội dung.
+13. Schema-migration/CI/security/release checks pass khi triển khai; release artifact truy vết tới exact system + microSched adapter refs/tags, không chứa secret và mọi ảnh/topology được owner chọn + review metadata/nội dung.
 
 ### 18.4 Requirement traceability
 
-| Requirement | Nguồn/rationale | Implementation | Acceptance |
+| Requirement | Rationale | Design | Acceptance |
 |---|---|---|---|
-| `REQ-PROD-01` dynamic `Pot`, placement/planting history | `D-L1-04` owner lock | §6 + domain tables/API | `G0-SENSING-PILOT`, lifecycle/history queries |
-| `REQ-PROD-02` Zone A remote + owner-approved scheduled irrigation; optional pot/representative sensing | `D-L1-02/03/04`, `D-L2-08`, `D-L2-29` | §8, §11-15 | MVP criteria 3-10a; soil sensing deferred, per-pot actuation future-gated |
-| `REQ-MAP-01` spatial model bám layout thật và versioned | `D-L1-05` owner lock | §6, §11-12 | map geometry + move/history tests |
-| `REQ-SEC-01` secret/credential không phát hành | threat boundary | §3.3, log/API rules | secret scan + curated-media review |
-| `REQ-REPO-01` system repo miGarden + microSched adapter, versioned compatibility | current MG-H1 topology | §3.3, §4.2, §17 | exact commit/tag + path trace receipt |
-| `REQ-DEV-01` identity/lifecycle/config/firmware | note lớp + Chapters 1-3 | §7, tables/API | registry/config/rotation tests |
-| `REQ-DATA-01` metadata/time/calibration | Chapter 2 slides 18, 22, 39, 65-73 | §8, §11 | schema/API/calibration tests |
-| `REQ-DATA-02` freshness theo observed time, server authority | replay/calibration trust boundary | §8.2-8.5, §13 | offline-2h + outlier/config/calibration tests |
-| `REQ-NET-01` protocol theo constraint | note lớp + Chapter 3 slide 78 | §10 | board probe + decision record |
-| `REQ-NET-02` HTTPS fail closed | device credential threat boundary | §10.5 | bad-CA/hostname negative lane |
-| `REQ-COST-01` cadence không giữ Neon wake thừa | repeated-interval cost boundary | `G0-NEON-COST`, §5.2, §8.1, §10.4 | owner-approved cap/period + 7-day CU/row/index receipt; target guard fail-before-I/O |
-| `REQ-OFF-01` intermittent connectivity normal | Chapter 3 slides 9, 14 | §9 | offline/replay injection |
-| `REQ-API-01` tích hợp microSched | owner lock + microSched architecture | §4.2, §11, §17 | same-origin deployment + route/auth tests |
-| `REQ-FLAG-01` exact fail-closed feature hierarchy | no hidden disabled surface | §17.2 | strict parse + app.routes/OpenAPI matrix |
-| `REQ-REC-01` baseline giải thích/eval được | product value + data lifecycle | §13 | labeled eval report |
-| `REQ-SAFE-01` controlled irrigation không phải automation; local fail-closed | owner lock + physical consequence | §3, §14-15, flag | disabled/enabled route matrix + field safety receipts |
-| `REQ-CMD-01` TTL/idempotency/ack/unknown outcome | physical consequence + course downstream flow | §14 | state-machine/RED-GREEN tests |
-| `REQ-CMD-02` credential target/lease/safe-confirmed | cross-device/replay physical risk | §14.3-14.6, §15.3 | concurrent lease + CLOSE_ALL/safety tests |
-| `REQ-BUY-01` chưa spec actuator exact | owner lock | §16 | purchase gate review |
-| `REQ-EVID-01` phone test != board SLA | owner lock/field uncertainty | §5.3 | only board logs count |
-| `REQ-FREEZE-01` BTL release truy vết exact canonical revision | course scope control | §3.3, §19.1 | manifest/hash + commit/tag; secret-free artifact |
+| `REQ-PROD-01` dynamic `Pot`, placement/planting history | Garden inventory changes without changing device identity | §6, domain tables/API | lifecycle/history queries; sensing-pilot only if reopened |
+| `REQ-PROD-02` shared Zone A remote + scheduled irrigation | Bounded irrigation despite Internet outages | §11–15 | MVP criteria 3–10a; soil sensing conditional, per-pot actuation future |
+| `REQ-MAP-01` versioned real-layout model | Correctable shared SVG/Three.js source | §6, §11–12, representation | geometry + move/history tests |
+| `REQ-SEC-01` no published credentials | Credential and content boundaries | §3.3, log/API rules | secret scan + finished-asset review |
+| `REQ-REPO-01` system + adapter compatibility | Separate miGarden and microSched ownership | §3.3, §4.2, §17 | both exact refs + contract versions |
+| `REQ-DEV-01` identity/lifecycle/config/firmware | Replace/update devices without corrupting history | §7, tables/API | registry/config/rotation tests |
+| `REQ-DATA-01` metadata/time/calibration | Interpret raw measurements only with valid context | §8, §11 | schema/API/calibration tests; soil lane conditional |
+| `REQ-DATA-02` observed-time freshness | Replay must not become fresh measurement | §8.2–8.5, §13 | offline-2h + outlier/config/calibration tests |
+| `REQ-NET-01` protocol by constraint | Lossy network, resource and maintenance limits | §10 | board probe + protocol comparison |
+| `REQ-NET-02` HTTPS fail closed | Device credential protection | §10.5 | bad-CA/hostname negative tests |
+| `REQ-COST-01` no excess Neon wakeups | Bounded recurring cost | §5.2, §8.1, §10.4 | selected cap/period + 7-day CU/row/index evidence; reject invalid target before I/O |
+| `REQ-OFF-01` intermittent connectivity | Continue local recording with honest cloud freshness | §9 | offline/replay injection |
+| `REQ-API-01` microSched adapter | Reuse existing human API/auth/storage | §4.2, §11, §17 | same-origin + route/auth tests |
+| `REQ-FLAG-01` strict feature hierarchy | Disabled surfaces remain absent | §17.2 | strict parse + routes/OpenAPI matrix |
+| `REQ-REC-01` explainable conditional recommendation | Abstain rather than invent a watering need | §13 | labeled eval report if sensing reopened |
+| `REQ-SAFE-01` remote and scheduled irrigation | Physical consequence needs one local safety boundary | §14–15 | disabled/enabled routes + field safety evidence |
+| `REQ-CMD-01` TTL/idempotency/ack/unknown | Lost receipt does not prove no action | §14 | state-machine/RED-GREEN tests |
+| `REQ-CMD-02` credential target/lease/safe-confirmed | Cross-device and replay risk | §14.3–14.6, §15.3 | concurrent lease + CLOSE_ALL/safety tests |
+| `REQ-BUY-01` evidence before exact water hardware | Avoid incompatible field design | §16 | measured category/selection review |
+| `REQ-EVID-01` phone test is not board SLA | Different radio/power/recovery behavior | §5.3 | real-board logs |
+| `REQ-FREEZE-01` reproducible release | Trace artifacts to exact source and compatibility | §3.3, §19.1 | manifest/hash + refs/tags |
 
 ### 18.5 Evidence reporting format
 
@@ -1098,84 +1087,67 @@ Mỗi milestone report tách:
 
 Local pass không chứng minh commit/CI/production. CI chứng minh revision; production proof cần exact deployed commit/readiness; field acceptance cần board/sensor/hydraulic receipt.
 
-## 19. Milestones và implementation slices cho solo project
+## 19. Implementation stages
 
-| Milestone | Deliverable | Exit gate |
+Planned stages below do not claim any implementation is complete. They organize dependencies and evidence rather than setting deadlines.
+
+| Stage | Deliverable | Exit evidence |
 |---|---|---|
-| `M0 - Spec/rubric reconciliation` | owner review spec; trace rubric mới; no hidden decision conflict | `G0-RUBRIC`, CHỐT/MỞ/LOẠI cập nhật |
-| `M1 - Domain contract + simulator` | dynamic pot/placement/assignment schemas, synthetic device, queue/retry, command state-machine fixtures | lifecycle + unit/failure tests + API examples |
-| `M2 - Backend foundation` | migrations, registry/credential/config, ingest, latest/history, audit | Postgres integration + RED/GREEN idempotency/auth |
-| `M3 - Map/dashboard/recommendation` | fixed-view real-layout map, pot detail, health/alerts/watering/feedback | UI state + move/history matrix + heuristic eval harness |
-| `M4 - Minimal hardware + source bench` | one board, dry command/load bench; direct-faucet flow/site measurements; pressure/residual chỉ khi có đúng dụng cụ/topology. Soil bench hoãn và không block. | `G0-BOARD-BUY`; Lớp 2 evidence; `G0-SENSOR-BENCH` chỉ nếu Owner mở lại sensing |
-| `M5 - Connectivity + controlled-irrigation pilot` | 24 h then 7 d network probe; command/ack bench; Zone A shared-circuit field pilot only after safety gate; schedule simulation/fault test rồi mới enable có giám sát | `G0-NET-24H/7D`, `G0-POWER-ENV`, `G0-WATER-SAFETY`; sensing gate chỉ nếu mở lại |
-| `M6 - BTL acceptance + tagged release` | end-to-end remote + bounded scheduled watering, local/cloud history và physical feedback demo; soil sensing chỉ khi lane được Owner mở lại; course-sensor disposition tường minh, owner-curated report/media | product MVP acceptance §18.3 + canonical commit/tag manifest/hash §3.3 |
+| M0 — Design baseline | Site/endpoint uncertainties, dry profile and relevant open choices resolved | Consistent specification and testable behavior |
+| M1 — Domain + simulator | Dynamic pot/placement/assignment schemas, synthetic device, queue/retry and command/schedule fixtures | Lifecycle, unit/failure tests and API examples |
+| M2 — Backend foundation | microSched migrations, registry/credential/config, ingest, latest/history, audit | Postgres integration and idempotency/auth RED/GREEN |
+| M3 — Map/dashboard | Shared SVG/Three.js source, map, pot history, health/alerts and control state | UI state + move/history checks; soil heuristic eval only if reopened |
+| M4 — Minimal board bench | Exact board identity, dry command/load, source/site measurements using appropriate tools | Board/electrical evidence; soil bench conditional |
+| M5 — Connectivity + irrigation pilot | 24 h then 7 d network probe, command/ack bench, schedule fault tests, then supervised Zone A field run | `G0-NET-24H/7D`, `G0-POWER-ENV`, `G0-WATER-SAFETY` and schedule evidence |
+| M6 — MVP release | Remote + scheduled watering, local/cloud history, physical feedback | §18.3 acceptance + exact system/adapter refs and manifest |
 
-Solo sequencing: mỗi slice nhỏ, deployable/reviewable. Research/listing và minimal bench purchase có thể đi sớm để tạo evidence; exact field-water SKU và việc nối nguồn thật vẫn chờ owner duyệt Lớp 2 + safety gate. Simulator đi trước để board đến chỉ thay transport/client, không viết lại contract.
+Simulator and dry tests precede physical irrigation. Exact field hardware and connection to a real source wait for site/safety evidence. Soil sensing remains HOLD and is not required to complete these stages.
 
-### 19.1 Hard freeze sau M6
+### 19.1 Release freeze
 
-Sau M6, BTL submission artifact, spec/report và acceptance receipt được freeze bằng manifest + SHA-256 gắn exact system + microSched adapter refs/tags. Product tiếp tục phát triển ở revision/release sau; không sửa âm thầm artifact đã nộp.
+Freeze each accepted release's specification, source refs, compatibility result and acceptance artifacts in a manifest with SHA-256. Corrections create a new reviewed revision/manifest and repeat affected checks; do not silently edit a previously published artifact.
 
-Ngoại lệ duy nhất: rubric chính thức bắt buộc một mục còn thiếu hoặc phát hiện privacy/safety defect. Khi đó owner phải approve change record nêu requirement, files/artifacts đổi, blast radius; rerun acceptance/privacy checks và phát hành manifest/hash mới. “Có thời gian làm thêm” không phải lý do phá freeze.
+### 19.2 Extensions after baseline MVP
 
-### 19.2 Roadmap sau baseline MVP/BTL
+- OTA/firmware rollout after staged authenticity, rollback and power-loss evidence (§7.5).
+- Sensing scale only if reopened and supported by identity/calibration/value evidence. Zone B and per-pot independent outlets need hydraulic/maintenance/cost evidence.
+- Adaptive soil/model automation needs trusted data and evaluation; deterministic schedule already belongs to MVP and remains gated by local safety.
 
-- FOTA/firmware rollout theo staged lifecycle §7.5.
-- Scale sensing theo Pot/representative evidence; scale zone/outlet và thêm ban công mini theo hydraulic/maintenance/cost evidence. Per-pot independent outlet là optional future decision.
-- Deterministic schedule đã được Owner chọn, chỉ field-enable sau water-safety evidence và fault tests; adaptive/soil/model automation cần thêm dataset/eval. Không lane nào bypass deterministic local policy.
+## 20. Product decisions
 
-## 20. Decision ledger
+### 20.1 Selected design
 
-### 20.1 [CHỐT]
+- Dynamic `Pot`, placement/planting and assignment history; nine pots are a snapshot.
+- One Zone A shared circuit, zone/exact-outlet targets and all affected pots in preview/history. Per-pot independent actuation and Zone B are deferred.
+- Remote preview/confirm, local deterministic schedule and source START/STOP share one local safety arbiter. Offline schedule continuation requires power and trusted time/config/ledger/safety; no catch-up or double-run.
+- Soil/Zigbee and sensing-only infrastructure are HOLD indefinitely. Generic device/telemetry contracts remain; soil calibration/recommendation are conditional, not current MVP blockers.
+- A/SVG + B/Three.js share one canonical versioned spatial source. COLMAP is optional, not a dependency. [Content policy](representation.md#public-content-and-private-sources) covers public finished geometry and private sources.
+- miGarden owns system/firmware/simulator/spatial source; microSched owns its web/API/Postgres adapter. Release compatibility binds both refs and versions.
+- HTTPS is the foundation baseline. Heartbeat coalesces with report cadence; the 60-second probe is isolated to `local|throwaway`. Cost acceptance precedes production ingest.
+- Strict flags, server-authoritative config/time/calibration, truthful outcome and local fail-closed safety remain normative.
 
-- Tên product/module và tên BTL theo header; cùng một implementation.
-- Làm cá nhân; miGarden giải quyết việc quản lý vườn từ xa như bounded module lớn của microSched.
-- `Pot` là aggregate động; chín chậu là snapshot, không phải cardinality. Device/channel/outlet và assignment có lifecycle riêng.
-- Logical domain giữ pot-level identity/history và optional sensing/recommendation; current MVP irrigation control theo zone/outlet và preview toàn bộ affected pots. Per-pot physical actuation là future gated; water pilot dùng Zone A shared circuit.
-- Product MVP core không phụ thuộc soil sensing: inventory/map/history, device/telemetry foundation và owner-confirmed remote controlled irrigation. Soil sensing là optional lane; rule/model soil-driven nằm sau evidence.
-- Product/course authority: giải quyết miGarden thật trước; từng rubric criterion được disposition, không tự trở thành architecture requirement.
-- Map/layout bám hình thái, ảnh và topology nhà thật; owner cho phép dùng curated media cho app/BTL/giới thiệu.
-- System source/release ở miGarden; web/API/DB adapter ở microSched modular monolith với runtime/database hiện có; bind exact refs và version compatibility.
-- Hardware/network probe là gate; P1A đã về theo Owner report nhưng chưa identity/bench; field water hardware chưa chốt/mua.
-- Phone speed test không phải board SLA.
-- Ưu tiên nghiên cứu lấy nước trực tiếp từ vòi sẵn có; exact hydraulic architecture vẫn mở.
-- Edge giữ local safety; cloud/model không là safety controller duy nhất.
-- Secret/credential thật không commit/phát hành; curated media phải review EXIF/visible secret/người thứ ba.
-- Normal heartbeat coalesce với report cadence đã được duyệt; lane 60 giây chỉ `local|throwaway` và không chạm production DSN/host/Neon; `G0-NEON-COST` bắt buộc trước production ingest.
-- Exact flags `IOT_ENABLED -> IOT_DEVICE_INGEST_ENABLED -> IOT_ACTUATION_ENABLED` parse strict/fail-closed và disabled routes absent khỏi app/OpenAPI.
-- Freshness tách `observed_age`/`ingest_age`; server là authority cho config/time/calibration/engineering value.
+### 20.2 Open implementation decisions
 
-### 20.2 [MỞ] - có gate cụ thể
+- Exact controller unit/board, pins/interfaces, framework/SDK, partition, power and enclosure. The bench kit has arrived by report; identity and bench evidence remain missing.
+- Command transport and remote-hop connectivity, benchmarked under §10. HTTPS baseline does not settle downstream transport or justify a broker.
+- Clock/persistence/recovery, schedule validity age, durable dedup/ledger and remote/manual/schedule arbitration. Source START/STOP is selected; exact switch, ingress protection and wiring remain physical design work. Balcony input is optional.
+- Exact XYZ/scale/endpoints and model-v0 schema/interactions. Rendering direction A+B is selected; package version, build and assets are still open.
+- Exact data/API naming, sampling/staleness/retention and production report cadence. `15 phút + jitter 0..120 s` remains an experimental baseline.
+- Cost fields `measurement_period`, `cu_hours_cap_per_period`, `row_growth_cap_per_period`, `index_growth_cap_per_period`: `OPEN - unset`, with no hidden defaults (§5.2).
+- Exact source/master/outlet, regulator/filter/check valve, flow/leak/pressure protection and field power. Every numeric water-policy field remains `OPEN - unset` and needs §15.3 evidence; dry profile cannot bypass it.
+- Soil strategy/sensor/quantity/calibration/heuristic only if the HOLD lane is deliberately reopened; the former three-wireless-probe plan is not a current requirement.
+- OTA only after exact-board integrity/authenticity, idle, power-loss and rollback proof; not an MVP dependency.
 
-- Exact controller board, interface, enclosure, power và firmware framework: `G0-BOARD-BUY`, `G0-POWER-ENV`.
-- Soil strategy, exact sensor và quantity: `G0-SENSING-STRATEGY`; nếu chọn thì `G0-SENSOR-BENCH/G0-SENSING-PILOT/G0-DATA-PILOT`. Exact Zone A source/outlet hardware vẫn `OPEN`; Zone B deferred.
-- Direct Wi-Fi/wired/LoRa/LoRaWAN/mesh cho remote hop: `G0-NET-24H/7D` + §10 decision record.
-- Local sampling, stale threshold và retention exact: benchmark board, data quality, row-size/cost và pilot.
-- Report/heartbeat cadence `15 phút + jitter 0..120 s` chỉ là baseline `MỞ`; cadence production chỉ được owner chốt bằng versioned decision sau `G0-NEON-COST`.
-- Cost prerequisites `measurement_period`, `cu_hours_cap_per_period`, `row_growth_cap_per_period`, `index_growth_cap_per_period`: `OPEN - unset` tới khi owner duyệt; không có cap mặc định trong spec.
-- MQTT: chỉ sau trigger/gate §10.3; HTTPS là foundation baseline.
-- FOTA/firmware rollout: post-BTL, signed/rollback/power-loss evidence.
-- Threshold/soil heuristic exact và có dùng ML hay không: chỉ mở nếu sensing selected + calibration/labeled eval.
-- Exact direct-faucet design: source/master, Zone A/Zone B provision, outlet topology, regulator/filter/check valve, flow/leak/pressure protection, power và command transport - Lớp 2 + safety review. Per-pot branch/emitter có thể điều chỉnh/bảo trì riêng nhưng không mặc định là independently controlled outlet.
-- Exact DB table/API naming và 2D/2.5D/3D rendering choice: chốt ở lớp tương ứng sau khi physical model đủ.
-- Toàn bộ numeric water policy, gồm `max_water_volume_per_command`, `max_volume_per_window`, `window`, `max_duty_cycle_per_window`, `cooldown`, `local_max_open_ms`, `leak_cutoff_latency_ms` và hydraulic inertia: `OPEN - unset` tới khi owner duyệt evidence và `G0-WATER-SAFETY=PASS` theo §15.3.
-- Disposition từng criterion của đề BTL và mọi clarification mới của giảng viên: `G0-RUBRIC-DISPOSITION`; rubric không có architecture authority.
+### 20.3 Excluded shortcuts
 
-### 20.3 [LOẠI]
-
-- Fixed nine-position registry, `zone` làm pot identity, hoặc 9 sensor + 9 actuator mua mặc định.
-- Adaptive rule/soil/LLM tự phát watering command trong MVP; cloud-only cutoff hoặc model bypass local policy. Deterministic schedule vẫn là option mở sau safety evidence.
-- Unsigned OTA, stale command replay, retained `OPEN`, reopen sau reboot.
-- Cấm chung việc dùng ảnh/layout/topology nhà sau khi owner đã cho phép; chỉ secret và privacy của người thứ ba còn là hard boundary.
-- Dùng DHT11 humidity thay soil moisture.
-- Dùng phone Mbps/ping để pass network gate.
-- MQTT broker, LoRa hoặc mesh không có requirement/evidence.
-- Repository, runtime, DB/service/cloud dashboard thứ hai hoặc microservices/Redis/Celery không có evidence biện minh.
-- DB polling dày cho command/health; health check chạm DB mỗi vài chục giây.
-- Shopping exact actuator/pipe/power hardware từ assumption.
-- Insecure TLS/trust-all/plaintext fallback hoặc yêu cầu mTLS không có threat-model evidence.
-- Recursive submission/copy cả `btl/`, export theo denylist-only hoặc silently coerce feature flag boolean.
+- Fixed nine-position identity or default nine sensors/valves; false per-pot control/volume on a shared circuit.
+- Adaptive soil/rule/LLM actuation in the MVP, cloud-only cutoff or any bypass of local safety. This exclusion does not reopen the selected deterministic schedule.
+- Unsigned OTA, stale/retained OPEN replay or reopening after reboot without trusted safe state.
+- DHT11 air humidity as soil moisture; phone speed tests as board network acceptance.
+- Broker/radio/mesh without requirement and evidence; additional DB/backend/cloud dashboard or microservices/Redis/Celery without demonstrated need. The selected separate system repository remains valid.
+- Frequent command/health DB polling, guessed field hardware, insecure TLS/trust-all/plaintext fallback, or mTLS mandated without a supported threat model.
+- Unbounded/denylist-only release exports, symlink/junction escapes or coerced feature flags.
 
 ## 21. Source map and provenance
 
-See [provenance](provenance.md) for selected source hashes and [design inputs](design-inputs.md) for course concepts/disposition. Original spec, survey, architecture/hardware drafts, Owner decisions and research receipts remain immutable private snapshots. Public pages reconcile current topology, arrival, sensing HOLD and chosen A+B without copying private grants or transcripts. [Site baseline](site-baseline.md) preserves readings/uncertainty; actual raw captures remain local. File presence/document approval is not implementation, CI, production or physical acceptance.
+See [provenance](provenance.md) for input document hashes, [design inputs](design-inputs.md) for rationale and [site baseline](site-baseline.md) for readings and uncertainty. Current requirements are stated in this specification; understanding them does not require a private decision ledger.

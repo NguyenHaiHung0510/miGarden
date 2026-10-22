@@ -1,17 +1,23 @@
 # Selected representation: A/SVG + B/Three.js
 
-Owner selected **A+B/Three.js**; this migration preserves the choice and its design inputs. Scene/model product implementation is outside MG-H1. Earlier raster comparison images were synthetic illustrations, not reconstructed house geometry; their exact files/prompts/provenance are retained privately.
+The selected design combines SVG and Three.js views of one versioned spatial source. The repository contains the design contract and preliminary readings; a scene/model/viewer has not been implemented.
 
-| View | Role / contract |
+| View | Role and contract |
 |---|---|
-| A: SVG plan + section/routes | Precise labels, anchors, route/elevation distinctions, source selection and uncertainty. Useful for correction/export; not a surveyed CAD drawing by default. |
-| B: Three.js simple 3D/cutaway | Understand multi-level relations, rotate/cut/select layers and inspect anchors. Shares the same canonical versioned data as SVG; visual plausibility is not measurement. |
-| C: photogrammetry/COLMAP | Owner self-experiment, not a prerequisite or Agent install/run task. Finished outputs may later be imported with scale, coordinate system, capture/reconstruction provenance and uncertainty; raw source stays local. |
+| A: SVG plan + section/routes | Labels, anchors, route/elevation distinctions, source selection and uncertainty. Useful for correction/export; not a surveyed CAD drawing by default. |
+| B: Three.js simple 3D/cutaway | Multi-level relations, rotation/cutaway/layer selection and anchor inspection. Shares the same canonical data as SVG; visual plausibility is not measurement. |
+| C: photogrammetry/COLMAP | Optional independent experiment, not a prerequisite for A+B. Import finished output with scale, coordinate system, reconstruction provenance and uncertainty. |
 
-Future scene source should name stable anchor/object/route IDs; explicit units, axes, origin and model version; source IDs/frame timestamp; observation date; confidence `observed`, `Owner-confirmed`, `estimated`, `inferred`, `unknown`; and reason/history for corrections. Unknown coordinates remain missing/visibly uncertain. Do not infer floor heights, wall thickness, valve SKU or calibrated scale from generic architecture conventions.
+## Shared source and corrections
 
-Route polyline, RF straight-line and elevation are distinct measurements. Geometry guides test placement; protocol/RF performance needs real devices/workload and hydraulic performance needs measured flow/pressure/feedback. A digital view does not certify either.
+The future scene source needs stable anchor/object/route IDs; explicit units, axes, origin and model version; source IDs/frame timestamps; observation date; confidence `observed`, `Owner-confirmed`, `estimated`, `inferred`, `unknown`; and reason/history for corrections. Unknown coordinates stay missing or visibly uncertain. Do not infer floor heights, wall thickness, valve SKU or calibrated scale from generic architecture conventions.
 
-miGarden owns one canonical scene source. The microSched adapter consumes a declared compatible scene/contract version; copied render assets are releases, not a competing editable authority. A correction should update both views through that same source. Exact schema, package/build versions, CDN/local-asset choice and interaction acceptance belong in the later model-v0 packet; no package, scene source or synthetic geometry is created by this docs migration.
+Route polyline, RF straight-line and elevation are different measurements. Geometry guides test placement; RF needs real devices/workload and hydraulics need measured flow/pressure/feedback. See [site baseline](site-baseline.md).
 
-Finished real-site SVG/drawings/3D/COLMAP are approved public content categories. Preserve source lineage without exposing raw captures, source-media filenames, EXIF/private identifiers or transcripts in the public tree. Do not require a synthetic replacement simply because a finished model represents the actual house. This candidate contains documented readings and contracts, no newly generated measured 3D/COLMAP assets.
+miGarden owns one canonical scene source. The microSched adapter consumes a compatible scene/contract version; copied render assets are releases, not another editable authority. A correction updates both views through the same source. Exact schema, product package/build versions, CDN/local-asset choice and interaction acceptance remain model-v0 design work. Earlier raster comparisons were synthetic illustrations, not reconstructed site geometry.
+
+## Public content and private sources
+
+Finished drawings, SVG, 3D models and COLMAP outputs of the actual site may be public. They do not need synthetic replacements. Keep source lineage, scale and uncertainty useful to readers, while excluding raw captures and private identifiers from published artifacts.
+
+Raw photos/video, extracted frames/contact sheets, private transcripts/ledgers/receipts, credentials and personal machine paths stay in ignored local storage. Preserve original source bytes. Before publishing a finished asset, review EXIF/embedded metadata, visible secrets and third-party content; use public-safe source IDs rather than private filenames or paths. No measured 3D/COLMAP reconstruction is present in this repository yet.

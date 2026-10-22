@@ -1,13 +1,31 @@
 # AGENTS.md — miGarden
 
-Read [README.md](README.md), then [current state](docs/project-state.md) and the document relevant to the task. This is the miGarden system project: firmware/local arbiter, simulator, hardware lifecycle, spatial source and versioned integration contracts. The microSched web/API/storage adapter follows its own repository rules.
+Start with the assigned task, read this entry, then only the product documents needed for that task and the matching skill. No README reread or full-document sweep is required. This repository currently contains design documentation and technical skill packages; firmware, simulator, viewer and microSched integration are not implemented.
 
-- Work within the actual task grant. A design choice, installed skill or successful dry run does not authorize product implementation, provisioning, flash, water, purchase or publication.
-- On the Owner machine, `.local/owner-machine.json` locates the **single shared Owner authority source** and current canonical decision ledger. Read applicable shared policy on demand; do not copy it into project policy. `.local/continuity.md` records migration/cutover state. A snapshot is not a second writable ledger. Capture new meaningful Owner decisions in the canonical ledger through its current writer before substantive dependent work.
-- A public checkout has enough product facts and workflows in `docs/` to read, discuss and propose work. Missing private locators grant no extra powers; obtain the actual task authority for execution. Public summaries do not reproduce private grants or personal policy.
-- Use [harness applicability](docs/harness.md), [operations](docs/operations.md), [specification](docs/specification.md) and [site baseline](docs/site-baseline.md). Preserve current Zone A/shared-circuit, local schedule, source START/STOP, sensing HOLD and A/SVG+B/Three.js decisions.
-- All Agents may select fitting available skills automatically within assigned scope. Follow [project skills](docs/skills.md) and [notices](THIRD_PARTY_NOTICES.md); selection does not authorize a runner's side effects. Keep one writer per file/lane, verify requested/effective pins through the responsible coordinator, and preserve independent acceptance. Do not recursively delegate without an actual grant.
-- Raw house photos/video, extracted frames, contact sheets, private ledgers/receipts, owner paths and secrets stay in ignored `.local/`. Finished real-site drawings, 3D and COLMAP outputs may be public under the recorded content decision; preserve provenance and label uncertainty. Do not impose a synthetic-only condition. Do not overwrite originals.
-- Treat simulator, LED dry bench, contained water and field evidence separately. A screenshot or output GPIO does not prove valve/flow state. Keep unknown outcomes, fail-closed behavior, local budget and manual shutoff boundaries from the spec.
-- Before device/runner work, bind exact board/build/config/boot, exclusive COM/resource ownership, wiring/output state, permitted effects and recovery. Unavailable or untested activation/device evidence stays `NOT_RUN`; file presence is not runtime proof.
-- Use Vietnamese with standard English technical terms for the Owner. Explain concrete behavior, evidence and material alternatives. Close out with changed files, observed checks, limitations and next action; never infer CI/production/field success from local document checks.
+## Task routing
+
+| Task | Read as needed |
+|---|---|
+| Scope or implementation status | [Project state](docs/project-state.md) |
+| Domain, API, command or schedule | Relevant sections of [specification](docs/specification.md) and [architecture](docs/architecture.md) |
+| Geometry, map or scene | [Representation](docs/representation.md), relevant [site readings](docs/site-baseline.md) |
+| Board, firmware, build or recovery | Relevant [operations runbook](docs/operations.md), specification §§14–15 for actuation |
+| Technical skill | Matching entry in [skills](docs/skills.md), then only needed references |
+
+Every Agent may automatically select suitable available skills within the assigned task. A named invocation is optional; do not read all skills for every task or restrict selection by role. Keep one writer per file and one executor per exclusive device/serial resource.
+
+## Product boundaries
+
+- Zone A is one shared circuit; preview and history include all affected pots. Pots and placements are dynamic. Per-pot independent actuation and Zone B remain future extensions.
+- Local deterministic schedule and source START/STOP are selected designs. Remote, schedule and local input converge at one safety arbiter. Soil/Zigbee sensing is HOLD; its conditional contracts do not make it a current requirement.
+- A/SVG and B/Three.js share one canonical versioned spatial source. Do not invent coordinates, calibrated scale or RF/hydraulic performance to fill gaps.
+- miGarden owns firmware/local arbiter, simulator, spatial source and integration contracts. microSched owns its human web/API/storage adapter under that repository's rules. Bind both revisions and contract versions for integration changes.
+- Preserve fail-closed boot, unknown-outcome blocking, cumulative local budget, no catch-up/replay and independent manual shutoff in specification §§14–15. Numeric water policy, exact board/pins/framework and unresolved arbitration require design evidence; do not fill them under editorial changes.
+
+## Changes and evidence
+
+Work within the task's requested effects. Reading a skill or runbook does not itself request toolchain installation, serial access/reset/flash, provisioning, water operation or publication. Before device work, identify the exact board, build/config/boot, wiring, output state, exclusive resources and recovery path using [operations](docs/operations.md).
+
+Keep simulator, dry LED, contained-water and field results distinct. GPIO, screenshots and received acknowledgements do not prove valve position or flow. Report changed files, observed checks and unresolved limitations; document checks do not prove runtime or field behavior. Apply the [public-content rules](docs/representation.md#public-content-and-private-sources) to data and assets.
+
+If `.local/current-brief.md` exists on this checkout, read that local file for current work context; it points to `.local/owner-machine.json`, shared authority and the canonical task record. This is a conditional file pointer, not an executable hook. A public clone without `.local` uses the task and product documents above.
