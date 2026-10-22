@@ -1,0 +1,2 @@
+# Keep reviewed text/license payload bytes stable across Windows checkouts.
+* text=auto eol=lf

@@ -1,0 +1,60 @@
+{
+  "skill": "threejs-interaction",
+  "adaptation_version": "mg-h1.1",
+  "reviewed_date": "2026-10-22",
+  "scope": "project-local .agents/skills",
+  "repository": "https://github.com/CloudAI-X/threejs-skills",
+  "source_commit": "0e181866f095b5f06d005133876e926515390d95",
+  "source_commit_date": "2026-10-19T05:17:17Z",
+  "source_path": "skills/threejs-interaction",
+  "immutable_source_url": "https://github.com/CloudAI-X/threejs-skills/tree/0e181866f095b5f06d005133876e926515390d95/skills/threejs-interaction",
+  "upstream_version": "no skill semantic version observed; pinned by commit",
+  "upstream_api_target": "three.js r186",
+  "license": "MIT",
+  "license_source": {
+    "path": "LICENSE",
+    "bytes": 1066,
+    "git_blob_sha1": "a8252c8e6798c6867144edbfb5bbd8df80743d00",
+    "sha256": "d26f12fa1a0e03fd5aa4d3cbf05262a9f1c684672d0864abac78b3bbb12b268c"
+  },
+  "modification_notice": "miGarden project contributors, 2026. Local adaptations are provided under the same MIT terms in LICENSE; upstream copyright notices are retained verbatim.",
+  "adaptations": [
+    "Move reviewed upstream technical body to references/upstream-r186.md; remove final See Also list of uninstalled suite modules. Technical examples otherwise unchanged.",
+    "Replace entry with a narrow project workflow and positive/negative discovery boundary; preserve r186 source/API declarations without assuming an installed package.",
+    "Add shared SVG/3D provenance, units/coordinates, package/version, local assets and representation-versus-device boundaries.",
+    "Add explicit implicit-invocation policy true for all task-eligible Agents; no plugin, MCP, provider or package dependency declarations."
+  ],
+  "source_files": [
+    {
+      "path": "skills/threejs-interaction/SKILL.md",
+      "bytes": 22313,
+      "git_blob_sha1": "bdd56b384eb0df0cc883057dd456136ec2c5d768",
+      "sha256": "46f60f3235aa11f2b89320cc2fb5b0adc167f3e8f0c717ba60ad1b006b41621f",
+      "disposition": "adapted-entry-and-extracted-reference"
+    }
+  ],
+  "installed_payload_files": [
+    {
+      "path": "agents/openai.yaml",
+      "bytes": 42,
+      "sha256": "8619a54e8c098122a7f3881394f84ca89b684366e848233a29ad18b6ec363935"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1066,
+      "sha256": "d26f12fa1a0e03fd5aa4d3cbf05262a9f1c684672d0864abac78b3bbb12b268c"
+    },
+    {
+      "path": "references/upstream-r186.md",
+      "bytes": 21565,
+      "sha256": "39302bb0acf60d3856ded6f7793dff0db86ce08306286dd774ffe138df5990ae"
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 3127,
+      "sha256": "43c59df78989d9ab7235e3370d36a7041cbaeaf40144b46569670ce98da5b8ba"
+    }
+  ],
+  "integrity_scope": "Payload list excludes this PROVENANCE.json to avoid a self-hash; private final manifest includes it. Same-environment integrity evidence is not independent review.",
+  "execution": "No upstream helper, firmware, package manager, toolchain, browser or device command executed during acquisition/adaptation."
+}

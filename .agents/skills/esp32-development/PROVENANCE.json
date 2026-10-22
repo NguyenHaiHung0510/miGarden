@@ -1,0 +1,245 @@
+{
+  "skill": "esp32-development",
+  "adaptation_version": "mg-h1.1",
+  "reviewed_date": "2026-10-22",
+  "scope": "project-local .agents/skills",
+  "repository": "https://github.com/magnus919/agent-skills",
+  "source_commit": "92c327e525da69c9ad3812fd223a1770e977c2e3",
+  "source_commit_date": "2026-10-20T17:14:52Z",
+  "source_path": "esp32-development",
+  "immutable_source_url": "https://github.com/magnus919/agent-skills/tree/92c327e525da69c9ad3812fd223a1770e977c2e3/esp32-development",
+  "upstream_version": "no skill semantic version observed; pinned by commit",
+  "upstream_api_target": "selected framework/board version must be bound by task",
+  "license": "MIT",
+  "license_source": {
+    "path": "LICENSE.md",
+    "bytes": 1072,
+    "git_blob_sha1": "9745e19f4b20d77c134964ae1bf0af0ace5c4db7",
+    "sha256": "22fa3b1ec405fe440e86d0d293ce21de0c637ebc37f263dbe3032ee47215cfe2"
+  },
+  "modification_notice": "miGarden project contributors, 2026. Local adaptations are provided under the same MIT terms in LICENSE; upstream copyright notices are retained verbatim.",
+  "adaptations": [
+    "Replace broad cross-framework entry with a bounded miGarden ESP32 engineering/evidence workflow; remove unsupported top-level compatibility field.",
+    "Preserve six relevant upstream Markdown references/worksheets, fixing two template links and one reference to the omitted native-tool workflow.",
+    "Omit executable helper, firmware/config templates, evals, README and unrelated framework/connectivity/peripheral references; exact omitted list recorded below.",
+    "Add Windows preflight: unsupported enumeration is not absence; use observed Device Manager/framework evidence without invented detection.",
+    "Separate skill selection, host/build/device/field evidence and actual mutation authority without personal/global role or policy copies."
+  ],
+  "source_files": [
+    {
+      "path": "esp32-development/README.md",
+      "bytes": 3132,
+      "git_blob_sha1": "41b94ffe6158897ee06d51861361b2d95cd8aee8",
+      "sha256": "0a8ca5b7ef235523ce30d2dfb7a59e8211fdc294eed757a9e7f4994c4cade4ca",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/SKILL.md",
+      "bytes": 10162,
+      "git_blob_sha1": "601de8623bfc69c45e11d472c78758ca89f8f151",
+      "sha256": "19b53675b50873d093c0e016c63af6fff1f7b3f05d0d4f58ac54a8edbef6329c",
+      "disposition": "adapted"
+    },
+    {
+      "path": "esp32-development/evals/evals.json",
+      "bytes": 8854,
+      "git_blob_sha1": "8c9acb702d95256d4181893914f9011191e4ce73",
+      "sha256": "da36f8bd66254ddb03fcb87f3cbd9c8338007839091c51770a086a8fa55ec9db",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/references/connectivity-power-and-ota.md",
+      "bytes": 5594,
+      "git_blob_sha1": "ea51378d59dabad205c3218686fd4f2bf4596c05",
+      "sha256": "32963e22c6a7fec6ac9393da2764fe940d53565051f9f96097d247bc6105ebb6",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/references/debugging-recovery-and-security.md",
+      "bytes": 6620,
+      "git_blob_sha1": "3ee2b56670d1052900abd6f9a32c2bea20ef454b",
+      "sha256": "149ea59175e358633f77e2e2e2b3733af8942aae220295fe8c5901ebf5878696",
+      "disposition": "unchanged"
+    },
+    {
+      "path": "esp32-development/references/decisions-and-preflight.md",
+      "bytes": 4894,
+      "git_blob_sha1": "23ee397588e3815e9d57524ce3aa032cc0a4c53b",
+      "sha256": "da935c7ed49cc3fa104edceb2266f58ca04dc4ae2dd0da9a7c53bb4ca152ea7e",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/references/firmware-frameworks.md",
+      "bytes": 6413,
+      "git_blob_sha1": "a2f4c4c806cb041c9ee5d46caae01289860e5aa7",
+      "sha256": "e5fe73e0ae573eee7b1cff6498a313262697532f4b8f818c9cad0f670a1e17e5",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/references/hardware-and-electrical-safety.md",
+      "bytes": 6115,
+      "git_blob_sha1": "d31b7f672bc1d604cd06d9cdb3fd4a26e8016603",
+      "sha256": "8e1983c854da1a364952cc7862ad21cc4370ed4fd4bc0df0db056b063239f069",
+      "disposition": "adapted"
+    },
+    {
+      "path": "esp32-development/references/hardware-test-automation.md",
+      "bytes": 11510,
+      "git_blob_sha1": "b17d2b99b8f8e3d8900a56b853fb236cb5435383",
+      "sha256": "621a27259cf2525ed5f9c14fd0142f192208bc86a5e79d1d0a41ff79ff9d55f5",
+      "disposition": "adapted"
+    },
+    {
+      "path": "esp32-development/references/native-tool-workflows.md",
+      "bytes": 6668,
+      "git_blob_sha1": "cc4dcde2a833e362cb7268ec6869f40363817dd3",
+      "sha256": "0812a4e61b374c54a33aecbc62151620a74355dbdbcb5b2475611ea3cfcdce4c",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/references/peripherals-and-buses.md",
+      "bytes": 6182,
+      "git_blob_sha1": "8b8083932dc5093e45df60a518355fa1ec10d443",
+      "sha256": "73730cc94a0e2a9d833012731c46297cc92dceca3a451d3df6bd076530700aba",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/references/sensors-actuators-and-calibration.md",
+      "bytes": 5294,
+      "git_blob_sha1": "9a4ab99c07237ad27053b3cc46c8d1eeb5120376",
+      "sha256": "f5e0be61a5bdba4d470bfbf2a648c9772bd4cf9fc5e9b77eccef384566ab3f8d",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/references/source-index.md",
+      "bytes": 17626,
+      "git_blob_sha1": "6cb9d357fb3d1645cd38a10d8ee27f356a5152f0",
+      "sha256": "72fed04c2d841d3e6e9837d5f4f7c44e7256bbab6debe09307b0760cf4a90b81",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/scripts/esp32-preflight.py",
+      "bytes": 3156,
+      "git_blob_sha1": "63bf7d85594b1072217f38f3df1d6c08cb69f2ac",
+      "sha256": "900461278e8e22d92d43b66834820565b6d7aa009cfcebf8f6276df34f3727dc",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/templates/component-contract.md",
+      "bytes": 1623,
+      "git_blob_sha1": "b7ab6180ddd2aaa1ff80a596a1911685f8aa0bc6",
+      "sha256": "945bb63cff2c4150dd88517f3cffe9b5be7ccd5f2f6eabe17b542dfae2499501",
+      "disposition": "unchanged"
+    },
+    {
+      "path": "esp32-development/templates/esp-idf-main.c",
+      "bytes": 1284,
+      "git_blob_sha1": "1493b425e458d902810451ab86cf79b3014c1ea8",
+      "sha256": "250567e2a9813734e5e4a8298f4322d97510a3e4439b22f5d8589b81eef38169",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/templates/esphome-device.yaml",
+      "bytes": 1064,
+      "git_blob_sha1": "231b9224856303ec3e567cf011765303145a8c71",
+      "sha256": "3422baef58f68527087f2040ddbe73c62b1881f0ecd5c0267e6095fd38e3cc4a",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/templates/esphome-secrets.yaml.example",
+      "bytes": 326,
+      "git_blob_sha1": "64516a4a4622f00575cc7deea41586bebb4c76f6",
+      "sha256": "15606b6b52d2aa1307bdcc39855d69b07ab98b3cb345f303dbf37fb8763feda4",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/templates/hardware-bringup.md",
+      "bytes": 2191,
+      "git_blob_sha1": "a15105c7e88ae5c3c96815f080c1b419a472b894",
+      "sha256": "8bc9eb3540837011ac26c37607a8279210b91b6a584cfe4e3495fc2156511933",
+      "disposition": "unchanged"
+    },
+    {
+      "path": "esp32-development/templates/hardware-test-plan.md",
+      "bytes": 3420,
+      "git_blob_sha1": "3b8b6e136b13bf7434fe72836641c0713c6b8cac",
+      "sha256": "1469137c1003ae6adecb789138ae2be0ec2a4fde21ab80c212b7c308cdbcc0b5",
+      "disposition": "unchanged"
+    },
+    {
+      "path": "esp32-development/templates/micropython-i2c-scan.py",
+      "bytes": 651,
+      "git_blob_sha1": "52685add9f191dce2a455bec6b7a05baa0bfdb40",
+      "sha256": "99d52ceae80057ca6b57cf34f324d61e82376d39f59c78fbb98f2b36afd1ea7d",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/templates/platformio.ini",
+      "bytes": 450,
+      "git_blob_sha1": "0f2c08dd8f55f6e99e913b1033f3128531931366",
+      "sha256": "f65e70c9a0191a43e0ade888647e83fd2a4757a96eafe392b1952d55b44b3334",
+      "disposition": "omitted-from-installed-package"
+    },
+    {
+      "path": "esp32-development/templates/zephyr-esp32.overlay",
+      "bytes": 737,
+      "git_blob_sha1": "fa20f68c7cb00786a85c09c29258998938cb4fc7",
+      "sha256": "6d0f3c6f1dbf02e87dee0cd88f3bc85548eb3a1aae7b8f19e2e764c9e154cb6d",
+      "disposition": "omitted-from-installed-package"
+    }
+  ],
+  "installed_payload_files": [
+    {
+      "path": "agents/openai.yaml",
+      "bytes": 42,
+      "sha256": "8619a54e8c098122a7f3881394f84ca89b684366e848233a29ad18b6ec363935"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1072,
+      "sha256": "22fa3b1ec405fe440e86d0d293ce21de0c637ebc37f263dbe3032ee47215cfe2"
+    },
+    {
+      "path": "references/debugging-recovery-and-security.md",
+      "bytes": 6620,
+      "sha256": "149ea59175e358633f77e2e2e2b3733af8942aae220295fe8c5901ebf5878696"
+    },
+    {
+      "path": "references/hardware-and-electrical-safety.md",
+      "bytes": 6147,
+      "sha256": "e81ccc15be1080e76f90563cba55c3299be21c234be5042a46a1e54c1e5f230a"
+    },
+    {
+      "path": "references/hardware-test-automation.md",
+      "bytes": 11598,
+      "sha256": "b543b9714f9eb9e93261c8ace2406fcae9f0b594c01a313d62fa7b3e6fda756c"
+    },
+    {
+      "path": "references/windows-preflight.md",
+      "bytes": 2886,
+      "sha256": "9727a184ba19ad0db6770f0cc3355dc2e6da68a9e1d134e27ec1971b971a9b96"
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 4840,
+      "sha256": "2088dd635fce8988b4cae8f7fd6e5fdc3dbc7a43386573dd068f0b494b11797d"
+    },
+    {
+      "path": "templates/component-contract.md",
+      "bytes": 1623,
+      "sha256": "945bb63cff2c4150dd88517f3cffe9b5be7ccd5f2f6eabe17b542dfae2499501"
+    },
+    {
+      "path": "templates/hardware-bringup.md",
+      "bytes": 2191,
+      "sha256": "8bc9eb3540837011ac26c37607a8279210b91b6a584cfe4e3495fc2156511933"
+    },
+    {
+      "path": "templates/hardware-test-plan.md",
+      "bytes": 3420,
+      "sha256": "1469137c1003ae6adecb789138ae2be0ec2a4fde21ab80c212b7c308cdbcc0b5"
+    }
+  ],
+  "integrity_scope": "Payload list excludes this PROVENANCE.json to avoid a self-hash; private final manifest includes it. Same-environment integrity evidence is not independent review.",
+  "execution": "No upstream helper, firmware, package manager, toolchain, browser or device command executed during acquisition/adaptation."
+}
