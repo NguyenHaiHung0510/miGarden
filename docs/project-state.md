@@ -29,7 +29,7 @@ MG-H1 đã được duyệt cho setup/selective migration/handoff, project skill
 | Product code inventory | Cached surveyed microSched `develop` SHA `ddba8d367d575c91f8e355bb9a21fa408d6fea0c` chưa thấy committed miGarden implementation. Đây là dated source observation, không live branch/production claim. |
 | Target-root/skills | 3/3 installed; fresh CLI đúng root/pin, catalog discovery và selection đủ ba được PM quan sát. Planning/handoff là scope đã chứng minh; renderer/toolchain/device workflow runtime vẫn **NOT_RUN**. |
 | App/DB/firmware/device | Build/simulator/USB/flash/LED/button/clock/RF/water/production **NOT_RUN** trong batch này. |
-| Release/cutover | [Review report](reports/2026-oct-22-mg-h1.md) giữ candidate/acceptance evidence. PM release đúng Git candidate và chuyển canonical một lần có receipt riêng; local locator là nơi đọc current cutover status. Source snapshot không được tự nâng canonical. |
+| Release/cutover | [Review report](reports/2026-oct-22-mg-h1.md) giữ candidate/acceptance evidence. Tại review snapshot, remote publication và canonical cutover pending/NOT_RUN; PM ghi receipt khi thực sự hoàn tất. Local locator là nơi đọc current cutover status. Source snapshot không được tự nâng canonical. |
 
 ## Việc tiếp theo
 

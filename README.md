@@ -20,4 +20,4 @@ Raw ảnh/video, frames/contact sheets, transcripts/ledger/receipts và đườn
 
 ## Trạng thái kiểm chứng
 
-Document/link/hash/private-separation checks và independent review đã thực hiện; fresh-root Codex đã chứng minh discovery/selection ở một task handoff. [Báo cáo MG-H1](docs/reports/2026-oct-22-mg-h1.md) phân biệt worker claims, PM reconciliation và giới hạn; release/canonical cutover có receipt riêng trên máy Owner. Device/toolchain/app/DB/flash/field tests **NOT_RUN**. Có tài liệu/skill không chứng minh hardware workflow đã hoạt động. Xem [operations](docs/operations.md) để tiếp tục đúng plane.
+Document/link/hash/private-separation checks và independent review đã thực hiện; fresh-root Codex đã chứng minh discovery/selection ở một task handoff. [Báo cáo MG-H1](docs/reports/2026-oct-22-mg-h1.md) phân biệt worker claims, PM reconciliation và giới hạn. Tại review snapshot, remote publication/canonical cutover còn pending; kết quả thực thi được PM ghi riêng sau khi kiểm chứng. Device/toolchain/app/DB/flash/field tests **NOT_RUN**. Có tài liệu/skill không chứng minh hardware workflow đã hoạt động. Xem [operations](docs/operations.md) để tiếp tục đúng plane.
