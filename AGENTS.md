@@ -1,6 +1,6 @@
 # AGENTS.md — miGarden
 
-Start with the assigned task, read this entry, then only the product documents needed for that task and the matching skill. No README reread or full-document sweep is required. This repository currently contains design documentation and technical skill packages; firmware, simulator, viewer and microSched integration are not implemented.
+Start with the assigned task, read this entry, then only the product documents needed for that task and the matching skill. No README reread or full-document sweep is required. This repository contains design documentation, technical skills and a runnable model-v0 prototype in viewer/. Firmware, control simulator and microSched integration are not implemented.
 
 ## Task routing
 
@@ -8,7 +8,7 @@ Start with the assigned task, read this entry, then only the product documents n
 |---|---|
 | Scope or implementation status | [Project state](docs/project-state.md) |
 | Domain, API, command or schedule | Relevant sections of [specification](docs/specification.md) and [architecture](docs/architecture.md) |
-| Geometry, map or scene | [Representation](docs/representation.md), relevant [site readings](docs/site-baseline.md) |
+| Geometry, map or scene | [Representation](docs/representation.md), [model-v0](docs/model-v0.md), relevant [site readings](docs/site-baseline.md) |
 | Board, firmware, build or recovery | Relevant [operations runbook](docs/operations.md), specification §§14–15 for actuation |
 | Technical skill | Matching entry in [skills](docs/skills.md), then only needed references |
 

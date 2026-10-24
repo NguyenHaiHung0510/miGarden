@@ -2,6 +2,8 @@
 
 Preliminary survey readings and source coverage, as of 2026-10-22. Source IDs below support the design without exposing raw captures; see [content and source handling](representation.md#public-content-and-private-sources).
 
+The [2026-10-24 model-v0 baseline](model-v0.md) adds later owner-confirmed site relations and estimated geometry. The old W/window label below is a historical survey anchor; viewer object W is retained for compatibility but now displays the corrected main door, with a separate window-left object. Showing mini balcony Zone B does not enable its irrigation. Later supplemental source IDs preserve private capture lineage without publishing filenames.
+
 ## Source coverage
 
 23 source images (A01–A11, B01–B12) + V01 video, **42,747,201 bytes** in the recorded inventory; A11 is an earlier Owner annotation derivative retained as a source input. These inputs do not calibrate measurements or determine every XYZ/endpoint. Directory dates are evidence grouping dates, not verified capture dates.

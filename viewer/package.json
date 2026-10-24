@@ -1,0 +1,9 @@
+{
+  "name": "migarden-model-v0-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node server.mjs", "test": "node --test --test-isolation=none server.test.mjs" },
+  "engines": { "node": ">=22.8" },
+  "dependencies": { "three": "0.186.1" }
+}

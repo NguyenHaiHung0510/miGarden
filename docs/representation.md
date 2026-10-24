@@ -1,6 +1,6 @@
 # Selected representation: A/SVG + B/Three.js
 
-The selected design combines SVG and Three.js views of one versioned spatial source. The repository contains the design contract and preliminary readings; a scene/model/viewer has not been implemented.
+The selected design combines SVG and Three.js views of one versioned spatial source. A runnable [model-v0 prototype](model-v0.md) is implemented in [viewer/](../viewer/README.md), alongside the design contract and preliminary readings. Its geometry is estimated, not surveyed.
 
 | View | Role and contract |
 |---|---|
@@ -14,7 +14,7 @@ The future scene source needs stable anchor/object/route IDs; explicit units, ax
 
 Route polyline, RF straight-line and elevation are different measurements. Geometry guides test placement; RF needs real devices/workload and hydraulics need measured flow/pressure/feedback. See [site baseline](site-baseline.md).
 
-miGarden owns one canonical scene source. The microSched adapter consumes a compatible scene/contract version; copied render assets are releases, not another editable authority. A correction updates both views through the same source. Exact schema, product package/build versions, CDN/local-asset choice and interaction acceptance remain model-v0 design work. Earlier raster comparisons were synthetic illustrations, not reconstructed site geometry.
+miGarden owns one canonical scene source. The microSched adapter consumes a compatible scene/contract version; copied render assets are releases, not another editable authority. A correction updates both views through the same source. The prototype pins Three.js locally and records its model/schema version; production packaging and automated live interaction acceptance remain open. Earlier raster comparisons were synthetic illustrations, not reconstructed site geometry.
 
 ## Public content and private sources
 

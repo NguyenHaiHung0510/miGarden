@@ -1,14 +1,30 @@
 # miGarden
 
-miGarden là bộ tài liệu thiết kế hệ thống tưới và quản lý một vườn chậu thật, dự kiến tích hợp giao diện, API và lưu trữ với microSched. Mục tiêu là biết chậu nào đang ở đâu, xem lịch sử chăm sóc và tưới chung một khu từ xa hoặc theo lịch, kể cả khi mất Internet nhưng controller vẫn có điện và trạng thái an toàn hợp lệ.
+miGarden là dự án tưới và quản lý một vườn chậu hoa/cây cảnh ở ban công, dự kiến tích hợp giao diện, API và lưu trữ với microSched. Mục tiêu là biết chậu nào đang ở đâu, xem lịch sử chăm sóc và tưới chung một khu từ xa hoặc theo lịch, kể cả khi mất Internet nhưng controller vẫn có điện và trạng thái an toàn hợp lệ.
 
-**Dự án hiện ở giai đoạn tài liệu và thiết kế.** Repository có specification, khảo sát hiện trường, thiết kế điều khiển và hướng dẫn kỹ thuật; chưa có firmware, simulator, SVG/3D viewer hoặc tích hợp microSched chạy được. Vì vậy chưa có executable quickstart. Xem [trạng thái sản phẩm](docs/project-state.md) để phân biệt thiết kế đã chọn với phần còn thiếu bằng chứng.
+**Đã có prototype SVG/3D model-v0 chạy local**, cùng specification, khảo sát và thiết kế điều khiển. Chưa triển khai firmware, simulator điều khiển hoặc tích hợp microSched. Xem [trạng thái sản phẩm](docs/project-state.md) để phân biệt prototype với chức năng sản phẩm.
+
+## Xem và sửa mô hình
+
+Với Node.js22.8+ và browser có WebGL:
+
+**Windows:** bấm đúp **`start-miGarden.cmd`** ở gốc repo hoặc chạy `./start-miGarden.cmd`. Launcher tự chuẩn bị dependency khi thiếu và mở viewer; dùng lại miGarden đang chạy hoặc chọn cổng trống, không cần nhớ cổng. Giữ cửa sổ server mở; Ctrl+C để dừng.
+
+Hoặc chạy thủ công:
+
+```sh
+cd viewer
+npm ci --ignore-scripts
+npm start
+```
+
+Mở [viewer local](http://127.0.0.1:4179/?layout=space). Xoay toàn cảnh, so tuyến nước, chỉnh điểm và lưu feedback. Clone public không cần ảnh gốc; raw captures và feedback không nằm trong repo. [Hướng dẫn](viewer/README.md) · [baseline và giới hạn](docs/model-v0.md). Chạy `npm test` trong `viewer/` để kiểm dữ liệu và local server; viewer không điều khiển nước thật.
 
 ## Thiết kế hiện tại
 
 - **Zone A là một mạch tưới chung.** Preview phải liệt kê mọi chậu bị tác động; chưa có điều khiển độc lập từng chậu. Chín chậu là snapshot khảo sát, inventory và lịch sử vị trí vẫn thay đổi được.
 - **Remote và local cùng qua một safety arbiter.** Thiết kế có “Tưới ngay” trên web, lịch deterministic được quản lý/version trên cloud và START/STOP tại nguồn. Controller chỉ tiếp tục lịch offline khi thời gian, cấu hình, ledger và safety còn hợp lệ; không chạy bù hoặc chạy trùng.
-- **Bản đồ dùng A/SVG + B/Three.js**, cùng một nguồn spatial data có version, provenance và uncertainty. Geometry chưa được dựng thành viewer.
+- **Bản đồ dùng A/SVG + B/Three.js**, cùng một nguồn spatial data có version, provenance và uncertainty. Prototype đã có; geometry còn synthetic/estimated để cùng chỉnh.
 - **Soil sensing/Zigbee đang HOLD.** Chúng không là điều kiện của irrigation MVP; thiết kế calibration/recommendation chỉ áp dụng nếu lane sensing được mở lại.
 - **miGarden giữ system source; microSched giữ web/API/Postgres adapter.** Hai repository dùng versioned contracts; không mở thêm database hoặc web backend mặc định.
 

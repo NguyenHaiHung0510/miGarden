@@ -1,4 +1,6 @@
-# Third-party skill notices
+# Third-party notices
+
+The [model-v0 viewer](viewer/README.md) depends on Three.js **0.186.1** from npm. Its MIT copyright and permission notice is retained in [viewer/THREE-LICENSE.txt](viewer/THREE-LICENSE.txt); the lockfile pins the package and integrity. Installed dependency files remain ignored. This notice does not assign a license to miGarden project code.
 
 The project-local skills below contain reviewed third-party Markdown and locally adapted instructions. Their MIT copyright and permission notices are retained verbatim in each package's `LICENSE`; these notices do not determine the license of unrelated project material.
 

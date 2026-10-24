@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>miGarden · Cùng nhìn một khu vườn</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23243e34'/%3E%3Cpath d='M9 23C8 12 14 7 24 8c0 9-5 14-15 15Zm1-1L21 11' fill='none' stroke='%23e4efc8' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+  <script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="miGarden, về góc nhìn đầu"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 25C6 12 14 6 26 7c0 11-7 17-19 18Zm1-1L23 10"/></svg><span>miGarden<span class="brand-dot">.</span></span></a>
+    <div class="header-divider"></div><span class="header-context">Không gian khu vườn</span>
+    <span class="draft-badge"><i></i> Model-v0 · Bản dựng 05</span>
+  </header>
+  <main>
+    <section class="intro">
+      <div><p class="eyebrow">CÙNG NHÌN · CÙNG CHỈNH</p><h1>Từ sân thượng đến ban công.</h1><p class="intro-copy">Chọn một điểm, xem ảnh thật và chỉ ra chỗ cần sửa.</p></div>
+      <nav class="layout-switch" aria-label="So sánh hai cách trình bày">
+        <button id="layout-space" data-layout="space" aria-pressed="true"><span>01</span> Không gian trước</button>
+        <button id="layout-drawing" data-layout="drawing" aria-pressed="false"><span>02</span> Bản vẽ trước</button>
+      </nav>
+    </section>
+    <div class="schematic-notice"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.4"/><path d="M10 9v5m0-9v1"/></svg><span><strong>Bản ước lượng để cùng sửa.</strong> Nhãn xanh: số từ ảnh, đầu mút Agent tạm gán. Nhãn ≈: kích thước ước lượng; chưa calibration.</span></div>
+    <section class="route-toolbar" aria-label="Đặt tuyến ống và lưu feedback">
+      <div class="route-presets"><span>SO TUYẾN</span><button data-route-preset="folded" aria-pressed="false">Men trái</button><button data-route-preset="right" aria-pressed="true">Phải · đi ngang</button><button data-route-preset="right-low" aria-pressed="false">Phải · hạ thấp</button><button data-route-preset="diagonal" aria-pressed="false">Chéo · tham khảo</button></div>
+      <div class="route-actions"><button id="route-edit-toggle" aria-pressed="false">Sửa điểm trên 3D</button><button id="focus-3d" aria-pressed="false">Xem 3D rộng</button><button id="route-save" class="save-agent">Lưu cho Agent</button></div>
+      <p id="route-metric-summary"></p><p id="route-save-status" role="status">Bản tuyến đang là ước lượng. Bạn có thể sửa rồi lưu vào project.</p>
+      <div id="route-comparison" class="route-comparison" aria-label="So hai tuyến men mép"></div>
+      <p id="route-site-warning" class="route-site-warning"></p>
+      <div id="previous-draft" class="previous-draft" hidden><span>Nháp bản 03/04 vẫn được giữ.</span><button id="route-restore-previous">Nạp tuyến / feedback cũ</button></div>
+    </section>
+    <section class="source-toolbar" aria-label="Hai phương án vòi nguồn"><div><span>VÒI NGUỒN</span><button data-source-option="reuse" aria-pressed="true">1 · Giữ vòi tay đỏ</button><button data-source-option="multi" aria-pressed="false">2 · Thay vòi ≥2 đầu</button></div><p id="source-option-note" role="status"></p></section>
+    <div class="workspace" id="workspace">
+      <div class="visuals">
+        <section class="view-panel three-panel" id="three-panel" aria-label="Mô hình 3D khu vườn">
+          <div class="panel-header"><div><span class="panel-number">B</span><h2>Không gian 3D</h2></div><label class="cutaway-control"><input type="checkbox" id="cutaway" checked> Mở mặt cắt</label></div>
+          <div class="scene-wrap" id="scene-wrap">
+            <div id="scene" tabindex="0" role="region" aria-label="Mô hình 3D. Kéo chuột để xoay; dùng các nút góc nhìn và danh sách điểm để điều hướng bằng bàn phím."></div>
+            <div class="view-presets" aria-label="Góc nhìn 3D"><button data-camera="all" class="active">Toàn cảnh</button><button data-camera="balcony">Ban công</button><button data-camera="source">Nguồn nước</button><button data-camera="right">Tường phải</button></div>
+            <div id="scene-labels" aria-hidden="true"></div>
+            <div class="scene-help"><span class="mouse-symbol">↔</span> Kéo để xoay <span>·</span> Cuộn để zoom</div>
+            <div class="scene-marker">◇ Cần gá / đỡ <span>Y ↑ · Ước lượng</span></div>
+            <div id="renderer-error" hidden><p>3D chưa mở được trên trình duyệt này.</p><button id="fallback-drawing">Xem bản vẽ SVG</button></div>
+          </div>
+          <details id="route-editor" class="route-editor"><summary>Chỉnh điểm tuyến / nhập số / gửi feedback</summary><div class="route-editor-body">
+            <p class="route-editor-help">Bật “Sửa điểm trên 3D”, chọn chấm trên ống rồi kéo mũi tên trục. Hoặc chọn điểm dưới đây và nhập tọa độ ước lượng (m); Y tính từ sàn Zone A.</p>
+            <div class="point-fields"><label class="point-picker">Điểm đang sửa<select id="route-point"></select></label><label>X ước (m)<input id="route-x" type="number" step="0.05"></label><label>Y ước (m)<input id="route-y" type="number" step="0.05"></label><label>Z ước (m)<input id="route-z" type="number" step="0.05"></label><button id="route-apply">Áp tọa độ</button></div>
+            <div class="point-actions"><button id="route-add">Thêm điểm sau</button><button id="route-remove">Bỏ điểm</button><button id="route-undo">Hoàn tác</button><button id="route-export">Xuất nháp dự phòng</button></div>
+            <p id="triangle-explanation"></p>
+            <label class="route-comment-label" for="route-comment">Feedback tuyến / số đo cần sửa</label><textarea id="route-comment" rows="2" placeholder="Ví dụ: khe trái hẹp hơn, điểm 4 cần sát tường hơn…"></textarea>
+            <p class="route-editor-help">“Lưu cho Agent” giữ tọa độ và feedback trong project local, không gửi lên cloud. Bản gốc vẫn giữ để đối chiếu.</p>
+          </div></details>
+          <div class="layer-bar" aria-label="Lớp hiển thị"><span>LỚP</span><label><input id="layer-water" type="checkbox" checked><i class="legend-dot water"></i> Tuyến tưới đề xuất</label><label><input id="layer-pots" type="checkbox" checked><i class="legend-dot plant"></i> Chậu mẫu</label><label><input id="layer-room" type="checkbox" checked><i class="legend-dot room"></i> Tường / cửa</label><label><input id="layer-dimensions" type="checkbox" checked> Số đo / ước lượng</label></div>
+        </section>
+        <section class="view-panel drawing-panel" id="svg-panel" aria-label="Sơ đồ SVG khu vườn">
+          <div class="panel-header"><div><span class="panel-number">A</span><h2>Bản vẽ đối chiếu</h2></div><div class="drawing-actions"><button data-projection="section" aria-pressed="true">Mặt cắt</button><button data-projection="plan" aria-pressed="false">Mặt bằng</button><button id="export-svg" title="Tải bản SVG đang xem" aria-label="Tải SVG">↓ SVG</button></div></div>
+          <div id="drawing" class="drawing-wrap"></div>
+        </section>
+      </div>
+      <aside class="inspector" aria-label="Thông tin điểm và nguồn đối chiếu">
+        <div class="inspector-title"><span class="eyebrow">ĐIỂM ĐANG XEM</span><span id="selected-code">F</span></div>
+        <div class="selection-info" id="selection-info" aria-live="polite"></div>
+        <div id="source-list" class="source-list"></div>
+        <button class="note-toggle" id="note-toggle">＋ Ghi chú chỗ cần sửa</button>
+        <div class="note-editor" id="note-editor" hidden><label for="note-text">Bạn thấy điểm này nên sửa thế nào?</label><textarea id="note-text" rows="3" placeholder="Ví dụ: vòi ở phía bên kia bồn…"></textarea><button id="save-note">Lưu ghi chú trên máy này</button><p id="note-status" role="status"></p></div>
+        <div class="inspector-section"><h3>Đi nhanh đến</h3><div id="object-list" class="object-list"></div></div>
+        <div class="inspector-section pot-demo"><h3>Thử bố trí chậu</h3><p>Chỉ đổi hình để cùng bàn; không ghi nhận vòi hoặc thiết bị thật.</p><div class="scenario-buttons"><button data-scenario="original" aria-pressed="true">9 chậu mẫu</button><button data-scenario="move" aria-pressed="false">Đổi vị trí</button><button data-scenario="add" aria-pressed="false">Thêm 2 chậu</button></div><span id="pot-count">9 chậu · vị trí minh họa</span></div>
+        <details class="observations"><summary>Số đo và giả định <span>bạn có thể đề xuất sửa</span></summary><div id="observation-list"></div><h3>Agent tạm chọn</h3><div id="estimate-list"></div></details>
+        <button class="export-notes" id="export-notes">Xuất ghi chú đối chiếu <span id="note-count">0</span> ↗</button>
+      </aside>
+    </div>
+    <footer><span><i></i> Một nguồn mô hình · hai góc nhìn</span><span>Nhánh khóa tay · chậu linh động · chưa mô phỏng lưu lượng</span><span id="model-version"></span></footer>
+  </main>
+  <dialog id="photo-dialog"><div class="dialog-bar"><div><span id="photo-code"></span><h2 id="photo-title"></h2></div><button id="close-photo" aria-label="Đóng ảnh">×</button></div><div class="photo-body"><img id="photo-image" alt=""></div><p id="photo-note"></p></dialog>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

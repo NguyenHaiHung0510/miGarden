@@ -1,0 +1,1271 @@
+{
+  "schema_version": "prototype-0.1",
+  "model_version": "model-v0-draft-05",
+  "title": "Từ sân thượng đến ban công",
+  "coordinate_frame": {
+    "kind": "synthetic-estimate",
+    "units": "display-only",
+    "up": "+Y",
+    "note": "Trục và scale ước lượng; số từ ảnh và cạnh tam giác synthetic. Tọa độ m trong editor để đề xuất sửa, không phải survey.",
+    "estimated_meters_per_scene_unit": [
+      0.710091743119266,
+      0.9136363636363635,
+      1.1277514946114187
+    ]
+  },
+  "site_relation": {
+    "value": "Zone A và phòng ngay dưới sân thượng có bồn/vòi",
+    "status": "owner-confirmed",
+    "physical_height_m": null
+  },
+  "layout": {
+    "balcony": {
+      "minX": -0.35,
+      "maxX": 5.8,
+      "minZ": 3.05,
+      "maxZ": 4.85,
+      "floor": 0
+    },
+    "terrace": {
+      "minX": -0.35,
+      "maxX": 5.8,
+      "minZ": -4.3,
+      "maxZ": 4.85,
+      "floor": 4.4
+    },
+    "room": {
+      "minX": -0.35,
+      "maxX": 5.8,
+      "minZ": 0.2,
+      "maxZ": 3.05,
+      "floor": 0
+    },
+    "railHeight": 1.15,
+    "railBaseHeight": 0.1,
+    "railZ": 4.85,
+    "pipeZ": 4.82,
+    "potRowZ": 4.4,
+    "zoneB": {
+      "minX": 1.1875,
+      "maxX": 5.8,
+      "minZ": 3.05,
+      "maxZ": 4.4,
+      "floor": 4.4,
+      "geometry_status": "agent-estimated-field-note-right-aligned",
+      "width_fraction": 0.75
+    },
+    "parapet": {
+      "z": 2.85,
+      "height_m": 0.45,
+      "height_scene": 0.4925373134328359,
+      "status": "owner-reported-approximate"
+    },
+    "leftWall": {
+      "x": -0.35,
+      "minZ": 3.02,
+      "maxZ": 4.85,
+      "height": 3.7
+    },
+    "rightWall": {
+      "x": 5.89,
+      "thickness": 0.18,
+      "minY": 0,
+      "maxY": 7.4,
+      "minZ": -4.3,
+      "maxZ": 4.93,
+      "status": "owner-confirmed-relation-synthetic-extent-field-note",
+      "owner": "neighbor"
+    },
+    "rightLedge": {
+      "minX": 5.37,
+      "maxX": 5.8,
+      "minZ": -3.9,
+      "maxZ": 4.4,
+      "floor": 4.4,
+      "height": 0.62,
+      "status": "synthetic-field-note-owner-parapet"
+    }
+  },
+  "sources": {
+    "A03": {
+      "title": "Tuyến tổng hợp và cụm nguồn",
+      "note": "Nguồn có bồn, bơm, van và vòi; nhãn tuyến 7,25 m và 0,77 m. Đầu mút chưa khóa."
+    },
+    "A04": {
+      "title": "Từ cửa sổ nhìn lên tầng trên",
+      "note": "Nhãn 3,01 m và 1,01 m. Owner chưa nhớ đầu mút, không coi là chiều cao tầng."
+    },
+    "A05": {
+      "title": "Ban công và góc cửa sổ",
+      "note": "Tuyến khảo sát từ chậu xa tới góc; vị trí chậu chỉ là snapshot."
+    },
+    "A06": {
+      "title": "Cửa sổ, điện và Wi-Fi trong phòng",
+      "note": "Nguồn baseline tuyến trong phòng; vị trí AP trên hình vẫn minh họa."
+    },
+    "A07": {
+      "title": "Chiều dọc ban công",
+      "note": "Thấy sàn, thoát nước và chậu dọc phía rào. Nhãn 3,89 m."
+    },
+    "A08": {
+      "title": "Chậu và mép rào",
+      "note": "Nguồn tham khảo cách đặt chậu lịch sử; không khóa số lượng hay vị trí."
+    },
+    "B01": {
+      "title": "Ban công, cửa sổ bên trái và rào",
+      "note": "Dùng cùng B02; phía cửa sổ là mặt tường, bên trái cửa chính theo Owner."
+    },
+    "B02": {
+      "title": "Tường, cửa sổ bên trái và cửa chính",
+      "note": "Owner sửa ô lớn thành cửa chính; cửa sổ thật nằm bên trái. Nhãn 3,69 m tạm map chiều đứng sàn tới dưới dầm."
+    },
+    "B03": {
+      "title": "Từ cụm vòi dọc sân thượng",
+      "note": "Nhãn 7,79 m; có thể không cùng đầu mút với tuyến A03, giữ riêng."
+    },
+    "V01-F12": {
+      "title": "Mini ban công Zone B · 31,567 s",
+      "note": "Owner xác nhận khu này là Zone B, phía trên cửa chính; chưa có số đo."
+    },
+    "V01-F13": {
+      "title": "Sàn và viền mini ban công · 34,433 s",
+      "note": "Zone B theo Owner; kích thước hiện tại là Agent ước lượng."
+    },
+    "V01-F14": {
+      "title": "Mini ban công Zone B · 37,300 s",
+      "note": "Quan sát sàn gạch hoa và viền; không phải reconstruction/calibration."
+    },
+    "V01-F15": {
+      "title": "Từ mini ban công nhìn xuống Zone A · 40,167 s",
+      "note": "Giúp đối chiếu quan hệ trên–dưới; chưa chứng minh cao độ."
+    },
+    "R01": {
+      "title": "Tường chắn tầng thượng Owner khoanh đỏ",
+      "note": "Owner: cao khoảng 40–50 cm; sau tường là mini balcony và khe bên trái."
+    },
+    "R02": {
+      "title": "Owner vẽ tuyến men tường trái tới rào",
+      "note": "Ảnh bị đảo hướng; đường đỏ dùng hiểu topology, không suy tọa độ từ pixel."
+    },
+    "R03": {
+      "title": "Tường phải, ống hiện hữu và sketch mặt cắt",
+      "note": "Owner field-note: tường hàng xóm kín từ tầng thượng xuống ban công; lan can nhà mình có ống lớn, có thêm ống trên sàn. Thang dời được. Vị trí/kích thước dựng là synthetic."
+    },
+    "R04": {
+      "title": "Chi tiết vòi tay đỏ, bồn và tuyến Owner vẽ",
+      "note": "field-note: bồn–vòi vuông góc tường phải; hạ thấp trên ống sẵn hoặc đi ngang sang phải rồi nâng lên lan can nhà mình. field-note: hai phương án giữ vòi / thay vòi nhiều đầu."
+    }
+  },
+  "objects": [
+    {
+      "id": "terrace",
+      "label": "Sân thượng",
+      "short": "Tầng trên",
+      "kind": "area",
+      "pose": [
+        2.7,
+        4.4,
+        -0.1
+      ],
+      "physical_position_m": null,
+      "status": "owner-confirmed",
+      "summary": "Sân thượng có cụm bồn, bơm và vòi, ngay trên ban công. Bề rộng, chiều sâu và cao độ trên hình chỉ để sắp bố cục.",
+      "sources": [
+        "A03",
+        "B03"
+      ]
+    },
+    {
+      "id": "balcony",
+      "label": "Ban công · Zone A",
+      "short": "Zone A",
+      "kind": "area",
+      "pose": [
+        2.6,
+        0,
+        4.1
+      ],
+      "physical_position_m": null,
+      "status": "owner-confirmed",
+      "summary": "Một circuit tưới chung; chậu và vị trí đặt có thể thay đổi. Chín chậu trong bản đầu là mẫu bố trí để cùng xem, không phải giới hạn hệ thống.",
+      "sources": [
+        "A05",
+        "A07",
+        "A08"
+      ]
+    },
+    {
+      "id": "F",
+      "label": "Vòi nguồn · van tay đỏ",
+      "short": "F · Vòi tay đỏ",
+      "kind": "tap",
+      "pose": [
+        4.75,
+        4.673631840796021,
+        -3.5
+      ],
+      "physical_position_m": null,
+      "status": "owner-confirmed",
+      "summary": "Vòi/van tay đỏ hiện hữu theo người dùng và ảnh nguồn. Vị trí/độ cao≈25cm vẫn ước lượng. Có thể giữ vòi một đầu hoặc xem phương án thay vòi≥2 đầu: một miGarden, một sinh hoạt riêng. Đổi hình chưa là thay/lắp thực tế.",
+      "sources": [
+        "R04",
+        "B03",
+        "R01"
+      ]
+    },
+    {
+      "id": "tank",
+      "label": "Bồn nước",
+      "short": "Bồn",
+      "kind": "tank",
+      "pose": [
+        3.25,
+        5.15,
+        -3.5
+      ],
+      "physical_position_m": null,
+      "status": "observed",
+      "summary": "Trục bồn vuông góc mặt tường phải. Vị trí và kích thước ước lượng, chưa survey.",
+      "sources": [
+        "R04",
+        "A03"
+      ]
+    },
+    {
+      "id": "pump",
+      "label": "Bơm / cụm ống",
+      "short": "Bơm",
+      "kind": "pump",
+      "pose": [
+        4.34,
+        4.66,
+        -3.18
+      ],
+      "physical_position_m": null,
+      "status": "observed",
+      "summary": "Tách bơm khỏi vòi và bồn. Trạng thái bơm không được mô phỏng; chưa suy áp lực hay lượng nước từ hình này.",
+      "sources": [
+        "R04",
+        "A03",
+        "B03"
+      ]
+    },
+    {
+      "id": "C",
+      "label": "C · Góc tuyến ban công",
+      "short": "C · Góc tuyến",
+      "kind": "anchor",
+      "pose": [
+        5.55,
+        0.2,
+        4.35
+      ],
+      "physical_position_m": null,
+      "status": "inferred",
+      "summary": "Anchor nối cách hiểu tuyến ban công với tuyến lên trên. Hướng rẽ và cao độ chưa được khảo sát đủ, nên chỉ là điểm đối chiếu trong sơ đồ.",
+      "sources": [
+        "A04",
+        "A05"
+      ]
+    },
+    {
+      "id": "W",
+      "display_id": "D",
+      "legacy_note": "Giữ ID W của ô cũ để không gán nhầm ghi chú đã có; semantic sửa thành door theo Owner.",
+      "label": "D · Cửa chính",
+      "short": "D · Cửa chính",
+      "kind": "door",
+      "pose": [
+        4.3,
+        1.25,
+        3.02
+      ],
+      "physical_position_m": null,
+      "status": "owner-confirmed",
+      "summary": "Owner xác nhận ô lớn prototype từng gọi cửa sổ thực tế là cửa chính. Cửa sổ nằm trên mặt tường bên trái khi nhìn từ ban công vào. Kích thước cửa đang ước lượng, không lấy từ pixel ảnh.",
+      "sources": [
+        "B02",
+        "B01"
+      ]
+    },
+    {
+      "id": "window-left",
+      "display_id": "WS",
+      "label": "Cửa sổ bên trái",
+      "short": "Cửa sổ trái",
+      "kind": "window",
+      "pose": [
+        1.55,
+        1.8,
+        3.04
+      ],
+      "physical_position_m": null,
+      "status": "owner-confirmed",
+      "summary": "Cửa sổ trên mặt tường bên trái cửa chính theo Owner. Vị trí, khổ cửa và hình thức dựng hiện là ước lượng để bạn sửa; không phải tường hở xuyên qua phòng.",
+      "sources": [
+        "B01",
+        "B02"
+      ]
+    },
+    {
+      "id": "zoneB",
+      "display_id": "B",
+      "label": "Mini ban công · Zone B",
+      "short": "Zone B · mini",
+      "kind": "area",
+      "pose": [
+        3.49375,
+        4.55,
+        3.72
+      ],
+      "physical_position_m": null,
+      "status": "owner-confirmed",
+      "summary": "Mini ban công Zone B sát tường phải, rộng khoảng 3/4 sân thượng. Vị trí và số đo Agent ước lượng từ field-note–64; đường ống có thể đi qua đây để xuống Zone A, chưa mở tưới Zone B.",
+      "sources": [
+        "R03",
+        "R01",
+        "V01-F13",
+        "V01-F15"
+      ]
+    },
+    {
+      "id": "AP",
+      "label": "AP · Wi-Fi trong phòng",
+      "short": "AP · Wi-Fi",
+      "kind": "ap",
+      "pose": [
+        3.1,
+        0.85,
+        1.25
+      ],
+      "physical_position_m": null,
+      "status": "estimated",
+      "summary": "Điểm Wi-Fi trong phòng theo baseline. Không vẽ vùng phủ sóng hoặc dự đoán độ mạnh; hình học không thay kiểm tra bằng board thật.",
+      "sources": [
+        "A06"
+      ]
+    },
+    {
+      "id": "rail",
+      "label": "Ống gắn/tựa trên rào",
+      "short": "Ống gắn rào",
+      "kind": "distribution",
+      "pose": [
+        2.7,
+        1.15,
+        4.82
+      ],
+      "physical_position_m": null,
+      "status": "proposed",
+      "summary": "Ống nằm sát rào, có các đai/kẹp minh họa vị trí cố định như Owner yêu cầu. Chân tường khoảng 10 cm; bên trên là rào. Chiều cao tổng rào tạm 1,2 m, chi tiết gá/ống chưa thiết kế thi công.",
+      "sources": [
+        "A07",
+        "A08",
+        "B01"
+      ]
+    },
+    {
+      "id": "route",
+      "label": "Tuyến cấp xuống Zone A",
+      "short": "Tuyến cấp dự kiến",
+      "kind": "route",
+      "pose": [
+        -0.245,
+        2.9,
+        3.15
+      ],
+      "physical_position_m": null,
+      "status": "proposed",
+      "summary": "Vòi → sàn → chéo/gấp khúc về tường cửa sổ trái → vượt tường chắn ≈45 cm → khe cạnh Zone B → men tường trái → neo vào rào. Chọn điểm cam để tự sửa tuyến.",
+      "sources": [
+        "R03",
+        "R01",
+        "R02",
+        "B03"
+      ]
+    },
+    {
+      "id": "left-wall",
+      "display_id": "T",
+      "label": "Tường phía cửa sổ trái",
+      "short": "Tường trái",
+      "kind": "wall",
+      "pose": [
+        -0.35,
+        2.1,
+        3.95
+      ],
+      "physical_position_m": null,
+      "status": "owner-confirmed",
+      "summary": "Mặt tường bên trái cửa sổ và đường men tường tới rào theo ảnh Owner vẽ. Khe phía trên cạnh Zone B và các cao độ đang dựng synthetic để Owner sửa.",
+      "sources": [
+        "R02",
+        "B01",
+        "R01"
+      ]
+    },
+    {
+      "id": "right-wall",
+      "short": "Tường phải · hàng xóm",
+      "label": "Tường hàng xóm phía phải",
+      "pose": [
+        5.89,
+        3.7,
+        0.8
+      ],
+      "status": "owner-confirmed",
+      "summary": "Owner xác nhận tường kín từ sân thượng xuống ban công; chiều cao/bounds do Agent ước lượng. Chưa chọn hoặc có quyền gá/khoan tường này.",
+      "sources": [
+        "R03"
+      ],
+      "physical_position_m": null
+    },
+    {
+      "id": "right-ledge",
+      "short": "Lan can nhà mình",
+      "label": "Lan can / gờ phía nhà mình",
+      "pose": [
+        5.57,
+        4.75,
+        1.5
+      ],
+      "status": "owner-confirmed",
+      "summary": "Sketch Owner: dưới tường hàng xóm có lan can nhà mình và các ống sẵn. Cao độ/bề rộng Agent tạm chọn, cần bạn sửa.",
+      "sources": [
+        "R03"
+      ],
+      "physical_position_m": null
+    },
+    {
+      "id": "existing-floor-pipe",
+      "short": "Ống sẵn · sàn",
+      "label": "Ống hiện hữu phải vượt gần vòi",
+      "pose": [
+        4.95,
+        4.5,
+        -3.5
+      ],
+      "status": "estimated",
+      "summary": "Có vật cản ống trên đường sang phải theo Owner. Hình này chỉ mô phỏng vật cản; đường kính, cao độ và hướng còn ước lượng. Không phải ống mới của miGarden.",
+      "sources": [
+        "R03"
+      ],
+      "physical_position_m": null
+    },
+    {
+      "id": "existing-ledge-pipe",
+      "short": "Ống sẵn · lan can",
+      "label": "Ống hiện hữu trên lan can phải",
+      "pose": [
+        5.55,
+        5.13,
+        1.4
+      ],
+      "status": "estimated",
+      "summary": "Ống miGarden cần đi phía trên theo sketch Owner. Khoảng hở, kích thước ống sẵn và cách đỡ chưa chốt; không dùng ống sẵn làm điểm chịu tải mặc định.",
+      "sources": [
+        "R03"
+      ],
+      "physical_position_m": null
+    },
+    {
+      "id": "household-outlet",
+      "short": "Đầu sinh hoạt · phương án 2",
+      "label": "Đầu dùng sinh hoạt riêng",
+      "pose": [
+        4.65,
+        4.553631840796021,
+        -3.12
+      ],
+      "status": "proposed",
+      "summary": "Chỉ xuất hiện khi xem phương án thay vòi≥2 đầu. Đây là đầu dùng bình thường bằng tay, ngoài circuit điều khiển miGarden; không có lệnh phần mềm hoặc actuation cho đầu này.",
+      "sources": [
+        "R04"
+      ],
+      "physical_position_m": null
+    }
+  ],
+  "water_route": {
+    "status": "proposed-synthetic-field-note",
+    "points": [
+      [
+        4.75,
+        4.673631840796021,
+        -3.5
+      ],
+      [
+        5.22,
+        4.673631840796021,
+        -3.5
+      ],
+      [
+        5.22,
+        5.34,
+        -3.5
+      ],
+      [
+        5.53,
+        5.34,
+        -3.5
+      ],
+      [
+        5.53,
+        5.34,
+        4.66
+      ],
+      [
+        5.53,
+        1.15,
+        4.66
+      ],
+      [
+        5.53,
+        1.15,
+        4.82
+      ],
+      [
+        0.1,
+        1.15,
+        4.82
+      ]
+    ],
+    "point_labels": [
+      "Vòi nguồn · tay đỏ",
+      "Ngang tới lan can nhà mình",
+      "Nâng lên trước lan can · cần đỡ",
+      "Trên ống lan can · cần gá",
+      "Qua Zone B tới mép ngoài · cần gá",
+      "Xuống Zone A · cần neo",
+      "Tới rào / đầu phân phối",
+      "Cuối ống trên rào"
+    ],
+    "preset": "right",
+    "support_indices": [
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "observations": [
+    {
+      "id": "obs-a04-301",
+      "reading": "3,01 m",
+      "source": "A04",
+      "endpoints": null,
+      "note": "Đoạn tuyến trong ảnh; chưa biết chắc hai đầu mút."
+    },
+    {
+      "id": "obs-a04-101",
+      "reading": "1,01 m",
+      "source": "A04",
+      "endpoints": null,
+      "note": "Giữ riêng 3,01 m; chưa dùng làm chiều cao tầng."
+    },
+    {
+      "id": "obs-a03-725",
+      "reading": "7,25 m",
+      "source": "A03",
+      "endpoints": null,
+      "note": "Chưa ghép thành tọa độ hay thay bằng số B03."
+    },
+    {
+      "id": "obs-a03-077",
+      "reading": "0,77 m",
+      "source": "A03",
+      "endpoints": null,
+      "note": "Không tự coi tổng 8,02 m là measured span."
+    },
+    {
+      "id": "obs-b03-779",
+      "reading": "7,79 m",
+      "source": "B03",
+      "endpoints": null,
+      "note": "Owner: có thể không cùng đầu mút với A03."
+    },
+    {
+      "id": "obs-a07-389",
+      "reading": "3,89 m",
+      "source": "A07",
+      "endpoints": null,
+      "note": "Các ảnh khác có nhãn 3,85–3,89 m; chưa calibration."
+    },
+    {
+      "id": "obs-b02-369",
+      "reading": "3,69 m",
+      "source": "B02",
+      "endpoints": null,
+      "note": "Nhãn bổ sung từ ảnh; chưa dùng để giải cao độ."
+    }
+  ],
+  "dimension_mappings": [
+    {
+      "id": "length-A",
+      "label": "3,85–3,89 m",
+      "kind": "image",
+      "source": "A07",
+      "mapping": "Tạm gán chiều dọc Zone A",
+      "points": [
+        [
+          0.1,
+          0.1,
+          5.15
+        ],
+        [
+          5.55,
+          0.1,
+          5.15
+        ]
+      ],
+      "views": [
+        "all",
+        "balcony"
+      ],
+      "svg_section": [
+        115,
+        402,
+        806,
+        402
+      ]
+    },
+    {
+      "id": "rise-301",
+      "label": "3,01 m",
+      "kind": "image",
+      "source": "A04",
+      "mapping": "Tạm gán C → R, không xác nhận chiều cao tầng",
+      "points": [
+        [
+          6.25,
+          0.2,
+          4.82
+        ],
+        [
+          6.25,
+          3.01,
+          4.82
+        ]
+      ],
+      "views": [
+        "all"
+      ],
+      "svg_section": [
+        864,
+        356,
+        864,
+        221
+      ]
+    },
+    {
+      "id": "rise-101",
+      "label": "1,01 m",
+      "kind": "image",
+      "source": "A04",
+      "mapping": "Tạm gán R → U, đầu mút Agent đoán",
+      "points": [
+        [
+          6.25,
+          3.01,
+          4.82
+        ],
+        [
+          6.25,
+          4.4,
+          4.82
+        ]
+      ],
+      "views": [
+        "all"
+      ],
+      "svg_section": [
+        864,
+        221,
+        864,
+        155
+      ]
+    },
+    {
+      "id": "room-clear",
+      "label": "3,69 m",
+      "kind": "image",
+      "source": "B02",
+      "mapping": "Tạm gán từ sàn lên dưới dầm trong ảnh B02; không ép trùng 3,01+1,01",
+      "points": [
+        [
+          -0.7,
+          0.1,
+          3.02
+        ],
+        [
+          -0.7,
+          3.7,
+          3.02
+        ]
+      ],
+      "views": [
+        "balcony"
+      ],
+      "svg_section": [
+        80,
+        366,
+        80,
+        188
+      ]
+    },
+    {
+      "id": "base-10cm",
+      "label": "≈10 cm · bạn",
+      "kind": "owner",
+      "source": null,
+      "mapping": "Chân tường dưới rào, Owner báo khoảng 10 cm",
+      "points": [
+        [
+          -0.1,
+          0,
+          4.95
+        ],
+        [
+          -0.1,
+          0.1,
+          4.95
+        ]
+      ],
+      "views": [
+        "balcony"
+      ],
+      "svg_section": [
+        115,
+        365,
+        115,
+        359
+      ]
+    },
+    {
+      "id": "depth-A",
+      "label": "≈1,2 m · ước",
+      "kind": "estimate",
+      "source": null,
+      "mapping": "Agent tạm chọn bề sâu Zone A; không đồng nhất với đoạn C–W 1,13 m",
+      "points": [
+        [
+          -0.6,
+          0.15,
+          3.05
+        ],
+        [
+          -0.6,
+          0.15,
+          4.85
+        ]
+      ],
+      "views": [
+        "balcony"
+      ],
+      "svg_plan": [
+        958,
+        249,
+        958,
+        336
+      ]
+    },
+    {
+      "id": "floor-diagonal",
+      "label": "≈7,79 m · tạm map",
+      "kind": "image",
+      "source": "B03",
+      "mapping": "Tạm coi 7,79 m trong B03 là đoạn chéo tới tường trái; ngang ≈3,55 m Agent chọn. Các đầu mút và góc chưa Owner xác nhận.",
+      "points": [
+        [
+          4.75,
+          4.42,
+          -3.5
+        ],
+        [
+          -0.245,
+          4.42,
+          2.65
+        ]
+      ],
+      "views": [
+        "all",
+        "source"
+      ],
+      "svg_plan": [
+        109,
+        130,
+        440,
+        325
+      ]
+    },
+    {
+      "id": "parapet-45",
+      "label": "≈45 cm · bạn",
+      "kind": "owner",
+      "source": "R01",
+      "mapping": "Owner nêu 40–50 cm; tạm chọn 45 cm",
+      "points": [
+        [
+          5.8,
+          4.4,
+          2.85
+        ],
+        [
+          5.8,
+          4.892537313432836,
+          2.85
+        ]
+      ],
+      "views": [
+        "source"
+      ]
+    }
+  ],
+  "agent_estimates": [
+    {
+      "item": "Đoạn chéo sàn",
+      "value": "≈7,79 m",
+      "basis": "Tạm coi 7,79 m trong B03 là đoạn chéo tới tường trái; ngang ≈3,55 m Agent chọn. Các đầu mút và góc chưa Owner xác nhận."
+    },
+    {
+      "item": "Hai cạnh vuông góc",
+      "value": "≈3.55 × 6.94 m",
+      "basis": "Synthetic; góc với cạnh ngang ≈62.9°; men mép ≈10.48 m"
+    },
+    {
+      "item": "Tường chắn",
+      "value": "≈0,45 m",
+      "basis": "Owner báo 40–50 cm; Agent lấy giữa khoảng"
+    },
+    {
+      "item": "Zone B",
+      "value": "≈3.3 × 1.5 m",
+      "basis": "Ngang ~3/4 terrace theo Owner; sâu/gap do Agent ước lượng"
+    },
+    {
+      "item": "Vòi / chân rào",
+      "value": "≈25 cm / ≈10 cm",
+      "basis": "Số Owner cung cấp; chưa đo kiểm độc lập"
+    },
+    {
+      "item": "Zone B sát phải",
+      "value": "≈3/4 bề ngang",
+      "basis": "field-note xác nhận tới kịch tường phải; minX/maxX dịch từ bố cục draft03, chưa đo sâu/gap."
+    },
+    {
+      "item": "Vượt ống sàn phía phải",
+      "value": "≈0.32 m trên sàn",
+      "basis": "Agent chọn synthetic để vẽ đoạn có đỡ vượt ống; đường kính/vị trí ống sẵn cũng chỉ ước lượng."
+    },
+    {
+      "item": "Đỉnh tuyến phải",
+      "value": "≈0.86 m trên sàn",
+      "basis": "Agent chọn để vượt ống trên lan can; khác đỉnh ≈45 cm tuyến trái. Bạn sửa được tọa độ; chưa tính thủy lực."
+    },
+    {
+      "item": "Hướng bồn–vòi",
+      "value": "90° so với draft04",
+      "basis": "Owner sửa field-note; trục theo X vuông góc tường phải, pose Agent chọn lại cho khớp quan hệ."
+    },
+    {
+      "item": "Tiếp cận bên phải",
+      "value": "Ngang / hạ thấp",
+      "basis": "field-note vẽ ít gấp hơn; hạ thấp chọn4.64scene để trên ống sẵn, không phải số đo ngoài hiện trường."
+    }
+  ],
+  "pot_samples": [
+    {
+      "id": "sample-01",
+      "x": 0.4,
+      "z": 4.31,
+      "type": "box"
+    },
+    {
+      "id": "sample-02",
+      "x": 1,
+      "z": 4.35,
+      "type": "box"
+    },
+    {
+      "id": "sample-03",
+      "x": 1.6,
+      "z": 4.32,
+      "type": "round"
+    },
+    {
+      "id": "sample-04",
+      "x": 2.2,
+      "z": 4.38,
+      "type": "box"
+    },
+    {
+      "id": "sample-05",
+      "x": 2.8,
+      "z": 4.32,
+      "type": "round"
+    },
+    {
+      "id": "sample-06",
+      "x": 3.4,
+      "z": 4.36,
+      "type": "box"
+    },
+    {
+      "id": "sample-07",
+      "x": 4,
+      "z": 4.3,
+      "type": "box"
+    },
+    {
+      "id": "sample-08",
+      "x": 4.6,
+      "z": 4.37,
+      "type": "round"
+    },
+    {
+      "id": "sample-09",
+      "x": 5.2,
+      "z": 4.32,
+      "type": "box"
+    }
+  ],
+  "route_presets": {
+    "diagonal": {
+      "label": "Chéo · phương án tham khảo",
+      "points": [
+        [
+          4.75,
+          4.673631840796021,
+          -3.5
+        ],
+        [
+          4.75,
+          4.42,
+          -3.5
+        ],
+        [
+          -0.245,
+          4.42,
+          2.65
+        ],
+        [
+          -0.245,
+          4.9144278606965175,
+          2.65
+        ],
+        [
+          -0.245,
+          4.9144278606965175,
+          3.15
+        ],
+        [
+          -0.245,
+          1.15,
+          3.15
+        ],
+        [
+          -0.245,
+          1.15,
+          4.82
+        ],
+        [
+          0.1,
+          1.15,
+          4.82
+        ],
+        [
+          5.55,
+          1.15,
+          4.82
+        ]
+      ],
+      "point_labels": [
+        "Vòi nguồn ≈25 cm",
+        "Xuống sàn",
+        "Chân tường chắn / góc trái",
+        "Vượt tường ≈45 cm",
+        "Qua khe bên trái Zone B",
+        "Xuống men tường trái",
+        "Tới rào / điểm neo",
+        "Đầu ống phân phối",
+        "Cuối tuyến trên rào"
+      ],
+      "note": "Giữ tuyến chéo cũ để đối chiếu. Tuyến này cắt qua phần giữa sàn; ưu tiên hiện tại là so hai tuyến men mép."
+    },
+    "folded": {
+      "label": "Men trái · vượt tường cuối sàn",
+      "points": [
+        [
+          4.75,
+          4.673631840796021,
+          -3.5
+        ],
+        [
+          4.75,
+          4.42,
+          -3.5
+        ],
+        [
+          -0.245,
+          4.42,
+          -3.5
+        ],
+        [
+          -0.245,
+          4.42,
+          2.65
+        ],
+        [
+          -0.245,
+          4.96,
+          2.65
+        ],
+        [
+          -0.245,
+          4.96,
+          3.15
+        ],
+        [
+          -0.245,
+          1.15,
+          3.15
+        ],
+        [
+          -0.245,
+          1.15,
+          4.82
+        ],
+        [
+          0.1,
+          1.15,
+          4.82
+        ],
+        [
+          5.55,
+          1.15,
+          4.82
+        ]
+      ],
+      "point_labels": [
+        "Vòi nguồn ≈25 cm",
+        "Xuống sàn",
+        "Góc rẽ sát mép trái",
+        "Chân tường chắn / góc trái",
+        "Vượt tường cuối sàn · cần gá",
+        "Qua khe trái Zone B · cần đỡ",
+        "Xuống men tường trái",
+        "Tới rào / điểm neo",
+        "Đầu ống phân phối",
+        "Cuối tuyến trên rào"
+      ],
+      "note": "Tuyến trái: dài hơn, ít vật cản theo Owner. Vượt tường chắn cuối sân thượng rồi qua khe trái tới rào; gá đỡ mới là vị trí cần xem."
+    },
+    "right": {
+      "label": "Men phải · đi ngang từ vòi",
+      "note": "Đi ngang từ vòi, nâng ngay trước lan can nhà mình rồi men phía trên ống sẵn. Gá đỡ và số đo còn ước lượng.",
+      "points": [
+        [
+          4.75,
+          4.673631840796021,
+          -3.5
+        ],
+        [
+          5.22,
+          4.673631840796021,
+          -3.5
+        ],
+        [
+          5.22,
+          5.34,
+          -3.5
+        ],
+        [
+          5.53,
+          5.34,
+          -3.5
+        ],
+        [
+          5.53,
+          5.34,
+          4.66
+        ],
+        [
+          5.53,
+          1.15,
+          4.66
+        ],
+        [
+          5.53,
+          1.15,
+          4.82
+        ],
+        [
+          0.1,
+          1.15,
+          4.82
+        ]
+      ],
+      "point_labels": [
+        "Vòi nguồn · tay đỏ",
+        "Ngang tới lan can nhà mình",
+        "Nâng lên trước lan can · cần đỡ",
+        "Trên ống lan can · cần gá",
+        "Qua Zone B tới mép ngoài · cần gá",
+        "Xuống Zone A · cần neo",
+        "Tới rào / đầu phân phối",
+        "Cuối ống trên rào"
+      ]
+    },
+    "right-low": {
+      "label": "Men phải · hạ thấp trên ống sẵn",
+      "note": "Hạ một đoạn nhưng giữ trên ống hiện hữu, sang lan can nhà mình rồi nâng lên tuyến dọc. Khoảng hở cần đối chiếu thực tế.",
+      "points": [
+        [
+          4.75,
+          4.673631840796021,
+          -3.5
+        ],
+        [
+          4.75,
+          4.64,
+          -3.5
+        ],
+        [
+          5.22,
+          4.64,
+          -3.5
+        ],
+        [
+          5.22,
+          5.34,
+          -3.5
+        ],
+        [
+          5.53,
+          5.34,
+          -3.5
+        ],
+        [
+          5.53,
+          5.34,
+          4.66
+        ],
+        [
+          5.53,
+          1.15,
+          4.66
+        ],
+        [
+          5.53,
+          1.15,
+          4.82
+        ],
+        [
+          0.1,
+          1.15,
+          4.82
+        ]
+      ],
+      "point_labels": [
+        "Vòi nguồn · tay đỏ",
+        "Hạ thấp nhưng trên ống sẵn",
+        "Sang trước lan can nhà mình",
+        "Nâng lên trước lan can · cần đỡ",
+        "Trên ống lan can · cần gá",
+        "Qua Zone B tới mép ngoài · cần gá",
+        "Xuống Zone A · cần neo",
+        "Tới rào / đầu phân phối",
+        "Cuối ống trên rào"
+      ]
+    }
+  },
+  "triangle_assumption": {
+    "diagonal": 7.79,
+    "transverse": 3.5469082568807337,
+    "longitudinal": 6.935671691860225,
+    "angleDegrees": 62.91475988144673,
+    "folded": 10.482579948740959,
+    "basis": "Tạm coi 7,79 m trong B03 là đoạn chéo tới tường trái; ngang ≈3,55 m Agent chọn. Các đầu mút và góc chưa Owner xác nhận.",
+    "source": "B03"
+  },
+  "default_route_preset": "right",
+  "existing_pipes": [
+    {
+      "id": "existing-floor-pipe",
+      "points": [
+        [
+          4.25,
+          4.5,
+          -3.5
+        ],
+        [
+          5.28,
+          4.5,
+          -3.5
+        ]
+      ],
+      "radius": 0.085,
+      "status": "owner-reported-existence-synthetic-size-position",
+      "source": "R03"
+    },
+    {
+      "id": "existing-ledge-pipe",
+      "points": [
+        [
+          5.55,
+          5.13,
+          -3.9
+        ],
+        [
+          5.55,
+          5.13,
+          4.38
+        ]
+      ],
+      "radius": 0.09,
+      "status": "owner-reported-existence-synthetic-size-position",
+      "source": "R03"
+    }
+  ],
+  "route_review": {
+    "authority": "field-note source/right approach; field-note source options",
+    "selection": "two-candidates-not-installation-decision",
+    "support_status": "positions-to-review-not-approved-mounting",
+    "existing_obstacles": "synthetic from R03; ladder movable and omitted",
+    "height_datum": "upper terrace floor",
+    "notes": "Tường phải liên tục; camera ở phía trong để không xuyên tường. Các ước lượng không chứng minh áp/lưu lượng."
+  },
+  "source_assembly": {
+    "tank_yaw_degrees": 90,
+    "tank_axis": [
+      1,
+      0,
+      0
+    ],
+    "wall_normal": [
+      1,
+      0,
+      0
+    ],
+    "status": "owner-confirmed-orientation-synthetic-position",
+    "authority": "field-note",
+    "note": "Bồn và trục bồn–vòi vuông góc mặt tường phải. Không xoay hệ trục nhà; các vị trí vẫn estimated."
+  },
+  "source_option": "reuse",
+  "source_options": {
+    "reuse": {
+      "label": "Giữ vòi tay đỏ",
+      "ports": [
+        "migarden"
+      ],
+      "note": "Vòi hiện có một đầu ra: dùng lại cho miGarden; chưa có đầu sinh hoạt riêng trong phương án này. Nếu muốn hai nhánh mà giữ vòi cũ, bộ chia sau vòi là lựa chọn cần bàn thêm."
+    },
+    "multi": {
+      "label": "Thay vòi ≥2 đầu",
+      "ports": [
+        "migarden",
+        "household"
+      ],
+      "note": "Phương án ưu tiên theo Owner: vòi mới ít nhất hai đầu ra, một cho miGarden, một dùng sinh hoạt như cũ. Các đầu khóa tay được vẽ riêng; ren/kích cỡ/loại vòi chưa chốt, chưa mua hoặc lắp."
+    }
+  }
+}

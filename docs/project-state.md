@@ -1,6 +1,6 @@
 # Current project state
 
-As of **2026-10-22, Asia/Saigon**, miGarden is a documentation/design project. Product requirements and contracts exist; firmware, simulator, spatial viewer and microSched integration have not been implemented here.
+As of **2026-10-24, Asia/Saigon**, miGarden has a runnable [model-v0 SVG/Three.js prototype](model-v0.md) alongside product requirements and contracts. Firmware, control simulator and microSched integration have not been implemented here. The viewer edits a representation and saves local feedback; it does not actuate devices.
 
 ## Selected design
 
@@ -22,8 +22,8 @@ The [product decisions](specification.md#20-product-decisions) define the curren
 | Requirements | Detailed domain, command/ack, schedule and safety contracts | Executable behavior and integration |
 | Site | [Anchors and preliminary route readings](site-baseline.md), with source references and uncertainty | Exact XYZ/scale/endpoints, changed placements, pressure/flow, drainage and outdoor electrical suitability |
 | Hardware | P1A bench kit arrival reported by the project owner; planned Vietduino ESP32 16MB HS2250V + USB-C HS1369, breadboard/jumpers/red LED/330Ω/DIP button | Exact-unit identity, board/pins/toolchain, USB/flash/bench; water actuator/driver/power/feedback selection |
-| Representation | [Shared SVG/Three.js data contract](representation.md) | Implemented scene, viewer, measured geometry and COLMAP assets |
+| Representation | [Shared SVG/Three.js data contract](representation.md), implemented [viewer/editor](../viewer/README.md), source/HTTP/feedback tests and observed basic live render | Extended live interaction QA, surveyed geometry, RF/hydraulic performance and COLMAP assets |
 | Skills | Three installed Markdown packages with source/license/version metadata; [usage and compatibility](skills.md) | Firmware/build/device/rendering workflows and discovery in other runtimes |
 | Deployment | Planned [microSched adapter boundary](architecture.md) | App/DB integration, network/cost probes, contained-water/field and production acceptance |
 
-The next design work is to verify site anchors/endpoints, define model-v0 and dry-LED semantics, and resolve the relevant implementation choices before building. Exact framework/board/pins/partition, time/persistence/recovery, remote/manual/schedule arbitration, transport/cost caps and numeric water policy remain open. The [operations runbooks](operations.md) describe the evidence needed to progress.
+Next work is to refine the model through owner feedback, choose a practical route/source option, define and implement a bounded simulator/dry-LED slice, and resolve hardware choices before water testing. Exact framework/board/pins/partition, time/persistence/recovery, remote/manual/schedule arbitration, transport/cost caps and numeric water policy remain open. The [operations runbooks](operations.md) describe the evidence needed to progress.
