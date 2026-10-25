@@ -52,7 +52,7 @@ function renderInspector() {
 }
 function select(id) {
   if (!model.objects.some(o=>o.id===id) && !state.pots.some(p=>'pot:'+p.id===id)) return;
-  state.selected = id; scene?.select(id); renderInspector(); renderDrawing();
+  state.selected = id; scene?.select(id); $('#quick-focus').value=id; renderInspector(); renderDrawing();
 }
 function setLayout(layout) {
   state.layout = layout; $('#workspace').classList.toggle('layout-drawing', layout === 'drawing');
@@ -62,9 +62,9 @@ function setLayout(layout) {
 function scenario(name) {
   state.scenario = name; state.pots = structuredClone(model.pot_samples);
   if (name === 'move') {
-    for (const index of [1, 4, 7]) { state.pots[index].z = 3.6; state.pots[index].x += .2; }
+    for (const index of [1, 4, 7]) { state.pots[index].z = 6.8; state.pots[index].x += .1; }
   }
-  if (name === 'add') state.pots.push({ id: 'sample-extra-01', x: 1.3, z: 3.6, type: 'round' }, { id: 'sample-extra-02', x: 3.8, z: 3.65, type: 'box' });
+  if (name === 'add') state.pots.push({ id: 'sample-extra-01', x: 1.3, z: 6.8, type: 'round' }, { id: 'sample-extra-02', x: 3.6, z: 6.85, type: 'box' });
   if (state.selected.startsWith('pot:') && !state.pots.some(p=>'pot:'+p.id===state.selected)) state.selected = 'balcony';
   scene?.setPots(state.pots); scene?.select(state.selected);
   $('#pot-count').textContent = state.pots.length + ' chậu · vị trí minh họa';
@@ -76,9 +76,14 @@ function saveFile(contents, filename, type) {
   const link = document.createElement('a'); link.href = url; link.download = filename; document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1500);
 }
 $('#model-version').textContent = model.model_version;
-$('#object-list').replaceChildren(...model.objects.filter(o => !['tank', 'pump'].includes(o.id)).map(object => {
-  const button = document.createElement('button'); button.dataset.id = object.id; button.textContent = object.short; button.setAttribute('aria-pressed', object.id === state.selected); button.addEventListener('click', () => select(object.id)); return button;
+function quickFocus(id){select(id);scene?.focus(id);}
+$('#object-list').replaceChildren(...model.navigation_groups.map(group=>{
+  const section=document.createElement('div');section.className='object-group';const title=document.createElement('h4');title.textContent=group.label;section.append(title);
+  const options=document.createElement('optgroup');options.label=group.label;
+  for(const id of group.ids){const object=model.objects.find(o=>o.id===id);const button=document.createElement('button');button.dataset.id=id;button.textContent=object.short;button.setAttribute('aria-pressed',id===state.selected);button.addEventListener('click',()=>quickFocus(id));section.append(button);const option=document.createElement('option');option.value=id;option.textContent=object.short;options.append(option);}
+  $('#quick-focus').append(options);return section;
 }));
+$('#quick-focus').value=state.selected;$('#quick-focus').addEventListener('change',event=>quickFocus(event.target.value));
 $('#observation-list').replaceChildren(...model.observations.map(observation => {
   const row = document.createElement('div'); row.className = 'observation-row';
   const value = document.createElement('b'); value.textContent = observation.reading;
@@ -110,12 +115,14 @@ $('#save-note').addEventListener('click', () => {
   else delete notes[state.selected];
   try { localStorage.setItem('migarden-model-v0-notes', JSON.stringify(notes)); $('#note-status').textContent = 'Đã lưu cục bộ. Mô hình chưa tự thay đổi.'; } catch { $('#note-status').textContent = 'Chưa lưu được vào trình duyệt. Bạn có thể xuất ghi chú ra file.'; }
   $('#note-count').textContent = Object.keys(notes).length;
+  routeEditor?.notesChanged();
 });
 $('#export-notes').addEventListener('click', () => saveFile(JSON.stringify({ model_version: model.model_version, type: 'comparison-notes-not-applied', notes: Object.values(notes) }, null, 2), 'migarden-ghi-chu-doi-chieu.json', 'application/json'));
 $('#export-svg').addEventListener('click', () => saveFile(drawSVG(model, state), 'migarden-model-v0-' + state.projection + '.svg', 'image/svg+xml'));
 $('#note-count').textContent = Object.keys(notes).length;
 $('#fallback-drawing').addEventListener('click', () => setLayout('drawing'));
-try { scene = createScene($('#scene'), $('#scene-labels'), model, select,{onRouteChange:(points,index)=>routeEditor?.changedFromScene(points,index),onRoutePointSelect:index=>routeEditor?.selectPoint(index),onRouteDragStart:()=>routeEditor?.beginDrag()}); }
+function navigationChanged(mode){$$('[data-navigation]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.navigation===mode));$('#navigation-help').textContent=mode==='fly'?'WASD di chuyển · Q/E xuống/lên · ←/→ quay360° · ↑/↓ ngẩng/cúi · chuột phải nhìn · Shift nhanh · Esc về Xoay':'Kéo xoay · chuột phải kéo để dịch · cuộn thu/phóng';}
+try { scene = createScene($('#scene'), $('#scene-labels'), model, select,{onRouteChange:(points,index)=>routeEditor?.changedFromScene(points,index),onRoutePointSelect:index=>routeEditor?.selectPoint(index),onRouteDragStart:()=>routeEditor?.beginDrag(),onNavigationChange:navigationChanged}); }
 catch (error) { $('#renderer-error').hidden = false; console.warn('3D unavailable; SVG stays usable:', error.message); }
 setLayout(state.layout); renderInspector(); renderDrawing();
 routeEditor=initRouteEditor({model,getScene:()=>scene,redraw:renderDrawing,getNotes:()=>notes,restoreNotes:previous=>{
@@ -125,5 +132,20 @@ routeEditor=initRouteEditor({model,getScene:()=>scene,redraw:renderDrawing,getNo
   $('#note-count').textContent=Object.keys(notes).length;renderInspector();
 }});
 // Read-only diagnostics for local smoke evidence; no physical/device state is represented.
-window.miGardenPrototype = { diagnostics: () => ({ model_version: model.model_version, coordinate_kind: model.coordinate_frame.kind, layout: state.layout, projection: state.projection, selection: state.selected, source_option:model.source_option, potCount: state.pots.length, layers: {...state.layers}, scene: scene?.diagnostics() || null }) };
+$$('[data-navigation]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.navigation==='fly')routeEditor?.stopEditing();scene?.setNavigation(button.dataset.navigation);$('#scene').focus({preventScroll:true});}));
+try{$('#highlight-selection').checked=localStorage.getItem('migarden-highlight')!=='off';}catch{}
+scene?.setHighlight($('#highlight-selection').checked);
+$('#highlight-selection').addEventListener('change',event=>{scene?.setHighlight(event.target.checked);try{localStorage.setItem('migarden-highlight',event.target.checked?'on':'off');}catch{}});
+const panel=$('#three-panel');
+function fullscreenChanged(){const active=document.fullscreenElement===panel||panel.classList.contains('is-expanded');$('#scene-fullscreen').setAttribute('aria-pressed',active);$('#scene-fullscreen').textContent=active?'Thoát toàn màn hình':'Toàn màn hình';}
+$('#scene-fullscreen').addEventListener('click',async()=>{
+  if(document.fullscreenElement===panel){await document.exitFullscreen();return;}
+  if(panel.classList.contains('is-expanded')){panel.classList.remove('is-expanded');$('#fullscreen-status').textContent='';fullscreenChanged();return;}
+  try{if(!panel.requestFullscreen)throw Error('unavailable');await panel.requestFullscreen();$('#fullscreen-status').textContent='';}
+  catch{panel.classList.add('is-expanded');$('#fullscreen-status').textContent='Trình duyệt không cấp fullscreen; đang mở rộng trong cửa sổ này.';}
+  fullscreenChanged();
+});
+document.addEventListener('fullscreenchange',fullscreenChanged);
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&panel.classList.contains('is-expanded')){panel.classList.remove('is-expanded');$('#fullscreen-status').textContent='';fullscreenChanged();}});
+window.miGardenPrototype = { diagnostics: () => ({ model_version: model.model_version, coordinate_kind: model.coordinate_frame.kind, layout: state.layout, projection: state.projection, selection: state.selected, source_option:model.source_option, potCount: state.pots.length, layers: {...state.layers}, scene: scene?.diagnostics() || null, editor:routeEditor?.diagnostics(),fullscreen:document.fullscreenElement===panel,expanded:panel.classList.contains('is-expanded') }) };
 window.addEventListener('pagehide', () => scene?.dispose(), { once: true });

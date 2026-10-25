@@ -18,13 +18,13 @@ npm ci --ignore-scripts
 npm start
 ```
 
-Mở [viewer local](http://127.0.0.1:4179/?layout=space). Xoay toàn cảnh, so tuyến nước, chỉnh điểm và lưu feedback. Clone public không cần ảnh gốc; raw captures và feedback không nằm trong repo. [Hướng dẫn](viewer/README.md) · [baseline và giới hạn](docs/model-v0.md). Chạy `npm test` trong `viewer/` để kiểm dữ liệu và local server; viewer không điều khiển nước thật.
+Mở [viewer local](http://127.0.0.1:4179/?layout=space). Xoay/bay tự do, focus theo luồng nước, bật/tắt nhãn, toàn màn hình, so tuyến và lưu feedback. Clone public không cần ảnh gốc; raw captures và feedback không nằm trong repo. [Hướng dẫn](viewer/README.md) · [baseline và giới hạn](docs/model-v0.md). Chạy `npm test` trong `viewer/` để kiểm dữ liệu và local server; viewer không điều khiển nước thật.
 
 ## Thiết kế hiện tại
 
 - **Zone A là một mạch tưới chung.** Preview phải liệt kê mọi chậu bị tác động; chưa có điều khiển độc lập từng chậu. Chín chậu là snapshot khảo sát, inventory và lịch sử vị trí vẫn thay đổi được.
 - **Remote và local cùng qua một safety arbiter.** Thiết kế có “Tưới ngay” trên web, lịch deterministic được quản lý/version trên cloud và START/STOP tại nguồn. Controller chỉ tiếp tục lịch offline khi thời gian, cấu hình, ledger và safety còn hợp lệ; không chạy bù hoặc chạy trùng.
-- **Bản đồ dùng A/SVG + B/Three.js**, cùng một nguồn spatial data có version, provenance và uncertainty. Prototype đã có; geometry còn synthetic/estimated để cùng chỉnh.
+- **Bản đồ dùng A/SVG + B/Three.js**, cùng một nguồn spatial data có version, provenance và uncertainty. Prototype đã có; [baseline2026-10-25](docs/site-model.md) có số đo thước dây, tên chuẩn và phần còn ước lượng.
 - **Soil sensing/Zigbee đang HOLD.** Chúng không là điều kiện của irrigation MVP; thiết kế calibration/recommendation chỉ áp dụng nếu lane sensing được mở lại.
 - **miGarden giữ system source; microSched giữ web/API/Postgres adapter.** Hai repository dùng versioned contracts; không mở thêm database hoặc web backend mặc định.
 
@@ -38,7 +38,8 @@ Fail-closed, unknown outcome, cumulative water budget và manual shutoff độc 
 | Vì sao có các yêu cầu này | [Design inputs](docs/design-inputs.md) |
 | Ranh giới hệ thống và tích hợp | [Architecture](docs/architecture.md) |
 | Domain, API, command/schedule và safety | [Specification](docs/specification.md) |
-| Dữ kiện hiện trường và mức chắc chắn | [Site baseline](docs/site-baseline.md) |
+| Mô hình thực địa, tên gọi và số đo chuẩn | [Site model2026-10-25](docs/site-model.md) |
+| Khảo sát lịch sử và mức chắc chắn | [Site baseline](docs/site-baseline.md) |
 | Nguồn chung SVG/Three.js, correction và content policy | [Representation](docs/representation.md) |
 | Thiết kế kiểm chứng, bring-up và recovery | [Operations](docs/operations.md) |
 | Skill kỹ thuật, version và license tương ứng | [Skills](docs/skills.md), [notices](THIRD_PARTY_NOTICES.md) |

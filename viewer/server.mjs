@@ -1,6 +1,6 @@
 import http from 'node:http';
 import {readFile,stat,mkdir,writeFile,rename} from 'node:fs/promises';
-import {randomUUID} from 'node:crypto';
+import {randomUUID,createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 
@@ -11,10 +11,12 @@ const files=new Set(['index.html','style.css','app.js','scene.js','drawing.js','
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml'};
 const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
 function json(res,status,value){res.writeHead(status,{...headers,'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify(value));}
+export async function viewerBuildId(){const hash=createHash('sha256');for(const name of [...files,'server.mjs'].sort()){hash.update(name);hash.update(await readFile(path.join(root,name)));}return hash.digest('hex');}
 
 export async function createViewerServer({feedbackDir=path.join(privateRoot,'viewer-feedback'),sourceManifest=path.join(privateRoot,'viewer-sources.json')}={}){
  const model=JSON.parse(await readFile(path.join(root,'model.json'),'utf8'));
- const versions=new Set([model.model_version,'model-v0-draft-03','model-v0-draft-04']);
+ const buildId=await viewerBuildId();
+ const versions=new Set([model.model_version,'model-v0-draft-03','model-v0-draft-04','model-v0-draft-05']);
  const sourceFiles=new Map();
  if(sourceManifest)try{
   const sources=JSON.parse((await readFile(sourceManifest,'utf8')).replace(/^\uFEFF/,''));
@@ -30,6 +32,7 @@ export async function createViewerServer({feedbackDir=path.join(privateRoot,'vie
  const server=http.createServer(async(req,res)=>{
   try{
    const url=new URL(req.url,'http://127.0.0.1');
+   if(url.pathname==='/api/info'){if(req.method!=='GET'){json(res,405,{error:'Method not allowed'});return;}json(res,200,{model_version:model.model_version,build_id:buildId,profile:path.resolve(feedbackDir)===path.join(privateRoot,'viewer-feedback')?'owner':'isolated'});return;}
    if(url.pathname==='/api/sources'){
     if(req.method!=='GET'){json(res,405,{error:'Method not allowed'});return;}
     json(res,200,{available:[...sourceFiles.keys()]});return;

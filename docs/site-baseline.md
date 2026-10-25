@@ -1,6 +1,6 @@
 # Site baseline and evidence limits
 
-Preliminary survey readings and source coverage, as of 2026-10-22. Source IDs below support the design without exposing raw captures; see [content and source handling](representation.md#public-content-and-private-sources).
+Historical preliminary readings as of2026-10-22. **The current canonical main-route geometry, names and tape readings are in the [2026-10-25 site model](site-model.md).** Source IDs below support the design without exposing raw captures; see [content and source handling](representation.md#public-content-and-private-sources).
 
 The [2026-10-24 model-v0 baseline](model-v0.md) adds later owner-confirmed site relations and estimated geometry. The old W/window label below is a historical survey anchor; viewer object W is retained for compatibility but now displays the corrected main door, with a separate window-left object. Showing mini balcony Zone B does not enable its irrigation. Later supplemental source IDs preserve private capture lineage without publishing filenames.
 

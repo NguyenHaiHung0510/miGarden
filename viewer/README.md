@@ -1,6 +1,6 @@
 # miGarden model-v0 viewer
 
-Prototype đối chiếu vườn chậu hoa/cây cảnh ở ban công. SVG và Three.js dùng cùng `model.json`; đây là **ước lượng để cùng sửa**, chưa phải CAD đo đạc, mô phỏng thủy lực hoặc điều khiển thiết bị.
+Prototype đối chiếu vườn chậu hoa/cây cảnh ở ban công. SVG và Three.js dùng cùng `model.json`; baseline06 có **số đo thước dây và phần còn ước lượng**, chưa phải CAD đo đạc, mô phỏng thủy lực hoặc điều khiển thiết bị.
 
 ## Chạy local
 
@@ -12,7 +12,7 @@ Node.js22.8+ và browser có WebGL; đã kiểm bằng Node24.15.0, Three.js0.18
 .\start-miGarden.cmd
 ```
 
-Launcher cài dependency theo lockfile khi thiếu, mở browser và dùng lại miGarden đang chạy. Mặc định thử4181 rồi tối đa9 cổng kế tiếp nếu bị ứng dụng khác chiếm; không kill process. Khi tạo server mới, giữ cửa sổ đó mở và Ctrl+C để dừng. Có thể truyền `--port 4300`; `--no-browser` chỉ chạy/in URL. Sau khi đã cài dependency, `node viewer/start.mjs` từ gốc repo cũng dùng được trên Windows/macOS/Linux.
+Launcher cài dependency theo lockfile khi thiếu, mở browser và dùng lại miGarden đang chạy cùng build. Nếu cổng có server bản cũ, launcher chọn cổng kế tiếp để tránh API lưu cũ. Mặc định thử4181 rồi tối đa9 cổng kế tiếp nếu bị ứng dụng khác chiếm; không kill process. Khi tạo server mới, giữ cửa sổ đó mở và Ctrl+C để dừng. Có thể truyền `--port 4300`; `--no-browser` chỉ chạy/in URL. Sau khi đã cài dependency, `node viewer/start.mjs` từ gốc repo cũng dùng được trên Windows/macOS/Linux.
 
 Hoặc chạy thủ công:
 
@@ -26,11 +26,12 @@ Mở [viewer](http://127.0.0.1:4179/?layout=space). Server chỉ bind loopback. 
 
 ## Sử dụng
 
-- Xoay/zoom hoặc chọn **Toàn cảnh / Ban công / Nguồn nước / Tường phải**. SVG có mặt bằng và mặt cắt.
-- So tuyến men trái, phải đi ngang, phải hạ thấp trên ống hiện hữu; đường chéo giữ tham khảo. Chiều dài/đỉnh là synthetic, chưa cộng dư thi công; dấu◇ là nơi cần thiết kế gá/đỡ.
-- So giữ vòi tay đỏ một đầu hoặc thay vòi≥2 đầu: một miGarden và một sinh hoạt dùng tay. Chưa chọn linh kiện hoặc lắp thực tế.
-- Sửa điểm bằng gizmo3D hoặc nhập tọa độ; thêm/bỏ/hoàn tác và ghi feedback. **Lưu cho Agent** giữ tuyến, lựa chọn vòi và ghi chú local. Đổi hình không điều khiển nước.
-- Chậu là mẫu linh động,9 không là capacity; nhánh minh họa không tạo actuator riêng.
+- **Xoay**: kéo để xoay, chuột phải kéo để dịch, cuộn zoom. **Bay**: bấm vào hình, WASD di chuyển, Q/E xuống/lên, ←/→ quay hướng nhìn360°, ↑/↓ ngẩng/cúi, giữ chuột phải kéo để nhìn, Shift nhanh, Esc về Xoay. Tab ra ngoài vùng hình sẽ ngừng phím bay.
+- **Đi nhanh đến** theo luồng nước; chọn bồn/bơm/tường/hàng rào riêng. **Nổi bật điểm chọn** bật/tắt độc lập.
+- Tắt **Số đo / ước lượng / nhãn** để xem sạch không bị chữ che hình. **Toàn màn hình** giữ điều khiển; nếu browser không cấp quyền thì báo rõ đang mở rộng trong cửa sổ.
+- Tuyến chính mặc định≈15,70m, nguồn→mép mini8,90m là tổng các đoạn. Các tuyến cũ chỉ là lớp so sánh, editor luôn sửa tuyến chính. Buffer mua hiện riêng, ví dụ3m chỉnh được; chưa tính nhánh chậu.
+- Vòi hai đầu là phương án chính: một sinh hoạt, một miGarden có van tay trước van điện tương lai; chưa chọn linh kiện/lắp thực tế.
+- Sửa điểm/gizmo hoặc tọa độ mét; thêm/bỏ/hoàn tác/về tuyến chuẩn và ghi feedback. **Lưu cho Agent** giữ nháp local, không ghi đè baseline. Chậu linh động;9 không là capacity.
 
 ## Ảnh và feedback riêng tư
 
@@ -38,7 +39,7 @@ Clone public chạy model/SVG/editor **không cần ảnh gốc**. Inspector hi�
 
 Optional local file `../.local/viewer-sources.json` là mảng các record như `{ "id": "R04", "path": ".local/photos/source.png" }`. Đây là placeholder, không phải ảnh được cung cấp. Chỉ đường dẫn nằm trong ignored `.local` của repo được phục vụ theo ID; `/api/sources` không trả filesystem paths.
 
-Feedback mặc định ở `../.local/viewer-feedback/current-draft.json`, kèm immutable `snapshot-*.json`. Browser giữ nháp riêng; nháp browser chưa đồng nghĩa đã lưu project. Nạp nháp cũ là thao tác chủ động. Revision check chống ghi đè giữa các tab. Xuất dự phòng trước khi xóa browser storage hoặc đổi máy/cổng. `MIGARDEN_FEEDBACK_DIR` có thể chọn thư mục khác trong `.local`; không nhận đường dẫn từ HTTP.
+Feedback mặc định ở `../.local/viewer-feedback/current-draft.json`, kèm immutable `snapshot-*.json`. Browser giữ nháp riêng; nháp browser chưa đồng nghĩa đã lưu project. Nạp ghi chú cũ là thao tác chủ động; tọa độ draft03–05 không được áp lên khung mét06. Revision check chống ghi đè giữa các tab. Xuất dự phòng trước khi xóa browser storage hoặc đổi máy/cổng. `MIGARDEN_FEEDBACK_DIR` có thể chọn thư mục khác trong `.local`; không nhận đường dẫn từ HTTP.
 
 Đây là server preview local, không phải dịch vụ Internet nhiều người dùng hoặc backend sản phẩm thứ hai.
 

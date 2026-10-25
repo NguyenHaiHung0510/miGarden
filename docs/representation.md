@@ -1,6 +1,6 @@
 # Selected representation: A/SVG + B/Three.js
 
-The selected design combines SVG and Three.js views of one versioned spatial source. A runnable [model-v0 prototype](model-v0.md) is implemented in [viewer/](../viewer/README.md), alongside the design contract and preliminary readings. Its geometry is estimated, not surveyed.
+The selected design combines SVG and Three.js views of one versioned spatial source. A runnable [model-v0 prototype](model-v0.md) is implemented in [viewer/](../viewer/README.md), alongside the design contract and preliminary readings. The [2026-10-25 field baseline](site-model.md) adds approved tape readings and names; unmeasured geometry remains estimated, not surveyed.
 
 | View | Role and contract |
 |---|---|

@@ -2,7 +2,7 @@ import {access} from 'node:fs/promises';
 import {execFile} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
-import {createViewerServer} from './server.mjs';
+import {createViewerServer,viewerBuildId} from './server.mjs';
 
 const args=process.argv.slice(2),at=args.indexOf('--port');
 const firstPort=Number(at>=0?args[at+1]:(process.env.MIGARDEN_PORT||4181));
@@ -19,12 +19,13 @@ function show(port,reused){
  const commandArgs=process.platform==='win32'?['/d','/c','start','',url]:[url];
  execFile(command,commandArgs,{windowsHide:true},error=>{if(error)console.log(`Open the viewer manually: ${url}`);});
 }
+const buildId=await viewerBuildId();
 let opened=false;
 for(let offset=0;offset<10;offset++){
  const port=firstPort+offset,origin=`http://127.0.0.1:${port}`;
  try{
-  const response=await fetch(origin+'/model.json',{signal:AbortSignal.timeout(700)}),m=await response.json();
-  if(m.model_version?.startsWith('model-v0-')&&m.title==='Từ sân thượng đến ban công'){show(port,true);opened=true;break;}
+  const response=await fetch(origin+'/api/info',{signal:AbortSignal.timeout(700)}),info=await response.json();
+  if(info.build_id===buildId&&info.profile==='owner'){show(port,true);opened=true;break;}
  }catch{}
  const server=await createViewerServer();
  try{

@@ -1,6 +1,6 @@
 # Current project state
 
-As of **2026-10-24, Asia/Saigon**, miGarden has a runnable [model-v0 SVG/Three.js prototype](model-v0.md) alongside product requirements and contracts. Firmware, control simulator and microSched integration have not been implemented here. The viewer edits a representation and saves local feedback; it does not actuate devices.
+As of **2026-10-25, Asia/Saigon**, miGarden has a runnable [model-v0 SVG/Three.js prototype](model-v0.md) alongside product requirements and contracts. Firmware, control simulator and microSched integration have not been implemented here. The viewer edits a representation and saves local feedback; it does not actuate devices.
 
 ## Selected design
 
@@ -20,10 +20,10 @@ The [product decisions](specification.md#20-product-decisions) define the curren
 | Area | Available | Still unverified |
 |---|---|---|
 | Requirements | Detailed domain, command/ack, schedule and safety contracts | Executable behavior and integration |
-| Site | [Anchors and preliminary route readings](site-baseline.md), with source references and uncertainty | Exact XYZ/scale/endpoints, changed placements, pressure/flow, drainage and outdoor electrical suitability |
+| Site | [Anchors and preliminary route readings](site-baseline.md), with source references and uncertainty | Unmeasured absolute XYZ and mounting details, pressure/flow, drainage and outdoor electrical suitability |
 | Hardware | P1A bench kit arrival reported by the project owner; planned Vietduino ESP32 16MB HS2250V + USB-C HS1369, breadboard/jumpers/red LED/330Ω/DIP button | Exact-unit identity, board/pins/toolchain, USB/flash/bench; water actuator/driver/power/feedback selection |
-| Representation | [Shared SVG/Three.js data contract](representation.md), implemented [viewer/editor](../viewer/README.md), source/HTTP/feedback tests and observed basic live render | Extended live interaction QA, surveyed geometry, RF/hydraulic performance and COLMAP assets |
+| Representation | [Shared model](representation.md), [field names/readings](site-model.md), [viewer/editor](../viewer/README.md),4 passing Node groups, Luna review/retest and qualified Flash live QA | Continuous drag/Shift and full flight-motion proof, surveyed geometry, RF/hydraulic performance and COLMAP assets |
 | Skills | Three installed Markdown packages with source/license/version metadata; [usage and compatibility](skills.md) | Firmware/build/device/rendering workflows and discovery in other runtimes |
 | Deployment | Planned [microSched adapter boundary](architecture.md) | App/DB integration, network/cost probes, contained-water/field and production acceptance |
 
-Next work is to refine the model through owner feedback, choose a practical route/source option, define and implement a bounded simulator/dry-LED slice, and resolve hardware choices before water testing. Exact framework/board/pins/partition, time/persistence/recovery, remote/manual/schedule arbitration, transport/cost caps and numeric water policy remain open. The [operations runbooks](operations.md) describe the evidence needed to progress.
+The [field baseline](site-model.md) selects the right main route and two-outlet source. Next work is to refine visual corrections, define and implement a bounded simulator/dry-LED slice, and resolve hardware choices before water testing. Exact framework/board/pins/partition, time/persistence/recovery, remote/manual/schedule arbitration, transport/cost caps and numeric water policy remain open. The [operations runbooks](operations.md) describe the evidence needed to progress.
