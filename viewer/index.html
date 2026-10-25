@@ -11,7 +11,7 @@
   <header class="site-header">
     <a class="brand" href="/" aria-label="miGarden, về góc nhìn đầu"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 25C6 12 14 6 26 7c0 11-7 17-19 18Zm1-1L23 10"/></svg><span>miGarden<span class="brand-dot">.</span></span></a>
     <div class="header-divider"></div><span class="header-context">Không gian khu vườn</span>
-    <span class="draft-badge"><i></i> Model-v0 · Baseline 06</span>
+    <span class="draft-badge"><i></i> Model-v0 · Baseline 07</span>
   </header>
   <main>
     <section class="intro">
@@ -23,13 +23,13 @@
     </section>
     <div class="schematic-notice"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.4"/><path d="M10 9v5m0-9v1"/></svg><span><strong>Hiện trường · 25/10/2026.</strong> Mét · số thước dây đã chốt, mốc suy ra và phần ≈ còn ước lượng. Nguồn chuẩn hiện có, chưa survey toàn bộ.</span></div>
     <section class="route-toolbar" aria-label="Đặt tuyến ống và lưu feedback">
-      <div class="route-presets"><span>SO TUYẾN</span><button data-route-preset="main" aria-pressed="true">Tuyến chính</button><button data-route-preset="right" aria-pressed="false">Phải cũ</button><button data-route-preset="right-low" aria-pressed="false">Phải thấp cũ</button><button data-route-preset="folded" aria-pressed="false">Men trái cũ</button><button data-route-preset="diagonal" aria-pressed="false">Chéo cũ</button></div>
+      <div class="route-presets"><span>SO TUYẾN</span><button data-route-preset="main" aria-pressed="true">PA2 · Men mini · chính</button><button data-route-preset="mini-straight" aria-pressed="false">PA1 · Thẳng · cần đỡ</button><button data-route-preset="right" aria-pressed="false">Phải cũ</button><button data-route-preset="right-low" aria-pressed="false">Phải thấp cũ</button><button data-route-preset="folded" aria-pressed="false">Men trái cũ</button><button data-route-preset="diagonal" aria-pressed="false">Chéo cũ</button></div>
       <div class="route-actions"><button id="route-edit-toggle" aria-pressed="false">Sửa điểm trên 3D</button><button id="focus-3d" aria-pressed="false">Xem 3D rộng</button><button id="route-save" class="save-agent">Lưu cho Agent</button></div>
       <p id="route-metric-summary"></p><p id="route-save-status" role="status">Bản tuyến đang là ước lượng. Bạn có thể sửa rồi lưu vào project.</p>
       <div id="route-comparison" class="route-comparison" aria-label="So hai tuyến men mép"></div>
       <p id="route-site-warning" class="route-site-warning"></p>
       <label class="buffer-control">Buffer mua ống (m)<input id="pipe-buffer" type="number" min="0" max="100" step="0.5" value="3"></label><p id="pipe-purchase-summary"></p>
-      <div id="previous-draft" class="previous-draft" hidden><span>Nháp bản 03–05 vẫn được giữ.</span><button id="route-restore-previous">Nạp nội dung ghi chú cũ</button></div>
+      <div id="previous-draft" class="previous-draft" hidden><span>Nháp cũ vẫn được giữ riêng.</span><button id="route-restore-previous">Nạp nội dung ghi chú cũ</button></div>
     </section>
     <section class="source-toolbar" aria-label="Phương án vòi nguồn"><div><span>VÒI NGUỒN</span><button data-source-option="multi" aria-pressed="true">Chính · Thay vòi 2 đầu</button><button data-source-option="reuse" aria-pressed="false">Tham khảo · Giữ vòi cũ</button></div><p id="source-option-note" role="status"></p></section>
     <div class="workspace" id="workspace">

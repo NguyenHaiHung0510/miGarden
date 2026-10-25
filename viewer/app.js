@@ -62,9 +62,9 @@ function setLayout(layout) {
 function scenario(name) {
   state.scenario = name; state.pots = structuredClone(model.pot_samples);
   if (name === 'move') {
-    for (const index of [1, 4, 7]) { state.pots[index].z = 6.8; state.pots[index].x += .1; }
+    for (const index of [1, 4, 7]) { state.pots[index].z = model.layout.balcony.minZ+.6; state.pots[index].x += .1; }
   }
-  if (name === 'add') state.pots.push({ id: 'sample-extra-01', x: 1.3, z: 6.8, type: 'round' }, { id: 'sample-extra-02', x: 3.6, z: 6.85, type: 'box' });
+  if (name === 'add') state.pots.push({ id: 'sample-extra-01', x: 1.3, z: model.layout.balcony.minZ+.6, type: 'round' }, { id: 'sample-extra-02', x: 3.6, z: model.layout.balcony.minZ+.65, type: 'box' });
   if (state.selected.startsWith('pot:') && !state.pots.some(p=>'pot:'+p.id===state.selected)) state.selected = 'balcony';
   scene?.setPots(state.pots); scene?.select(state.selected);
   $('#pot-count').textContent = state.pots.length + ' chậu · vị trí minh họa';

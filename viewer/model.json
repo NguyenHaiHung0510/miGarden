@@ -1,6 +1,6 @@
 {
   "schema_version": "prototype-0.2",
-  "model_version": "model-v0-draft-06",
+  "model_version": "model-v0-draft-07",
   "title": "Từ sân thượng đến ban công",
   "coordinate_frame": {
     "kind": "owner-measured-with-estimates",
@@ -23,38 +23,38 @@
     "balcony": {
       "minX": 0.03,
       "maxX": 4.13,
-      "minZ": 6.2,
-      "maxZ": 7.6,
+      "minZ": 7.5,
+      "maxZ": 8.98,
       "floor": 0
     },
     "terrace": {
       "minX": 0,
       "maxX": 4.13,
       "minZ": -0.65,
-      "maxZ": 5.9799999999999995,
+      "maxZ": 7.28,
       "floor": 3.53
     },
     "room": {
       "minX": 0,
       "maxX": 4.13,
-      "minZ": 2.9,
-      "maxZ": 6.2,
+      "minZ": 4.2,
+      "maxZ": 7.5,
       "floor": 0
     },
-    "railHeight": 1.05,
-    "railTop": 1.15,
+    "railHeight": 1.055,
+    "railTop": 1.14,
     "railBaseHeight": 0.1,
-    "railZ": 7.53,
+    "railZ": 8.9,
     "railMinX": 0.03,
     "railMaxX": 4.03,
-    "pipeZ": 7.5,
-    "potRowZ": 7.25,
+    "pipeZ": 8.815,
+    "potRowZ": 8.53,
     "zoneB": {
       "minX": 1,
       "maxX": 4.13,
-      "minZ": 6.1,
-      "maxZ": 7.6,
-      "floor": 3.55,
+      "minZ": 7.4,
+      "maxZ": 8.9,
+      "floor": 3.54,
       "wallThickness": 0.1,
       "wallHeight": 0.2,
       "geometry_status": "owner-measured-footprint-estimated-thickness",
@@ -62,7 +62,7 @@
       "depth_m": 1.5
     },
     "parapet": {
-      "z": 6.04,
+      "z": 7.34,
       "thickness": 0.12,
       "height_m": 0.45,
       "height_scene": 0.45,
@@ -70,8 +70,8 @@
     },
     "leftWall": {
       "x": -0.05,
-      "minZ": 2.9,
-      "maxZ": 7.6,
+      "minZ": 4.2,
+      "maxZ": 8.98,
       "height": 3.5,
       "innerX": 0
     },
@@ -81,15 +81,15 @@
       "minY": 0,
       "maxY": 6.3,
       "minZ": -0.65,
-      "maxZ": 7.65,
+      "maxZ": 9.05,
       "status": "owner-confirmed-relation-estimated-extent",
       "owner": "neighbor"
     },
     "rightLedge": {
-      "minX": 3.85,
+      "minX": 3.93,
       "maxX": 4.13,
       "minZ": -0.5,
-      "maxZ": 6.1,
+      "maxZ": 7.4,
       "floor": 3.53,
       "height": 0.5100000000000002,
       "status": "inferred-from-tap-wall-rise-and-estimated-tap-height"
@@ -207,6 +207,22 @@
     "FIELD-20261025": {
       "title": "Thước dây hiện trường · 2026-10-25",
       "note": "Số đo do Owner cung cấp và xác nhận đầu mút. Không kèm ảnh gốc trong bản public."
+    },
+    "N11": {
+      "title": "Nguồn · vị trí giao khối tường cũ",
+      "note": "Tham chiếu sửa hình học và đầu mút đo; ảnh gốc giữ riêng. Bản07 sửa nguồn,890cm thẳng và chọn PA2."
+    },
+    "N12": {
+      "title": "Mốc mép mini xuống đỉnh rào",
+      "note": "Tham chiếu sửa hình học và đầu mút đo; ảnh gốc giữ riêng. Bản07 sửa nguồn,890cm thẳng và chọn PA2."
+    },
+    "N13": {
+      "title": "Hai cách qua mini · hình đối chiếu",
+      "note": "Tham chiếu sửa hình học và đầu mút đo; ảnh gốc giữ riêng. Bản07 sửa nguồn,890cm thẳng và chọn PA2."
+    },
+    "FIELD-20261025-C2": {
+      "title": "Hiệu chỉnh mốc890cm và chọn PA2",
+      "note": "890cm là đoạn thẳng sau bước đặt ống lên tường. Phần tiếp cận nguồn riêng; PA2 men mini được chọn, PA1 không có sẵn giá đỡ."
     }
   },
   "objects": [
@@ -218,7 +234,7 @@
       "pose": [
         1.9,
         3.53,
-        2.8
+        3.4
       ],
       "physical_position_m": null,
       "status": "owner-confirmed",
@@ -236,7 +252,7 @@
       "pose": [
         2,
         0,
-        6.9
+        8.2
       ],
       "physical_position_m": null,
       "status": "owner-confirmed",
@@ -252,7 +268,7 @@
       "short": "Vòi nguồn",
       "kind": "tap",
       "pose": [
-        3.5,
+        3.4,
         3.78,
         0
       ],
@@ -260,8 +276,8 @@
       "status": "proposed",
       "summary": "Điểm nguồn của tuyến. Phương án chính: thay vòi hai đầu; van tay nhánh miGarden chặn cứng trước van điện tương lai. Thân vòi minh họa, chưa lắp mới.",
       "sources": [
+        "N11",
         "N01",
-        "N04",
         "N05"
       ]
     },
@@ -308,8 +324,8 @@
       "kind": "anchor",
       "pose": [
         4.03,
-        1.05,
-        7.5
+        1.04,
+        8.8
       ],
       "physical_position_m": null,
       "status": "owner-confirmed",
@@ -329,7 +345,7 @@
       "pose": [
         3,
         1.15,
-        6.2
+        7.5
       ],
       "physical_position_m": null,
       "status": "owner-confirmed",
@@ -348,7 +364,7 @@
       "pose": [
         1.45,
         1.65,
-        6.2
+        7.5
       ],
       "physical_position_m": null,
       "status": "owner-confirmed",
@@ -365,12 +381,12 @@
       "kind": "area",
       "pose": [
         2.565,
-        3.55,
-        6.85
+        3.54,
+        8.15
       ],
       "physical_position_m": null,
       "status": "owner-confirmed",
-      "summary": "Ngang ngoài 3,13m; sâu1,50m tính sau tường ngăn và gồm tường thấp mép ngoài. Tưới Zone B vẫn là mở rộng sau.",
+      "summary": "Ngang ngoài3,13m, sâu1,50m sau tường ngăn và gồm tường thấp mép ngoài. PA2 men kết cấu mini; tưới Zone B vẫn deferred.",
       "sources": [
         "N08",
         "N10"
@@ -384,7 +400,7 @@
       "pose": [
         0.045,
         1.7,
-        3.2
+        4.5
       ],
       "physical_position_m": null,
       "status": "owner-confirmed",
@@ -401,8 +417,8 @@
       "kind": "distribution",
       "pose": [
         2.03,
-        1.05,
-        7.5
+        1.055,
+        8.815
       ],
       "physical_position_m": null,
       "status": "proposed",
@@ -418,17 +434,16 @@
       "short": "Tuyến chính",
       "kind": "route",
       "pose": [
-        4.03,
-        4.15,
-        3.8
+        4.015,
+        4.155,
+        3.7
       ],
       "physical_position_m": null,
       "status": "owner-confirmed",
-      "summary": "Tuyến Owner chọn: sang phải, lên tường thấp phải, men mép qua mini và xuống hàng rào. 8,90m là tổng từ nguồn tới mặt trên mép ngoài mini, không cộng lặp các đoạn con.",
+      "summary": "PA2 đã chọn: từ S men phải7,40m, hạ40cm, men mini1,50m rồi hạ260cm. 890cm chỉ là đoạn thẳng S tới mép ngoài nếu giữ cao, không tính từ vòi.",
       "sources": [
-        "FIELD-20261025",
-        "N08",
-        "N10"
+        "FIELD-20261025-C2",
+        "N13"
       ]
     },
     {
@@ -438,9 +453,9 @@
       "short": "Tường trái",
       "kind": "wall",
       "pose": [
-        0,
+        -0.05,
         1.8,
-        6.8
+        8.2
       ],
       "physical_position_m": null,
       "status": "owner-confirmed",
@@ -456,7 +471,7 @@
       "pose": [
         4.23,
         3.1,
-        3.5
+        4.3
       ],
       "status": "owner-confirmed",
       "summary": "Tường cao liên tục bên phải, tách khỏi tường thấp nhà mình. Chưa chọn gá/khoan vào tường hàng xóm.",
@@ -473,12 +488,12 @@
       "short": "Tường thấp phải",
       "label": "Tường thấp phải",
       "pose": [
-        4,
+        4.03,
         3.8,
-        3.1
+        3.7
       ],
       "status": "owner-confirmed",
-      "summary": "Tường thấp phía phải sân thượng của nhà mình; tên cũ lan can/gờ phía nhà mình. Mặt trên cao hơn vòi26cm.",
+      "summary": "Tường thấp phải nhà mình. Nguồn tiếp cận mặt trước, leo26cm tới đỉnh, tính phần ống sẵnØ10cm rồi rẽ≈10cm lên mặt tường tới S. Bề dày dựng≈20cm chưa đo.",
       "sources": [
         "N01",
         "N03",
@@ -492,7 +507,7 @@
       "short": "Ống sẵn gần vòi",
       "label": "Ống hiện hữu gần vòi",
       "pose": [
-        3.95,
+        3.83,
         3.61,
         0
       ],
@@ -512,7 +527,7 @@
       "pose": [
         4.03,
         4.09,
-        3
+        3.7
       ],
       "status": "owner-confirmed",
       "summary": "Đường kính10cm theo Owner; đây là kích thước ống sẵn, không phải khoảng chừa10cm phía trên.",
@@ -528,7 +543,7 @@
       "short": "Đầu sinh hoạt",
       "label": "Đầu vòi sinh hoạt",
       "pose": [
-        3.35,
+        3.25,
         3.7,
         0.32
       ],
@@ -585,7 +600,7 @@
       "label": "Vị trí van điện miGarden tương lai",
       "short": "Van điện · dự kiến",
       "pose": [
-        3.76,
+        3.66,
         3.78,
         0
       ],
@@ -604,7 +619,7 @@
       "pose": [
         2.06,
         3.75,
-        6.04
+        7.34
       ],
       "summary": "Tường ngăn không nằm trong chiều sâu150cm của mini. Bề dày12cm trên hình là ≈.",
       "sources": [
@@ -620,8 +635,8 @@
       "short": "Tường thấp mini",
       "pose": [
         2.565,
-        3.65,
-        7
+        3.64,
+        8.15
       ],
       "summary": "Hai tường bên nằm trong chiều ngang313cm; tường mép ngoài nằm trong chiều sâu150cm. Bề dày10cm/chiều cao20cm trên hình là ≈.",
       "sources": [
@@ -638,14 +653,13 @@
       "short": "Mép ngoài mini",
       "pose": [
         4.03,
-        3.75,
-        7.6
+        3.74,
+        8.9
       ],
-      "summary": "Mặt trên mép ngoài là mốc kết thúc tổng8,90m và bắt đầu đoạn xuống2,60m đến đỉnh hàng rào.",
+      "summary": "Mặt trên mép ngoài mini là đầu mốc260cm tới đỉnh rào; khác điểm trên tuyến cao hơn40cm. PA2 đi sát mép này trước khi hạ xuống.",
       "sources": [
-        "N09",
-        "N10",
-        "FIELD-20261025"
+        "N12",
+        "N13"
       ],
       "status": "owner-confirmed",
       "kind": "anchor",
@@ -657,8 +671,8 @@
       "short": "Hàng rào sắt",
       "pose": [
         2.03,
-        1.15,
-        7.53
+        1.14,
+        8.9
       ],
       "summary": "Dài4,00m. Tách kết cấu hàng rào khỏi ống phân phối miGarden. Cao độ hàng rào so sàn là ≈.",
       "sources": [
@@ -677,7 +691,7 @@
       "pose": [
         2.03,
         0.05,
-        7.53
+        8.9
       ],
       "summary": "Chân tường thấp≈10cm theo mô tả trước; khác với ống hiện hữu Ø10cm trên sân thượng.",
       "sources": [
@@ -687,90 +701,177 @@
       "status": "owner-confirmed",
       "kind": "wall",
       "physical_position_m": null
+    },
+    {
+      "id": "S",
+      "label": "S · Bắt đầu đoạn thẳng 890cm",
+      "short": "S · Đầu tuyến thẳng",
+      "kind": "anchor",
+      "pose": [
+        4.03,
+        4.14,
+        0
+      ],
+      "physical_position_m": null,
+      "status": "owner-confirmed",
+      "summary": "Sau khi tiếp cận, leo và rẽ ngang lên mặt tường. Từ S tới điểm rẽ cao ở mép ngoài mini là8,90m một đoạn thẳng.",
+      "sources": [
+        "FIELD-20261025-C2"
+      ]
     }
   ],
   "water_route": {
     "preset": "main",
     "points": [
       [
-        3.5,
+        3.4,
         3.78,
         0
       ],
       [
-        4.03,
+        3.915,
         3.78,
         0
       ],
       [
-        4.03,
+        3.915,
         4.04,
         0
       ],
       [
-        4.03,
-        4.15,
+        3.915,
+        4.155,
         0
       ],
       [
         4.03,
-        4.15,
-        6.1
+        4.155,
+        0
       ],
       [
         4.03,
-        4.15,
-        7.6
+        4.155,
+        7.465
       ],
       [
         4.03,
-        3.75,
-        7.6
+        3.755,
+        7.465
       ],
       [
         4.03,
-        1.15,
-        7.6
+        3.755,
+        8.915
       ],
       [
         4.03,
-        1.15,
-        7.5
+        1.155,
+        8.915
       ],
       [
         4.03,
-        1.05,
-        7.5
+        1.155,
+        8.815
+      ],
+      [
+        4.03,
+        1.055,
+        8.815
       ],
       [
         0.03,
-        1.05,
-        7.5
+        1.055,
+        8.815
+      ]
+    ],
+    "reference_points": [
+      [
+        3.4,
+        3.78,
+        0
+      ],
+      [
+        3.93,
+        3.78,
+        0
+      ],
+      [
+        3.93,
+        4.04,
+        0
+      ],
+      [
+        3.93,
+        4.14,
+        0
+      ],
+      [
+        4.03,
+        4.14,
+        0
+      ],
+      [
+        4.03,
+        4.14,
+        7.4
+      ],
+      [
+        4.03,
+        3.74,
+        7.4
+      ],
+      [
+        4.03,
+        3.74,
+        8.9
+      ],
+      [
+        4.03,
+        1.14,
+        8.9
+      ],
+      [
+        4.03,
+        1.14,
+        8.8
+      ],
+      [
+        4.03,
+        1.04,
+        8.8
+      ],
+      [
+        0.03,
+        1.04,
+        8.8
       ]
     ],
     "point_labels": [
       "Nguồn · sau van tay",
-      "Sang phải53cm",
-      "Mặt trên tường · lên26cm",
-      "Vượt ống sẵn Ø10cm · cần đỡ",
-      "Sau tường ngăn · đầu mini",
-      "Trên mép ngoài mini",
-      "Mặt trên mép mini · hết8,90m",
-      "Đỉnh hàng rào · xuống2,60m",
-      "Vào phía cửa chính≈10cm",
+      "Tiếp cận ngoài mặt tường",
+      "Leo tới đỉnh tường",
+      "Vượt phần ống sẵn Ø10cm",
+      "S · đặt ngang≈10cm",
+      "PA2 · hết7,40m danh nghĩa",
+      "PA2 · hạ40cm",
+      "PA2 · men mini1,50m theo mốc",
+      "Hạ260cm · đỉnh rào",
+      "Vào≈10cm phía cửa chính",
       "Hạ≈10cm · neo hàng rào",
-      "Cuối hàng rào ·4,00m"
+      "Cuối hàng rào4m"
     ],
     "support_indices": [
       1,
-      3,
       4,
       5,
-      8,
-      9
+      6,
+      7,
+      9,
+      10
     ],
-    "aggregate_end_index": 6,
-    "status": "owner-selected-route-with-measured-and-inferred-geometry"
+    "status": "owner-selected-pa2-with-explicit-render-clearance",
+    "baseline_nominal_m": 17.09,
+    "reference_note": "Mốc đo/danh nghĩa và tim ống dựng riêng; cộng≈3cm hình học để không giao khối, chưa là chiều dài cắt."
   },
   "observations": [
     {
@@ -796,12 +897,12 @@
     {
       "id": "M03",
       "reading": "890 cm",
-      "source": "FIELD-20261025",
+      "source": "FIELD-20261025-C2",
       "endpoints": [
-        "F",
-        "mini-edge"
+        "S",
+        "main-route-crest"
       ],
-      "note": "Tổng theo các đoạn của tuyến; gồm các đoạn con và đoạn hạ40cm ở mini."
+      "note": "Một đoạn thẳng8,90m sau khi đặt ống lên tường, không tính từ vòi hoặc gồm hạ40cm. PA2 tách phần này7,40m và1,50m."
     },
     {
       "id": "M04",
@@ -821,7 +922,7 @@
         "mini-edge",
         "main-route-crest"
       ],
-      "note": "Chênh cao đã tính phần Ø10cm ống sẵn."
+      "note": "Chênh cao tham chiếu40cm từ mép mini lên tuyến cao, đã tính phầnốngØ10cm; không phải đầu mốc260cm."
     },
     {
       "id": "M06",
@@ -912,20 +1013,30 @@
         "AP"
       ],
       "note": "AP sát tường trái; cao so sàn phòng."
+    },
+    {
+      "id": "M15",
+      "reading": "≈10 cm",
+      "source": "FIELD-20261025-C2",
+      "endpoints": [
+        "source-above-wall",
+        "S"
+      ],
+      "note": "Rẽ ngang về phía phải≈10cm để nằm trên mặt tường trước S; riêng vớiØ10cm và haioffset hàng rào."
     }
   ],
   "dimension_mappings": [
     {
       "id": "M01",
-      "label": "53 cm",
+      "label": "53cm · tới mặt tường",
       "points": [
         [
-          3.5,
+          3.4,
           3.78,
           0
         ],
         [
-          4.03,
+          3.93,
           3.78,
           0
         ]
@@ -938,15 +1049,15 @@
     },
     {
       "id": "M02",
-      "label": "26 cm",
+      "label": "26cm · lên mặt tường",
       "points": [
         [
-          4.03,
+          3.93,
           3.78,
           0
         ],
         [
-          4.03,
+          3.93,
           4.04,
           0
         ]
@@ -958,8 +1069,30 @@
       "mapping": "Đến mặt trên tường thấp phải, chưa gồm ống sẵn."
     },
     {
+      "id": "M03",
+      "label": "890cm · thẳng từ S",
+      "points": [
+        [
+          4.03,
+          4.14,
+          0
+        ],
+        [
+          4.03,
+          4.14,
+          8.9
+        ]
+      ],
+      "views": [
+        "right",
+        "all"
+      ],
+      "kind": "owner",
+      "mapping": "Một đoạn thẳng8,90m sau khi đặt ống lên tường, không tính từ vòi hoặc gồm hạ40cm. PA2 tách phần này7,40m và1,50m."
+    },
+    {
       "id": "M04",
-      "label": "Ống sẵn Ø10 cm",
+      "label": "Ống sẵn Ø10cm",
       "points": [
         [
           4.03,
@@ -973,51 +1106,49 @@
         ]
       ],
       "views": [
-        "source",
-        "right"
+        "source"
       ],
       "kind": "owner",
       "mapping": "Đường kính ống hiện hữu, không phải clearance."
     },
     {
       "id": "M05",
-      "label": "40 cm · đã gồm Ø10",
+      "label": "40cm · hạ xuống mini",
       "points": [
         [
           4.03,
-          3.75,
-          7.6
+          4.14,
+          8.9
         ],
         [
           4.03,
-          4.15,
-          7.6
+          3.74,
+          8.9
         ]
       ],
       "views": [
-        "right",
-        "mini"
+        "mini",
+        "right"
       ],
       "kind": "owner",
-      "mapping": "Chênh cao đã tính phần Ø10cm ống sẵn."
+      "mapping": "Chênh cao tham chiếu40cm từ mép mini lên tuyến cao, đã tính phầnốngØ10cm; không phải đầu mốc260cm."
     },
     {
       "id": "M06",
-      "label": "150 cm · gồm mép ngoài",
+      "label": "150cm · gồm tường ngoài",
       "points": [
         [
           1,
-          3.8,
-          6.1
+          3.54,
+          7.4
         ],
         [
           1,
-          3.8,
-          7.6
+          3.54,
+          8.9
         ]
       ],
       "views": [
-        "all",
         "mini"
       ],
       "kind": "owner",
@@ -1025,43 +1156,42 @@
     },
     {
       "id": "M07",
-      "label": "313 cm · gồm 2 tường",
+      "label": "313cm · gồm2tường",
       "points": [
         [
           1,
-          3.85,
-          6.9
+          3.54,
+          8.15
         ],
         [
           4.13,
-          3.85,
-          6.9
+          3.54,
+          8.15
         ]
       ],
       "views": [
-        "all",
-        "mini"
+        "mini",
+        "all"
       ],
       "kind": "owner",
       "mapping": "Gồm bề dày hai tường thấp bên."
     },
     {
       "id": "M08",
-      "label": "Khe 100 cm",
+      "label": "Khe100cm",
       "points": [
         [
           0,
-          3.8,
-          6.8
+          3.54,
+          8.15
         ],
         [
           1,
-          3.8,
-          6.8
+          3.54,
+          8.15
         ]
       ],
       "views": [
-        "all",
         "mini"
       ],
       "kind": "owner",
@@ -1069,40 +1199,41 @@
     },
     {
       "id": "M09",
-      "label": "260 cm · mép trên → đỉnh rào",
+      "label": "260cm · mép mini → đỉnh rào",
       "points": [
         [
           4.03,
-          3.75,
-          7.6
+          3.74,
+          8.9
         ],
         [
           4.03,
-          1.15,
-          7.6
+          1.14,
+          8.9
         ]
       ],
       "views": [
-        "all",
+        "balcony",
+        "mini",
         "right",
-        "balcony"
+        "all"
       ],
       "kind": "owner",
       "mapping": "Mặt trên mép mini → đỉnh thanh ngang hàng rào."
     },
     {
       "id": "M10",
-      "label": "Vào ≈10 cm",
+      "label": "Vào≈10cm",
       "points": [
         [
           4.03,
-          1.15,
-          7.6
+          1.14,
+          8.9
         ],
         [
           4.03,
-          1.15,
-          7.5
+          1.14,
+          8.8
         ]
       ],
       "views": [
@@ -1113,17 +1244,17 @@
     },
     {
       "id": "M11",
-      "label": "Xuống ≈10 cm",
+      "label": "Xuống≈10cm",
       "points": [
         [
           4.03,
-          1.15,
-          7.5
+          1.14,
+          8.8
         ],
         [
           4.03,
-          1.05,
-          7.5
+          1.04,
+          8.8
         ]
       ],
       "views": [
@@ -1134,39 +1265,39 @@
     },
     {
       "id": "M12",
-      "label": "Hàng rào 400 cm",
+      "label": "Hàng rào400cm",
       "points": [
         [
-          0.03,
-          1.25,
-          7.53
+          4.03,
+          1.04,
+          8.8
         ],
         [
-          4.03,
-          1.25,
-          7.53
+          0.03,
+          1.04,
+          8.8
         ]
       ],
       "views": [
-        "all",
-        "balcony"
+        "balcony",
+        "all"
       ],
       "kind": "owner",
       "mapping": "Chiều dài hàng rào sắt, chưa tính nhánh chậu."
     },
     {
       "id": "M13",
-      "label": "AP → cửa sổ 300 cm",
+      "label": "AP → cửa sổ300cm",
       "points": [
         [
-          0.1,
+          0.045,
           1.7,
-          3.2
+          4.5
         ],
         [
-          0.1,
+          0.045,
           1.7,
-          6.2
+          7.5
         ]
       ],
       "views": [
@@ -1177,17 +1308,17 @@
     },
     {
       "id": "M14",
-      "label": "AP cao170 cm",
+      "label": "AP cao170cm",
       "points": [
         [
-          0.1,
+          0.045,
           0,
-          3.2
+          4.5
         ],
         [
-          0.1,
+          0.045,
           1.7,
-          3.2
+          4.5
         ]
       ],
       "views": [
@@ -1195,88 +1326,109 @@
       ],
       "kind": "owner",
       "mapping": "AP sát tường trái; cao so sàn phòng."
+    },
+    {
+      "id": "M15",
+      "label": "Đặt ngang≈10cm",
+      "points": [
+        [
+          3.93,
+          4.14,
+          0
+        ],
+        [
+          4.03,
+          4.14,
+          0
+        ]
+      ],
+      "views": [
+        "source"
+      ],
+      "kind": "owner",
+      "mapping": "Rẽ ngang về phía phải≈10cm để nằm trên mặt tường trước S; riêng vớiØ10cm và haioffset hàng rào."
     }
   ],
   "agent_estimates": [
     {
-      "item": "Cao độ sàn / hàng rào",
-      "value": "sàn thượng≈3,53m; đỉnh rào≈1,15m",
-      "basis": "Cao tuyệt đối so sàn chính chưa đo; dựng cùng các chênh cao đã báo."
+      "item": "Cao độ tuyệt đối",
+      "value": "sàn thượng≈3,53m; mép mini≈3,74m; đỉnh rào≈1,14m",
+      "basis": "Các chênh cao được chốt; cao tuyệt đối so sàn chính vẫn ước lượng."
     },
     {
-      "item": "Tường mini / tường ngăn",
-      "value": "dày≈10cm /≈12cm",
-      "basis": "Bề dày chưa đo; không cộng lại vào kích thước ngoài150/313cm."
+      "item": "Bề dày tường thấp phải",
+      "value": "≈20cm",
+      "basis": "Chưa đo; mặt tiếp cận gắn vào mốc53cm và đoạn đặt ngang10cm. Không cho ống chạy trong khối tường."
     },
     {
-      "item": "Tim ống mới",
-      "value": "cao hơn mặt tường≈11cm",
-      "basis": "Ống hiện hữu Ø10cm + bán kính ống mới minh họa1cm. Không thêm clearance10cm."
+      "item": "Tim ống và khoảng tránh",
+      "value": "bán kính≈1cm; khoảng hình học≈5mm",
+      "basis": "Giả định dựng hình, không là SKU hoặc thiết kế gá; timốngvẽ≈17,12m so với chuỗi mốc≈17,09m. Đặt ngang timống11,5cm quanh mốc≈10cm, không quay ngược ở hàng rào."
     },
     {
-      "item": "Đoạn men phải",
-      "value": "≈7,60m theo phương dọc",
-      "basis": "Suy từ tổng8,90m trừ ngang53cm, leo37cm và hạ40cm; không phải phép đo dọc độc lập."
+      "item": "Gá/neo",
+      "value": "chưa có sẵn giá đỡ",
+      "basis": "PA2 men kết cấu mini; vị trí◇ là đề xuất, vẫn cần kẹp trên phần nhà mình."
     },
     {
-      "item": "Ống mua dự kiến",
-      "value": "tuyến≈15,70m + buffer chỉnh được",
-      "basis": "Buffer mặc định ví dụ3m là đề xuất Agent, chưa là lượng đặt mua; nhánh xuống chậu tính riêng."
+      "item": "Buffer mua dư",
+      "value": "ví dụ3m chỉnh được",
+      "basis": "Cộng riêng ngoài chiều dài, chưa gồm nhánh chậu và khổcuộn bán."
     }
   ],
   "pot_samples": [
     {
       "id": "sample-01",
       "x": 0.25,
-      "z": 7.23,
+      "z": 8.530000000000001,
       "type": "box"
     },
     {
       "id": "sample-02",
       "x": 0.6799999999999999,
-      "z": 7.23,
+      "z": 8.530000000000001,
       "type": "box"
     },
     {
       "id": "sample-03",
       "x": 1.1099999999999999,
-      "z": 7.23,
+      "z": 8.530000000000001,
       "type": "round"
     },
     {
       "id": "sample-04",
       "x": 1.54,
-      "z": 7.23,
+      "z": 8.530000000000001,
       "type": "box"
     },
     {
       "id": "sample-05",
       "x": 1.97,
-      "z": 7.23,
+      "z": 8.530000000000001,
       "type": "round"
     },
     {
       "id": "sample-06",
       "x": 2.4,
-      "z": 7.23,
+      "z": 8.530000000000001,
       "type": "box"
     },
     {
       "id": "sample-07",
       "x": 2.83,
-      "z": 7.23,
+      "z": 8.530000000000001,
       "type": "box"
     },
     {
       "id": "sample-08",
       "x": 3.26,
-      "z": 7.23,
+      "z": 8.530000000000001,
       "type": "round"
     },
     {
       "id": "sample-09",
       "x": 3.69,
-      "z": 7.23,
+      "z": 8.530000000000001,
       "type": "box"
     }
   ],
@@ -1341,7 +1493,7 @@
         "Đầu ống phân phối",
         "Cuối tuyến trên rào"
       ],
-      "note": "Phương án cũ, tọa độ chuyển sang khung mới chỉ để so sánh; không tiếp tục thiết kế hoặc dùng làm số đo tuyến chính.",
+      "note": "Tuyến lịch sử chưa hiệu chỉnh theo mốc07; chỉ giữ xem, không phát triển hoặc lấy làm số đo tuyến chính.",
       "historical_original": {
         "model_version": "model-v0-draft-05",
         "points": [
@@ -1465,7 +1617,7 @@
         "Đầu ống phân phối",
         "Cuối tuyến trên rào"
       ],
-      "note": "Phương án cũ, tọa độ chuyển sang khung mới chỉ để so sánh; không tiếp tục thiết kế hoặc dùng làm số đo tuyến chính.",
+      "note": "Tuyến lịch sử chưa hiệu chỉnh theo mốc07; chỉ giữ xem, không phát triển hoặc lấy làm số đo tuyến chính.",
       "historical_original": {
         "model_version": "model-v0-draft-05",
         "points": [
@@ -1530,7 +1682,7 @@
     },
     "right": {
       "label": "Men phải · đi ngang từ vòi · tham khảo",
-      "note": "Phương án cũ, tọa độ chuyển sang khung mới chỉ để so sánh; không tiếp tục thiết kế hoặc dùng làm số đo tuyến chính.",
+      "note": "Tuyến lịch sử chưa hiệu chỉnh theo mốc07; chỉ giữ xem, không phát triển hoặc lấy làm số đo tuyến chính.",
       "points": [
         [
           3.4248780487804873,
@@ -1637,7 +1789,7 @@
     },
     "right-low": {
       "label": "Men phải · hạ thấp trên ống sẵn · tham khảo",
-      "note": "Phương án cũ, tọa độ chuyển sang khung mới chỉ để so sánh; không tiếp tục thiết kế hoặc dùng làm số đo tuyến chính.",
+      "note": "Tuyến lịch sử chưa hiệu chỉnh theo mốc07; chỉ giữ xem, không phát triển hoặc lấy làm số đo tuyến chính.",
       "points": [
         [
           3.4248780487804873,
@@ -1754,79 +1906,268 @@
       "read_only": true
     },
     "main": {
-      "label": "Tuyến chính · đã chọn",
+      "label": "PA2 · Men mini · chính",
       "points": [
         [
-          3.5,
+          3.4,
           3.78,
           0
         ],
         [
-          4.03,
+          3.915,
           3.78,
           0
         ],
         [
-          4.03,
+          3.915,
           4.04,
           0
         ],
         [
-          4.03,
-          4.15,
+          3.915,
+          4.155,
           0
         ],
         [
           4.03,
-          4.15,
-          6.1
+          4.155,
+          0
         ],
         [
           4.03,
-          4.15,
-          7.6
+          4.155,
+          7.465
         ],
         [
           4.03,
-          3.75,
-          7.6
+          3.755,
+          7.465
         ],
         [
           4.03,
-          1.15,
-          7.6
+          3.755,
+          8.915
         ],
         [
           4.03,
-          1.15,
-          7.5
+          1.155,
+          8.915
         ],
         [
           4.03,
-          1.05,
-          7.5
+          1.155,
+          8.815
+        ],
+        [
+          4.03,
+          1.055,
+          8.815
         ],
         [
           0.03,
-          1.05,
-          7.5
+          1.055,
+          8.815
+        ]
+      ],
+      "reference_points": [
+        [
+          3.4,
+          3.78,
+          0
+        ],
+        [
+          3.93,
+          3.78,
+          0
+        ],
+        [
+          3.93,
+          4.04,
+          0
+        ],
+        [
+          3.93,
+          4.14,
+          0
+        ],
+        [
+          4.03,
+          4.14,
+          0
+        ],
+        [
+          4.03,
+          4.14,
+          7.4
+        ],
+        [
+          4.03,
+          3.74,
+          7.4
+        ],
+        [
+          4.03,
+          3.74,
+          8.9
+        ],
+        [
+          4.03,
+          1.14,
+          8.9
+        ],
+        [
+          4.03,
+          1.14,
+          8.8
+        ],
+        [
+          4.03,
+          1.04,
+          8.8
+        ],
+        [
+          0.03,
+          1.04,
+          8.8
         ]
       ],
       "point_labels": [
         "Nguồn · sau van tay",
-        "Sang phải53cm",
-        "Mặt trên tường · lên26cm",
-        "Vượt ống sẵn Ø10cm · cần đỡ",
-        "Sau tường ngăn · đầu mini",
-        "Trên mép ngoài mini",
-        "Mặt trên mép mini · hết8,90m",
-        "Đỉnh hàng rào · xuống2,60m",
-        "Vào phía cửa chính≈10cm",
+        "Tiếp cận ngoài mặt tường",
+        "Leo tới đỉnh tường",
+        "Vượt phần ống sẵn Ø10cm",
+        "S · đặt ngang≈10cm",
+        "PA2 · hết7,40m danh nghĩa",
+        "PA2 · hạ40cm",
+        "PA2 · men mini1,50m theo mốc",
+        "Hạ260cm · đỉnh rào",
+        "Vào≈10cm phía cửa chính",
         "Hạ≈10cm · neo hàng rào",
-        "Cuối hàng rào ·4,00m"
+        "Cuối hàng rào4m"
       ],
-      "note": "Tổng nguồn→mặt trên mép mini8,90m; ống sẵn Ø10cm; thêm đoạn xuống2,60m, hai chuyển≈10cm và hàng rào4m. Gá đỡ chưa chốt.",
-      "read_only": false
+      "read_only": false,
+      "note": "PA2 được chọn, chưa có sẵn giá đỡ:7,40m→hạ40cm→men1,50m→hạ260cm. Kẹp/neo trên phần nhà mình vẫn cần thiết kế."
+    },
+    "mini-straight": {
+      "label": "PA1 · Thẳng trên cao · cần đỡ",
+      "points": [
+        [
+          3.4,
+          3.78,
+          0
+        ],
+        [
+          3.915,
+          3.78,
+          0
+        ],
+        [
+          3.915,
+          4.04,
+          0
+        ],
+        [
+          3.915,
+          4.155,
+          0
+        ],
+        [
+          4.03,
+          4.155,
+          0
+        ],
+        [
+          4.03,
+          4.155,
+          8.915
+        ],
+        [
+          4.03,
+          1.155,
+          8.915
+        ],
+        [
+          4.03,
+          1.155,
+          8.815
+        ],
+        [
+          4.03,
+          1.055,
+          8.815
+        ],
+        [
+          0.03,
+          1.055,
+          8.815
+        ]
+      ],
+      "reference_points": [
+        [
+          3.4,
+          3.78,
+          0
+        ],
+        [
+          3.93,
+          3.78,
+          0
+        ],
+        [
+          3.93,
+          4.04,
+          0
+        ],
+        [
+          3.93,
+          4.14,
+          0
+        ],
+        [
+          4.03,
+          4.14,
+          0
+        ],
+        [
+          4.03,
+          4.14,
+          8.9
+        ],
+        [
+          4.03,
+          1.14,
+          8.9
+        ],
+        [
+          4.03,
+          1.14,
+          8.8
+        ],
+        [
+          4.03,
+          1.04,
+          8.8
+        ],
+        [
+          0.03,
+          1.04,
+          8.8
+        ]
+      ],
+      "point_labels": [
+        "PA1 · điểm0",
+        "PA1 · điểm1",
+        "PA1 · điểm2",
+        "PA1 · điểm3",
+        "PA1 · điểm4",
+        "PA1 · hết8,90m danh nghĩa",
+        "PA1 · hạ300cm",
+        "PA1 · điểm7",
+        "PA1 · điểm8",
+        "PA1 · điểm10"
+      ],
+      "read_only": true,
+      "note": "Chỉ so sánh:8,90m từ S rồi hạ300cm. Đoạn trên mini≈1,50m chưa có giá đỡ; không chọn thi công."
     }
   },
   "triangle_assumption": {
@@ -1844,12 +2185,12 @@
       "id": "existing-floor-pipe",
       "points": [
         [
-          3.94,
+          3.83,
           3.61,
           -0.5
         ],
         [
-          3.94,
+          3.83,
           3.61,
           1
         ]
@@ -1868,7 +2209,7 @@
         [
           4.03,
           4.09,
-          6.1
+          7.4
         ]
       ],
       "radius": 0.05,
@@ -1878,7 +2219,9 @@
   ],
   "route_review": {
     "selected": "main",
-    "note": "Tuyến chính theo Owner; các tuyến trước chỉ giữ so sánh. Gá đỡ phía tài sản nhà mình chưa chốt."
+    "mini_option": "pa2",
+    "pa1_support": "not-present",
+    "note": "PA2 đã duyệt; PA1 chỉ so sánh. Chi tiết gá và bán kính uốn thi công chưa chốt."
   },
   "source_assembly": {
     "tank_yaw_degrees": 90,
@@ -1937,7 +2280,8 @@
         "existing-floor-pipe",
         "right-ledge",
         "existing-ledge-pipe",
-        "route"
+        "route",
+        "S"
       ]
     },
     {
@@ -1993,13 +2337,12 @@
     {
       "id": "M03",
       "value_m": 8.9,
-      "from": "F",
-      "to": "mini-edge",
-      "note": "Tổng theo các đoạn của tuyến; gồm các đoạn con và đoạn hạ40cm ở mini.",
+      "from": "S",
+      "to": "main-route-crest",
+      "note": "Một đoạn thẳng8,90m sau khi đặt ống lên tường, không tính từ vòi hoặc gồm hạ40cm. PA2 tách phần này7,40m và1,50m.",
       "status": "owner-measured",
-      "source": "FIELD-20261025",
-      "kind": "aggregate",
-      "route_end_index": 6
+      "source": "FIELD-20261025-C2",
+      "kind": "straight"
     },
     {
       "id": "M04",
@@ -2016,7 +2359,7 @@
       "value_m": 0.4,
       "from": "mini-edge",
       "to": "main-route-crest",
-      "note": "Chênh cao đã tính phần Ø10cm ống sẵn.",
+      "note": "Chênh cao tham chiếu40cm từ mép mini lên tuyến cao, đã tính phầnốngØ10cm; không phải đầu mốc260cm.",
       "status": "owner-measured",
       "source": "FIELD-20261025"
     },
@@ -2100,6 +2443,16 @@
       "note": "AP sát tường trái; cao so sàn phòng.",
       "status": "owner-measured",
       "source": "FIELD-20261025"
+    },
+    {
+      "id": "M15",
+      "value_m": 0.1,
+      "from": "source-above-wall",
+      "to": "S",
+      "status": "owner-approximate",
+      "kind": "sideways-seat",
+      "source": "FIELD-20261025-C2",
+      "note": "Rẽ ngang về phía phải≈10cm để nằm trên mặt tường trước S; riêng vớiØ10cm và haioffset hàng rào."
     }
   ],
   "historical_observations": [
@@ -2161,35 +2514,147 @@
   "anchors": {
     "F": {
       "position": [
-        3.5,
+        3.4,
         3.78,
         0
       ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
+      "status": "inferred-reference-placement"
     },
     "right-access": {
       "position": [
-        4.03,
+        3.93,
         3.78,
         0
       ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
+      "status": "inferred-reference-placement"
     },
     "right-wall-top": {
       "position": [
-        4.03,
+        3.93,
         4.04,
         0
       ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
+      "status": "inferred-reference-placement"
+    },
+    "S": {
+      "position": [
+        4.03,
+        4.14,
+        0
+      ],
+      "status": "owner-confirmed-reference-in-estimated-frame"
+    },
+    "main-route-crest": {
+      "position": [
+        4.03,
+        4.14,
+        8.9
+      ],
+      "status": "inferred-reference-placement"
+    },
+    "mini-entry-high": {
+      "position": [
+        4.03,
+        4.14,
+        7.4
+      ],
+      "status": "inferred-reference-placement"
+    },
+    "mini-entry-edge": {
+      "position": [
+        4.03,
+        3.74,
+        7.4
+      ],
+      "status": "inferred-reference-placement"
     },
     "mini-edge": {
       "position": [
         4.03,
-        3.75,
-        7.6
+        3.74,
+        8.9
       ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
+      "status": "owner-confirmed-reference-in-estimated-frame"
+    },
+    "fence-top": {
+      "position": [
+        4.03,
+        1.14,
+        8.9
+      ],
+      "status": "owner-confirmed-reference-in-estimated-frame"
+    },
+    "rail-inward": {
+      "position": [
+        4.03,
+        1.14,
+        8.8
+      ],
+      "status": "inferred-reference-placement"
+    },
+    "C": {
+      "position": [
+        4.03,
+        1.04,
+        8.8
+      ],
+      "status": "inferred-reference-placement"
+    },
+    "rail-start": {
+      "position": [
+        4.03,
+        1.04,
+        8.8
+      ],
+      "status": "inferred-reference-placement"
+    },
+    "rail-end": {
+      "position": [
+        0.03,
+        1.04,
+        8.8
+      ],
+      "status": "inferred-reference-placement"
+    },
+    "after-terrace-divider": {
+      "position": [
+        1,
+        3.54,
+        7.4
+      ],
+      "status": "inferred-reference-placement"
+    },
+    "mini-outer-face": {
+      "position": [
+        1,
+        3.54,
+        8.9
+      ],
+      "status": "inferred-reference-placement"
+    },
+    "mini-left-outer-face": {
+      "position": [
+        1,
+        3.54,
+        8.15
+      ],
+      "status": "inferred-reference-placement"
+    },
+    "mini-right-outer-face": {
+      "position": [
+        4.13,
+        3.54,
+        8.15
+      ],
+      "status": "inferred-reference-placement"
+    },
+    "left-wall-inner-face": {
+      "position": [
+        0,
+        3.54,
+        8.15
+      ],
+      "status": "inferred-reference-placement"
     },
     "existing-ledge-pipe-bottom": {
       "position": [
@@ -2197,7 +2662,7 @@
         4.04,
         2.5
       ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
+      "status": "inferred-reference-placement"
     },
     "existing-ledge-pipe-top": {
       "position": [
@@ -2205,119 +2670,48 @@
         4.14,
         2.5
       ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
-    },
-    "main-route-crest": {
-      "position": [
-        4.03,
-        4.15,
-        7.6
-      ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
-    },
-    "after-terrace-divider": {
-      "position": [
-        1,
-        3.55,
-        6.1
-      ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
-    },
-    "mini-outer-face": {
-      "position": [
-        1,
-        3.55,
-        7.6
-      ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
-    },
-    "mini-left-outer-face": {
-      "position": [
-        1,
-        3.55,
-        6.85
-      ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
-    },
-    "mini-right-outer-face": {
-      "position": [
-        4.13,
-        3.55,
-        6.85
-      ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
-    },
-    "left-wall-inner-face": {
-      "position": [
-        0,
-        3.55,
-        6.85
-      ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
-    },
-    "fence-top": {
-      "position": [
-        4.03,
-        1.15,
-        7.6
-      ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
-    },
-    "rail-inward": {
-      "position": [
-        4.03,
-        1.15,
-        7.5
-      ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
-    },
-    "C": {
-      "position": [
-        4.03,
-        1.05,
-        7.5
-      ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
-    },
-    "rail-start": {
-      "position": [
-        4.03,
-        1.05,
-        7.5
-      ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
-    },
-    "rail-end": {
-      "position": [
-        0.03,
-        1.05,
-        7.5
-      ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
+      "status": "inferred-reference-placement"
     },
     "AP": {
       "position": [
         0.045,
         1.7,
-        3.2
+        4.5
       ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
+      "status": "inferred-reference-placement"
     },
     "window-plane": {
       "position": [
         0.045,
         1.7,
-        6.2
+        7.5
       ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
+      "status": "inferred-reference-placement"
     },
     "room-floor": {
       "position": [
         0.045,
         0,
-        3.2
+        4.5
       ],
-      "status": "inferred-placement-bound-to-owner-relative-measurements"
+      "status": "inferred-reference-placement"
+    },
+    "source-above-wall": {
+      "position": [
+        3.93,
+        4.14,
+        0
+      ],
+      "status": "inferred-reference-placement"
     }
+  },
+  "baseline_revision": "2026-10-25-correction-02-r2",
+  "routing_geometry": {
+    "tube_radius_m": 0.01,
+    "illustrative_clearance_m": 0.005,
+    "status": "agent-estimated-display-only",
+    "note": "1cm bán kính ống và5mm khoảng dựng hình là giả định; không là lựa chọn pipe/mounting. Mốc đo độc lập với tim ống vẽ. Đoạn hạ đầu mini lùi6,5cm để tránh đầu ống sẵn; đoạn cuối ra ngoài mép1,5cm. Không đổi mốc150/890cm. Tim ống dựng đặtX4,03m từ S tới rào, đoạn đặt ngang thực trên hình11,5cm quanh mốc≈10cm; không có điểm quayngược/căntrụcthừa.",
+    "mini_drop_z_offset_m": 0.065,
+    "sideways_rendered_m": 0.115
   }
 }

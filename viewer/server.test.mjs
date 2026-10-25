@@ -4,26 +4,50 @@ import {readFile,mkdtemp,mkdir,writeFile,rm} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createViewerServer} from './server.mjs';
-import {routeMetrics,validPoints} from './route-math.js';
+import {routeMetrics,validPoints,routeWallClashes,routeObstacleClashes,segmentHitsBox} from './route-math.js';
 import {drawSVG} from './drawing.js';
 
 const root=path.dirname(fileURLToPath(import.meta.url)),repoRoot=path.dirname(root),localRoot=path.join(repoRoot,'.local');
 const model=JSON.parse(await readFile(path.join(root,'model.json'),'utf8'));
+test('main pipe clears wall volumes including its radius',()=>{
+ assert.deepEqual(routeWallClashes(model.water_route.points,model),[]);
+ assert.deepEqual(routeObstacleClashes(model.water_route.points,model),[]);
+ assert.deepEqual(routeObstacleClashes(model.route_presets['mini-straight'].points,model),[]);
+ const bad=structuredClone(model.water_route.points);bad[1][0]=(model.layout.rightLedge.minX+model.layout.rightLedge.maxX)/2;
+ assert.ok(routeWallClashes(bad,model).some(hit=>hit.wall==='right-ledge'));
+ assert.equal(segmentHitsBox([-1,.5,.5],[2,.5,.5],{min:[0,0,0],max:[1,1,1]},.01),true);
+ assert.equal(segmentHitsBox([-1,1.02,.5],[2,1.02,.5],{min:[0,0,0],max:[1,1,1]},.01),false);
+});
+test('selected and mini-comparison routes do not reverse into a collinear hairpin',()=>{
+ for(const key of ['main','mini-straight']){
+  const points=model.route_presets[key].points;
+  for(let i=1;i<points.length-1;i++){
+   const a=points[i].map((v,j)=>v-points[i-1][j]),b=points[i+1].map((v,j)=>v-points[i][j]);
+   const cross=Math.hypot(a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]);
+   const dot=a.reduce((sum,v,j)=>sum+v*b[j],0);
+   assert.ok(cross>1e-10||dot>=0,`${key} reverses at point${i}`);
+  }
+ }
+});
 test('shared metric baseline preserves measured endpoints, diameter and historical comparisons',()=>{
  assert.equal(model.coordinate_frame.kind,'owner-measured-with-estimates');
  assert.deepEqual(model.coordinate_frame.estimated_meters_per_scene_unit,[1,1,1]);
- const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-9,`${a} != ${b}`),p=model.water_route.points;
- near(routeMetrics(p.slice(0,7)).total,8.9);near(routeMetrics(p).total,15.7);
- near(p[1][0]-p[0][0],.53);near(p[2][1]-p[1][1],.26);
+ const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-9,`${a} != ${b}`),p=model.water_route.reference_points,anchor=id=>model.anchors[id].position;
+ near(routeMetrics(p.slice(0,5)).total,.99);near(routeMetrics(p).total,17.09);
+ near(p[1][0]-p[0][0],.53);near(p[2][1]-p[1][1],.26);near(p[4][0]-p[3][0],.1);
+ assert.deepEqual(anchor('S'),p[4]);near(anchor('main-route-crest')[2]-anchor('S')[2],8.9);
+ near(p[5][2]-p[4][2],7.4);near(p[5][1]-p[6][1],.4);near(p[7][2]-p[6][2],1.5);near(p[7][1]-p[8][1],2.6);
+ const pa1=model.route_presets['mini-straight'];near(pa1.reference_points[5][2]-pa1.reference_points[4][2],8.9);near(pa1.reference_points[5][1]-pa1.reference_points[6][1],3);near(routeMetrics(pa1.reference_points).total,17.09);
+ for(const candidate of [model.water_route,pa1]){const allowance=routeMetrics(candidate.points).total-routeMetrics(candidate.reference_points).total;assert.ok(allowance>0&&allowance<.1);}
  near(model.existing_pipes.find(v=>v.id==='existing-ledge-pipe').radius*2,.1);
- near(p[5][1]-p[6][1],.4);near(p[6][1]-p[7][1],2.6);
+ near(anchor('main-route-crest')[1]-anchor('mini-edge')[1],.4);near(anchor('mini-edge')[1]-anchor('fence-top')[1],2.6);
  near(model.layout.zoneB.maxZ-model.layout.zoneB.minZ,1.5);
  near(model.layout.zoneB.minZ-(model.layout.parapet.z+model.layout.parapet.thickness/2),0);
  near(model.layout.zoneB.maxX-model.layout.zoneB.minX,3.13);near(model.layout.zoneB.minX-model.layout.leftWall.innerX,1);
- near(Math.abs(p[8][2]-p[7][2]),.1);near(p[8][1]-p[9][1],.1);near(Math.abs(p[10][0]-p[9][0]),4);
+ near(Math.abs(p[9][2]-p[8][2]),.1);near(p[9][1]-p[10][1],.1);near(Math.abs(p[11][0]-p[10][0]),4);
  const ap=model.objects.find(v=>v.id==='AP').pose,window=model.objects.find(v=>v.id==='window-left').pose;
  near(ap[1],1.7);near(window[2]-ap[2],3);assert.equal(model.source_option,'multi');assert.ok(model.source_assembly.manual_isolation_before_future_solenoid);
- assert.equal(model.measurements.length,14);assert.equal(model.default_route_preset,'main');
+ assert.equal(model.measurements.length,15);assert.equal(model.measurements.find(d=>d.id==='M03').kind,'straight');assert.equal(model.default_route_preset,'main');assert.equal(model.route_review.mini_option,'pa2');
  for(const[key,preset]of Object.entries(model.route_presets))assert.equal(preset.read_only,key!=='main');
  const ids=model.navigation_groups.flatMap(g=>g.ids);assert.equal(new Set(ids).size,ids.length);for(const o of model.objects)assert.ok(ids.includes(o.id));
  assert.equal(model.layout.zoneB.maxX,model.layout.terrace.maxX);

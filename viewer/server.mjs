@@ -16,7 +16,7 @@ export async function viewerBuildId(){const hash=createHash('sha256');for(const 
 export async function createViewerServer({feedbackDir=path.join(privateRoot,'viewer-feedback'),sourceManifest=path.join(privateRoot,'viewer-sources.json')}={}){
  const model=JSON.parse(await readFile(path.join(root,'model.json'),'utf8'));
  const buildId=await viewerBuildId();
- const versions=new Set([model.model_version,'model-v0-draft-03','model-v0-draft-04','model-v0-draft-05']);
+ const versions=new Set([model.model_version,'model-v0-draft-03','model-v0-draft-04','model-v0-draft-05','model-v0-draft-06']);
  const sourceFiles=new Map();
  if(sourceManifest)try{
   const sources=JSON.parse((await readFile(sourceManifest,'utf8')).replace(/^\uFEFF/,''));

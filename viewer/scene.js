@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
+import {siteWallBoxes} from './route-math.js';
 
 export function createScene(host, labelHost, model, onSelect, hooks = {}) {
   const scene = new THREE.Scene();
@@ -37,31 +38,27 @@ export function createScene(host, labelHost, model, onSelect, hooks = {}) {
   }
   function slab(g,bounds,color,id){box(g,[bounds.maxX-bounds.minX,.08,bounds.maxZ-bounds.minZ],color,[(bounds.minX+bounds.maxX)/2,bounds.floor-.04,(bounds.minZ+bounds.maxZ)/2],id);}
   slab(groups.building,b,P.floor,'balcony');slab(groups.room,r,0xe2decf,'room-area');slab(groups.upper,t,P.floor,'terrace');slab(groups.upper,zb,0xdce2c8,'zoneB');
-  box(groups.building,[rw.thickness,rw.maxY-rw.minY,rw.maxZ-rw.minZ],0xcac7b8,[rw.x,(rw.minY+rw.maxY)/2,(rw.minZ+rw.maxZ)/2],'right-wall');
-  const lw=model.layout.leftWall;box(groups.room,[.1,lw.height,lw.maxZ-lw.minZ],P.wall,[lw.x,lw.height/2,(lw.minZ+lw.maxZ)/2],'left-wall');
+  // One set of solid bounds drives rendering and tube-clearance checks.
+  for(const wall of siteWallBoxes(model))box(groups[wall.group],wall.max.map((v,i)=>v-wall.min[i]),wall.id==='right-wall'?0xcac7b8:wall.id==='right-ledge'?0xc8c3ae:P.wall,wall.max.map((v,i)=>(v+wall.min[i])/2),wall.id);
   box(groups.upper,[.1,.48,t.maxZ-t.minZ],P.wall,[0,t.floor+.24,(t.minZ+t.maxZ)/2],'terrace');
   box(groups.upper,[4.13,.48,.1],P.wall,[2.065,t.floor+.24,t.minZ],'terrace');
-  box(groups.upper,[ledge.maxX-ledge.minX,ledge.height,ledge.maxZ-ledge.minZ],0xc8c3ae,[(ledge.minX+ledge.maxX)/2,ledge.floor+ledge.height/2,(ledge.minZ+ledge.maxZ)/2],'right-ledge');
-  const divider=model.layout.parapet;box(groups.upper,[4.13,divider.height_m,divider.thickness],P.wall,[2.065,t.floor+divider.height_m/2,divider.z],'terrace-divider');
-  for(const x of [zb.minX+zb.wallThickness/2,zb.maxX-zb.wallThickness/2])box(groups.upper,[zb.wallThickness,zb.wallHeight,zb.maxZ-zb.minZ],P.wall,[x,zb.floor+zb.wallHeight/2,(zb.minZ+zb.maxZ)/2],'mini-low-walls');
-  box(groups.upper,[zb.maxX-zb.minX,zb.wallHeight,zb.wallThickness],P.wall,[(zb.minX+zb.maxX)/2,zb.floor+zb.wallHeight/2,zb.maxZ-zb.wallThickness/2],'mini-edge');
   for(let x=zb.minX+.2;x<zb.maxX-.1;x+=.4)for(let z=zb.minZ+.2;z<zb.maxZ-.1;z+=.4)box(groups.upper,[.14,.005,.14],0xb3bea4,[x,zb.floor+.005,z],'zoneB');
   for(const pipe of model.existing_pipes)tube(groups.upper,pipe.points,pipe.radius,P.existing,pipe.id);
   const railTop=model.layout.railTop,railZ=model.layout.railZ;
   box(groups.building,[4,.1,.1],P.wall,[2.03,.05,railZ],'fence-base');
-  for(let x=.03;x<=4.04;x+=.4)box(groups.building,[.025,railTop-.1,.025],P.rail,[x,(railTop+.1)/2,railZ],'fence');
-  box(groups.building,[4,.035,.045],P.rail,[2.03,railTop,railZ],'fence');
+  for(let x=.03;x<=4.04;x+=.4)box(groups.building,[.025,railTop-.135,.025],P.rail,[x,(railTop+.065)/2,railZ],'fence');
+  box(groups.building,[4,.035,.045],P.rail,[2.03,railTop-.0175,railZ],'fence');
   for(let x=.08;x<4;x+=.4)line(groups.building,[[x,.015,b.minZ],[x,.015,b.maxZ]],0xbab8a5);
-  box(groups.room,[4.13,.8,.1],P.wall,[2.065,.4,6.2],'room-area');
-  box(groups.room,[4.13,.8,.1],P.wall,[2.065,2.9,6.2],'room-area');
-  for(const [x,width]of [[.3,.6],[2.1,.25],[4.02,.22]])box(groups.room,[width,1.7,.1],P.wall,[x,1.65,6.2],'room-area');
+  box(groups.room,[4.13,.8,.1],P.wall,[2.065,.4,r.maxZ],'room-area');
+  box(groups.room,[4.13,.8,.1],P.wall,[2.065,2.9,r.maxZ],'room-area');
+  for(const [x,width]of [[.3,.6],[2.1,.25],[4.02,.22]])box(groups.room,[width,1.7,.1],P.wall,[x,1.65,r.maxZ],'room-area');
   const door=object('W').pose,win=object('window-left').pose;
   box(groups.room,[1.45,2.3,.05],0x657468,door,'W');
   for(const dx of [-.74,0,.74])box(groups.room,[.035,2.35,.08],0x40574a,[door[0]+dx,door[1],door[2]+.04],'W');
   box(groups.room,[1.3,1.5,.055],0x8eafa3,win,'window-left',{roughness:.45});
   for(const dx of [-.66,0,.66])box(groups.room,[.035,1.54,.08],0x40574a,[win[0]+dx,win[1],win[2]+.04],'window-left');
   box(groups.room,[.09,.16,.28],0xdfe5d3,object('AP').pose,'AP');
-  box(groups.closed,[4.4,.08,8.6],0x9fa998,[2.06,6,3.4],'terrace');groups.closed.visible=false;
+  box(groups.closed,[4.4,.08,zb.maxZ-t.minZ+.4],0x9fa998,[2.06,6,(zb.maxZ+t.minZ)/2],'terrace');groups.closed.visible=false;
   const tankPose=object('tank').pose,tankGroup=new THREE.Group();tankGroup.position.set(...tankPose);tankGroup.rotation.y=Math.PI/2;groups.upper.add(tankGroup);
   const tank=mesh(tankGroup,new THREE.CylinderGeometry(.53,.53,1.3,40),0xaeb9b2,[0,0,0],'tank',{metalness:.5,roughness:.4});tank.rotation.x=Math.PI/2;
   for(const dz of [-.5,-.28,.28,.5])mesh(tankGroup,new THREE.TorusGeometry(.535,.012,6,40),0x87978e,[0,0,dz],'tank',{metalness:.4});
@@ -71,7 +68,7 @@ export function createScene(host, labelHost, model, onSelect, hooks = {}) {
   const sourceGroup=new THREE.Group();groups.upper.add(sourceGroup);
   function rebuildSource(option){
     if(!model.source_options[option])return;model.source_option=option;clear(sourceGroup);const p=object('F').pose;
-    tube(sourceGroup,[[tankPose[0]+.65,tankPose[1]-.35,0],[3.1,3.85,0],[3.1,3.65,.25],[3.7,3.65,.25],[3.9,3.65,.25]],.032,P.existing,'existing-blue-valves');
+    tube(sourceGroup,[[tankPose[0]+.65,tankPose[1]-.35,0],[3.1,3.85,0],[3.1,3.65,.25],[3.7,3.65,.25],[3.85,3.65,.25]],.032,P.existing,'existing-blue-valves');
     for(const x of [3.22,3.58]){box(sourceGroup,[.13,.035,.1],0x377e9b,[x,3.73,.25],'existing-blue-valves');tube(sourceGroup,[[x,3.65,.25],[x,3.72,.25]],.02,P.existing,'existing-blue-valves');}
     tube(sourceGroup,[[3.1,3.65,.25],[p[0]-.15,3.65,.25],[p[0]-.15,p[1],p[2]],[p[0],p[1],p[2]]],.025,P.existing,'F');
     box(sourceGroup,[.15,.03,.055],0xbd4d39,[p[0]-.09,p[1]+.065,p[2]],'F');
@@ -87,7 +84,7 @@ export function createScene(host, labelHost, model, onSelect, hooks = {}) {
   const routeGroup=new THREE.Group();groups.water.add(routeGroup);
   function rebuildRoute(){
     clear(routeGroup);clear(groups.hints);
-    tube(routeGroup,points.slice(0,-1),.01,P.water,'route');tube(routeGroup,points.slice(-2),.01,P.water,'rail');
+    tube(routeGroup,points.slice(0,-1),model.routing_geometry.tube_radius_m,P.water,'route');tube(routeGroup,points.slice(-2),model.routing_geometry.tube_radius_m,P.water,'rail');
     for(let x=.16;x<4;x+=.5){const clip=mesh(routeGroup,new THREE.TorusGeometry(.028,.006,5,12),0x65796e,[x,model.layout.railHeight,model.layout.pipeZ],'rail');clip.rotation.y=Math.PI/2;}
     for(const i of model.water_route.support_indices||[]){if(!points[i])continue;mesh(groups.hints,new THREE.OctahedronGeometry(.045),0xc79b43,points[i],null,{wireframe:true,depthTest:false});}
     select(selected);
@@ -132,7 +129,7 @@ export function createScene(host, labelHost, model, onSelect, hooks = {}) {
     const direction=camera.position.clone().sub(controls.target).normalize();if(!Number.isFinite(direction.x)||direction.length()<.1)direction.set(-.8,.6,1).normalize();
     camera.position.copy(center).addScaledVector(direction,dist);controls.target.copy(center);camera.lookAt(center);if(mode==='orbit')controls.update();select(id);
   }
-  const presets={all:{pos:[-7,9,15],target:[2.0,2.6,3.8]},source:{pos:[.7,5.5,3.2],target:[3.1,3.95,.1]},right:{pos:[-3,7,11],target:[3.8,3.2,3.8]},balcony:{pos:[-2.7,3.3,11],target:[2,1.1,6.9]},mini:{pos:[-1,6,10],target:[2.5,3.8,6.9]}};
+  const presets={all:{pos:[-7,9,zb.maxZ+7.4],target:[2.0,2.6,zb.maxZ/2]},source:{pos:[.7,5.5,3.2],target:[3.1,3.95,.1]},right:{pos:[-3,7,zb.maxZ+3.4],target:[3.8,3.2,zb.maxZ/2]},balcony:{pos:[-2.7,3.3,b.maxZ+3.4],target:[2,1.1,(b.minZ+b.maxZ)/2]},mini:{pos:[-1,6,zb.maxZ+2.4],target:[2.5,3.8,(zb.minZ+zb.maxZ)/2]}};
   function setCamera(name){stopMotion();currentCamera=presets[name]?name:'all';const p=presets[currentCamera];camera.position.set(...p.pos);controls.target.set(...p.target);camera.lookAt(controls.target);if(mode==='orbit')controls.update();}
   const transform=new TransformControls(camera,renderer.domElement);transform.setSize(.7);scene.add(transform.getHelper());
   function selectRoutePoint(index){selectedPoint=Math.max(0,Math.min(index,handles.length-1));handles.forEach((h,i)=>h.material.color.setHex(i===selectedPoint?0xe7a042:0x66825b));if(editMode&&handles[selectedPoint])transform.attach(handles[selectedPoint]);}
@@ -158,7 +155,7 @@ export function createScene(host, labelHost, model, onSelect, hooks = {}) {
   renderer.domElement.addEventListener('pointerdown',pointerDown);renderer.domElement.addEventListener('pointermove',pointerMove);renderer.domElement.addEventListener('pointerup',pointerUp);renderer.domElement.addEventListener('contextmenu',context);renderer.domElement.addEventListener('wheel',wheel,{passive:false});
   const release=()=>{looking=false;lastPointer=null;};window.addEventListener('pointerup',release);host.addEventListener('keydown',keyDown);window.addEventListener('keyup',keyUp);host.addEventListener('blur',stopMotion);window.addEventListener('blur',stopMotion);
   function updateLabels(){
-    const dimensions=(model.dimension_mappings||[]).filter(d=>d.views.includes(currentCamera)&&(currentCamera!=='all'||['M07','M09','M12'].includes(d.id)));
+    const dimensions=(model.dimension_mappings||[]).filter(d=>d.views.includes(currentCamera)&&(currentCamera!=='all'||['M03','M07','M09','M12'].includes(d.id)));
     const ids=[...new Set(['F','zoneB','balcony',selected,...dimensions.map(d=>'dim:'+d.id)])];
     for(const [id,el]of labels)if(!ids.includes(id)){el.remove();labels.delete(id);}
     for(const id of ids){const d=dimensions.find(v=>'dim:'+v.id===id),o=object(id),pot=pots.find(p=>'pot:'+p.id===id);const pos=d?d.points[0].map((v,i)=>(v+d.points[1][i])/2):o?.pose|| (pot?[pot.x,.6,pot.z]:null);if(!pos)continue;

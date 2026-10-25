@@ -11,7 +11,7 @@ export function drawSVG(model,state){
  const bounds=(b,color,force,id)=>{const a=planPoint([b.minX,b.floor,b.minZ],force),z=planPoint([b.maxX,b.floor,b.maxZ],force);return rect(a[0],a[1],z[0]-a[0],z[1]-a[1],color,`stroke="#c3cdb7" data-id="${escape(id)}"`);};
  let body=rect(0,0,1000,520,'#fafaf4');
  body+=text(30,30,plan?'MẶT BẰNG · HAI TẦNG':'MẶT CẮT ĐỐI CHIẾU · X/Y',13,'#354f40','font-weight="600"');
- if(state.layers.dimensions)body+=text(30,51,'Nguồn → mặt trên mép mini: 8,90 m tổng các đoạn · tuyến chính đang vẽ ≈'+routeMetrics(model.water_route.points).total.toFixed(2)+' m',11);
+ if(state.layers.dimensions)body+=text(30,51,'S → mép cao: 8,90 m thẳng · PA2 cơ sở≈17,09 m · tim ống vẽ≈'+routeMetrics(model.water_route.points).total.toFixed(2)+' m',11);
  if(plan){
   body+=text(70,78,'SÂN THƯỢNG + MINI',12)+text(580,78,'PHÒNG + BAN CÔNG CHÍNH',12);
   body+=bounds(l.terrace,'#eeeade',true,'terrace')+bounds(l.zoneB,'#e1e7d0',true,'zoneB');
@@ -45,7 +45,7 @@ export function drawSVG(model,state){
  }
  if(state.layers.pots)for(const p of state.pots){const id='pot:'+p.id,[x,y]=project([p.x,.2,p.z]);body+=`<g data-id="${escape(id)}" role="button" tabindex="0" aria-label="Chậu mẫu ${escape(p.id)}">${rect(x-8,y-3,16,13,'#c69b70',`rx="3" stroke="${selected===id?'#2e5d3b':'#9c986f'}"`)}<path d="M${x} ${y-2}v-13m0 6q-13 -12 -7 -14q10 1 7 9m0 1q12 -12 11 -3q-4 8 -11 7" fill="#7a9965"/></g>`;}
  if(state.layers.dimensions){
-  const ids=plan?['M01','M06','M07','M08','M12','M13']:['M02','M04','M05','M07','M09','M12'];
+  const ids=plan?['M01','M03','M06','M07','M08','M12','M13']:['M02','M04','M05','M07','M09','M12'];
   for(const d of model.dimension_mappings.filter(d=>ids.includes(d.id))){const a=project(d.points[0]),b=project(d.points[1]),vertical=Math.abs(a[1]-b[1])>Math.abs(a[0]-b[0]);const offset=d.id==='M12'?22:d.id==='M07'?-27:d.id==='M08'?-12:9;
    body+=`<g data-dimension="${d.id}"><title>${escape(d.mapping)}</title><path d="M${a[0]} ${a[1]}L${b[0]} ${b[1]}" stroke="#62916c" stroke-dasharray="3 3"/>${text((a[0]+b[0])/2+(vertical?12:0),(a[1]+b[1])/2+offset,d.label,10,'#497452',vertical?'':'text-anchor="middle"')}</g>`;
   }

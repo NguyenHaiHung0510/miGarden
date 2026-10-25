@@ -1,6 +1,6 @@
 # Site model — 2026-10-25
 
-Owner-approved **model-v0-draft-06**. The canonical editable source for geometry, names, measurements and navigation order is [viewer/model.json](../viewer/model.json). This document explains that source; SVG and Three.js consume it together. Earlier [photo-label readings](site-baseline.md) remain historical.
+Owner-approved **model-v0-draft-07**. The canonical editable source for geometry, names, measurements and navigation order is [viewer/model.json](../viewer/model.json). This document explains that source; SVG and Three.js consume it together. Earlier [photo-label readings](site-baseline.md) remain historical.
 
 ## Coordinate frame and confidence
 
@@ -28,6 +28,7 @@ One scene unit is **one metre**, +Y up. Left/right are fixed as seen standing ou
 | right-ledge | Tường thấp phải |
 | existing-ledge-pipe | Ống hiện hữu trên tường thấp phải |
 | route | Tuyến chính |
+| S | S · Bắt đầu đoạn thẳng 890cm |
 
 ### 3 · Ban công mini
 
@@ -59,7 +60,7 @@ One scene unit is **one metre**, +Y up. Left/right are fixed as seen standing ou
 | right-wall | Tường hàng xóm phải |
 | AP | Bộ phát Wi-Fi / AP |
 
-Tường thấp phải is the owner's low rooftop wall, formerly the owner's ledge/parapet. Tường hàng xóm phải is the separate tall wall continuing down to the main balcony. Hàng rào sắt is the lower metal structure; ống phân phối is the pipe supported by it. The term lan can alone is avoided because it previously mixed these objects.
+Tường thấp phải is the Owner low rooftop wall, separate from the tall neighbor wall and lower metal fence. S is the reference after the source access/rise/sideways seating.
 
 ## Tape readings and endpoints
 
@@ -69,9 +70,9 @@ Reported by the Owner on2026-10-25, source FIELD-20261025. N01–N10 identify fi
 |---|---:|---|---|
 | M01 | 0.53m | F → right-access | Vuông góc từ nguồn sang phải. |
 | M02 | 0.26m | right-access → right-wall-top | Đến mặt trên tường thấp phải, chưa gồm ống sẵn. |
-| M03 | 8.90m | F → mini-edge | Tổng theo các đoạn của tuyến; gồm các đoạn con và đoạn hạ40cm ở mini. |
+| M03 | 8.90m | S → main-route-crest | Một đoạn thẳng8,90m sau khi đặt ống lên tường, không tính từ vòi hoặc gồm hạ40cm. PA2 tách phần này7,40m và1,50m. |
 | M04 | 0.10m | existing-ledge-pipe-bottom → existing-ledge-pipe-top | Đường kính ống hiện hữu, không phải clearance. |
-| M05 | 0.40m | mini-edge → main-route-crest | Chênh cao đã tính phần Ø10cm ống sẵn. |
+| M05 | 0.40m | mini-edge → main-route-crest | Chênh cao tham chiếu40cm từ mép mini lên tuyến cao, đã tính phầnốngØ10cm; không phải đầu mốc260cm. |
 | M06 | 1.50m | after-terrace-divider → mini-outer-face | Không gồm tường ngăn sân thượng–mini; có gồm tường thấp mép ngoài. |
 | M07 | 3.13m | mini-left-outer-face → mini-right-outer-face | Gồm bề dày hai tường thấp bên. |
 | M08 | 1.00m | left-wall-inner-face → mini-left-outer-face | Khe lọt lòng; không gồm bề dày hai tường. |
@@ -81,19 +82,24 @@ Reported by the Owner on2026-10-25, source FIELD-20261025. N01–N10 identify fi
 | M12 | 4.00m | rail-start → rail-end | Chiều dài hàng rào sắt, chưa tính nhánh chậu. |
 | M13 | 3.00m | AP → window-plane | Vuông góc từ AP ra mặt cửa sổ. |
 | M14 | 1.70m | room-floor → AP | AP sát tường trái; cao so sàn phòng. |
+| M15 | ≈0.10m | source-above-wall → S | Rẽ ngang về phía phải≈10cm để nằm trên mặt tường trước S; riêng vớiØ10cm và haioffset hàng rào. |
 
-M03 is an **aggregate along the route**, not a longitudinal length. Its subsegments are not added again. M04 is the existing pipe's10cm **diameter**, not an additional10cm clearance. M06 excludes the terrace–mini divider and includes the outer low-wall thickness. M07 includes both side walls; M08 is clear width. M09 starts at the **top** of the outer mini edge and ends at the fence crossbar top.
+**M03 corrected:**8.90m is one straight reference span from S to the high outer-mini bend. It is not a source-to-edge aggregate and includes none of the source approach/rise/sideways seating. Source→S nominal chain≈0.99m is0.53+0.26+0.10+≈0.10m. The10cm pipe allowance is the existing diameter, separate from the new≈10cm sideways step and purchase buffer.
 
-The longitudinal run≈7.60m is **derived**, not independently measured:8.90−0.53−0.37−0.40. The0.37m rise consists of0.26m to wall top,0.10m existing pipe and an illustrative0.01m new-pipe radius. The aggregate includes the0.40m transition to the top-edge anchor. This endpoint interpretation is explicit so later visual corrections can refine it without discarding the original readings.
+PA2 reference from S:7.40m forward,0.40m down,1.50m along mini,2.60m down. PA1 reference:8.90m forward,3.00m down. Both are11.90m S→fence. M09 always starts at the **top of the outer mini edge**, not the high route40cm above it. M06 excludes the divider and includes the outer wall; M07 includes both side walls; M08 is clear gap.
 
-Display terrace floor3.53m, mini floor3.55m, mini-edge top3.75m, fence top1.15m and route crest4.15m are **estimated absolute elevations** constrained by reported relative dimensions. Assumed new-pipe diameter2cm is not selected hardware. Mini wall thickness≈10cm and divider≈12cm are estimates and are not double counted in outside dimensions. No extra10cm clearance is added.
+Reference points bind these measurements independently of the displayed tube centerline. The illustrated tube uses radius1cm and a5mm geometric gap, both **Agent estimates**, not selected materials or support specifications. The source rise stays outside the wall face; it turns sideways above the wall. At the first mini bend the centerline is6.5cm past the reference entry to clear the existing pipe end, then1.5cm outside the outer edge before dropping. The displayed sideways seating is11.5cm around the approximate10cm reference, keeping one continuous X alignment through the fence. These offsets preserve the original reference spans and produce a displayed centerline≈17.12m versus nominal17.09m. The rendered lower run is shorter than the1.50m reference by the corner clearances; it is not a second tape measurement.
+
+Estimated absolute elevations: terrace floor3.53m, mini floor3.54m, mini-edge top3.74m, fence top1.14m. The right low-wall thickness≈20cm, mini side-wall≈10cm and divider≈12cm remain unmeasured. Renderer and collision checks consume the same solid wall bounds. Tube radius is included in conservative wall/existing-pipe clearance checks; these checks do not certify site mounting or bending radii.
 
 ## Selected route and source
 
-The main route goes right from source, over the existing pipe on the owner's low wall, along the right perimeter past the mini, down to the main fence, inward≈10cm, down≈10cm and along the4m fence. Only this route is developed/edited. Old right-horizontal, right-low, left and diagonal options remain view-only comparisons, reprojected from draft05 with original coordinates retained. They are not new measured installation alternatives.
+**PA2 is selected:** source→approach face→rise outside the wall→sideways≈10cm onto the wall→S; then follow the mini contour and descend to the main fence. **PA1 stays view-only:** high straight route followed by3m drop, with no existing support bridge for the≈1.50m suspended span. Proposed clips/support markers do not depict installed supports. Older left/diagonal/right presets stay historical comparisons and are not redesigned.
+
+N11–N13 reference the private correction images; FIELD-20261025-C2 records corrected endpoints/choice. The earlier source→mini aggregate interpretation and15.70m total are superseded, retained in the draft06 archive only.
 
 Main source option: **replacement two-outlet tap**, ordinary-use outlet plus miGarden branch. The miGarden manual valve provides hard upstream isolation before a future electronic valve. The old single-outlet tap remains a reference. Source detail only needs to identify and avoid the overlapping existing assembly; it does not certify each old pipe's function, nominal thread, flow direction or pump state.
 
-Baseline chain≈**15.70m**:8.90+2.60+0.10+0.10+4.00, excluding individual pot branches and unmeasured mounting detours. Purchase **buffer** is separate and editable; default example3m gives18.70m before pot branches/sales-roll sizing. The3m is an Agent proposal, not an Owner-selected purchase quantity. Longer pipe can be cut; the viewer performs no purchase.
+Nominal chain≈**17.09m**:0.99 source entry+11.90 S→fence+≈0.10 inward+≈0.10 down+4.00 fence. The displayed centerline≈17.12m includes illustrative geometric offsets. Both exclude pot branches, installation allowances and sales-roll sizing. Purchase **buffer** remains separate and editable; default3m is an Agent example, not an Owner purchase quantity. The UI currently calculates centerline+buffer≈20.12m before branches. No purchase is performed.
 
 Supports remain schematic; no neighbor-wall drilling/fixing permission is implied. Zone A stays one shared circuit with dynamic pots and illustrative manual branch shutoffs. Zone B irrigation is deferred. Geometry does not prove pressure, flow, RF delivery, mounting strength or device operation.
