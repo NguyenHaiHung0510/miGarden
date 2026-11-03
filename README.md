@@ -1,8 +1,8 @@
 # miGarden
 
-miGarden là dự án tưới và quản lý một vườn chậu hoa/cây cảnh ở ban công, dự kiến tích hợp giao diện, API và lưu trữ với microSched. Mục tiêu là biết chậu nào đang ở đâu, xem lịch sử chăm sóc và tưới chung một khu từ xa hoặc theo lịch, kể cả khi mất Internet nhưng controller vẫn có điện và trạng thái an toàn hợp lệ.
+miGarden thiết kế tưới có kiểm soát cho vườn hoa/cây cảnh ở ban công, dự kiến tích hợp quản lý vào microSched. Zone là đơn vị tưới, lịch và lịch sử; thiết bị hướng tới chạy lịch hợp lệ và START/STOP local khi mất Internet nhưng vẫn có điện và điều kiện an toàn đáng tin.
 
-**Đã có prototype SVG/3D model-v0 chạy local**, cùng specification, khảo sát và thiết kế điều khiển. Chưa triển khai firmware, simulator điều khiển hoặc tích hợp microSched. Xem [trạng thái sản phẩm](docs/project-state.md) để phân biệt prototype với chức năng sản phẩm.
+**[Baseline thiết kế 01–04](docs/design/README.md) là nguồn thiết kế hiện hành.** Có bảy [ví dụ synthetic mở offline](docs/design/walkthrough/index.html) để đọc domain/information model; bước 05–10 còn pending. Đã có prototype SVG/3D model-v0 chạy local. Chưa triển khai firmware, simulator điều khiển hoặc tích hợp microSched; [project state](docs/project-state.md) phân biệt rõ các mức này.
 
 ## Xem và sửa mô hình
 
@@ -22,28 +22,25 @@ Mở [viewer local](http://127.0.0.1:4179/?layout=space). Xoay/bay tự do, focu
 
 ## Thiết kế hiện tại
 
-- **Zone A là một mạch tưới chung.** Preview phải liệt kê mọi chậu bị tác động; chưa có điều khiển độc lập từng chậu. Chín chậu là snapshot khảo sát, inventory và lịch sử vị trí vẫn thay đổi được.
-- **Remote và local cùng qua một safety arbiter.** Thiết kế có “Tưới ngay” trên web, lịch deterministic được quản lý/version trên cloud và START/STOP tại nguồn. Controller chỉ tiếp tục lịch offline khi thời gian, cấu hình, ledger và safety còn hợp lệ; không chạy bù hoặc chạy trùng.
-- **Bản đồ dùng A/SVG + B/Three.js**, cùng một nguồn spatial data có version, provenance và uncertainty. Prototype đã có; [baseline2026-10-25 bản07](docs/site-model.md) có số đo thước dây, tên chuẩn và phần còn ước lượng.
-- **Soil sensing/Zigbee đang HOLD.** Chúng không là điều kiện của irrigation MVP; thiết kế calibration/recommendation chỉ áp dụng nếu lane sensing được mở lại.
-- **miGarden giữ system source; microSched giữ web/API/Postgres adapter.** Hai repository dùng versioned contracts; không mở thêm database hoặc web backend mặc định.
-
-Fail-closed, unknown outcome, cumulative water budget và manual shutoff độc lập là các ràng buộc thiết kế. [Contract điều khiển và an toàn](docs/specification.md#14-controlled-irrigation-commandack-contract---product-mvp-field-enable-còn-gated) quy định bằng chứng cần có trước khi cho phép mở nước thật.
+- **Area nhóm Zone; điều khiển/lịch/history theo Zone.** Ban đầu triển khai A. Mô hình cho phép B/C/D trong khả năng thực tế chưa xác minh của một ESP32 nhiều Actuator, phương án một van nhánh/Zone, tối đa một lịch logic đang hoạt động local/Zone. Không quản lý chậu/placement hoặc danh sách chậu bị tác động. Chín chậu trong khảo sát là hiện trường của prototype.
+- **Remote, local schedule và source START/STOP cùng qua local safety arbiter.** Giữ all-source cumulative budget, STOP ưu tiên/ngăn pending START cũ, no-double/no-catch-up/no-replay, unknown block, fail-closed boot và van khóa tay độc lập. Numeric water policy/hardware chưa được chọn hoặc kiểm chứng; candidate [SAF-P01](docs/design/README.md#saf-p01--proposed-giới-hạn-tích-lũy-và-cooldown) chỉ để quyết định ở bước 08.
+- **A/SVG + B/Three.js dùng chung `viewer/model.json`.** [Site baseline 2026-10-25 bản 07](docs/site-model.md) giữ số đo, tên chuẩn và phần còn ước lượng; geometry không chứng minh RF/hydraulics.
+- **Soil/Zigbee HOLD.** Không tự kế thừa notification lifecycle, inventory CRUD hoặc tưới nhóm vào baseline; nhóm chỉ là mở rộng tương lai.
+- **miGarden giữ system source; microSched giữ human web/API/storage adapter.** Contract/revision của hai bên phải được gắn khi tích hợp; chưa chọn API/schema/transport bằng việc công bố thiết kế này.
 
 ## Đọc theo nhu cầu
 
 | Bạn muốn tìm hiểu | Tài liệu |
 |---|---|
+| Mục đích, yêu cầu, năm UC, domain và dữ liệu | [Design 01–04](docs/design/README.md) |
+| Ví dụ desired/applied, lịch sử bất biến, unknown/time | [Walkthrough offline](docs/design/walkthrough/index.html), [hướng dẫn](docs/design/walkthrough/README.vi.md) |
 | Đã có gì, còn thiếu gì | [Project state](docs/project-state.md) |
-| Vì sao có các yêu cầu này | [Design inputs](docs/design-inputs.md) |
-| Ranh giới hệ thống và tích hợp | [Architecture](docs/architecture.md) |
-| Domain, API, command/schedule và safety | [Specification](docs/specification.md) |
-| Mô hình thực địa, tên gọi và số đo chuẩn | [Site model2026-10-25](docs/site-model.md) |
-| Khảo sát lịch sử và mức chắc chắn | [Site baseline](docs/site-baseline.md) |
-| Nguồn chung SVG/Three.js, correction và content policy | [Representation](docs/representation.md) |
-| Thiết kế kiểm chứng, bring-up và recovery | [Operations](docs/operations.md) |
-| Skill kỹ thuật, version và license tương ứng | [Skills](docs/skills.md), [notices](THIRD_PARTY_NOTICES.md) |
-| Nguồn khảo sát và tài liệu thiết kế | [Provenance](docs/provenance.md) |
+| Mô hình thực địa, tên gọi và số đo | [Site model](docs/site-model.md), [site baseline](docs/site-baseline.md) |
+| Nguồn chung SVG/Three.js và content policy | [Representation](docs/representation.md) |
+| Bring-up, evidence và recovery tương lai | [Operations](docs/operations.md) |
+| Skill kỹ thuật và license | [Skills](docs/skills.md), [notices](THIRD_PARTY_NOTICES.md) |
+| Nguồn thiết kế và vai trò lịch sử | [Provenance](docs/provenance.md) |
+| Thiết kế cũ, chỉ reference-only | [Specification](docs/specification.md), [architecture](docs/architecture.md), [design inputs](docs/design-inputs.md) |
 
 ## Đóng góp
 

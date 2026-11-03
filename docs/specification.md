@@ -1,5 +1,7 @@
 # miGarden — system specification
 
+> **LEGACY — reference only / chỉ tham khảo lịch sử.** Current product design: [baseline 01–04](design/README.md), promoted 2026-11-03. This file retains its historical text and links at the original path. Internal “current”, CHỐT/MUST, API/schema/transport, scope and numeric gates describe the old revision, not present authority. Steps 05–10 are pending; silence in the new baseline does not select old choices. Current implementation status: [project state](project-state.md). Reuse requires an explicit design choice with source, rationale and impact.
+
 Thiết kế hiện hành ngày **2026-10-22, Asia/Saigon**. Repository chưa có firmware, simulator, viewer hoặc microSched adapter chạy được. Specification mô tả hành vi cần triển khai và kiểm chứng; các ví dụ API/layout không phải executable đã có.
 
 [Product decisions](#20-product-decisions) tổng hợp lựa chọn hiện tại và những chi tiết còn mở. Các phần chi tiết bên dưới áp dụng cùng lựa chọn đó: sensing HOLD, A/SVG+B/Three.js, local deterministic schedule và system repo miGarden riêng với microSched adapter. Xem [architecture](architecture.md), [site baseline](site-baseline.md) và [provenance](provenance.md) cho ranh giới và nguồn thiết kế. [Content policy](representation.md#public-content-and-private-sources) quy định dữ liệu/asset công khai.

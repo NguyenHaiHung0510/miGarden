@@ -1,6 +1,16 @@
 # Design source provenance
 
-The design uses a site survey, preliminary architecture/hardware options and a detailed system specification. The table identifies the original document revisions used on **2026-10-22**. SHA-256 values identify those inputs, not the current public pages or independent validation of their claims.
+## Current public baseline
+
+**2026-11-03 · Asia/Saigon.** [Design 01–04](design/README.md) is the only editable current product-design source: purpose/requirements → five processes → eight domain concepts → information semantics. Earlier private working snapshots remain history, not another canonical edition. Publication-baseline acceptance is separate from code, independent review, device or water acceptance. Steps 05–10 remain pending.
+
+The method follows IoT Design and Development, Chapter 4 (requirements, process, domain and information steps). The course is a method reference, not automatic authority for sensors, infrastructure or product scope. No raw slide deck or private discussions are distributed.
+
+[Walkthrough W00–W06](design/walkthrough/README.vi.md) uses synthetic examples from information model 0.2. Its `prepare_data.py` defines data/derived views; `validate_data.py` checks selected semantic constraints. Finished figures are curated existing outputs from the same content, with their embedded attribution retained. Static HTML/text and public-safe lineage replace private review links; no raw QA receipts are published. See the walkthrough guide for exact provenance and reproduction limits.
+
+## Historical input lineage — reference only
+
+The table identifies original input revisions used on **2026-10-22**. Hashes identify those historical inputs, not current public pages or independent validation. Legacy specification/architecture/design-inputs retain their old paths; internal status/requirements/numeric values are historical. They do not define the current domain, API or implementation. Reuse of an unselected idea requires rationale and an explicit choice in the appropriate new design step.
 
 | Source ID | Technical input | Public document | Original SHA-256 |
 |---|---|---|---|
@@ -12,8 +22,8 @@ The design uses a site survey, preliminary architecture/hardware options and a d
 | S06 | Site-source inventory and sampled-frame coverage | [Site baseline](site-baseline.md) | `2fc8588b75c30d36d42815072293d8021410a5360f39e3e08cfd802aae12ed30` |
 | S07 | SVG/Three.js representation trade-offs | [Representation](representation.md) | `305deac1ec80cf381fa34ba234209c196d1f1e5e1e8f2074dfb72b37b238aa62` |
 
-Current [product decisions](specification.md#20-product-decisions) are folded into the specification: separate system/adapter ownership, dynamic pots and shared Zone A, local schedule and source input, sensing HOLD and A+B. Historical inputs may describe earlier alternatives. Original hashes identify their lineage without making those old alternatives current requirements.
+Selected principles already carried into the new baseline include local autonomy, honest desired/applied/reported/physical distinctions, safety/accounting and separate system/adapter ownership. Dynamic managed-pot requirements, notification lifecycle, old schema/transport and numeric thresholds have not been carried forward automatically. Proposed SAF-P01 values are recorded at the new index for future Step 08 decision, not approved policy.
 
-Site sources have not calibrated XYZ/scale or verified radio/hydraulic behavior. Earlier comparison illustrations were synthetic examples, not site reconstructions. [Representation](representation.md#public-content-and-private-sources) defines public content and private-source handling; no measured 3D/COLMAP asset is supplied here.
+The spatial source remains `viewer/model.json`. Site sources have not calibrated all XYZ/scale or verified RF/hydraulics. Finished site drawings may be public under [content policy](representation.md#public-content-and-private-sources); raw captures, private identifiers and source transcripts stay private. Walkthrough illustrations are synthetic, not site reconstructions. No measured 3D/COLMAP reconstruction is supplied here.
 
-External skill sources, adaptations, licenses and API-version compatibility are recorded in [skills](skills.md), package `PROVENANCE.json` files and [notices](../THIRD_PARTY_NOTICES.md).
+External skill sources, adaptations, licenses and API-version compatibility remain recorded in [skills](skills.md), package `PROVENANCE.json` files and [notices](../THIRD_PARTY_NOTICES.md). Site/model sources and third-party license files are preserved by this transition.

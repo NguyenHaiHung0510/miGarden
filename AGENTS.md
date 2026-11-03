@@ -7,20 +7,22 @@ Start with the assigned task, read this entry, then only the product documents n
 | Task | Read as needed |
 |---|---|
 | Scope or implementation status | [Project state](docs/project-state.md) |
-| Domain, API, command or schedule | Relevant sections of [specification](docs/specification.md) and [architecture](docs/architecture.md) |
+| Current requirements, process, domain, information or schedule | [Design index](docs/design/README.md), then relevant 01–04; API/service/operational/device/application steps 05–10 are pending |
 | Geometry, map or scene | [Representation](docs/representation.md), [model-v0](docs/model-v0.md), relevant [site readings](docs/site-baseline.md) |
-| Board, firmware, build or recovery | Relevant [operations runbook](docs/operations.md), specification §§14–15 for actuation |
+| Board, firmware, build or recovery | Relevant [operations runbook](docs/operations.md); current safety outcomes in design 01/02/04, hardware and numeric policy still open |
 | Technical skill | Matching entry in [skills](docs/skills.md), then only needed references |
 
 Every Agent may automatically select suitable available skills within the assigned task. A named invocation is optional; do not read all skills for every task or restrict selection by role. Keep one writer per file and one executor per exclusive device/serial resource.
 
 ## Product boundaries
 
-- Zone A is one shared circuit; preview and history include all affected pots. Pots and placements are dynamic. Per-pot independent actuation and Zone B remain future extensions.
+- Zone is the control/schedule/history unit; Area groups Zones, each Zone one Area. Preview/history are Zone-based, without managed Pot/placement/assignment or affected-pot lists. Rollout starts at A; B/C/D are possible within the unverified capacity of exactly one ESP32 Controller and multiple Actuators, conceptually one branch valve per Zone. Each Zone has 0..1 active local logical schedule. Site pots remain representation facts.
 - Local deterministic schedule and source START/STOP are selected designs. Remote, schedule and local input converge at one safety arbiter. Soil/Zigbee sensing is HOLD; its conditional contracts do not make it a current requirement.
 - A/SVG and B/Three.js share one canonical versioned spatial source. Do not invent coordinates, calibrated scale or RF/hydraulic performance to fill gaps.
 - miGarden owns firmware/local arbiter, simulator, spatial source and integration contracts. microSched owns its human web/API/storage adapter under that repository's rules. Bind both revisions and contract versions for integration changes.
-- Preserve fail-closed boot, unknown-outcome blocking, cumulative local budget, no catch-up/replay and independent manual shutoff in specification §§14–15. Numeric water policy, exact board/pins/framework and unresolved arbitration require design evidence; do not fill them under editorial changes.
+- Preserve the safety outcomes in design 01/02/04: fail-closed boot, all-source cumulative local budget, STOP priority and no old pending START after STOP, no-double/no-catch-up/no-replay, critical-storage safe stop/degraded, and independent manual shutoff. Unknown after possible execution blocks every source and all Zones on a common source/accounting boundary unless independence is proven. Exact arbitration/clock/recovery/hardware and numeric policy remain open; SAF-P01 is a proposed Step 08 candidate, never an approved limit/default.
+
+`docs/design/` is the only editable current product-design source. Earlier working snapshots are history. Specification, architecture and design-inputs at their old paths are LEGACY/reference-only; their internal CHỐT/MUST/API/thresholds do not automatically govern current work. Steps 05–10 remain pending. No implicit inventory/Area/Source/Controller CRUD, revision/application management, notification lifecycle or group domain is selected. Viewer geometry remains `viewer/model.json`.
 
 ## Changes and evidence
 

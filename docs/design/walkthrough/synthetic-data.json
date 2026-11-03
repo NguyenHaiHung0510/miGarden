@@ -1,0 +1,2253 @@
+{
+  "meta": {
+    "title": "miGarden — dữ liệu synthetic cho 03/04",
+    "version": "public-01-04-v1",
+    "information_model": "04-v0.2",
+    "synthetic": true,
+    "timezone": "Asia/Saigon",
+    "case_histories_are_independent": true,
+    "not_water_policy": true,
+    "all_timing_values_illustrative": true,
+    "immutable_content_sha256": {
+      "SC-A-v1": "1b92e2010c2929e39285cfc98f0e210845ca172263a99076cb65ec08019b2e48",
+      "BIND-A-1": "00d268d369109ef40a7c1c3a5c1df44b6671b11fa7c8aa0d1e9f6a79c1e47c7a",
+      "SC-A-v2": "e7e7df15cc8c8535a321395d6c257df6691b89b6763973391957e929f9ca46d4",
+      "SC-A-v3": "361c3f5e45d183911f015745e4b030950b018112517075ef30479d5c0da359e2"
+    },
+    "projections_are_derived_not_storage": true,
+    "result_contract": "Controller-reported; chưa đo nước",
+    "notice": "Synthetic design, không phải runtime/device/water evidence"
+  },
+  "catalog": {
+    "areas": [
+      {
+        "area_id": "AREA-DEMO-01",
+        "name": "Ban công mẫu"
+      }
+    ],
+    "zones": [
+      {
+        "zone_id": "ZONE-DEMO-A",
+        "name": "Zone A mẫu",
+        "area_id": "AREA-DEMO-01"
+      }
+    ],
+    "controllers": [
+      {
+        "controller_id": "CTRL-DEMO-01",
+        "label": "ESP32 mẫu"
+      }
+    ],
+    "actuators": [
+      {
+        "actuator_id": "VALVE-DEMO-A",
+        "zone_id": "ZONE-DEMO-A",
+        "controller_id": "CTRL-DEMO-01"
+      }
+    ]
+  },
+  "scenarios": {
+    "W00": {
+      "id": "W00",
+      "title": "Một phiên mẫu nối đủ 8 khái niệm",
+      "question": "Một lần tưới tạo ra những đối tượng và dữ liệu nào?",
+      "summary": "Instance map sau một phiên local; ID mẫu liên kết xuyên lịch → occurrence → request → session.",
+      "uc_refs": [
+        "DM01–DM08"
+      ],
+      "observed_at": "2026-11-01T07:00:46+07:00",
+      "viewpoint": "domain-instance-map",
+      "timeline": [],
+      "takeaways": [
+        "Một ESP32, một Zone mẫu, một lịch hoạt động; không có registry chậu hoặc group.",
+        "Session kết nối START gốc; van là đối tượng vật lý, report không chứng minh flow."
+      ],
+      "limitations": [
+        "Dữ liệu synthetic — không phải log thiết bị hay bằng chứng tưới đủ nước."
+      ],
+      "state": {
+        "schedule": {
+          "schedule_id": "SCHED-DEMO-A",
+          "zone_id": "ZONE-DEMO-A",
+          "desired_content_ref": "SC-A-v1",
+          "desired_saved_at_web": "2026-10-31T21:00:00+07:00",
+          "last_known_applied_report_ref": "REP-APPLIED-1"
+        },
+        "schedule_contents": [
+          {
+            "content_ref": "SC-A-v1",
+            "schedule_id": "SCHED-DEMO-A",
+            "config": {
+              "enabled": true,
+              "effective_from": "2026-11-01T00:00:00+07:00",
+              "effective_until": null,
+              "recurrence": {
+                "kind": "daily",
+                "at_local_time": "07:00"
+              },
+              "duration_seconds": 45
+            }
+          }
+        ],
+        "target_bindings": [
+          {
+            "binding_ref": "BIND-A-1",
+            "zone_id": "ZONE-DEMO-A",
+            "actuator_id": "VALVE-DEMO-A",
+            "controller_id": "CTRL-DEMO-01"
+          }
+        ],
+        "occurrences": [
+          {
+            "occurrence_id": "OCC-DEMO-0700",
+            "content_ref": "SC-A-v1",
+            "planned_for": "2026-11-01T07:00:00+07:00",
+            "evaluation_outcome": "start_requested",
+            "reason": null
+          }
+        ],
+        "requests": [
+          {
+            "request_id": "REQ-DEMO-SCHED",
+            "kind": "START",
+            "trigger_source": "schedule",
+            "binding_ref": "BIND-A-1",
+            "status": "accepted",
+            "reason": null,
+            "occurrence_id": "OCC-DEMO-0700",
+            "valid_until": null
+          }
+        ],
+        "sessions": [
+          {
+            "session_id": "SES-DEMO-SCHED",
+            "request_id": "REQ-DEMO-SCHED",
+            "reported_output_duration_seconds": 45,
+            "result": "completed_reported",
+            "end_reason": "planned_end"
+          }
+        ],
+        "records": [
+          {
+            "record_id": "REP-APPLIED-1",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "schedule_applied",
+            "subject_kind": "schedule",
+            "subject_ref": "SCHED-DEMO-A",
+            "time": {
+              "at": "2026-11-01T06:40:00+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T06:40:01+07:00",
+            "content_ref": "SC-A-v1",
+            "source_order": 1
+          },
+          {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T07:00:45+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": null,
+            "output_reported_state": "closed",
+            "active_session_id": null,
+            "clock_usable_for_open": true
+          },
+          {
+            "record_id": "CREATED-REQ-DEMO-SCHED",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "request_created",
+            "subject_kind": "request",
+            "subject_ref": "REQ-DEMO-SCHED",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-EVAL",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "occurrence_evaluated",
+            "subject_kind": "occurrence",
+            "subject_ref": "OCC-DEMO-0700",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-DEMO-START",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "session_started",
+            "subject_kind": "session",
+            "subject_ref": "SES-DEMO-SCHED",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-DEMO-CLOSE",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "close_requested",
+            "subject_kind": "session",
+            "subject_ref": "SES-DEMO-SCHED",
+            "time": {
+              "at": "2026-11-01T07:00:45+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-DEMO-END",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "session_ended",
+            "subject_kind": "session",
+            "subject_ref": "SES-DEMO-SCHED",
+            "time": {
+              "at": "2026-11-01T07:00:45+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          }
+        ],
+        "controller_report_ref": "REP-STATUS",
+        "safety_view": {
+          "new_start_allowed": true,
+          "block_reasons": [],
+          "basis": "Expected synthetic local conditions; not runtime proof"
+        },
+        "ingest_view": {
+          "deliveries": [],
+          "unique_record_ids": [],
+          "duplicate_record_ids": [],
+          "history_session_ids": []
+        },
+        "dashboard_view": {
+          "as_of": "2026-11-01T07:00:45+07:00",
+          "last_execution_at_reported": "2026-11-01T07:00:00+07:00",
+          "next_planned_at": "2026-11-02T07:00:00+07:00",
+          "next_plan_basis": "last_known_applied_SC-A-v1",
+          "freshness_note": "Góc nhìn local; web chưa nhận các record offline"
+        },
+        "connectivity_view": "offline",
+        "branches": {},
+        "projections": {
+          "schedule": {
+            "desired": {
+              "content_ref": "SC-A-v1",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": true,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "07:00"
+                },
+                "duration_seconds": 45
+              }
+            },
+            "last_known_applied": {
+              "content_ref": "SC-A-v1",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": true,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "07:00"
+                },
+                "duration_seconds": 45
+              }
+            },
+            "application_status": "confirmed",
+            "applied_enabled": true,
+            "last_known_reported_at": "2026-11-01T06:40:00+07:00",
+            "first_received_at_web": "2026-11-01T06:40:01+07:00"
+          },
+          "requests": {
+            "REQ-DEMO-SCHED": {
+              "binding_ref": "BIND-A-1",
+              "zone_id": "ZONE-DEMO-A",
+              "actuator_id": "VALVE-DEMO-A",
+              "controller_id": "CTRL-DEMO-01",
+              "trigger_source": "schedule",
+              "occurrence_id": "OCC-DEMO-0700",
+              "content_ref": "SC-A-v1",
+              "planned_duration_seconds": 45,
+              "requested_at": "2026-11-01T07:00:00+07:00"
+            }
+          },
+          "sessions": {
+            "SES-DEMO-SCHED": {
+              "binding_ref": "BIND-A-1",
+              "zone_id": "ZONE-DEMO-A",
+              "actuator_id": "VALVE-DEMO-A",
+              "controller_id": "CTRL-DEMO-01",
+              "trigger_source": "schedule",
+              "occurrence_id": "OCC-DEMO-0700",
+              "content_ref": "SC-A-v1",
+              "planned_duration_seconds": 45,
+              "requested_at": "2026-11-01T07:00:00+07:00",
+              "started_at_reported": "2026-11-01T07:00:00+07:00",
+              "ended_at_reported": "2026-11-01T07:00:45+07:00",
+              "reported_output_duration_seconds": 45,
+              "result": "completed_reported"
+            }
+          },
+          "controller": {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T07:00:45+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": null,
+            "output_reported_state": "closed",
+            "active_session_id": null,
+            "clock_usable_for_open": true
+          }
+        }
+      }
+    },
+    "W01": {
+      "id": "W01",
+      "title": "Web đổi lịch, ESP32 chưa xác nhận",
+      "question": "Đã lưu v2 có nghĩa thiết bị dùng v2 chưa?",
+      "summary": "Cùng SCHED-DEMO-A: desired v2 lúc 08:00/60 giây, last-known applied v1 lúc 07:00/45 giây.",
+      "uc_refs": [
+        "UC01",
+        "DR02",
+        "DR12"
+      ],
+      "observed_at": "2026-11-01T06:50:00+07:00",
+      "viewpoint": "web-last-known",
+      "timeline": [
+        {
+          "id": "applied",
+          "at": "2026-11-01T06:40:00+07:00",
+          "lane": "device",
+          "title": "Báo applied v1",
+          "detail": "07:00 • 45 giây; giữ cả nội dung và version",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "save",
+          "at": "2026-11-01T06:45:00+07:00",
+          "lane": "web",
+          "title": "Web lưu desired v2",
+          "detail": "08:00 • 60 giây; không phải lịch active thứ hai",
+          "kind": "change",
+          "evidence": "web_saved"
+        },
+        {
+          "id": "pending",
+          "at": "2026-11-01T06:50:00+07:00",
+          "lane": "result",
+          "title": "application_status = pending",
+          "detail": "occurrences = []; requests = []; sessions = []",
+          "kind": "event",
+          "evidence": "synthetic_snapshot"
+        }
+      ],
+      "takeaways": [
+        "Saved ≠ applied. Applied có nghĩa cả trước occurrence đầu tiên.",
+        "Last-known report có tuổi; mất ack không chứng minh đã hoặc chưa áp dụng."
+      ],
+      "limitations": [
+        "Dữ liệu synthetic — không phải log thiết bị hay bằng chứng tưới đủ nước."
+      ],
+      "state": {
+        "schedule": {
+          "schedule_id": "SCHED-DEMO-A",
+          "zone_id": "ZONE-DEMO-A",
+          "desired_content_ref": "SC-A-v2",
+          "desired_saved_at_web": "2026-11-01T06:45:00+07:00",
+          "last_known_applied_report_ref": "REP-APPLIED-1",
+          "desired_submission": {
+            "state": "pending",
+            "observed_at_web": "2026-11-01T06:45:01+07:00"
+          }
+        },
+        "schedule_contents": [
+          {
+            "content_ref": "SC-A-v1",
+            "schedule_id": "SCHED-DEMO-A",
+            "config": {
+              "enabled": true,
+              "effective_from": "2026-11-01T00:00:00+07:00",
+              "effective_until": null,
+              "recurrence": {
+                "kind": "daily",
+                "at_local_time": "07:00"
+              },
+              "duration_seconds": 45
+            }
+          },
+          {
+            "content_ref": "SC-A-v2",
+            "schedule_id": "SCHED-DEMO-A",
+            "config": {
+              "enabled": true,
+              "effective_from": "2026-11-01T00:00:00+07:00",
+              "effective_until": null,
+              "recurrence": {
+                "kind": "daily",
+                "at_local_time": "08:00"
+              },
+              "duration_seconds": 60
+            }
+          }
+        ],
+        "target_bindings": [
+          {
+            "binding_ref": "BIND-A-1",
+            "zone_id": "ZONE-DEMO-A",
+            "actuator_id": "VALVE-DEMO-A",
+            "controller_id": "CTRL-DEMO-01"
+          }
+        ],
+        "occurrences": [],
+        "requests": [],
+        "sessions": [],
+        "records": [
+          {
+            "record_id": "REP-APPLIED-1",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "schedule_applied",
+            "subject_kind": "schedule",
+            "subject_ref": "SCHED-DEMO-A",
+            "time": {
+              "at": "2026-11-01T06:40:00+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T06:40:01+07:00",
+            "content_ref": "SC-A-v1",
+            "source_order": 1
+          },
+          {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T06:40:00+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T06:40:01+07:00",
+            "output_reported_state": "closed",
+            "active_session_id": null,
+            "clock_usable_for_open": true
+          }
+        ],
+        "controller_report_ref": "REP-STATUS",
+        "safety_view": {
+          "new_start_allowed": true,
+          "block_reasons": [],
+          "basis": "Expected synthetic local conditions; not runtime proof"
+        },
+        "ingest_view": {
+          "deliveries": [],
+          "unique_record_ids": [],
+          "duplicate_record_ids": [],
+          "history_session_ids": []
+        },
+        "dashboard_view": {
+          "as_of": "2026-11-01T06:50:00+07:00",
+          "last_execution_at_reported": null,
+          "next_planned_at": "2026-11-01T07:00:00+07:00",
+          "next_plan_basis": "last_known_applied_SC-A-v1",
+          "freshness_note": "Last-known SC-A-v1; chưa có report applied SC-A-v2"
+        },
+        "connectivity_view": "offline",
+        "branches": {},
+        "projections": {
+          "schedule": {
+            "desired": {
+              "content_ref": "SC-A-v2",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": true,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "08:00"
+                },
+                "duration_seconds": 60
+              }
+            },
+            "last_known_applied": {
+              "content_ref": "SC-A-v1",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": true,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "07:00"
+                },
+                "duration_seconds": 45
+              }
+            },
+            "application_status": "pending",
+            "applied_enabled": true,
+            "last_known_reported_at": "2026-11-01T06:40:00+07:00",
+            "first_received_at_web": "2026-11-01T06:40:01+07:00"
+          },
+          "requests": {},
+          "sessions": {},
+          "controller": {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T06:40:00+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T06:40:01+07:00",
+            "output_reported_state": "closed",
+            "active_session_id": null,
+            "clock_usable_for_open": true
+          }
+        }
+      }
+    },
+    "W02": {
+      "id": "W02",
+      "title": "Lịch local chạy khi web mất kết nối",
+      "question": "Đã đến giờ, hệ thống ghi nhận lần tưới như thế nào?",
+      "summary": "Giả định local đủ điều kiện: một occurrence, một START, một session 45 giây được báo.",
+      "uc_refs": [
+        "UC02",
+        "FR02",
+        "FR04",
+        "FR05"
+      ],
+      "observed_at": "2026-11-01T07:00:46+07:00",
+      "viewpoint": "controller-local",
+      "timeline": [
+        {
+          "id": "due",
+          "at": "2026-11-01T07:00:00+07:00",
+          "lane": "device",
+          "title": "Occurrence đến hạn",
+          "detail": "OCC-DEMO-0700 • applied v1 • planned 45 giây",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "start",
+          "at": "2026-11-01T07:00:00+07:00",
+          "lane": "result",
+          "title": "START → phiên đã bắt đầu",
+          "detail": "REQ-DEMO-SCHED → SES-DEMO-SCHED; reported start 07:00:00",
+          "kind": "action",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "close",
+          "at": "2026-11-01T07:00:45+07:00",
+          "lane": "device",
+          "title": "Đến deadline: yêu cầu đóng",
+          "detail": "reported_output_duration_seconds = 45",
+          "kind": "action",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "end",
+          "at": "2026-11-01T07:00:45+07:00",
+          "lane": "result",
+          "title": "Có kết quả đầu ra được báo",
+          "detail": "completed_reported; kết quả Controller báo, chưa đo nước",
+          "kind": "event",
+          "evidence": "controller_reported"
+        }
+      ],
+      "takeaways": [
+        "Không cần cloud xin phép mỗi occurrence.",
+        "Chỉ có session sau execution-start evidence; completed_reported không phải physical-water proof."
+      ],
+      "limitations": [
+        "Đây là góc nhìn record tại controller mẫu; website offline chưa nhìn thấy các record này.",
+        "45 giây chỉ là giá trị synthetic, không là water policy."
+      ],
+      "state": {
+        "schedule": {
+          "schedule_id": "SCHED-DEMO-A",
+          "zone_id": "ZONE-DEMO-A",
+          "desired_content_ref": "SC-A-v1",
+          "desired_saved_at_web": "2026-10-31T21:00:00+07:00",
+          "last_known_applied_report_ref": "REP-APPLIED-1"
+        },
+        "schedule_contents": [
+          {
+            "content_ref": "SC-A-v1",
+            "schedule_id": "SCHED-DEMO-A",
+            "config": {
+              "enabled": true,
+              "effective_from": "2026-11-01T00:00:00+07:00",
+              "effective_until": null,
+              "recurrence": {
+                "kind": "daily",
+                "at_local_time": "07:00"
+              },
+              "duration_seconds": 45
+            }
+          }
+        ],
+        "target_bindings": [
+          {
+            "binding_ref": "BIND-A-1",
+            "zone_id": "ZONE-DEMO-A",
+            "actuator_id": "VALVE-DEMO-A",
+            "controller_id": "CTRL-DEMO-01"
+          }
+        ],
+        "occurrences": [
+          {
+            "occurrence_id": "OCC-DEMO-0700",
+            "content_ref": "SC-A-v1",
+            "planned_for": "2026-11-01T07:00:00+07:00",
+            "evaluation_outcome": "start_requested",
+            "reason": null
+          }
+        ],
+        "requests": [
+          {
+            "request_id": "REQ-DEMO-SCHED",
+            "kind": "START",
+            "trigger_source": "schedule",
+            "binding_ref": "BIND-A-1",
+            "status": "accepted",
+            "reason": null,
+            "occurrence_id": "OCC-DEMO-0700",
+            "valid_until": null
+          }
+        ],
+        "sessions": [
+          {
+            "session_id": "SES-DEMO-SCHED",
+            "request_id": "REQ-DEMO-SCHED",
+            "reported_output_duration_seconds": 45,
+            "result": "completed_reported",
+            "end_reason": "planned_end"
+          }
+        ],
+        "records": [
+          {
+            "record_id": "REP-APPLIED-1",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "schedule_applied",
+            "subject_kind": "schedule",
+            "subject_ref": "SCHED-DEMO-A",
+            "time": {
+              "at": "2026-11-01T06:40:00+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T06:40:01+07:00",
+            "content_ref": "SC-A-v1",
+            "source_order": 1
+          },
+          {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T07:00:45+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": null,
+            "output_reported_state": "closed",
+            "active_session_id": null,
+            "clock_usable_for_open": true
+          },
+          {
+            "record_id": "CREATED-REQ-DEMO-SCHED",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "request_created",
+            "subject_kind": "request",
+            "subject_ref": "REQ-DEMO-SCHED",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-EVAL",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "occurrence_evaluated",
+            "subject_kind": "occurrence",
+            "subject_ref": "OCC-DEMO-0700",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-DEMO-START",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "session_started",
+            "subject_kind": "session",
+            "subject_ref": "SES-DEMO-SCHED",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-DEMO-CLOSE",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "close_requested",
+            "subject_kind": "session",
+            "subject_ref": "SES-DEMO-SCHED",
+            "time": {
+              "at": "2026-11-01T07:00:45+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-DEMO-END",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "session_ended",
+            "subject_kind": "session",
+            "subject_ref": "SES-DEMO-SCHED",
+            "time": {
+              "at": "2026-11-01T07:00:45+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          }
+        ],
+        "controller_report_ref": "REP-STATUS",
+        "safety_view": {
+          "new_start_allowed": true,
+          "block_reasons": [],
+          "basis": "Expected synthetic local conditions; not runtime proof"
+        },
+        "ingest_view": {
+          "deliveries": [],
+          "unique_record_ids": [],
+          "duplicate_record_ids": [],
+          "history_session_ids": []
+        },
+        "dashboard_view": {
+          "as_of": "2026-11-01T07:00:45+07:00",
+          "last_execution_at_reported": "2026-11-01T07:00:00+07:00",
+          "next_planned_at": "2026-11-02T07:00:00+07:00",
+          "next_plan_basis": "last_known_applied_SC-A-v1",
+          "freshness_note": "Góc nhìn local; web chưa nhận các record offline"
+        },
+        "connectivity_view": "offline",
+        "branches": {},
+        "projections": {
+          "schedule": {
+            "desired": {
+              "content_ref": "SC-A-v1",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": true,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "07:00"
+                },
+                "duration_seconds": 45
+              }
+            },
+            "last_known_applied": {
+              "content_ref": "SC-A-v1",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": true,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "07:00"
+                },
+                "duration_seconds": 45
+              }
+            },
+            "application_status": "confirmed",
+            "applied_enabled": true,
+            "last_known_reported_at": "2026-11-01T06:40:00+07:00",
+            "first_received_at_web": "2026-11-01T06:40:01+07:00"
+          },
+          "requests": {
+            "REQ-DEMO-SCHED": {
+              "binding_ref": "BIND-A-1",
+              "zone_id": "ZONE-DEMO-A",
+              "actuator_id": "VALVE-DEMO-A",
+              "controller_id": "CTRL-DEMO-01",
+              "trigger_source": "schedule",
+              "occurrence_id": "OCC-DEMO-0700",
+              "content_ref": "SC-A-v1",
+              "planned_duration_seconds": 45,
+              "requested_at": "2026-11-01T07:00:00+07:00"
+            }
+          },
+          "sessions": {
+            "SES-DEMO-SCHED": {
+              "binding_ref": "BIND-A-1",
+              "zone_id": "ZONE-DEMO-A",
+              "actuator_id": "VALVE-DEMO-A",
+              "controller_id": "CTRL-DEMO-01",
+              "trigger_source": "schedule",
+              "occurrence_id": "OCC-DEMO-0700",
+              "content_ref": "SC-A-v1",
+              "planned_duration_seconds": 45,
+              "requested_at": "2026-11-01T07:00:00+07:00",
+              "started_at_reported": "2026-11-01T07:00:00+07:00",
+              "ended_at_reported": "2026-11-01T07:00:45+07:00",
+              "reported_output_duration_seconds": 45,
+              "result": "completed_reported"
+            }
+          },
+          "controller": {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T07:00:45+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": null,
+            "output_reported_state": "closed",
+            "active_session_id": null,
+            "clock_usable_for_open": true
+          }
+        }
+      }
+    },
+    "W03": {
+      "id": "W03",
+      "title": "Bấm START, rồi STOP sau 17 giây",
+      "question": "Duration đặt 45 giây nhưng dừng sớm thì dữ liệu ra sao?",
+      "summary": "Nút tạo START riêng; STOP không tạo phiên mới. Planned 45 giây, reported output 17 giây.",
+      "uc_refs": [
+        "UC03",
+        "LC01",
+        "FR03"
+      ],
+      "observed_at": "2026-11-01T07:15:17+07:00",
+      "viewpoint": "controller-local",
+      "timeline": [
+        {
+          "id": "button",
+          "at": "2026-11-01T07:15:00+07:00",
+          "lane": "device",
+          "title": "Nhận START tại nút",
+          "detail": "trigger_source = local_button; không ghi danh tính người bấm",
+          "kind": "action",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "started",
+          "at": "2026-11-01T07:15:00+07:00",
+          "lane": "result",
+          "title": "Một session bắt đầu",
+          "detail": "SES-DEMO-BUTTON • planned_duration_seconds = 45",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "stop",
+          "at": "2026-11-01T07:15:17+07:00",
+          "lane": "device",
+          "title": "STOP yêu cầu CLOSE",
+          "detail": "REQ-DEMO-STOP; không cần OPEN gates",
+          "kind": "action",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "stopped",
+          "at": "2026-11-01T07:15:17+07:00",
+          "lane": "result",
+          "title": "stopped_reported",
+          "detail": "reported duration = 17; chưa đo lượng nước",
+          "kind": "event",
+          "evidence": "controller_reported"
+        }
+      ],
+      "takeaways": [
+        "Độ chia cấu hình 15 giây không bắt duration thực phải là bội 15.",
+        "Nút local không cần cloud; không gán giả danh tính người bấm."
+      ],
+      "limitations": [
+        "17 giây là thời lượng output được báo trong fixture, không chứng minh lượng nước."
+      ],
+      "state": {
+        "schedule": {
+          "schedule_id": "SCHED-DEMO-A",
+          "zone_id": "ZONE-DEMO-A",
+          "desired_content_ref": "SC-A-v1",
+          "desired_saved_at_web": "2026-10-31T21:00:00+07:00",
+          "last_known_applied_report_ref": "REP-APPLIED-1"
+        },
+        "schedule_contents": [
+          {
+            "content_ref": "SC-A-v1",
+            "schedule_id": "SCHED-DEMO-A",
+            "config": {
+              "enabled": true,
+              "effective_from": "2026-11-01T00:00:00+07:00",
+              "effective_until": null,
+              "recurrence": {
+                "kind": "daily",
+                "at_local_time": "07:00"
+              },
+              "duration_seconds": 45
+            }
+          }
+        ],
+        "target_bindings": [
+          {
+            "binding_ref": "BIND-A-1",
+            "zone_id": "ZONE-DEMO-A",
+            "actuator_id": "VALVE-DEMO-A",
+            "controller_id": "CTRL-DEMO-01"
+          }
+        ],
+        "occurrences": [],
+        "requests": [
+          {
+            "request_id": "REQ-DEMO-BUTTON",
+            "kind": "START",
+            "trigger_source": "local_button",
+            "binding_ref": "BIND-A-1",
+            "status": "accepted",
+            "reason": null,
+            "duration_seconds": 45,
+            "valid_until": null
+          },
+          {
+            "request_id": "REQ-DEMO-STOP",
+            "kind": "STOP",
+            "trigger_source": "local_button",
+            "binding_ref": "BIND-A-1",
+            "status": "accepted",
+            "reason": null
+          }
+        ],
+        "sessions": [
+          {
+            "session_id": "SES-DEMO-BUTTON",
+            "request_id": "REQ-DEMO-BUTTON",
+            "reported_output_duration_seconds": 17,
+            "result": "stopped_reported",
+            "end_reason": "manual_stop"
+          }
+        ],
+        "records": [
+          {
+            "record_id": "REP-APPLIED-1",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "schedule_applied",
+            "subject_kind": "schedule",
+            "subject_ref": "SCHED-DEMO-A",
+            "time": {
+              "at": "2026-11-01T06:40:00+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T06:40:01+07:00",
+            "content_ref": "SC-A-v1",
+            "source_order": 1
+          },
+          {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T07:15:17+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": null,
+            "output_reported_state": "closed",
+            "active_session_id": null,
+            "clock_usable_for_open": true
+          },
+          {
+            "record_id": "CREATED-REQ-DEMO-BUTTON",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "request_created",
+            "subject_kind": "request",
+            "subject_ref": "REQ-DEMO-BUTTON",
+            "time": {
+              "at": "2026-11-01T07:15:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "CREATED-REQ-DEMO-STOP",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "request_created",
+            "subject_kind": "request",
+            "subject_ref": "REQ-DEMO-STOP",
+            "time": {
+              "at": "2026-11-01T07:15:17+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-BUTTON-START",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "session_started",
+            "subject_kind": "session",
+            "subject_ref": "SES-DEMO-BUTTON",
+            "time": {
+              "at": "2026-11-01T07:15:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-BUTTON-STOP",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "stop_received",
+            "subject_kind": "request",
+            "subject_ref": "REQ-DEMO-STOP",
+            "time": {
+              "at": "2026-11-01T07:15:17+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-BUTTON-END",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "session_ended",
+            "subject_kind": "session",
+            "subject_ref": "SES-DEMO-BUTTON",
+            "time": {
+              "at": "2026-11-01T07:15:17+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          }
+        ],
+        "controller_report_ref": "REP-STATUS",
+        "safety_view": {
+          "new_start_allowed": true,
+          "block_reasons": [],
+          "basis": "Expected synthetic local conditions; not runtime proof"
+        },
+        "ingest_view": {
+          "deliveries": [],
+          "unique_record_ids": [],
+          "duplicate_record_ids": [],
+          "history_session_ids": []
+        },
+        "dashboard_view": {
+          "as_of": "2026-11-01T07:15:17+07:00",
+          "last_execution_at_reported": "2026-11-01T07:15:00+07:00",
+          "next_planned_at": "2026-11-02T07:00:00+07:00",
+          "next_plan_basis": "last_known_applied_SC-A-v1",
+          "freshness_note": "Báo cáo có mốc, không cam kết realtime"
+        },
+        "connectivity_view": "offline",
+        "branches": {},
+        "projections": {
+          "schedule": {
+            "desired": {
+              "content_ref": "SC-A-v1",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": true,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "07:00"
+                },
+                "duration_seconds": 45
+              }
+            },
+            "last_known_applied": {
+              "content_ref": "SC-A-v1",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": true,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "07:00"
+                },
+                "duration_seconds": 45
+              }
+            },
+            "application_status": "confirmed",
+            "applied_enabled": true,
+            "last_known_reported_at": "2026-11-01T06:40:00+07:00",
+            "first_received_at_web": "2026-11-01T06:40:01+07:00"
+          },
+          "requests": {
+            "REQ-DEMO-BUTTON": {
+              "binding_ref": "BIND-A-1",
+              "zone_id": "ZONE-DEMO-A",
+              "actuator_id": "VALVE-DEMO-A",
+              "controller_id": "CTRL-DEMO-01",
+              "trigger_source": "local_button",
+              "occurrence_id": null,
+              "content_ref": null,
+              "planned_duration_seconds": 45,
+              "requested_at": "2026-11-01T07:15:00+07:00"
+            },
+            "REQ-DEMO-STOP": {
+              "binding_ref": "BIND-A-1",
+              "zone_id": "ZONE-DEMO-A",
+              "actuator_id": "VALVE-DEMO-A",
+              "controller_id": "CTRL-DEMO-01",
+              "trigger_source": "local_button",
+              "occurrence_id": null,
+              "content_ref": null,
+              "planned_duration_seconds": null,
+              "requested_at": "2026-11-01T07:15:17+07:00"
+            }
+          },
+          "sessions": {
+            "SES-DEMO-BUTTON": {
+              "binding_ref": "BIND-A-1",
+              "zone_id": "ZONE-DEMO-A",
+              "actuator_id": "VALVE-DEMO-A",
+              "controller_id": "CTRL-DEMO-01",
+              "trigger_source": "local_button",
+              "occurrence_id": null,
+              "content_ref": null,
+              "planned_duration_seconds": 45,
+              "requested_at": "2026-11-01T07:15:00+07:00",
+              "started_at_reported": "2026-11-01T07:15:00+07:00",
+              "ended_at_reported": "2026-11-01T07:15:17+07:00",
+              "reported_output_duration_seconds": 17,
+              "result": "stopped_reported"
+            }
+          },
+          "controller": {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T07:15:17+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": null,
+            "output_reported_state": "closed",
+            "active_session_id": null,
+            "clock_usable_for_open": true
+          }
+        }
+      }
+    },
+    "W04": {
+      "id": "W04",
+      "title": "Remote đã được nhận, kết quả chưa rõ",
+      "question": "Có receipt có đồng nghĩa đã tưới không?",
+      "summary": "Request có receipt nhận/giao thực thi, thiếu start/terminal evidence: không tạo session đã tưới giả.",
+      "uc_refs": [
+        "UC04",
+        "SAFE08",
+        "DR09"
+      ],
+      "observed_at": "2026-11-01T07:01:00+07:00",
+      "viewpoint": "web-received-evidence",
+      "timeline": [
+        {
+          "id": "confirm",
+          "at": "2026-11-01T06:59:50+07:00",
+          "lane": "web",
+          "title": "Preview + confirm",
+          "detail": "ZONE-DEMO-A • duration 45 giây • cfg-demo-1",
+          "kind": "action",
+          "evidence": "web_saved"
+        },
+        {
+          "id": "received",
+          "at": "2026-11-01T07:00:00+07:00",
+          "lane": "device",
+          "title": "Controller nhận request",
+          "detail": "REC-REMOTE-RX; chưa phải started",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "allowed",
+          "at": "2026-11-01T07:00:01+07:00",
+          "lane": "result",
+          "title": "Có record giao thực thi",
+          "detail": "execution_authorized; không phải completed",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "unknown",
+          "at": "2026-11-01T07:01:00+07:00",
+          "lane": "result",
+          "title": "outcome_unknown",
+          "detail": "sessions = []; new_start_allowed = false",
+          "kind": "alert",
+          "evidence": "unknown"
+        }
+      ],
+      "takeaways": [
+        "Accepted/authorized không tự tạo session khi chưa có start evidence.",
+        "Không retry action mới; unknown giữ chặn OPEN mọi nguồn đến recovery/xác minh."
+      ],
+      "limitations": [
+        "sessions=[] nghĩa chưa có session được xác nhận trong evidence, không chứng minh chưa có tác động vật lý.",
+        "Readiness trong fixture là expected design state, không đo được arbiter/valve thật."
+      ],
+      "state": {
+        "schedule": {
+          "schedule_id": "SCHED-DEMO-A",
+          "zone_id": "ZONE-DEMO-A",
+          "desired_content_ref": "SC-A-v1",
+          "desired_saved_at_web": "2026-10-31T21:00:00+07:00",
+          "last_known_applied_report_ref": "REP-APPLIED-1"
+        },
+        "schedule_contents": [
+          {
+            "content_ref": "SC-A-v1",
+            "schedule_id": "SCHED-DEMO-A",
+            "config": {
+              "enabled": true,
+              "effective_from": "2026-11-01T00:00:00+07:00",
+              "effective_until": null,
+              "recurrence": {
+                "kind": "daily",
+                "at_local_time": "07:00"
+              },
+              "duration_seconds": 45
+            }
+          }
+        ],
+        "target_bindings": [
+          {
+            "binding_ref": "BIND-A-1",
+            "zone_id": "ZONE-DEMO-A",
+            "actuator_id": "VALVE-DEMO-A",
+            "controller_id": "CTRL-DEMO-01"
+          }
+        ],
+        "occurrences": [],
+        "requests": [
+          {
+            "request_id": "REQ-DEMO-REMOTE",
+            "kind": "START",
+            "trigger_source": "remote",
+            "binding_ref": "BIND-A-1",
+            "status": "outcome_unknown",
+            "reason": "TERMINAL_EVIDENCE_MISSING",
+            "duration_seconds": 45,
+            "valid_until": "2026-11-01T07:00:30+07:00",
+            "confirmed_context": {
+              "binding_ref": "BIND-A-1",
+              "duration_seconds": 45,
+              "confirmed_at_web": "2026-11-01T06:59:50+07:00"
+            }
+          }
+        ],
+        "sessions": [],
+        "records": [
+          {
+            "record_id": "REP-APPLIED-1",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "schedule_applied",
+            "subject_kind": "schedule",
+            "subject_ref": "SCHED-DEMO-A",
+            "time": {
+              "at": "2026-11-01T06:40:00+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T06:40:01+07:00",
+            "content_ref": "SC-A-v1",
+            "source_order": 1
+          },
+          {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T06:59:45+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T06:59:46+07:00",
+            "output_reported_state": "closed",
+            "active_session_id": null,
+            "clock_usable_for_open": true
+          },
+          {
+            "record_id": "CREATED-REQ-DEMO-REMOTE",
+            "origin_ref": "microSched",
+            "event_kind": "request_created",
+            "subject_kind": "request",
+            "subject_ref": "REQ-DEMO-REMOTE",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "created_at_web",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T07:00:00+07:00"
+          },
+          {
+            "record_id": "REC-REMOTE-RX",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "request_received",
+            "subject_kind": "request",
+            "subject_ref": "REQ-DEMO-REMOTE",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T07:00:00+07:00"
+          },
+          {
+            "record_id": "REC-REMOTE-AUTH",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "execution_authorized",
+            "subject_kind": "request",
+            "subject_ref": "REQ-DEMO-REMOTE",
+            "time": {
+              "at": "2026-11-01T07:00:01+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T07:00:01+07:00"
+          }
+        ],
+        "controller_report_ref": "REP-STATUS",
+        "safety_view": {
+          "new_start_allowed": false,
+          "block_reasons": [
+            "OUTCOME_UNKNOWN"
+          ],
+          "basis": "Expected block: mọi nguồn/Zone trên nguồn-accounting chung chưa xác minh"
+        },
+        "ingest_view": {
+          "deliveries": [],
+          "unique_record_ids": [],
+          "duplicate_record_ids": [],
+          "history_session_ids": []
+        },
+        "dashboard_view": {
+          "as_of": "2026-11-01T07:01:00+07:00",
+          "last_execution_at_reported": null,
+          "next_planned_at": null,
+          "next_plan_basis": "unknown_until_reconciliation",
+          "freshness_note": "Last-known closed 06:59:45 không chứng minh trạng thái sau remote command",
+          "current_output_assessment": "unknown"
+        },
+        "connectivity_view": "unknown",
+        "branches": {},
+        "projections": {
+          "schedule": {
+            "desired": {
+              "content_ref": "SC-A-v1",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": true,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "07:00"
+                },
+                "duration_seconds": 45
+              }
+            },
+            "last_known_applied": {
+              "content_ref": "SC-A-v1",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": true,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "07:00"
+                },
+                "duration_seconds": 45
+              }
+            },
+            "application_status": "confirmed",
+            "applied_enabled": true,
+            "last_known_reported_at": "2026-11-01T06:40:00+07:00",
+            "first_received_at_web": "2026-11-01T06:40:01+07:00"
+          },
+          "requests": {
+            "REQ-DEMO-REMOTE": {
+              "binding_ref": "BIND-A-1",
+              "zone_id": "ZONE-DEMO-A",
+              "actuator_id": "VALVE-DEMO-A",
+              "controller_id": "CTRL-DEMO-01",
+              "trigger_source": "remote",
+              "occurrence_id": null,
+              "content_ref": null,
+              "planned_duration_seconds": 45,
+              "requested_at": "2026-11-01T07:00:00+07:00"
+            }
+          },
+          "sessions": {},
+          "controller": {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T06:59:45+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T06:59:46+07:00",
+            "output_reported_state": "closed",
+            "active_session_id": null,
+            "clock_usable_for_open": true
+          }
+        }
+      }
+    },
+    "W05": {
+      "id": "W05",
+      "title": "Sync trễ và gửi lại record",
+      "question": "Hai lần nhận cùng record có tạo hai phiên không?",
+      "summary": "Record có event-time khác received-time; cùng REC-DEMO-END gửi lại vẫn chỉ một session lịch sử.",
+      "uc_refs": [
+        "UC05",
+        "FR05",
+        "FR07"
+      ],
+      "observed_at": "2026-11-01T07:10:05+07:00",
+      "viewpoint": "web-received-data",
+      "timeline": [
+        {
+          "id": "happened",
+          "at": "2026-11-01T07:00:45+07:00",
+          "lane": "device",
+          "title": "Phiên đã kết thúc ở local",
+          "detail": "REC-DEMO-END • occurred_at_reported = 07:00:45",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "upload",
+          "at": "2026-11-01T07:10:00+07:00",
+          "lane": "web",
+          "title": "Kết nối lại, nhận backlog",
+          "detail": "Web bắt đầu nhận record cũ, không phát START mới",
+          "kind": "recovery",
+          "evidence": "web_received"
+        },
+        {
+          "id": "endrx",
+          "at": "2026-11-01T07:10:02+07:00",
+          "lane": "result",
+          "title": "Nhận REC-DEMO-END",
+          "detail": "Một session SES-DEMO-SCHED trong history",
+          "kind": "event",
+          "evidence": "web_received"
+        },
+        {
+          "id": "duplicate",
+          "at": "2026-11-01T07:10:05+07:00",
+          "lane": "result",
+          "title": "Cùng ID + cùng payload gửi lại",
+          "detail": "duplicate_same_payload; không nhân phiên, không replay",
+          "kind": "event",
+          "evidence": "web_received"
+        }
+      ],
+      "takeaways": [
+        "Event-time không bị thay bằng thời điểm upload.",
+        "Last execution là reported 07:00; next planned lấy applied plan, không lấy một request đã gửi."
+      ],
+      "limitations": [
+        "Dữ liệu synthetic — không phải log thiết bị hay bằng chứng tưới đủ nước."
+      ],
+      "state": {
+        "schedule": {
+          "schedule_id": "SCHED-DEMO-A",
+          "zone_id": "ZONE-DEMO-A",
+          "desired_content_ref": "SC-A-v1",
+          "desired_saved_at_web": "2026-10-31T21:00:00+07:00",
+          "last_known_applied_report_ref": "REP-APPLIED-1"
+        },
+        "schedule_contents": [
+          {
+            "content_ref": "SC-A-v1",
+            "schedule_id": "SCHED-DEMO-A",
+            "config": {
+              "enabled": true,
+              "effective_from": "2026-11-01T00:00:00+07:00",
+              "effective_until": null,
+              "recurrence": {
+                "kind": "daily",
+                "at_local_time": "07:00"
+              },
+              "duration_seconds": 45
+            }
+          }
+        ],
+        "target_bindings": [
+          {
+            "binding_ref": "BIND-A-1",
+            "zone_id": "ZONE-DEMO-A",
+            "actuator_id": "VALVE-DEMO-A",
+            "controller_id": "CTRL-DEMO-01"
+          }
+        ],
+        "occurrences": [
+          {
+            "occurrence_id": "OCC-DEMO-0700",
+            "content_ref": "SC-A-v1",
+            "planned_for": "2026-11-01T07:00:00+07:00",
+            "evaluation_outcome": "start_requested",
+            "reason": null
+          }
+        ],
+        "requests": [
+          {
+            "request_id": "REQ-DEMO-SCHED",
+            "kind": "START",
+            "trigger_source": "schedule",
+            "binding_ref": "BIND-A-1",
+            "status": "accepted",
+            "reason": null,
+            "occurrence_id": "OCC-DEMO-0700",
+            "valid_until": null
+          }
+        ],
+        "sessions": [
+          {
+            "session_id": "SES-DEMO-SCHED",
+            "request_id": "REQ-DEMO-SCHED",
+            "reported_output_duration_seconds": 45,
+            "result": "completed_reported",
+            "end_reason": "planned_end"
+          }
+        ],
+        "records": [
+          {
+            "record_id": "REP-APPLIED-1",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "schedule_applied",
+            "subject_kind": "schedule",
+            "subject_ref": "SCHED-DEMO-A",
+            "time": {
+              "at": "2026-11-01T06:40:00+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T06:40:01+07:00",
+            "content_ref": "SC-A-v1",
+            "source_order": 1
+          },
+          {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T07:10:00+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T07:10:01+07:00",
+            "output_reported_state": "closed",
+            "active_session_id": null,
+            "clock_usable_for_open": true
+          },
+          {
+            "record_id": "CREATED-REQ-DEMO-SCHED",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "request_created",
+            "subject_kind": "request",
+            "subject_ref": "REQ-DEMO-SCHED",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-EVAL",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "occurrence_evaluated",
+            "subject_kind": "occurrence",
+            "subject_ref": "OCC-DEMO-0700",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-DEMO-START",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "session_started",
+            "subject_kind": "session",
+            "subject_ref": "SES-DEMO-SCHED",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T07:10:00+07:00"
+          },
+          {
+            "record_id": "REC-DEMO-CLOSE",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "close_requested",
+            "subject_kind": "session",
+            "subject_ref": "SES-DEMO-SCHED",
+            "time": {
+              "at": "2026-11-01T07:00:45+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T07:10:01+07:00"
+          },
+          {
+            "record_id": "REC-DEMO-END",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "session_ended",
+            "subject_kind": "session",
+            "subject_ref": "SES-DEMO-SCHED",
+            "time": {
+              "at": "2026-11-01T07:00:45+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T07:10:02+07:00"
+          }
+        ],
+        "controller_report_ref": "REP-STATUS",
+        "safety_view": {
+          "new_start_allowed": true,
+          "block_reasons": [],
+          "basis": "Expected synthetic local conditions; not runtime proof"
+        },
+        "ingest_view": {
+          "deliveries": [
+            {
+              "record_id": "REC-DEMO-START",
+              "received_at_web": "2026-11-01T07:10:00+07:00",
+              "disposition": "inserted"
+            },
+            {
+              "record_id": "REC-DEMO-CLOSE",
+              "received_at_web": "2026-11-01T07:10:01+07:00",
+              "disposition": "inserted"
+            },
+            {
+              "record_id": "REC-DEMO-END",
+              "received_at_web": "2026-11-01T07:10:02+07:00",
+              "disposition": "inserted"
+            },
+            {
+              "record_id": "REC-DEMO-END",
+              "received_at_web": "2026-11-01T07:10:05+07:00",
+              "disposition": "duplicate_same_payload"
+            }
+          ],
+          "unique_record_ids": [
+            "REC-DEMO-START",
+            "REC-DEMO-CLOSE",
+            "REC-DEMO-END"
+          ],
+          "duplicate_record_ids": [
+            "REC-DEMO-END"
+          ],
+          "history_session_ids": [
+            "SES-DEMO-SCHED"
+          ]
+        },
+        "dashboard_view": {
+          "as_of": "2026-11-01T07:10:05+07:00",
+          "last_execution_at_reported": "2026-11-01T07:00:00+07:00",
+          "next_planned_at": "2026-11-02T07:00:00+07:00",
+          "next_plan_basis": "last_known_applied_SC-A-v1",
+          "freshness_note": "Event 07:00–07:00:45, nhận 07:10; không phải vừa tưới"
+        },
+        "connectivity_view": "online",
+        "branches": {},
+        "projections": {
+          "schedule": {
+            "desired": {
+              "content_ref": "SC-A-v1",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": true,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "07:00"
+                },
+                "duration_seconds": 45
+              }
+            },
+            "last_known_applied": {
+              "content_ref": "SC-A-v1",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": true,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "07:00"
+                },
+                "duration_seconds": 45
+              }
+            },
+            "application_status": "confirmed",
+            "applied_enabled": true,
+            "last_known_reported_at": "2026-11-01T06:40:00+07:00",
+            "first_received_at_web": "2026-11-01T06:40:01+07:00"
+          },
+          "requests": {
+            "REQ-DEMO-SCHED": {
+              "binding_ref": "BIND-A-1",
+              "zone_id": "ZONE-DEMO-A",
+              "actuator_id": "VALVE-DEMO-A",
+              "controller_id": "CTRL-DEMO-01",
+              "trigger_source": "schedule",
+              "occurrence_id": "OCC-DEMO-0700",
+              "content_ref": "SC-A-v1",
+              "planned_duration_seconds": 45,
+              "requested_at": "2026-11-01T07:00:00+07:00"
+            }
+          },
+          "sessions": {
+            "SES-DEMO-SCHED": {
+              "binding_ref": "BIND-A-1",
+              "zone_id": "ZONE-DEMO-A",
+              "actuator_id": "VALVE-DEMO-A",
+              "controller_id": "CTRL-DEMO-01",
+              "trigger_source": "schedule",
+              "occurrence_id": "OCC-DEMO-0700",
+              "content_ref": "SC-A-v1",
+              "planned_duration_seconds": 45,
+              "requested_at": "2026-11-01T07:00:00+07:00",
+              "started_at_reported": "2026-11-01T07:00:00+07:00",
+              "ended_at_reported": "2026-11-01T07:00:45+07:00",
+              "reported_output_duration_seconds": 45,
+              "result": "completed_reported"
+            }
+          },
+          "controller": {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T07:10:00+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T07:10:01+07:00",
+            "output_reported_state": "closed",
+            "active_session_id": null,
+            "clock_usable_for_open": true
+          }
+        }
+      }
+    },
+    "W06": {
+      "id": "W06",
+      "title": "Pause lịch không dừng/đổi phiên đang chạy",
+      "question": "Applied v3 đã tạm dừng, sao session vẫn giữ 45 giây?",
+      "summary": "Phiên bind v1/45 giây; applied v3 disabled chỉ ảnh hưởng lần tương lai. STOP/safety vẫn có thể dừng phiên.",
+      "uc_refs": [
+        "P01",
+        "LC01–03",
+        "SAFE05",
+        "SAFE07"
+      ],
+      "observed_at": "2026-11-01T07:00:20+07:00",
+      "viewpoint": "reported-running-session",
+      "timeline": [
+        {
+          "id": "bind",
+          "at": "2026-11-01T07:00:00+07:00",
+          "lane": "device",
+          "title": "Session bind v1",
+          "detail": "SES-DEMO-RUNNING • planned_duration_seconds = 45",
+          "kind": "action",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "edit",
+          "at": "2026-11-01T07:00:10+07:00",
+          "lane": "web",
+          "title": "Sửa mong muốn v2",
+          "detail": "Đổi giờ 08:00, duration 60 giây",
+          "kind": "change",
+          "evidence": "web_saved"
+        },
+        {
+          "id": "apply2",
+          "at": "2026-11-01T07:00:12+07:00",
+          "lane": "device",
+          "title": "Báo áp dụng v2",
+          "detail": "Không retime session v1 đang chạy",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "pause",
+          "at": "2026-11-01T07:00:15+07:00",
+          "lane": "web",
+          "title": "Pause bằng desired v3",
+          "detail": "enabled = false; không phải STOP session",
+          "kind": "change",
+          "evidence": "web_saved"
+        },
+        {
+          "id": "applied3",
+          "at": "2026-11-01T07:00:16+07:00",
+          "lane": "device",
+          "title": "Báo applied v3",
+          "detail": "applied SC-A-v3: enabled = false; phiên cũ giữ SC-A-v1",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "running",
+          "at": "2026-11-01T07:00:20+07:00",
+          "lane": "result",
+          "title": "Phiên đang được báo chạy",
+          "detail": "ended_at_reported = null; output duration chưa có kết luận",
+          "kind": "event",
+          "evidence": "controller_reported"
+        }
+      ],
+      "takeaways": [
+        "Sửa/pause không restart hay kéo/rút duration đã bind; dừng phiên dùng STOP/safety.",
+        "Ba nhánh từ chối là ví dụ độc lập: request rejected không tạo session mới, không queue muộn."
+      ],
+      "limitations": [
+        "Các nhánh BUSY/CLOCK_UNTRUSTED/CUMULATIVE_LIMIT là ví dụ độc lập, không nối thành timeline chính.",
+        "Không chọn numeric cumulative budget hoặc đo khả năng safety arbiter trong fixture."
+      ],
+      "state": {
+        "schedule": {
+          "schedule_id": "SCHED-DEMO-A",
+          "zone_id": "ZONE-DEMO-A",
+          "desired_content_ref": "SC-A-v3",
+          "desired_saved_at_web": "2026-11-01T07:00:15+07:00",
+          "last_known_applied_report_ref": "REP-APPLIED-3"
+        },
+        "schedule_contents": [
+          {
+            "content_ref": "SC-A-v1",
+            "schedule_id": "SCHED-DEMO-A",
+            "config": {
+              "enabled": true,
+              "effective_from": "2026-11-01T00:00:00+07:00",
+              "effective_until": null,
+              "recurrence": {
+                "kind": "daily",
+                "at_local_time": "07:00"
+              },
+              "duration_seconds": 45
+            }
+          },
+          {
+            "content_ref": "SC-A-v2",
+            "schedule_id": "SCHED-DEMO-A",
+            "config": {
+              "enabled": true,
+              "effective_from": "2026-11-01T00:00:00+07:00",
+              "effective_until": null,
+              "recurrence": {
+                "kind": "daily",
+                "at_local_time": "08:00"
+              },
+              "duration_seconds": 60
+            }
+          },
+          {
+            "content_ref": "SC-A-v3",
+            "schedule_id": "SCHED-DEMO-A",
+            "config": {
+              "enabled": false,
+              "effective_from": "2026-11-01T00:00:00+07:00",
+              "effective_until": null,
+              "recurrence": {
+                "kind": "daily",
+                "at_local_time": "08:00"
+              },
+              "duration_seconds": 60
+            }
+          }
+        ],
+        "target_bindings": [
+          {
+            "binding_ref": "BIND-A-1",
+            "zone_id": "ZONE-DEMO-A",
+            "actuator_id": "VALVE-DEMO-A",
+            "controller_id": "CTRL-DEMO-01"
+          }
+        ],
+        "occurrences": [
+          {
+            "occurrence_id": "OCC-DEMO-0700",
+            "content_ref": "SC-A-v1",
+            "planned_for": "2026-11-01T07:00:00+07:00",
+            "evaluation_outcome": "start_requested",
+            "reason": null
+          }
+        ],
+        "requests": [
+          {
+            "request_id": "REQ-DEMO-RUNNING",
+            "kind": "START",
+            "trigger_source": "schedule",
+            "binding_ref": "BIND-A-1",
+            "status": "accepted",
+            "reason": null,
+            "occurrence_id": "OCC-DEMO-0700",
+            "valid_until": null
+          }
+        ],
+        "sessions": [
+          {
+            "session_id": "SES-DEMO-RUNNING",
+            "request_id": "REQ-DEMO-RUNNING",
+            "reported_output_duration_seconds": null,
+            "result": "running",
+            "end_reason": null
+          }
+        ],
+        "records": [
+          {
+            "record_id": "REP-APPLIED-1",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "schedule_applied",
+            "subject_kind": "schedule",
+            "subject_ref": "SCHED-DEMO-A",
+            "time": {
+              "at": "2026-11-01T06:40:00+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T06:40:01+07:00",
+            "content_ref": "SC-A-v1",
+            "source_order": 1
+          },
+          {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T07:00:20+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T07:00:20+07:00",
+            "output_reported_state": "open",
+            "active_session_id": "SES-DEMO-RUNNING",
+            "clock_usable_for_open": true
+          },
+          {
+            "record_id": "CREATED-REQ-DEMO-RUNNING",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "request_created",
+            "subject_kind": "request",
+            "subject_ref": "REQ-DEMO-RUNNING",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-EVAL",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "occurrence_evaluated",
+            "subject_kind": "occurrence",
+            "subject_ref": "OCC-DEMO-0700",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REC-RUNNING-START",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "session_started",
+            "subject_kind": "session",
+            "subject_ref": "SES-DEMO-RUNNING",
+            "time": {
+              "at": "2026-11-01T07:00:00+07:00",
+              "meaning": "occurred_at_reported",
+              "quality": "known"
+            },
+            "received_at_web": null
+          },
+          {
+            "record_id": "REP-APPLIED-2",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "schedule_applied",
+            "subject_kind": "schedule",
+            "subject_ref": "SCHED-DEMO-A",
+            "time": {
+              "at": "2026-11-01T07:00:12+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T07:00:13+07:00",
+            "content_ref": "SC-A-v2",
+            "source_order": 2
+          },
+          {
+            "record_id": "REP-APPLIED-3",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "schedule_applied",
+            "subject_kind": "schedule",
+            "subject_ref": "SCHED-DEMO-A",
+            "time": {
+              "at": "2026-11-01T07:00:16+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T07:00:17+07:00",
+            "content_ref": "SC-A-v3",
+            "source_order": 3
+          }
+        ],
+        "controller_report_ref": "REP-STATUS",
+        "safety_view": {
+          "new_start_allowed": false,
+          "block_reasons": [
+            "BUSY"
+          ],
+          "basis": "Expected: phiên cũ đang chạy; không queue START riêng"
+        },
+        "ingest_view": {
+          "deliveries": [],
+          "unique_record_ids": [],
+          "duplicate_record_ids": [],
+          "history_session_ids": []
+        },
+        "dashboard_view": {
+          "as_of": "2026-11-01T07:00:20+07:00",
+          "last_execution_at_reported": "2026-11-01T07:00:00+07:00",
+          "next_planned_at": null,
+          "next_plan_basis": "schedule_paused",
+          "freshness_note": "SC-A-v3 pause không retime phiên đã bind SC-A-v1"
+        },
+        "connectivity_view": "online",
+        "branches": {
+          "busy": {
+            "independent_example": true,
+            "request": {
+              "request_id": "REQ-BRANCH-BUSY",
+              "kind": "START",
+              "trigger_source": "remote",
+              "binding_ref": "BIND-A-1",
+              "status": "rejected",
+              "reason": "BUSY",
+              "duration_seconds": 45,
+              "valid_until": "2026-11-01T07:00:30+07:00",
+              "confirmed_context": {
+                "binding_ref": "BIND-A-1",
+                "duration_seconds": 45,
+                "confirmed_at_web": "2026-11-01T06:59:50+07:00"
+              }
+            },
+            "new_sessions": [],
+            "basis": "Independent expected rejection, không chọn ngưỡng số/không thực thi arbiter"
+          },
+          "untrusted_clock": {
+            "independent_example": true,
+            "request": {
+              "request_id": "REQ-BRANCH-UNTRUSTED_CLOCK",
+              "kind": "START",
+              "trigger_source": "local_button",
+              "binding_ref": "BIND-A-1",
+              "status": "rejected",
+              "reason": "CLOCK_UNTRUSTED",
+              "duration_seconds": 45,
+              "valid_until": null
+            },
+            "new_sessions": [],
+            "basis": "Independent expected rejection, không chọn ngưỡng số/không thực thi arbiter"
+          },
+          "cumulative_limit": {
+            "independent_example": true,
+            "request": {
+              "request_id": "REQ-BRANCH-CUMULATIVE_LIMIT",
+              "kind": "START",
+              "trigger_source": "local_button",
+              "binding_ref": "BIND-A-1",
+              "status": "rejected",
+              "reason": "CUMULATIVE_LIMIT_REACHED",
+              "duration_seconds": 45,
+              "valid_until": null
+            },
+            "new_sessions": [],
+            "basis": "Independent expected rejection, không chọn ngưỡng số/không thực thi arbiter"
+          }
+        },
+        "projections": {
+          "schedule": {
+            "desired": {
+              "content_ref": "SC-A-v3",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": false,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "08:00"
+                },
+                "duration_seconds": 60
+              }
+            },
+            "last_known_applied": {
+              "content_ref": "SC-A-v3",
+              "schedule_id": "SCHED-DEMO-A",
+              "config": {
+                "enabled": false,
+                "effective_from": "2026-11-01T00:00:00+07:00",
+                "effective_until": null,
+                "recurrence": {
+                  "kind": "daily",
+                  "at_local_time": "08:00"
+                },
+                "duration_seconds": 60
+              }
+            },
+            "application_status": "confirmed",
+            "applied_enabled": false,
+            "last_known_reported_at": "2026-11-01T07:00:16+07:00",
+            "first_received_at_web": "2026-11-01T07:00:17+07:00"
+          },
+          "requests": {
+            "REQ-DEMO-RUNNING": {
+              "binding_ref": "BIND-A-1",
+              "zone_id": "ZONE-DEMO-A",
+              "actuator_id": "VALVE-DEMO-A",
+              "controller_id": "CTRL-DEMO-01",
+              "trigger_source": "schedule",
+              "occurrence_id": "OCC-DEMO-0700",
+              "content_ref": "SC-A-v1",
+              "planned_duration_seconds": 45,
+              "requested_at": "2026-11-01T07:00:00+07:00"
+            }
+          },
+          "sessions": {
+            "SES-DEMO-RUNNING": {
+              "binding_ref": "BIND-A-1",
+              "zone_id": "ZONE-DEMO-A",
+              "actuator_id": "VALVE-DEMO-A",
+              "controller_id": "CTRL-DEMO-01",
+              "trigger_source": "schedule",
+              "occurrence_id": "OCC-DEMO-0700",
+              "content_ref": "SC-A-v1",
+              "planned_duration_seconds": 45,
+              "requested_at": "2026-11-01T07:00:00+07:00",
+              "started_at_reported": "2026-11-01T07:00:00+07:00",
+              "ended_at_reported": null,
+              "reported_output_duration_seconds": null,
+              "result": "running"
+            }
+          },
+          "controller": {
+            "record_id": "REP-STATUS",
+            "origin_ref": "CTRL-DEMO-01",
+            "event_kind": "controller_status",
+            "subject_kind": "controller",
+            "subject_ref": "CTRL-DEMO-01",
+            "time": {
+              "at": "2026-11-01T07:00:20+07:00",
+              "meaning": "reported_at",
+              "quality": "known"
+            },
+            "received_at_web": "2026-11-01T07:00:20+07:00",
+            "output_reported_state": "open",
+            "active_session_id": "SES-DEMO-RUNNING",
+            "clock_usable_for_open": true
+          }
+        }
+      }
+    }
+  }
+}
