@@ -1,0 +1,1132 @@
+{
+  "meta": {
+    "title": "miGarden — nhìn dữ liệu qua 03/04",
+    "locale": "vi",
+    "timezone": "Asia/Saigon",
+    "synthetic": true,
+    "source_file": "synthetic-data.json",
+    "independent_cases": true,
+    "card_contract": "Derived projections, not independent stored facts"
+  },
+  "scenes": [
+    {
+      "id": "W00",
+      "title": "Một phiên mẫu nối đủ 8 khái niệm",
+      "question": "Một lần tưới tạo ra những đối tượng và dữ liệu nào?",
+      "summary": "Instance map sau một phiên local; ID mẫu liên kết xuyên lịch → occurrence → request → session.",
+      "uc_refs": [
+        "DM01–DM08"
+      ],
+      "observed_at": "2026-11-01T07:00:46+07:00",
+      "takeaways": [
+        "Một ESP32, một Zone mẫu, một lịch hoạt động; không có registry chậu hoặc group.",
+        "Session kết nối START gốc; van là đối tượng vật lý, report không chứng minh flow."
+      ],
+      "limitations": [
+        "Dữ liệu synthetic — không phải log thiết bị hay bằng chứng tưới đủ nước."
+      ],
+      "mode": "overview",
+      "viewpoint": "domain-instance-map",
+      "lanes": [
+        {
+          "id": "web",
+          "label": "microSched / web"
+        },
+        {
+          "id": "device",
+          "label": "Controller ESP32"
+        },
+        {
+          "id": "result",
+          "label": "Record / điều biết được"
+        }
+      ],
+      "events": [],
+      "cards": [
+        {
+          "title": "Khu vực",
+          "model": "Area · projection, không là fact lưu riêng",
+          "record_id": "AREA-DEMO-01",
+          "fields": [
+            {
+              "label": "name",
+              "value": "Ban công mẫu",
+              "source_path": "/catalog/areas/0/name"
+            }
+          ]
+        },
+        {
+          "title": "Đích tưới",
+          "model": "Zone · projection, không là fact lưu riêng",
+          "record_id": "ZONE-DEMO-A",
+          "fields": [
+            {
+              "label": "area_id",
+              "value": "AREA-DEMO-01",
+              "source_path": "/catalog/zones/0/area_id"
+            }
+          ]
+        },
+        {
+          "title": "Bộ thực thi duy nhất",
+          "model": "Controller · projection, không là fact lưu riêng",
+          "record_id": "CTRL-DEMO-01",
+          "fields": [
+            {
+              "label": "label",
+              "value": "ESP32 mẫu",
+              "source_path": "/catalog/controllers/0/label"
+            }
+          ]
+        },
+        {
+          "title": "Van nhánh",
+          "model": "Actuator · projection, không là fact lưu riêng",
+          "record_id": "VALVE-DEMO-A",
+          "fields": [
+            {
+              "label": "controller_id",
+              "value": "CTRL-DEMO-01",
+              "source_path": "/catalog/actuators/0/controller_id"
+            },
+            {
+              "label": "zone_id",
+              "value": "ZONE-DEMO-A",
+              "source_path": "/catalog/actuators/0/zone_id"
+            }
+          ]
+        },
+        {
+          "title": "Lịch active",
+          "model": "Schedule · projection, không là fact lưu riêng",
+          "record_id": "SCHED-DEMO-A",
+          "fields": [
+            {
+              "label": "applied content_ref",
+              "value": "SC-A-v1",
+              "source_path": "/scenarios/W00/state/projections/schedule/last_known_applied/content_ref"
+            },
+            {
+              "label": "duration_seconds",
+              "value": 45,
+              "source_path": "/scenarios/W00/state/projections/schedule/last_known_applied/config/duration_seconds"
+            }
+          ]
+        },
+        {
+          "title": "Cơ hội đến hạn",
+          "model": "Occurrence · projection, không là fact lưu riêng",
+          "record_id": "OCC-DEMO-0700",
+          "fields": [
+            {
+              "label": "content_ref",
+              "value": "SC-A-v1",
+              "source_path": "/scenarios/W00/state/occurrences/0/content_ref"
+            },
+            {
+              "label": "disposition",
+              "value": "start_requested",
+              "source_path": "/scenarios/W00/state/occurrences/0/evaluation_outcome"
+            }
+          ]
+        },
+        {
+          "title": "Ý định START",
+          "model": "ControlRequest · projection, không là fact lưu riêng",
+          "record_id": "REQ-DEMO-SCHED",
+          "fields": [
+            {
+              "label": "status",
+              "value": "accepted",
+              "source_path": "/scenarios/W00/state/requests/0/status"
+            }
+          ]
+        },
+        {
+          "title": "Thực thi đã bắt đầu",
+          "model": "Session · projection, không là fact lưu riêng",
+          "record_id": "SES-DEMO-SCHED",
+          "fields": [
+            {
+              "label": "result",
+              "value": "completed_reported",
+              "source_path": "/scenarios/W00/state/sessions/0/result"
+            },
+            {
+              "label": "reported_output_duration_seconds",
+              "value": 45,
+              "source_path": "/scenarios/W00/state/sessions/0/reported_output_duration_seconds"
+            }
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "to": "ZONE-DEMO-A",
+          "label": "nhóm vị trí",
+          "from": "AREA-DEMO-01"
+        },
+        {
+          "to": "VALVE-DEMO-A",
+          "label": "van nhánh",
+          "from": "ZONE-DEMO-A"
+        },
+        {
+          "to": "VALVE-DEMO-A",
+          "label": "điều khiển",
+          "from": "CTRL-DEMO-01"
+        },
+        {
+          "to": "SCHED-DEMO-A",
+          "label": "0..1 lịch active",
+          "from": "ZONE-DEMO-A"
+        },
+        {
+          "to": "OCC-DEMO-0700",
+          "label": "cơ hội",
+          "from": "SCHED-DEMO-A"
+        },
+        {
+          "to": "REQ-DEMO-SCHED",
+          "label": "START",
+          "from": "OCC-DEMO-0700"
+        },
+        {
+          "to": "SES-DEMO-SCHED",
+          "label": "đã bắt đầu",
+          "from": "REQ-DEMO-SCHED"
+        }
+      ]
+    },
+    {
+      "id": "W01",
+      "title": "Web đổi lịch, ESP32 chưa xác nhận",
+      "question": "Đã lưu v2 có nghĩa thiết bị dùng v2 chưa?",
+      "summary": "Cùng SCHED-DEMO-A: desired v2 lúc 08:00/60 giây, last-known applied v1 lúc 07:00/45 giây.",
+      "uc_refs": [
+        "UC01",
+        "DR02",
+        "DR12"
+      ],
+      "observed_at": "2026-11-01T06:50:00+07:00",
+      "takeaways": [
+        "Saved ≠ applied. Applied có nghĩa cả trước occurrence đầu tiên.",
+        "Last-known report có tuổi; mất ack không chứng minh đã hoặc chưa áp dụng."
+      ],
+      "limitations": [
+        "Dữ liệu synthetic — không phải log thiết bị hay bằng chứng tưới đủ nước."
+      ],
+      "mode": "timeline",
+      "viewpoint": "web-last-known",
+      "lanes": [
+        {
+          "id": "web",
+          "label": "microSched / web"
+        },
+        {
+          "id": "device",
+          "label": "Controller ESP32"
+        },
+        {
+          "id": "result",
+          "label": "Record / điều biết được"
+        }
+      ],
+      "events": [
+        {
+          "id": "applied",
+          "at": "2026-11-01T06:40:00+07:00",
+          "lane": "device",
+          "title": "Báo applied v1",
+          "detail": "07:00 • 45 giây; giữ cả nội dung và version",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "save",
+          "at": "2026-11-01T06:45:00+07:00",
+          "lane": "web",
+          "title": "Web lưu desired v2",
+          "detail": "08:00 • 60 giây; không phải lịch active thứ hai",
+          "kind": "change",
+          "evidence": "web_saved"
+        },
+        {
+          "id": "pending",
+          "at": "2026-11-01T06:50:00+07:00",
+          "lane": "result",
+          "title": "application_status = pending",
+          "detail": "occurrences = []; requests = []; sessions = []",
+          "kind": "event",
+          "evidence": "synthetic_snapshot"
+        }
+      ],
+      "cards": [
+        {
+          "title": "Web mong muốn",
+          "model": "Schedule desired · projection, không là fact lưu riêng",
+          "record_id": "SCHED-DEMO-A",
+          "fields": [
+            {
+              "label": "content_ref",
+              "value": "SC-A-v2",
+              "source_path": "/scenarios/W01/state/projections/schedule/desired/content_ref"
+            },
+            {
+              "label": "at_local_time",
+              "value": "08:00",
+              "source_path": "/scenarios/W01/state/projections/schedule/desired/config/recurrence/at_local_time"
+            },
+            {
+              "label": "duration_seconds",
+              "value": 60,
+              "source_path": "/scenarios/W01/state/projections/schedule/desired/config/duration_seconds"
+            },
+            {
+              "label": "saved_at_web",
+              "value": "2026-11-01T06:45:00+07:00",
+              "source_path": "/scenarios/W01/state/schedule/desired_saved_at_web"
+            }
+          ]
+        },
+        {
+          "title": "Bản applied cuối được biết",
+          "model": "Schedule supporting info · projection, không là fact lưu riêng",
+          "record_id": "SCHED-DEMO-A",
+          "fields": [
+            {
+              "label": "content_ref",
+              "value": "SC-A-v1",
+              "source_path": "/scenarios/W01/state/projections/schedule/last_known_applied/content_ref"
+            },
+            {
+              "label": "at_local_time",
+              "value": "07:00",
+              "source_path": "/scenarios/W01/state/projections/schedule/last_known_applied/config/recurrence/at_local_time"
+            },
+            {
+              "label": "duration_seconds",
+              "value": 45,
+              "source_path": "/scenarios/W01/state/projections/schedule/last_known_applied/config/duration_seconds"
+            },
+            {
+              "label": "reported_at, không actual apply time",
+              "value": "2026-11-01T06:40:00+07:00",
+              "source_path": "/scenarios/W01/state/projections/schedule/last_known_reported_at"
+            }
+          ]
+        },
+        {
+          "title": "Chưa phải một lần tưới",
+          "model": "Derived observation · projection, không là fact lưu riêng",
+          "record_id": "W01",
+          "fields": [
+            {
+              "label": "application_status",
+              "value": "pending",
+              "source_path": "/scenarios/W01/state/projections/schedule/application_status"
+            },
+            {
+              "label": "occurrences",
+              "value": [],
+              "source_path": "/scenarios/W01/state/occurrences"
+            },
+            {
+              "label": "requests",
+              "value": [],
+              "source_path": "/scenarios/W01/state/requests"
+            },
+            {
+              "label": "sessions",
+              "value": [],
+              "source_path": "/scenarios/W01/state/sessions"
+            }
+          ]
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "W02",
+      "title": "Lịch local chạy khi web mất kết nối",
+      "question": "Đã đến giờ, hệ thống ghi nhận lần tưới như thế nào?",
+      "summary": "Giả định local đủ điều kiện: một occurrence, một START, một session 45 giây được báo.",
+      "uc_refs": [
+        "UC02",
+        "FR02",
+        "FR04",
+        "FR05"
+      ],
+      "observed_at": "2026-11-01T07:00:46+07:00",
+      "takeaways": [
+        "Không cần cloud xin phép mỗi occurrence.",
+        "Chỉ có session sau execution-start evidence; completed_reported không phải physical-water proof."
+      ],
+      "limitations": [
+        "Đây là góc nhìn record tại controller mẫu; website offline chưa nhìn thấy các record này.",
+        "45 giây chỉ là giá trị synthetic, không là water policy."
+      ],
+      "mode": "timeline",
+      "viewpoint": "controller-local",
+      "lanes": [
+        {
+          "id": "web",
+          "label": "microSched / web"
+        },
+        {
+          "id": "device",
+          "label": "Controller ESP32"
+        },
+        {
+          "id": "result",
+          "label": "Record / điều biết được"
+        }
+      ],
+      "events": [
+        {
+          "id": "due",
+          "at": "2026-11-01T07:00:00+07:00",
+          "lane": "device",
+          "title": "Occurrence đến hạn",
+          "detail": "OCC-DEMO-0700 • applied v1 • planned 45 giây",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "start",
+          "at": "2026-11-01T07:00:00+07:00",
+          "lane": "result",
+          "title": "START → phiên đã bắt đầu",
+          "detail": "REQ-DEMO-SCHED → SES-DEMO-SCHED; reported start 07:00:00",
+          "kind": "action",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "close",
+          "at": "2026-11-01T07:00:45+07:00",
+          "lane": "device",
+          "title": "Đến deadline: yêu cầu đóng",
+          "detail": "reported_output_duration_seconds = 45",
+          "kind": "action",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "end",
+          "at": "2026-11-01T07:00:45+07:00",
+          "lane": "result",
+          "title": "Có kết quả đầu ra được báo",
+          "detail": "completed_reported; kết quả Controller báo, chưa đo nước",
+          "kind": "event",
+          "evidence": "controller_reported"
+        }
+      ],
+      "cards": [
+        {
+          "title": "Cơ hội đã xử lý",
+          "model": "Occurrence · projection, không là fact lưu riêng",
+          "record_id": "OCC-DEMO-0700",
+          "fields": [
+            {
+              "label": "planned_for",
+              "value": "2026-11-01T07:00:00+07:00",
+              "source_path": "/scenarios/W02/state/occurrences/0/planned_for"
+            },
+            {
+              "label": "content_ref",
+              "value": "SC-A-v1",
+              "source_path": "/scenarios/W02/state/occurrences/0/content_ref"
+            },
+            {
+              "label": "evaluation_outcome",
+              "value": "start_requested",
+              "source_path": "/scenarios/W02/state/occurrences/0/evaluation_outcome"
+            }
+          ]
+        },
+        {
+          "title": "Một session có evidence bắt đầu",
+          "model": "Session · projection, không là fact lưu riêng",
+          "record_id": "SES-DEMO-SCHED",
+          "fields": [
+            {
+              "label": "request_id",
+              "value": "REQ-DEMO-SCHED",
+              "source_path": "/scenarios/W02/state/sessions/0/request_id"
+            },
+            {
+              "label": "planned qua ref",
+              "value": 45,
+              "source_path": "/scenarios/W02/state/projections/sessions/SES-DEMO-SCHED/planned_duration_seconds"
+            },
+            {
+              "label": "started_at_reported",
+              "value": "2026-11-01T07:00:00+07:00",
+              "source_path": "/scenarios/W02/state/projections/sessions/SES-DEMO-SCHED/started_at_reported"
+            },
+            {
+              "label": "ended_at_reported",
+              "value": "2026-11-01T07:00:45+07:00",
+              "source_path": "/scenarios/W02/state/projections/sessions/SES-DEMO-SCHED/ended_at_reported"
+            },
+            {
+              "label": "reported_output_duration_seconds",
+              "value": 45,
+              "source_path": "/scenarios/W02/state/sessions/0/reported_output_duration_seconds"
+            },
+            {
+              "label": "result",
+              "value": "completed_reported",
+              "source_path": "/scenarios/W02/state/sessions/0/result"
+            }
+          ]
+        },
+        {
+          "title": "Góc nhìn local, web chưa nhận",
+          "model": "Report freshness · projection, không là fact lưu riêng",
+          "record_id": "REP-STATUS",
+          "fields": [
+            {
+              "label": "connectivity_view",
+              "value": "offline",
+              "source_path": "/scenarios/W02/state/connectivity_view"
+            },
+            {
+              "label": "received_at_web",
+              "value": null,
+              "source_path": "/scenarios/W02/state/projections/controller/received_at_web"
+            }
+          ]
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "W03",
+      "title": "Bấm START, rồi STOP sau 17 giây",
+      "question": "Duration đặt 45 giây nhưng dừng sớm thì dữ liệu ra sao?",
+      "summary": "Nút tạo START riêng; STOP không tạo phiên mới. Planned 45 giây, reported output 17 giây.",
+      "uc_refs": [
+        "UC03",
+        "LC01",
+        "FR03"
+      ],
+      "observed_at": "2026-11-01T07:15:17+07:00",
+      "takeaways": [
+        "Độ chia cấu hình 15 giây không bắt duration thực phải là bội 15.",
+        "Nút local không cần cloud; không gán giả danh tính người bấm."
+      ],
+      "limitations": [
+        "17 giây là thời lượng output được báo trong fixture, không chứng minh lượng nước."
+      ],
+      "mode": "timeline",
+      "viewpoint": "controller-local",
+      "lanes": [
+        {
+          "id": "web",
+          "label": "microSched / web"
+        },
+        {
+          "id": "device",
+          "label": "Controller ESP32"
+        },
+        {
+          "id": "result",
+          "label": "Record / điều biết được"
+        }
+      ],
+      "events": [
+        {
+          "id": "button",
+          "at": "2026-11-01T07:15:00+07:00",
+          "lane": "device",
+          "title": "Nhận START tại nút",
+          "detail": "trigger_source = local_button; không ghi danh tính người bấm",
+          "kind": "action",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "started",
+          "at": "2026-11-01T07:15:00+07:00",
+          "lane": "result",
+          "title": "Một session bắt đầu",
+          "detail": "SES-DEMO-BUTTON • planned_duration_seconds = 45",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "stop",
+          "at": "2026-11-01T07:15:17+07:00",
+          "lane": "device",
+          "title": "STOP yêu cầu CLOSE",
+          "detail": "REQ-DEMO-STOP; không cần OPEN gates",
+          "kind": "action",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "stopped",
+          "at": "2026-11-01T07:15:17+07:00",
+          "lane": "result",
+          "title": "stopped_reported",
+          "detail": "reported duration = 17; chưa đo lượng nước",
+          "kind": "event",
+          "evidence": "controller_reported"
+        }
+      ],
+      "cards": [
+        {
+          "title": "START tại nút",
+          "model": "ControlRequest · projection, không là fact lưu riêng",
+          "record_id": "REQ-DEMO-BUTTON",
+          "fields": [
+            {
+              "label": "trigger_source",
+              "value": "local_button",
+              "source_path": "/scenarios/W03/state/requests/0/trigger_source"
+            },
+            {
+              "label": "binding_ref",
+              "value": "BIND-A-1",
+              "source_path": "/scenarios/W03/state/requests/0/binding_ref"
+            },
+            {
+              "label": "duration_seconds",
+              "value": 45,
+              "source_path": "/scenarios/W03/state/requests/0/duration_seconds"
+            }
+          ]
+        },
+        {
+          "title": "STOP không tạo session mới",
+          "model": "ControlRequest · projection, không là fact lưu riêng",
+          "record_id": "REQ-DEMO-STOP",
+          "fields": [
+            {
+              "label": "kind",
+              "value": "STOP",
+              "source_path": "/scenarios/W03/state/requests/1/kind"
+            },
+            {
+              "label": "status",
+              "value": "accepted",
+              "source_path": "/scenarios/W03/state/requests/1/status"
+            }
+          ]
+        },
+        {
+          "title": "45 dự kiến, 17 được báo",
+          "model": "Session · projection, không là fact lưu riêng",
+          "record_id": "SES-DEMO-BUTTON",
+          "fields": [
+            {
+              "label": "planned qua START",
+              "value": 45,
+              "source_path": "/scenarios/W03/state/projections/sessions/SES-DEMO-BUTTON/planned_duration_seconds"
+            },
+            {
+              "label": "reported_output_duration_seconds",
+              "value": 17,
+              "source_path": "/scenarios/W03/state/sessions/0/reported_output_duration_seconds"
+            },
+            {
+              "label": "result",
+              "value": "stopped_reported",
+              "source_path": "/scenarios/W03/state/sessions/0/result"
+            },
+            {
+              "label": "end_reason",
+              "value": "manual_stop",
+              "source_path": "/scenarios/W03/state/sessions/0/end_reason"
+            }
+          ]
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "W04",
+      "title": "Remote đã được nhận, kết quả chưa rõ",
+      "question": "Có receipt có đồng nghĩa đã tưới không?",
+      "summary": "Request có receipt nhận/giao thực thi, thiếu start/terminal evidence: không tạo session đã tưới giả.",
+      "uc_refs": [
+        "UC04",
+        "SAFE08",
+        "DR09"
+      ],
+      "observed_at": "2026-11-01T07:01:00+07:00",
+      "takeaways": [
+        "Accepted/authorized không tự tạo session khi chưa có start evidence.",
+        "Không retry action mới; unknown giữ chặn OPEN mọi nguồn đến recovery/xác minh."
+      ],
+      "limitations": [
+        "sessions=[] nghĩa chưa có session được xác nhận trong evidence, không chứng minh chưa có tác động vật lý.",
+        "Readiness trong fixture là expected design state, không đo được arbiter/valve thật."
+      ],
+      "mode": "timeline",
+      "viewpoint": "web-received-evidence",
+      "lanes": [
+        {
+          "id": "web",
+          "label": "microSched / web"
+        },
+        {
+          "id": "device",
+          "label": "Controller ESP32"
+        },
+        {
+          "id": "result",
+          "label": "Record / điều biết được"
+        }
+      ],
+      "events": [
+        {
+          "id": "confirm",
+          "at": "2026-11-01T06:59:50+07:00",
+          "lane": "web",
+          "title": "Preview + confirm",
+          "detail": "ZONE-DEMO-A • duration 45 giây • cfg-demo-1",
+          "kind": "action",
+          "evidence": "web_saved"
+        },
+        {
+          "id": "received",
+          "at": "2026-11-01T07:00:00+07:00",
+          "lane": "device",
+          "title": "Controller nhận request",
+          "detail": "REC-REMOTE-RX; chưa phải started",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "allowed",
+          "at": "2026-11-01T07:00:01+07:00",
+          "lane": "result",
+          "title": "Có record giao thực thi",
+          "detail": "execution_authorized; không phải completed",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "unknown",
+          "at": "2026-11-01T07:01:00+07:00",
+          "lane": "result",
+          "title": "outcome_unknown",
+          "detail": "sessions = []; new_start_allowed = false",
+          "kind": "alert",
+          "evidence": "unknown"
+        }
+      ],
+      "cards": [
+        {
+          "title": "Yêu cầu chưa rõ kết quả",
+          "model": "ControlRequest · projection, không là fact lưu riêng",
+          "record_id": "REQ-DEMO-REMOTE",
+          "fields": [
+            {
+              "label": "trigger_source",
+              "value": "remote",
+              "source_path": "/scenarios/W04/state/requests/0/trigger_source"
+            },
+            {
+              "label": "status",
+              "value": "outcome_unknown",
+              "source_path": "/scenarios/W04/state/requests/0/status"
+            },
+            {
+              "label": "valid_until",
+              "value": "2026-11-01T07:00:30+07:00",
+              "source_path": "/scenarios/W04/state/requests/0/valid_until"
+            },
+            {
+              "label": "reason",
+              "value": "TERMINAL_EVIDENCE_MISSING",
+              "source_path": "/scenarios/W04/state/requests/0/reason"
+            }
+          ]
+        },
+        {
+          "title": "Không tạo success giả",
+          "model": "Evidence state · projection, không là fact lưu riêng",
+          "record_id": "W04",
+          "fields": [
+            {
+              "label": "sessions",
+              "value": [],
+              "source_path": "/scenarios/W04/state/sessions"
+            },
+            {
+              "label": "current_output_assessment",
+              "value": "unknown",
+              "source_path": "/scenarios/W04/state/dashboard_view/current_output_assessment"
+            },
+            {
+              "label": "last_known_output",
+              "value": "closed",
+              "source_path": "/scenarios/W04/state/projections/controller/output_reported_state"
+            },
+            {
+              "label": "last_reported_at",
+              "value": "2026-11-01T06:59:45+07:00",
+              "source_path": "/scenarios/W04/state/projections/controller/time/at"
+            }
+          ]
+        },
+        {
+          "title": "Expected interlock",
+          "model": "Safety view · projection, không là fact lưu riêng",
+          "record_id": "W04",
+          "fields": [
+            {
+              "label": "new_start_allowed",
+              "value": false,
+              "source_path": "/scenarios/W04/state/safety_view/new_start_allowed"
+            },
+            {
+              "label": "block_reasons",
+              "value": [
+                "OUTCOME_UNKNOWN"
+              ],
+              "source_path": "/scenarios/W04/state/safety_view/block_reasons"
+            },
+            {
+              "label": "next_planned_at",
+              "value": null,
+              "source_path": "/scenarios/W04/state/dashboard_view/next_planned_at"
+            }
+          ]
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "W05",
+      "title": "Sync trễ và gửi lại record",
+      "question": "Hai lần nhận cùng record có tạo hai phiên không?",
+      "summary": "Record có event-time khác received-time; cùng REC-DEMO-END gửi lại vẫn chỉ một session lịch sử.",
+      "uc_refs": [
+        "UC05",
+        "FR05",
+        "FR07"
+      ],
+      "observed_at": "2026-11-01T07:10:05+07:00",
+      "takeaways": [
+        "Event-time không bị thay bằng thời điểm upload.",
+        "Last execution là reported 07:00; next planned lấy applied plan, không lấy một request đã gửi."
+      ],
+      "limitations": [
+        "Dữ liệu synthetic — không phải log thiết bị hay bằng chứng tưới đủ nước."
+      ],
+      "mode": "timeline",
+      "viewpoint": "web-received-data",
+      "lanes": [
+        {
+          "id": "web",
+          "label": "microSched / web"
+        },
+        {
+          "id": "device",
+          "label": "Controller ESP32"
+        },
+        {
+          "id": "result",
+          "label": "Record / điều biết được"
+        }
+      ],
+      "events": [
+        {
+          "id": "happened",
+          "at": "2026-11-01T07:00:45+07:00",
+          "lane": "device",
+          "title": "Phiên đã kết thúc ở local",
+          "detail": "REC-DEMO-END • occurred_at_reported = 07:00:45",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "upload",
+          "at": "2026-11-01T07:10:00+07:00",
+          "lane": "web",
+          "title": "Kết nối lại, nhận backlog",
+          "detail": "Web bắt đầu nhận record cũ, không phát START mới",
+          "kind": "recovery",
+          "evidence": "web_received"
+        },
+        {
+          "id": "endrx",
+          "at": "2026-11-01T07:10:02+07:00",
+          "lane": "result",
+          "title": "Nhận REC-DEMO-END",
+          "detail": "Một session SES-DEMO-SCHED trong history",
+          "kind": "event",
+          "evidence": "web_received"
+        },
+        {
+          "id": "duplicate",
+          "at": "2026-11-01T07:10:05+07:00",
+          "lane": "result",
+          "title": "Cùng ID + cùng payload gửi lại",
+          "detail": "duplicate_same_payload; không nhân phiên, không replay",
+          "kind": "event",
+          "evidence": "web_received"
+        }
+      ],
+      "cards": [
+        {
+          "title": "Nguồn record không đổi",
+          "model": "ExecutionRecord · projection, không là fact lưu riêng",
+          "record_id": "REC-DEMO-END",
+          "fields": [
+            {
+              "label": "record_id",
+              "value": "REC-DEMO-END",
+              "source_path": "/scenarios/W05/state/records/6/record_id"
+            },
+            {
+              "label": "occurred_at_reported",
+              "value": "2026-11-01T07:00:45+07:00",
+              "source_path": "/scenarios/W05/state/records/6/time/at"
+            },
+            {
+              "label": "subject_ref",
+              "value": "SES-DEMO-SCHED",
+              "source_path": "/scenarios/W05/state/records/6/subject_ref"
+            }
+          ]
+        },
+        {
+          "title": "Nhận lại cùng ID",
+          "model": "Ingest view · projection, không là fact lưu riêng",
+          "record_id": "REC-DEMO-END",
+          "fields": [
+            {
+              "label": "first receipt",
+              "value": "2026-11-01T07:10:02+07:00",
+              "source_path": "/scenarios/W05/state/ingest_view/deliveries/2/received_at_web"
+            },
+            {
+              "label": "duplicate receipt",
+              "value": "2026-11-01T07:10:05+07:00",
+              "source_path": "/scenarios/W05/state/ingest_view/deliveries/3/received_at_web"
+            },
+            {
+              "label": "disposition",
+              "value": "duplicate_same_payload",
+              "source_path": "/scenarios/W05/state/ingest_view/deliveries/3/disposition"
+            },
+            {
+              "label": "history_session_ids",
+              "value": [
+                "SES-DEMO-SCHED"
+              ],
+              "source_path": "/scenarios/W05/state/ingest_view/history_session_ids"
+            }
+          ]
+        },
+        {
+          "title": "Dashboard hiểu đúng thời gian",
+          "model": "Derived view · projection, không là fact lưu riêng",
+          "record_id": "W05",
+          "fields": [
+            {
+              "label": "last_execution_at_reported",
+              "value": "2026-11-01T07:00:00+07:00",
+              "source_path": "/scenarios/W05/state/dashboard_view/last_execution_at_reported"
+            },
+            {
+              "label": "next_planned_at",
+              "value": "2026-11-02T07:00:00+07:00",
+              "source_path": "/scenarios/W05/state/dashboard_view/next_planned_at"
+            },
+            {
+              "label": "freshness_note",
+              "value": "Event 07:00–07:00:45, nhận 07:10; không phải vừa tưới",
+              "source_path": "/scenarios/W05/state/dashboard_view/freshness_note"
+            }
+          ]
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "W06",
+      "title": "Pause lịch không dừng/đổi phiên đang chạy",
+      "question": "Applied v3 đã tạm dừng, sao session vẫn giữ 45 giây?",
+      "summary": "Phiên bind v1/45 giây; applied v3 disabled chỉ ảnh hưởng lần tương lai. STOP/safety vẫn có thể dừng phiên.",
+      "uc_refs": [
+        "P01",
+        "LC01–03",
+        "SAFE05",
+        "SAFE07"
+      ],
+      "observed_at": "2026-11-01T07:00:20+07:00",
+      "takeaways": [
+        "Sửa/pause không restart hay kéo/rút duration đã bind; dừng phiên dùng STOP/safety.",
+        "Ba nhánh từ chối là ví dụ độc lập: request rejected không tạo session mới, không queue muộn."
+      ],
+      "limitations": [
+        "Các nhánh BUSY/CLOCK_UNTRUSTED/CUMULATIVE_LIMIT là ví dụ độc lập, không nối thành timeline chính.",
+        "Không chọn numeric cumulative budget hoặc đo khả năng safety arbiter trong fixture."
+      ],
+      "mode": "timeline",
+      "viewpoint": "reported-running-session",
+      "lanes": [
+        {
+          "id": "web",
+          "label": "microSched / web"
+        },
+        {
+          "id": "device",
+          "label": "Controller ESP32"
+        },
+        {
+          "id": "result",
+          "label": "Record / điều biết được"
+        }
+      ],
+      "events": [
+        {
+          "id": "bind",
+          "at": "2026-11-01T07:00:00+07:00",
+          "lane": "device",
+          "title": "Session bind v1",
+          "detail": "SES-DEMO-RUNNING • planned_duration_seconds = 45",
+          "kind": "action",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "edit",
+          "at": "2026-11-01T07:00:10+07:00",
+          "lane": "web",
+          "title": "Sửa mong muốn v2",
+          "detail": "Đổi giờ 08:00, duration 60 giây",
+          "kind": "change",
+          "evidence": "web_saved"
+        },
+        {
+          "id": "apply2",
+          "at": "2026-11-01T07:00:12+07:00",
+          "lane": "device",
+          "title": "Báo áp dụng v2",
+          "detail": "Không retime session v1 đang chạy",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "pause",
+          "at": "2026-11-01T07:00:15+07:00",
+          "lane": "web",
+          "title": "Pause bằng desired v3",
+          "detail": "enabled = false; không phải STOP session",
+          "kind": "change",
+          "evidence": "web_saved"
+        },
+        {
+          "id": "applied3",
+          "at": "2026-11-01T07:00:16+07:00",
+          "lane": "device",
+          "title": "Báo applied v3",
+          "detail": "applied SC-A-v3: enabled = false; phiên cũ giữ SC-A-v1",
+          "kind": "event",
+          "evidence": "controller_reported"
+        },
+        {
+          "id": "running",
+          "at": "2026-11-01T07:00:20+07:00",
+          "lane": "result",
+          "title": "Phiên đang được báo chạy",
+          "detail": "ended_at_reported = null; output duration chưa có kết luận",
+          "kind": "event",
+          "evidence": "controller_reported"
+        }
+      ],
+      "cards": [
+        {
+          "title": "Lịch đã pause tại local",
+          "model": "Schedule applied · projection, không là fact lưu riêng",
+          "record_id": "SCHED-DEMO-A",
+          "fields": [
+            {
+              "label": "applied content_ref",
+              "value": "SC-A-v3",
+              "source_path": "/scenarios/W06/state/projections/schedule/last_known_applied/content_ref"
+            },
+            {
+              "label": "applied enabled",
+              "value": false,
+              "source_path": "/scenarios/W06/state/projections/schedule/applied_enabled"
+            },
+            {
+              "label": "applied duration_seconds",
+              "value": 60,
+              "source_path": "/scenarios/W06/state/projections/schedule/last_known_applied/config/duration_seconds"
+            }
+          ]
+        },
+        {
+          "title": "Phiên cũ không retime",
+          "model": "Session · projection, không là fact lưu riêng",
+          "record_id": "SES-DEMO-RUNNING",
+          "fields": [
+            {
+              "label": "bound content_ref",
+              "value": "SC-A-v1",
+              "source_path": "/scenarios/W06/state/projections/sessions/SES-DEMO-RUNNING/content_ref"
+            },
+            {
+              "label": "planned qua ref",
+              "value": 45,
+              "source_path": "/scenarios/W06/state/projections/sessions/SES-DEMO-RUNNING/planned_duration_seconds"
+            },
+            {
+              "label": "result",
+              "value": "running",
+              "source_path": "/scenarios/W06/state/sessions/0/result"
+            },
+            {
+              "label": "ended_at_reported",
+              "value": null,
+              "source_path": "/scenarios/W06/state/projections/sessions/SES-DEMO-RUNNING/ended_at_reported"
+            },
+            {
+              "label": "reported_output_duration_seconds",
+              "value": null,
+              "source_path": "/scenarios/W06/state/sessions/0/reported_output_duration_seconds"
+            }
+          ]
+        },
+        {
+          "title": "Nhánh từ chối độc lập",
+          "model": "Request examples · projection, không là fact lưu riêng",
+          "record_id": "W06-branches",
+          "fields": [
+            {
+              "label": "busy.status",
+              "value": "rejected",
+              "source_path": "/scenarios/W06/state/branches/busy/request/status"
+            },
+            {
+              "label": "busy.reason",
+              "value": "BUSY",
+              "source_path": "/scenarios/W06/state/branches/busy/request/reason"
+            },
+            {
+              "label": "clock.reason",
+              "value": "CLOCK_UNTRUSTED",
+              "source_path": "/scenarios/W06/state/branches/untrusted_clock/request/reason"
+            },
+            {
+              "label": "limit.reason",
+              "value": "CUMULATIVE_LIMIT_REACHED",
+              "source_path": "/scenarios/W06/state/branches/cumulative_limit/request/reason"
+            },
+            {
+              "label": "new_sessions",
+              "value": [],
+              "source_path": "/scenarios/W06/state/branches/cumulative_limit/new_sessions"
+            }
+          ]
+        }
+      ],
+      "relations": []
+    }
+  ]
+}

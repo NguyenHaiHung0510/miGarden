@@ -8,6 +8,8 @@ The selected design combines SVG and Three.js views of one versioned spatial sou
 | B: Three.js simple 3D/cutaway | Multi-level relations, rotation/cutaway/layer selection and anchor inspection. Shares the same canonical data as SVG; visual plausibility is not measurement. |
 | C: photogrammetry/COLMAP | Optional independent experiment, not a prerequisite for A+B. Import finished output with scale, coordinate system, reconstruction provenance and uncertainty. |
 
+This document governs the spatial representation and its public-content boundary, not the whole product domain/API. Current product design lives in [design 01–04](design/README.md); site pots are representation facts, not managed Pot/placement requirements. The editable spatial source remains `viewer/model.json`; walkthrough synthetic data is a separate illustration of information semantics, never another geometry source.
+
 ## Shared source and corrections
 
 The future scene source needs stable anchor/object/route IDs; explicit units, axes, origin and model version; source IDs/frame timestamps; observation date; confidence `observed`, `Owner-confirmed`, `estimated`, `inferred`, `unknown`; and reason/history for corrections. Unknown coordinates stay missing or visibly uncertain. Do not infer floor heights, wall thickness, valve SKU or calibrated scale from generic architecture conventions.

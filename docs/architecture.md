@@ -1,5 +1,7 @@
 # System architecture and trust boundaries
 
+> **LEGACY — reference only / chỉ tham khảo lịch sử.** Current product design: [baseline 01–04](design/README.md), promoted 2026-11-03. This file retains its historical text and links at the original path. Internal “current”, CHỐT/MUST, API/schema/transport, scope and numeric gates describe the old revision, not present authority. Steps 05–10 are pending; silence in the new baseline does not select old choices. Current implementation status: [project state](project-state.md). Reuse requires an explicit design choice with source, rationale and impact.
+
 Selected system topology, 2026-10-22. The diagram describes planned responsibilities; firmware, viewer and adapter integration are not implemented.
 
 ```mermaid

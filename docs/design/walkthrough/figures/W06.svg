@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2923" viewBox="0 0 1600 2923" role="img" aria-labelledby="scene-title scene-desc"><title id="scene-title">W06 · Pause lịch không dừng/đổi phiên đang chạy</title><desc id="scene-desc">Dữ liệu synthetic — minh họa thiết kế. Applied v3 đã tạm dừng, sao session vẫn giữ 45 giây?. Phiên bind v1/45 giây; applied v3 disabled chỉ ảnh hưởng lần tương lai. STOP/safety vẫn có thể dừng phiên.. Trạng thái controller báo cáo không chứng minh van mở, dòng nước hay sức khỏe cây.</desc><rect width="1600" height="2923" fill="#f4f7fa"/><rect x="48" y="26" width="510" height="40" rx="12" fill="#e8f4ee" stroke="#b9dac9"/>
+<text x="64" y="52" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#20533f"><tspan x="64" dy="0">Dữ liệu synthetic — minh họa thiết kế</tspan></text>
+<text x="48" y="108" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#152d40"><tspan x="48" dy="0">W06 · Pause lịch không dừng/đổi phiên đang chạy</tspan></text>
+<text x="48" y="162.4" font-family="Arial, sans-serif" font-size="23" font-weight="600" fill="#19677b"><tspan x="48" dy="0">Applied v3 đã tạm dừng, sao session vẫn giữ 45 giây?</tspan></text>
+<text x="48" y="203.75" font-family="Arial, sans-serif" font-size="20" font-weight="400" fill="#152d40"><tspan x="48" dy="0">Phiên bind v1/45 giây; applied v3 disabled chỉ ảnh hưởng lần tương lai. STOP/safety vẫn có thể dừng phiên.</tspan></text>
+<text x="48" y="242.75" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="48" dy="0">Quan sát: 2026-11-01T07:00:20+07:00  ·  P01 · LC01–03 · SAFE05 · SAFE07  ·  3 bản ghi / 6 sự kiện</tspan></text>
+<text x="48" y="269.95" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="48" dy="0">Góc nhìn: reported-running-session</tspan></text>
+<rect x="48" y="311.15" width="1504" height="924.6208" rx="16" fill="#ffffff" stroke="#d9e2e9"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1250 758" x="64" y="327.15" width="1472" height="892.6208"><rect width="1250" height="758" fill="white"/><text x="24" y="30" font-family="Arial" font-size="18" fill="#20533f">Synthetic · các mốc theo thứ tự; khoảng cách hàng không biểu diễn thời lượng</text><path d="M28 65V728" stroke="#b9d6df" stroke-width="3"/><g><circle cx="28" cy="90" r="6" fill="#28778a"/><text x="52" y="90" font-family="Arial" font-size="18" fill="#173246">07:00:00 · Controller ESP32</text><text x="52" y="118" font-family="Arial" font-size="21" font-weight="600" fill="#173246">Session bind v1</text><text x="52" y="145" font-family="Arial" font-size="17" fill="#486477">SES-DEMO-RUNNING • planned_duration_seconds = 45</text></g><g><circle cx="28" cy="198" r="6" fill="#28778a"/><text x="52" y="198" font-family="Arial" font-size="18" fill="#173246">07:00:10 · microSched / web</text><text x="52" y="226" font-family="Arial" font-size="21" font-weight="600" fill="#173246">Sửa mong muốn v2</text><text x="52" y="253" font-family="Arial" font-size="17" fill="#486477">Đổi giờ 08:00, duration 60 giây</text></g><g><circle cx="28" cy="306" r="6" fill="#28778a"/><text x="52" y="306" font-family="Arial" font-size="18" fill="#173246">07:00:12 · Controller ESP32</text><text x="52" y="334" font-family="Arial" font-size="21" font-weight="600" fill="#173246">Báo áp dụng v2</text><text x="52" y="361" font-family="Arial" font-size="17" fill="#486477">Không retime session v1 đang chạy</text></g><g><circle cx="28" cy="414" r="6" fill="#28778a"/><text x="52" y="414" font-family="Arial" font-size="18" fill="#173246">07:00:15 · microSched / web</text><text x="52" y="442" font-family="Arial" font-size="21" font-weight="600" fill="#173246">Pause bằng desired v3</text><text x="52" y="469" font-family="Arial" font-size="17" fill="#486477">enabled = false; không phải STOP session</text></g><g><circle cx="28" cy="522" r="6" fill="#28778a"/><text x="52" y="522" font-family="Arial" font-size="18" fill="#173246">07:00:16 · Controller ESP32</text><text x="52" y="550" font-family="Arial" font-size="21" font-weight="600" fill="#173246">Báo applied v3</text><text x="52" y="577" font-family="Arial" font-size="17" fill="#486477">applied SC-A-v3: enabled = false; phiên cũ giữ SC-A-v1</text></g><g><circle cx="28" cy="630" r="6" fill="#28778a"/><text x="52" y="630" font-family="Arial" font-size="18" fill="#173246">07:00:20 · Record / điều biết được</text><text x="52" y="658" font-family="Arial" font-size="21" font-weight="600" fill="#173246">Phiên đang được báo chạy</text><text x="52" y="685" font-family="Arial" font-size="17" fill="#486477">ended_at_reported = null; output duration chưa có kết luận</text></g></svg>
+<text x="48" y="1269.7708" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#152d40"><tspan x="48" dy="0">Các bước và bằng chứng được ghi trong fixture</tspan></text>
+<rect x="48" y="1318.5708" width="740" height="146.25" rx="16" fill="#f8fbfd" stroke="#d9e2e9"/>
+<text x="66" y="1347.5708" font-family="Consolas, monospace" font-size="15" font-weight="400" fill="#19677b"><tspan x="66" dy="0">bind · 2026-11-01T07:00:00+07:00</tspan></text>
+<text x="66" y="1372.3208" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#152d40"><tspan x="66" dy="0">Session bind v1</tspan></text>
+<text x="66" y="1403.8708" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#152d40"><tspan x="66" dy="0">SES-DEMO-RUNNING • planned_duration_seconds = 45</tspan></text>
+<text x="66" y="1434.5208" font-family="Consolas, monospace" font-size="14" font-weight="400" fill="#51697a"><tspan x="66" dy="0">lane=device · evidence=controller_reported</tspan></text>
+<rect x="812" y="1318.5708" width="740" height="146.25" rx="16" fill="#f8fbfd" stroke="#d9e2e9"/>
+<text x="830" y="1347.5708" font-family="Consolas, monospace" font-size="15" font-weight="400" fill="#19677b"><tspan x="830" dy="0">edit · 2026-11-01T07:00:10+07:00</tspan></text>
+<text x="830" y="1372.3208" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#152d40"><tspan x="830" dy="0">Sửa mong muốn v2</tspan></text>
+<text x="830" y="1403.8708" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#152d40"><tspan x="830" dy="0">Đổi giờ 08:00, duration 60 giây</tspan></text>
+<text x="830" y="1434.5208" font-family="Consolas, monospace" font-size="14" font-weight="400" fill="#51697a"><tspan x="830" dy="0">lane=web · evidence=web_saved</tspan></text>
+<rect x="48" y="1480.8208" width="740" height="146.25" rx="16" fill="#f8fbfd" stroke="#d9e2e9"/>
+<text x="66" y="1509.8208" font-family="Consolas, monospace" font-size="15" font-weight="400" fill="#19677b"><tspan x="66" dy="0">apply2 · 2026-11-01T07:00:12+07:00</tspan></text>
+<text x="66" y="1534.5708" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#152d40"><tspan x="66" dy="0">Báo áp dụng v2</tspan></text>
+<text x="66" y="1566.1208" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#152d40"><tspan x="66" dy="0">Không retime session v1 đang chạy</tspan></text>
+<text x="66" y="1596.7708" font-family="Consolas, monospace" font-size="14" font-weight="400" fill="#51697a"><tspan x="66" dy="0">lane=device · evidence=controller_reported</tspan></text>
+<rect x="812" y="1480.8208" width="740" height="146.25" rx="16" fill="#f8fbfd" stroke="#d9e2e9"/>
+<text x="830" y="1509.8208" font-family="Consolas, monospace" font-size="15" font-weight="400" fill="#19677b"><tspan x="830" dy="0">pause · 2026-11-01T07:00:15+07:00</tspan></text>
+<text x="830" y="1534.5708" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#152d40"><tspan x="830" dy="0">Pause bằng desired v3</tspan></text>
+<text x="830" y="1566.1208" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#152d40"><tspan x="830" dy="0">enabled = false; không phải STOP session</tspan></text>
+<text x="830" y="1596.7708" font-family="Consolas, monospace" font-size="14" font-weight="400" fill="#51697a"><tspan x="830" dy="0">lane=web · evidence=web_saved</tspan></text>
+<rect x="48" y="1643.0708" width="740" height="146.25" rx="16" fill="#f8fbfd" stroke="#d9e2e9"/>
+<text x="66" y="1672.0708" font-family="Consolas, monospace" font-size="15" font-weight="400" fill="#19677b"><tspan x="66" dy="0">applied3 · 2026-11-01T07:00:16+07:00</tspan></text>
+<text x="66" y="1696.8208" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#152d40"><tspan x="66" dy="0">Báo applied v3</tspan></text>
+<text x="66" y="1728.3708" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#152d40"><tspan x="66" dy="0">applied SC-A-v3: enabled = false; phiên cũ giữ SC-A-v1</tspan></text>
+<text x="66" y="1759.0208" font-family="Consolas, monospace" font-size="14" font-weight="400" fill="#51697a"><tspan x="66" dy="0">lane=device · evidence=controller_reported</tspan></text>
+<rect x="812" y="1643.0708" width="740" height="146.25" rx="16" fill="#f8fbfd" stroke="#d9e2e9"/>
+<text x="830" y="1672.0708" font-family="Consolas, monospace" font-size="15" font-weight="400" fill="#19677b"><tspan x="830" dy="0">running · 2026-11-01T07:00:20+07:00</tspan></text>
+<text x="830" y="1696.8208" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#152d40"><tspan x="830" dy="0">Phiên đang được báo chạy</tspan></text>
+<text x="830" y="1728.3708" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#152d40"><tspan x="830" dy="0">ended_at_reported = null; output duration chưa có kết luận</tspan></text>
+<text x="830" y="1759.0208" font-family="Consolas, monospace" font-size="14" font-weight="400" fill="#51697a"><tspan x="830" dy="0">lane=result · evidence=controller_reported</tspan></text>
+<text x="48" y="1829.3208" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#152d40"><tspan x="48" dy="0">Projection tại thời điểm quan sát (không lưu fact lặp)</tspan></text>
+<rect x="48" y="1877.5708" width="740" height="282.0499999999997" rx="16" fill="#ffffff" stroke="#d9e2e9"/>
+<text x="70" y="1911.5708" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#152d40"><tspan x="70" dy="0">Lịch đã pause tại local</tspan></text>
+<text x="70" y="1945.0208" font-family="Arial, sans-serif" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">Schedule applied · projection, không là fact lưu riêng</tspan></text>
+<text x="70" y="1971.2208" font-family="Consolas, monospace" font-size="18" font-weight="400" fill="#19677b"><tspan x="70" dy="0">SCHED-DEMO-A</tspan></text>
+<path d="M68 1997.3208H768" stroke="#e5ebef"/>
+<text x="70" y="2019.3208" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">applied content_ref</tspan></text>
+<text x="324" y="2019.3208" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="324" dy="0">SC-A-v3</tspan></text>
+<path d="M68 2043.4207999999999H768" stroke="#e5ebef"/>
+<text x="70" y="2065.4208" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">applied enabled</tspan></text>
+<text x="324" y="2065.4208" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="324" dy="0">false</tspan></text>
+<path d="M68 2089.5208H768" stroke="#e5ebef"/>
+<text x="70" y="2111.5208" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">applied duration_seconds</tspan></text>
+<text x="324" y="2111.5208" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="324" dy="0">60</tspan></text>
+<rect x="812" y="1877.5708" width="740" height="394.5499999999997" rx="16" fill="#ffffff" stroke="#d9e2e9"/>
+<text x="834" y="1911.5708" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#152d40"><tspan x="834" dy="0">Phiên cũ không retime</tspan></text>
+<text x="834" y="1945.0208" font-family="Arial, sans-serif" font-size="16" font-weight="400" fill="#51697a"><tspan x="834" dy="0">Session · projection, không là fact lưu riêng</tspan></text>
+<text x="834" y="1971.2208" font-family="Consolas, monospace" font-size="18" font-weight="400" fill="#19677b"><tspan x="834" dy="0">SES-DEMO-RUNNING</tspan></text>
+<path d="M832 1997.3208H1532" stroke="#e5ebef"/>
+<text x="834" y="2019.3208" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="834" dy="0">bound content_ref</tspan></text>
+<text x="1088" y="2019.3208" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="1088" dy="0">SC-A-v1</tspan></text>
+<path d="M832 2043.4207999999999H1532" stroke="#e5ebef"/>
+<text x="834" y="2065.4208" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="834" dy="0">planned qua ref</tspan></text>
+<text x="1088" y="2065.4208" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="1088" dy="0">45</tspan></text>
+<path d="M832 2089.5208H1532" stroke="#e5ebef"/>
+<text x="834" y="2111.5208" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="834" dy="0">result</tspan></text>
+<text x="1088" y="2111.5208" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="1088" dy="0">running</tspan></text>
+<path d="M832 2135.6207999999997H1532" stroke="#e5ebef"/>
+<text x="834" y="2157.6207999999997" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="834" dy="0">ended_at_reported</tspan></text>
+<text x="1088" y="2157.6207999999997" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="1088" dy="0">null — chưa biết/không có</tspan></text>
+<path d="M832 2181.7207999999996H1532" stroke="#e5ebef"/>
+<text x="834" y="2203.7207999999996" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="834" dy="0">reported_output_duration_s</tspan><tspan x="834" dy="23.2">econds</tspan></text>
+<text x="1088" y="2203.7207999999996" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="1088" dy="0">null — chưa biết/không có</tspan></text>
+<rect x="48" y="2183.6207999999997" width="740" height="374.2499999999991" rx="16" fill="#ffffff" stroke="#d9e2e9"/>
+<text x="70" y="2217.6207999999997" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#152d40"><tspan x="70" dy="0">Nhánh từ chối độc lập</tspan></text>
+<text x="70" y="2251.0707999999995" font-family="Arial, sans-serif" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">Request examples · projection, không là fact lưu riêng</tspan></text>
+<text x="70" y="2277.2707999999993" font-family="Consolas, monospace" font-size="18" font-weight="400" fill="#19677b"><tspan x="70" dy="0">W06-branches</tspan></text>
+<path d="M68 2303.3707999999992H768" stroke="#e5ebef"/>
+<text x="70" y="2325.3707999999992" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">busy.status</tspan></text>
+<text x="324" y="2325.3707999999992" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="324" dy="0">rejected</tspan></text>
+<path d="M68 2349.470799999999H768" stroke="#e5ebef"/>
+<text x="70" y="2371.470799999999" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">busy.reason</tspan></text>
+<text x="324" y="2371.470799999999" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="324" dy="0">BUSY</tspan></text>
+<path d="M68 2395.570799999999H768" stroke="#e5ebef"/>
+<text x="70" y="2417.570799999999" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">clock.reason</tspan></text>
+<text x="324" y="2417.570799999999" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="324" dy="0">CLOCK_UNTRUSTED</tspan></text>
+<path d="M68 2441.670799999999H768" stroke="#e5ebef"/>
+<text x="70" y="2463.670799999999" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">limit.reason</tspan></text>
+<text x="324" y="2463.670799999999" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="324" dy="0">CUMULATIVE_LIMIT_REACHED</tspan></text>
+<path d="M68 2487.770799999999H768" stroke="#e5ebef"/>
+<text x="70" y="2509.770799999999" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">new_sessions</tspan></text>
+<text x="324" y="2509.770799999999" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="324" dy="0">[]</tspan></text>
+<rect x="48" y="2595.870799999999" width="740" height="182.19999999999982" rx="16" fill="#eaf5f1" stroke="#b9dac9"/>
+<text x="70" y="2629.870799999999" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#152d40"><tspan x="70" dy="0">Điều cần rút ra</tspan></text>
+<text x="70" y="2669.770799999999" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#152d40"><tspan x="70" dy="0">• Sửa/pause không restart hay kéo/rút duration đã bind; dừng phiên dùng STOP/safety.</tspan></text>
+<text x="70" y="2705.870799999999" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#152d40"><tspan x="70" dy="0">• Ba nhánh từ chối là ví dụ độc lập: request rejected không tạo session mới, không</tspan><tspan x="70" dy="26.099999999999998">queue muộn.</tspan></text>
+<rect x="812" y="2595.870799999999" width="740" height="244.39999999999964" rx="16" fill="#fff5e5" stroke="#ecd4ab"/>
+<text x="834" y="2629.870799999999" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#152d40"><tspan x="834" dy="0">Giới hạn bằng chứng</tspan></text>
+<text x="834" y="2669.770799999999" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#152d40"><tspan x="834" dy="0">• Các nhánh BUSY/CLOCK_UNTRUSTED/CUMULATIVE_LIMIT là ví dụ độc lập,</tspan><tspan x="834" dy="26.099999999999998">không nối thành timeline chính.</tspan></text>
+<text x="834" y="2731.9707999999987" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#152d40"><tspan x="834" dy="0">• Không chọn numeric cumulative budget hoặc đo khả năng safety arbiter trong fixture.</tspan></text>
+<text x="834" y="2768.0707999999986" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#152d40"><tspan x="834" dy="0">• Trạng thái controller báo cáo không chứng minh van mở, dòng nước hay sức khỏe</tspan><tspan x="834" dy="26.099999999999998">cây.</tspan></text>
+<text x="48" y="2870.2707999999984" font-family="Arial, sans-serif" font-size="15" font-weight="400" fill="#51697a"><tspan x="48" dy="0">Dữ liệu synthetic — minh họa thiết kế · views.json · SHA-256 00788dc34c42e13f</tspan></text></svg>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2368" viewBox="0 0 1600 2368" role="img" aria-labelledby="scene-title scene-desc"><title id="scene-title">W02 · Lịch local chạy khi web mất kết nối</title><desc id="scene-desc">Dữ liệu synthetic — minh họa thiết kế. Đã đến giờ, hệ thống ghi nhận lần tưới như thế nào?. Giả định local đủ điều kiện: một occurrence, một START, một session 45 giây được báo.. Trạng thái controller báo cáo không chứng minh van mở, dòng nước hay sức khỏe cây.</desc><rect width="1600" height="2368" fill="#f4f7fa"/><rect x="48" y="26" width="510" height="40" rx="12" fill="#e8f4ee" stroke="#b9dac9"/>
+<text x="64" y="52" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#20533f"><tspan x="64" dy="0">Dữ liệu synthetic — minh họa thiết kế</tspan></text>
+<text x="48" y="108" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#152d40"><tspan x="48" dy="0">W02 · Lịch local chạy khi web mất kết nối</tspan></text>
+<text x="48" y="162.4" font-family="Arial, sans-serif" font-size="23" font-weight="600" fill="#19677b"><tspan x="48" dy="0">Đã đến giờ, hệ thống ghi nhận lần tưới như thế nào?</tspan></text>
+<text x="48" y="203.75" font-family="Arial, sans-serif" font-size="20" font-weight="400" fill="#152d40"><tspan x="48" dy="0">Giả định local đủ điều kiện: một occurrence, một START, một session 45 giây được báo.</tspan></text>
+<text x="48" y="242.75" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="48" dy="0">Quan sát: 2026-11-01T07:00:46+07:00  ·  UC02 · FR02 · FR04 · FR05  ·  3 bản ghi / 4 sự kiện</tspan></text>
+<text x="48" y="269.95" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="48" dy="0">Góc nhìn: controller-local</tspan></text>
+<rect x="48" y="311.15" width="1504" height="670.2592" rx="16" fill="#ffffff" stroke="#d9e2e9"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1250 542" x="64" y="327.15" width="1472" height="638.2592"><rect width="1250" height="542" fill="white"/><text x="24" y="30" font-family="Arial" font-size="18" fill="#20533f">Synthetic · các mốc theo thứ tự; khoảng cách hàng không biểu diễn thời lượng</text><path d="M28 65V512" stroke="#b9d6df" stroke-width="3"/><g><circle cx="28" cy="90" r="6" fill="#28778a"/><text x="52" y="90" font-family="Arial" font-size="18" fill="#173246">07:00:00 · Controller ESP32</text><text x="52" y="118" font-family="Arial" font-size="21" font-weight="600" fill="#173246">Occurrence đến hạn</text><text x="52" y="145" font-family="Arial" font-size="17" fill="#486477">OCC-DEMO-0700 • applied v1 • planned 45 giây</text></g><g><circle cx="28" cy="198" r="6" fill="#28778a"/><text x="52" y="198" font-family="Arial" font-size="18" fill="#173246">07:00:00 · Record / điều biết được</text><text x="52" y="226" font-family="Arial" font-size="21" font-weight="600" fill="#173246">START → phiên đã bắt đầu</text><text x="52" y="253" font-family="Arial" font-size="17" fill="#486477">REQ-DEMO-SCHED → SES-DEMO-SCHED; reported start 07:00:00</text></g><g><circle cx="28" cy="306" r="6" fill="#28778a"/><text x="52" y="306" font-family="Arial" font-size="18" fill="#173246">07:00:45 · Controller ESP32</text><text x="52" y="334" font-family="Arial" font-size="21" font-weight="600" fill="#173246">Đến deadline: yêu cầu đóng</text><text x="52" y="361" font-family="Arial" font-size="17" fill="#486477">reported_output_duration_seconds = 45</text></g><g><circle cx="28" cy="414" r="6" fill="#28778a"/><text x="52" y="414" font-family="Arial" font-size="18" fill="#173246">07:00:45 · Record / điều biết được</text><text x="52" y="442" font-family="Arial" font-size="21" font-weight="600" fill="#173246">Có kết quả đầu ra được báo</text><text x="52" y="469" font-family="Arial" font-size="17" fill="#486477">completed_reported; kết quả Controller báo, chưa đo nước</text></g></svg>
+<text x="48" y="1015.4091999999999" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#152d40"><tspan x="48" dy="0">Các bước và bằng chứng được ghi trong fixture</tspan></text>
+<rect x="48" y="1064.2092" width="740" height="146.25" rx="16" fill="#f8fbfd" stroke="#d9e2e9"/>
+<text x="66" y="1093.2092" font-family="Consolas, monospace" font-size="15" font-weight="400" fill="#19677b"><tspan x="66" dy="0">due · 2026-11-01T07:00:00+07:00</tspan></text>
+<text x="66" y="1117.9592" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#152d40"><tspan x="66" dy="0">Occurrence đến hạn</tspan></text>
+<text x="66" y="1149.5092" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#152d40"><tspan x="66" dy="0">OCC-DEMO-0700 • applied v1 • planned 45 giây</tspan></text>
+<text x="66" y="1180.1592" font-family="Consolas, monospace" font-size="14" font-weight="400" fill="#51697a"><tspan x="66" dy="0">lane=device · evidence=controller_reported</tspan></text>
+<rect x="812" y="1064.2092" width="740" height="146.25" rx="16" fill="#f8fbfd" stroke="#d9e2e9"/>
+<text x="830" y="1093.2092" font-family="Consolas, monospace" font-size="15" font-weight="400" fill="#19677b"><tspan x="830" dy="0">start · 2026-11-01T07:00:00+07:00</tspan></text>
+<text x="830" y="1117.9592" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#152d40"><tspan x="830" dy="0">START → phiên đã bắt đầu</tspan></text>
+<text x="830" y="1149.5092" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#152d40"><tspan x="830" dy="0">REQ-DEMO-SCHED → SES-DEMO-SCHED; reported start 07:00:00</tspan></text>
+<text x="830" y="1180.1592" font-family="Consolas, monospace" font-size="14" font-weight="400" fill="#51697a"><tspan x="830" dy="0">lane=result · evidence=controller_reported</tspan></text>
+<rect x="48" y="1226.4592" width="740" height="146.25" rx="16" fill="#f8fbfd" stroke="#d9e2e9"/>
+<text x="66" y="1255.4592" font-family="Consolas, monospace" font-size="15" font-weight="400" fill="#19677b"><tspan x="66" dy="0">close · 2026-11-01T07:00:45+07:00</tspan></text>
+<text x="66" y="1280.2092" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#152d40"><tspan x="66" dy="0">Đến deadline: yêu cầu đóng</tspan></text>
+<text x="66" y="1311.7592" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#152d40"><tspan x="66" dy="0">reported_output_duration_seconds = 45</tspan></text>
+<text x="66" y="1342.4092" font-family="Consolas, monospace" font-size="14" font-weight="400" fill="#51697a"><tspan x="66" dy="0">lane=device · evidence=controller_reported</tspan></text>
+<rect x="812" y="1226.4592" width="740" height="146.25" rx="16" fill="#f8fbfd" stroke="#d9e2e9"/>
+<text x="830" y="1255.4592" font-family="Consolas, monospace" font-size="15" font-weight="400" fill="#19677b"><tspan x="830" dy="0">end · 2026-11-01T07:00:45+07:00</tspan></text>
+<text x="830" y="1280.2092" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#152d40"><tspan x="830" dy="0">Có kết quả đầu ra được báo</tspan></text>
+<text x="830" y="1311.7592" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#152d40"><tspan x="830" dy="0">completed_reported; kết quả Controller báo, chưa đo nước</tspan></text>
+<text x="830" y="1342.4092" font-family="Consolas, monospace" font-size="14" font-weight="400" fill="#51697a"><tspan x="830" dy="0">lane=result · evidence=controller_reported</tspan></text>
+<text x="48" y="1412.7092" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#152d40"><tspan x="48" dy="0">Projection tại thời điểm quan sát (không lưu fact lặp)</tspan></text>
+<rect x="48" y="1460.9592" width="740" height="282.0499999999997" rx="16" fill="#ffffff" stroke="#d9e2e9"/>
+<text x="70" y="1494.9592" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#152d40"><tspan x="70" dy="0">Cơ hội đã xử lý</tspan></text>
+<text x="70" y="1528.4092" font-family="Arial, sans-serif" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">Occurrence · projection, không là fact lưu riêng</tspan></text>
+<text x="70" y="1554.6092" font-family="Consolas, monospace" font-size="18" font-weight="400" fill="#19677b"><tspan x="70" dy="0">OCC-DEMO-0700</tspan></text>
+<path d="M68 1580.7092H768" stroke="#e5ebef"/>
+<text x="70" y="1602.7092" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">planned_for</tspan></text>
+<text x="324" y="1602.7092" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="324" dy="0">2026-11-01T07:00:00+07:00</tspan></text>
+<path d="M68 1626.8092H768" stroke="#e5ebef"/>
+<text x="70" y="1648.8092" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">content_ref</tspan></text>
+<text x="324" y="1648.8092" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="324" dy="0">SC-A-v1</tspan></text>
+<path d="M68 1672.9091999999998H768" stroke="#e5ebef"/>
+<text x="70" y="1694.9091999999998" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">evaluation_outcome</tspan></text>
+<text x="324" y="1694.9091999999998" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="324" dy="0">start_requested</tspan></text>
+<rect x="812" y="1460.9592" width="740" height="440.64999999999964" rx="16" fill="#ffffff" stroke="#d9e2e9"/>
+<text x="834" y="1494.9592" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#152d40"><tspan x="834" dy="0">Một session có evidence bắt đầu</tspan></text>
+<text x="834" y="1528.4092" font-family="Arial, sans-serif" font-size="16" font-weight="400" fill="#51697a"><tspan x="834" dy="0">Session · projection, không là fact lưu riêng</tspan></text>
+<text x="834" y="1554.6092" font-family="Consolas, monospace" font-size="18" font-weight="400" fill="#19677b"><tspan x="834" dy="0">SES-DEMO-SCHED</tspan></text>
+<path d="M832 1580.7092H1532" stroke="#e5ebef"/>
+<text x="834" y="1602.7092" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="834" dy="0">request_id</tspan></text>
+<text x="1088" y="1602.7092" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="1088" dy="0">REQ-DEMO-SCHED</tspan></text>
+<path d="M832 1626.8092H1532" stroke="#e5ebef"/>
+<text x="834" y="1648.8092" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="834" dy="0">planned qua ref</tspan></text>
+<text x="1088" y="1648.8092" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="1088" dy="0">45</tspan></text>
+<path d="M832 1672.9091999999998H1532" stroke="#e5ebef"/>
+<text x="834" y="1694.9091999999998" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="834" dy="0">started_at_reported</tspan></text>
+<text x="1088" y="1694.9091999999998" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="1088" dy="0">2026-11-01T07:00:00+07:00</tspan></text>
+<path d="M832 1719.0091999999997H1532" stroke="#e5ebef"/>
+<text x="834" y="1741.0091999999997" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="834" dy="0">ended_at_reported</tspan></text>
+<text x="1088" y="1741.0091999999997" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="1088" dy="0">2026-11-01T07:00:45+07:00</tspan></text>
+<path d="M832 1765.1091999999996H1532" stroke="#e5ebef"/>
+<text x="834" y="1787.1091999999996" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="834" dy="0">reported_output_duration_s</tspan><tspan x="834" dy="23.2">econds</tspan></text>
+<text x="1088" y="1787.1091999999996" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="1088" dy="0">45</tspan></text>
+<path d="M832 1831.5091999999997H1532" stroke="#e5ebef"/>
+<text x="834" y="1853.5091999999997" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="834" dy="0">result</tspan></text>
+<text x="1088" y="1853.5091999999997" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="1088" dy="0">completed_reported</tspan></text>
+<rect x="48" y="1767.0091999999997" width="740" height="235.94999999999982" rx="16" fill="#ffffff" stroke="#d9e2e9"/>
+<text x="70" y="1801.0091999999997" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#152d40"><tspan x="70" dy="0">Góc nhìn local, web chưa nhận</tspan></text>
+<text x="70" y="1834.4591999999998" font-family="Arial, sans-serif" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">Report freshness · projection, không là fact lưu riêng</tspan></text>
+<text x="70" y="1860.6591999999998" font-family="Consolas, monospace" font-size="18" font-weight="400" fill="#19677b"><tspan x="70" dy="0">REP-STATUS</tspan></text>
+<path d="M68 1886.7591999999997H768" stroke="#e5ebef"/>
+<text x="70" y="1908.7591999999997" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">connectivity_view</tspan></text>
+<text x="324" y="1908.7591999999997" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="324" dy="0">offline</tspan></text>
+<path d="M68 1932.8591999999996H768" stroke="#e5ebef"/>
+<text x="70" y="1954.8591999999996" font-family="Consolas, monospace" font-size="16" font-weight="400" fill="#51697a"><tspan x="70" dy="0">received_at_web</tspan></text>
+<text x="324" y="1954.8591999999996" font-family="Consolas, monospace" font-size="18" font-weight="600" fill="#152d40"><tspan x="324" dy="0">null — chưa biết/không có</tspan></text>
+<rect x="48" y="2040.9591999999996" width="740" height="182.1999999999996" rx="16" fill="#eaf5f1" stroke="#b9dac9"/>
+<text x="70" y="2074.9591999999993" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#152d40"><tspan x="70" dy="0">Điều cần rút ra</tspan></text>
+<text x="70" y="2114.8591999999994" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#152d40"><tspan x="70" dy="0">• Không cần cloud xin phép mỗi occurrence.</tspan></text>
+<text x="70" y="2150.9591999999993" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#152d40"><tspan x="70" dy="0">• Chỉ có session sau execution-start evidence; completed_reported không phải</tspan><tspan x="70" dy="26.099999999999998">physical-water proof.</tspan></text>
+<rect x="812" y="2040.9591999999996" width="740" height="244.3999999999994" rx="16" fill="#fff5e5" stroke="#ecd4ab"/>
+<text x="834" y="2074.9591999999993" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#152d40"><tspan x="834" dy="0">Giới hạn bằng chứng</tspan></text>
+<text x="834" y="2114.8591999999994" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#152d40"><tspan x="834" dy="0">• Đây là góc nhìn record tại controller mẫu; website offline chưa nhìn thấy các record</tspan><tspan x="834" dy="26.099999999999998">này.</tspan></text>
+<text x="834" y="2177.0591999999992" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#152d40"><tspan x="834" dy="0">• 45 giây chỉ là giá trị synthetic, không là water policy.</tspan></text>
+<text x="834" y="2213.159199999999" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#152d40"><tspan x="834" dy="0">• Trạng thái controller báo cáo không chứng minh van mở, dòng nước hay sức khỏe</tspan><tspan x="834" dy="26.099999999999998">cây.</tspan></text>
+<text x="48" y="2315.359199999999" font-family="Arial, sans-serif" font-size="15" font-weight="400" fill="#51697a"><tspan x="48" dy="0">Dữ liệu synthetic — minh họa thiết kế · views.json · SHA-256 00788dc34c42e13f</tspan></text></svg>
