@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="900" viewBox="0 0 1280 900" role="img" aria-label="08-cumulative-window"><defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#48677e"/></marker></defs><rect width="1280" height="900" fill="white"/>
+<text x="36" y="54" font-family="Segoe UI,Arial,sans-serif" font-size="30" fill="#173247" text-anchor="start"><tspan x="36" dy="0">08 • Hạn mức cộng thời gian nào?</tspan></text>
+<text x="36" y="92" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#526475" text-anchor="start"><tspan x="36" dy="0">Ví dụ lúc 12:00 · Xám: ngoài cửa sổ · Xanh: phần được cộng · Không có phiên đồng thời</tspan></text>
+<rect x="320" y="180" width="780" height="410" rx="10" fill="#eaf3ff" stroke="#48677e" stroke-width="1.5"/>
+<text x="710" y="162" font-family="Segoe UI,Arial,sans-serif" font-size="22" fill="#173247" text-anchor="middle"><tspan x="710" dy="0">Nhìn lùi 3 giờ: 09:00–12:00 (ứng viên, chưa chốt)</tspan></text>
+<line x1="320" y1="217" x2="320" y2="560" stroke="#48677e" stroke-width="1"/>
+<text x="320" y="208" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="320" dy="0">09:00</tspan></text>
+<line x1="580" y1="217" x2="580" y2="560" stroke="#48677e" stroke-width="1"/>
+<text x="580" y="208" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="580" dy="0">10:00</tspan></text>
+<line x1="840" y1="217" x2="840" y2="560" stroke="#48677e" stroke-width="1"/>
+<text x="840" y="208" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="840" dy="0">11:00</tspan></text>
+<line x1="1100" y1="217" x2="1100" y2="560" stroke="#48677e" stroke-width="1"/>
+<text x="1100" y="208" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="1100" dy="0">12:00</tspan></text>
+<text x="36" y="276" font-family="Segoe UI,Arial,sans-serif" font-size="22" fill="#173247" text-anchor="start"><tspan x="36" dy="0">Phiên 1</tspan><tspan x="36" dy="29.040000000000003">08:50–09:10</tspan></text>
+<rect x="276.667" y="270" width="43.333" height="44" rx="10" fill="#e0e5eb" stroke="#48677e" stroke-width="1.5"/>
+<rect x="320" y="270" width="43.333" height="44" rx="10" fill="#e2f3e9" stroke="#48677e" stroke-width="1.5"/>
+<text x="1182.5" y="296" font-family="Segoe UI,Arial,sans-serif" font-size="23" fill="#173247" text-anchor="middle"><tspan x="1182.5" dy="0">10 phút</tspan></text>
+<text x="36" y="384" font-family="Segoe UI,Arial,sans-serif" font-size="22" fill="#173247" text-anchor="start"><tspan x="36" dy="0">Phiên 2</tspan><tspan x="36" dy="29.040000000000003">10:00–10:20</tspan></text>
+<rect x="580" y="378" width="86.667" height="44" rx="10" fill="#e2f3e9" stroke="#48677e" stroke-width="1.5"/>
+<text x="1182.5" y="404" font-family="Segoe UI,Arial,sans-serif" font-size="23" fill="#173247" text-anchor="middle"><tspan x="1182.5" dy="0">20 phút</tspan></text>
+<text x="36" y="492" font-family="Segoe UI,Arial,sans-serif" font-size="22" fill="#173247" text-anchor="start"><tspan x="36" dy="0">Phiên 3</tspan><tspan x="36" dy="29.040000000000003">11:20–11:35</tspan></text>
+<rect x="926.667" y="486" width="65" height="44" rx="10" fill="#e2f3e9" stroke="#48677e" stroke-width="1.5"/>
+<text x="1182.5" y="512" font-family="Segoe UI,Arial,sans-serif" font-size="23" fill="#173247" text-anchor="middle"><tspan x="1182.5" dy="0">15 phút</tspan></text>
+<rect x="36" y="625" width="1208" height="75" rx="10" fill="#e2f3e9" stroke="#48677e" stroke-width="1.5"/>
+<text x="640" y="669.34" font-family="Segoe UI,Arial,sans-serif" font-size="26" fill="#173247" text-anchor="middle"><tspan x="640" dy="0">12:00 · Tổng được tính = 10 + 20 + 15 = 45 phút</tspan></text>
+<rect x="36" y="725" width="1208" height="75" rx="10" fill="#fff3d9" stroke="#48677e" stroke-width="1.5"/>
+<text x="640" y="768.32" font-family="Segoe UI,Arial,sans-serif" font-size="23" fill="#173247" text-anchor="middle"><tspan x="640" dy="0">12:15 · Nếu không tưới thêm: phần đầu rời cửa sổ, còn 35 phút</tspan></text>
+<text x="36" y="853" font-family="Segoe UI,Arial,sans-serif" font-size="19" fill="#526475" text-anchor="start"><tspan x="36" dy="0">Minh họa cách cộng thời gian output; không đo lít nước và không xác nhận van đã đóng.</tspan></text></svg>

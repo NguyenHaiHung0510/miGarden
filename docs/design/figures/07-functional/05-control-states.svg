@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1320" viewBox="0 0 1280 1320" role="img" aria-label="07-E-control-states"><defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#48677E"/></marker></defs><rect width="1280" height="1320" fill="#fff"/>
+<text x="36" y="54" font-family="Segoe UI,Arial,sans-serif" font-size="30" fill="#173247" text-anchor="start"><tspan x="36" dy="0">07 • Khi nào được xét START, khi nào phải chặn?</tspan></text>
+<text x="36" y="92" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#506477" text-anchor="start"><tspan x="36" dy="0">Bản đồ quyết định ở mức hành vi; cơ chế recovery/clock/arbitration cụ thể còn ở bước 08.</tspan></text>
+<rect x="390" y="150" width="500" height="105" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="640" y="192.82" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="640" dy="0">Có START từ lịch / nút / remote</tspan><tspan x="640" dy="31.68">Remote còn cần quyền / hiệu lực</tspan></text>
+<rect x="925" y="150" width="315" height="118" rx="14" fill="#FFF3D9" stroke="#48677E" stroke-width="2" />
+<text x="1082.5" y="185.44" font-family="Segoe UI,Arial,sans-serif" font-size="22" fill="#173247" text-anchor="middle"><tspan x="1082.5" dy="0">STOP hợp lệ</tspan><tspan x="1082.5" dy="29.040000000000003">Đi đường CLOSE</tspan><tspan x="1082.5" dy="29.040000000000003">Không cần gate OPEN</tspan></text>
+<rect x="390" y="355" width="500" height="135" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="640" y="396.98" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="640" dy="0">G05/G06 • Xét admission</tspan><tspan x="640" dy="31.68">Context, time, budget, busy,</tspan><tspan x="640" dy="31.68">interlock và critical state</tspan></text>
+<rect x="40" y="575" width="350" height="125" rx="14" fill="#FFF0EB" stroke="#48677E" stroke-width="2" />
+<text x="215" y="612.96" font-family="Segoe UI,Arial,sans-serif" font-size="23" fill="#173247" text-anchor="middle"><tspan x="215" dy="0">Không đạt / đang bận</tspan><tspan x="215" dy="30.360000000000003">Từ chối, không OPEN</tspan><tspan x="215" dy="30.360000000000003">Không queue để chạy muộn</tspan></text>
+<rect x="735" y="575" width="505" height="125" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="987.5" y="612.96" font-family="Segoe UI,Arial,sans-serif" font-size="23" fill="#173247" text-anchor="middle"><tspan x="987.5" dy="0">Hợp lệ → thực thi bounded</tspan><tspan x="987.5" dy="30.360000000000003">Giữ duration / deadline đã bind</tspan><tspan x="987.5" dy="30.360000000000003">Sửa lịch không retime phiên</tspan></text>
+<rect x="735" y="835" width="505" height="125" rx="14" fill="#FFF3D9" stroke="#48677E" stroke-width="2" />
+<text x="987.5" y="872.96" font-family="Segoe UI,Arial,sans-serif" font-size="23" fill="#173247" text-anchor="middle"><tspan x="987.5" dy="0">Đến hạn, STOP hoặc lỗi</tspan><tspan x="987.5" dy="30.360000000000003">Yêu cầu CLOSE / cutoff</tspan><tspan x="987.5" dy="30.360000000000003">STOP ngăn intent START cũ</tspan></text>
+<rect x="40" y="835" width="530" height="155" rx="14" fill="#FFF0EB" stroke="#48677E" stroke-width="2" />
+<text x="305" y="872.78" font-family="Segoe UI,Arial,sans-serif" font-size="23" fill="#173247" text-anchor="middle"><tspan x="305" dy="0">Local unresolved / critical fault</tspan><tspan x="305" dy="30.360000000000003">Chặn OPEN mọi nguồn</tspan><tspan x="305" dy="30.360000000000003">Chặn mọi Zone cùng ranh giới</tspan><tspan x="305" dy="30.360000000000003">chưa chứng minh độc lập</tspan></text>
+<rect x="270" y="1115" width="740" height="110" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="640" y="1145.46" font-family="Segoe UI,Arial,sans-serif" font-size="23" fill="#173247" text-anchor="middle"><tspan x="640" dy="0">Đủ căn cứ mới xét START mới</tspan><tspan x="640" dy="30.360000000000003">Áp dụng lại mọi điều kiện mở</tspan><tspan x="640" dy="30.360000000000003">Không tự clear do TTL, receipt hoặc reboot</tspan></text>
+<polyline points="640,255 640,355" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<polyline points="390,422 215,422 215,575" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="46" y="458" width="328" height="35.72" rx="4" fill="#fff"/>
+<text x="210" y="481" font-family="Segoe UI,Arial,sans-serif" font-size="21" fill="#173247" text-anchor="middle"><tspan x="210" dy="0">Gate không đạt</tspan></text>
+<polyline points="890,422 988,422 988,575" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="911" y="458" width="308" height="35.72" rx="4" fill="#fff"/>
+<text x="1065" y="481" font-family="Segoe UI,Arial,sans-serif" font-size="21" fill="#173247" text-anchor="middle"><tspan x="1065" dy="0">Gate hợp lệ</tspan></text>
+<polyline points="988,700 988,835" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<polyline points="1240,208 1260,208 1260,898 1240,898" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<polyline points="735,900 570,900" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="561" y="793" width="178" height="58.160000000000004" rx="4" fill="#fff"/>
+<text x="650" y="814" font-family="Segoe UI,Arial,sans-serif" font-size="19" fill="#173247" text-anchor="middle"><tspan x="650" dy="0">Thiếu kết quả</tspan><tspan x="650" dy="25.080000000000002">cần thiết / fault</tspan></text>
+<polyline points="305,990 305,1075 460,1075 460,1115" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<text x="323" y="1017" font-family="Segoe UI,Arial,sans-serif" font-size="19" fill="#173247" text-anchor="start"><tspan x="323" dy="0">Chỉ sau khi recovery đạt</tspan><tspan x="323" dy="25.080000000000002">và có xác minh an toàn mới</tspan></text>
+<polyline points="988,960 988,1055 840,1055 840,1115" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="831" y="1008" width="398" height="34.400000000000006" rx="4" fill="#fff"/>
+<text x="1030" y="1030" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="1030" dy="0">Kết quả local đủ căn cứ</tspan></text>
+<text x="36" y="1276" font-family="Segoe UI,Arial,sans-serif" font-size="18" fill="#506477" text-anchor="start"><tspan x="36" dy="0">Cloud chỉ thiếu ACK không tự tạo local unknown. Critical storage lỗi giữa phiên cần safe stop/degraded.</tspan></text></svg>

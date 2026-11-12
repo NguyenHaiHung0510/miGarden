@@ -1,14 +1,14 @@
 # Operations and recovery design
 
-These runbooks describe prerequisites, observations and recovery for future implementation. **No runnable control firmware build, control simulator or device command is supplied by this repository yet.** The spatial viewer and static information walkthrough are separate runnable artifacts. Exact commands must come from the selected stack and target; the stages below are design guidance, not an executable quickstart.
+These runbooks describe prerequisites, observations and recovery for future implementation. **No runnable watering firmware or control simulator is supplied by this design batch.** The spatial viewer and static information walkthrough are separate runnable artifacts. The steps below define evidence to collect when implementation and the target are available.
 
 ## Current design versus historical operational choices
 
-Current safety outcomes are in [01](design/01-purpose-and-requirements.vi.md), [02](design/02-process-specification.vi.md) and [04](design/04-information-model.vi.md). [Design index](design/README.md) is the current baseline; steps 05–10, including operational/device design, are pending. This runbook retains evidence/resource/recovery principles; it does not select board/pins/framework, API/transport, network cadence, numeric policy or a field-enable protocol.
+Current safety outcomes are in [01](design/01-purpose-and-requirements.vi.md), [02](design/02-process-specification.vi.md) and [04](design/04-information-model.vi.md). Use [08](design/08-operational-view-specification.vi.md) for operation and recovery and [09](design/09-device-and-component-integration.vi.md) for selected first-stage hardware, wiring and installation checks. Firmware framework, API/transport, network cadence, numerical limits and field-enable evidence remain open.
 
 Every source uses the same local arbiter and cumulative accounting; STOP prioritizes CLOSE and prevents old pending START from opening later. Boot never restores OPEN or resets budget. Unknown after possible execution blocks all sources and all Zones on common source/accounting until independence and safe recovery are proven. Critical-storage failure during execution requires safe stop/cutoff/degraded handling, with honest evidence gaps. Independent mechanical shutoff and hardware feedback/cutoff remain necessary.
 
-SAF-P01 at the index records **PROPOSED candidates only**, for Step 08 decision. No candidate value is an accepted maximum/default or measured safe limit; software limits cannot certify physical shutoff. Technical device work still requires its own exact task authorization, target identity and safe recovery path.
+[The numerical candidates in 08](design/08-operational-view-specification.vi.md#budget-d186) are not active limits, defaults or measured safe values. Software limits cannot certify physical shutoff. Technical device work still requires its own authorization, target identity and safe recovery path.
 
 ## Evidence and resource identity
 
@@ -38,7 +38,7 @@ Exercise local button and web intent through received/accepted-or-rejected/start
 
 Use the current safety outcomes as requirements for a future explicitly authorized hardware validation plan: identify source/faucet/manual shutoff; measure pump states, pressure/flow, residual flow/siphon/drain-down; verify valve/driver/power/feedback/cutoff, enclosure/wiring/drainage and blast radius. Bind every numeric policy value to measured evidence and a policy version.
 
-Progress from dry bench to contained water, then supervised Zone A, then unattended operation only after the required network/power/fault evidence. Shared-source/Zone volume cannot become per-pot volume; site pots do not create a managed-pot domain. Electronic STOP supplements the independent mechanical shutoff. Unknown outcome blocks new OPEN until fresh safe state is established.
+In the [first installation wave](design/09-device-and-component-integration.vi.md#installation-and-checks), check electrical connections before permanent fixing where possible, then use an appropriate controlled outlet when testing water after the connection is ready. Supervised Zone A precedes any unattended operation. Shared-source/Zone volume cannot become per-pot volume. Electronic STOP supplements the independent mechanical shutoff; an unresolved unsafe state blocks new OPEN until recovery establishes fresh evidence.
 
 ## Network and cost probes — unselected legacy references
 

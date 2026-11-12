@@ -1,6 +1,6 @@
 {
-  "schema_version": "prototype-0.2",
-  "model_version": "model-v0-draft-07",
+  "schema_version": "prototype-0.3",
+  "model_version": "model-v0-draft-08",
   "title": "Từ sân thượng đến ban công",
   "coordinate_frame": {
     "kind": "owner-measured-with-estimates",
@@ -223,6 +223,10 @@
     "FIELD-20261025-C2": {
       "title": "Hiệu chỉnh mốc890cm và chọn PA2",
       "note": "890cm là đoạn thẳng sau bước đặt ống lên tường. Phần tiếp cận nguồn riêng; PA2 men mini được chọn, PA1 không có sẵn giá đỡ."
+    },
+    "DESIGN-20261112-A91": {
+      "title": "Thiết kế đợt một · Zone A",
+      "note": "Bước 09: giữ vòi đỏ, DNV5, dây mềm, van 12 V NC và uPVC tới đầu chờ bịt. Không phải nguồn số đo hiện trường."
     }
   },
   "objects": [
@@ -256,7 +260,7 @@
       ],
       "physical_position_m": null,
       "status": "owner-confirmed",
-      "summary": "Một circuit tưới chung; chậu và nhánh xuống chậu linh động.",
+      "summary": "Zone A là một tuyến chung qua một van. Hai hướng phân phối sau Y để sau; chậu trong hình chỉ là mẫu không gian.",
       "sources": [
         "N06",
         "N07"
@@ -264,8 +268,8 @@
     },
     {
       "id": "F",
-      "label": "Vòi nguồn miGarden · van tay",
-      "short": "Vòi nguồn",
+      "label": "Vòi đỏ hiện hữu · ren ngoài 27",
+      "short": "Vòi đỏ",
       "kind": "tap",
       "pose": [
         3.4,
@@ -273,8 +277,8 @@
         0
       ],
       "physical_position_m": null,
-      "status": "proposed",
-      "summary": "Điểm nguồn của tuyến. Phương án chính: thay vòi hai đầu; van tay nhánh miGarden chặn cứng trước van điện tương lai. Thân vòi minh họa, chưa lắp mới.",
+      "status": "observed",
+      "summary": "Giữ vòi tay đỏ. Sau vòi dùng đầu nối hai ren trong 27–21 vào DNV5. Khóa vòi đỏ ngắt cả đường rửa và nhánh A.",
       "sources": [
         "N11",
         "N01",
@@ -311,7 +315,7 @@
       ],
       "physical_position_m": null,
       "status": "observed",
-      "summary": "Bơm/cụm ống hiện hữu là bối cảnh và vật cản. Hình không mô phỏng áp lực hay trạng thái bơm.",
+      "summary": "Bơm giữ nguyên hệ điều khiển hiện hữu. Hình không biểu diễn áp suất, dòng chảy hay trạng thái bơm.",
       "sources": [
         "N01",
         "N05"
@@ -412,8 +416,8 @@
     },
     {
       "id": "rail",
-      "label": "Ống phân phối trên hàng rào",
-      "short": "Ống phân phối",
+      "label": "Ống ngang rào bản 07 · lịch sử",
+      "short": "Ống ngang rào cũ",
       "kind": "distribution",
       "pose": [
         2.03,
@@ -421,8 +425,8 @@
         8.815
       ],
       "physical_position_m": null,
-      "status": "proposed",
-      "summary": "Ống miGarden được neo/tựa vào hàng rào sắt; nhánh mềm và khóa tay đi xuống các chậu mẫu.",
+      "status": "historical",
+      "summary": "Bản 07 vẽ 4 m ống ngang rào. Đoạn ống chỉ hiện trong lớp so sánh bản 07; đợt một A91 kết thúc ở đầu chờ bịt. M12 vẫn là số đo chiều dài rào.",
       "sources": [
         "N06",
         "N07"
@@ -430,8 +434,8 @@
     },
     {
       "id": "route",
-      "label": "Tuyến chính",
-      "short": "Tuyến chính",
+      "label": "uPVC Ø21 · tuyến PA2 đợt một",
+      "short": "uPVC · PA2",
       "kind": "route",
       "pose": [
         4.015,
@@ -439,8 +443,8 @@
         3.7
       ],
       "physical_position_m": null,
-      "status": "owner-confirmed",
-      "summary": "PA2 đã chọn: từ S men phải7,40m, hạ40cm, men mini1,50m rồi hạ260cm. 890cm chỉ là đoạn thẳng S tới mép ngoài nếu giữ cao, không tính từ vòi.",
+      "status": "selected-design",
+      "summary": "Từ van theo tường phải và PA2 men mini, hạ xuống đầu chờ bịt dưới đỉnh rào cũ. 11,90 m chỉ là mốc S tới đỉnh rào; tim ống dự tính và số mua/cắt là các giá trị riêng.",
       "sources": [
         "FIELD-20261025-C2",
         "N13"
@@ -493,7 +497,7 @@
         3.7
       ],
       "status": "owner-confirmed",
-      "summary": "Tường thấp phải nhà mình. Nguồn tiếp cận mặt trước, leo26cm tới đỉnh, tính phần ống sẵnØ10cm rồi rẽ≈10cm lên mặt tường tới S. Bề dày dựng≈20cm chưa đo.",
+      "summary": "Tường thấp phải nhà mình. Van NC 12 V dự tính gá tại đầu tường; vị trí và cách gá phải đối chiếu tại chỗ. Bề dày dựng ≈20 cm chưa đo.",
       "sources": [
         "N01",
         "N03",
@@ -540,18 +544,17 @@
     },
     {
       "id": "household-outlet",
-      "short": "Đầu sinh hoạt",
-      "label": "Đầu vòi sinh hoạt",
+      "short": "Vòi rửa",
+      "label": "Vòi rửa tay · sau DNV5",
       "pose": [
-        3.25,
-        3.7,
+        3.68,
+        3.73,
         0.32
       ],
-      "status": "proposed",
-      "summary": "Đầu dùng thường độc lập với nhánh miGarden trong phương án vòi hai đầu.",
+      "status": "selected-design",
+      "summary": "Một cổng DNV5 M21 qua nối F21/F21 tới vòi rửa M21. Đường rửa tách nhánh A sau khóa tổng.",
       "sources": [
-        "N04",
-        "N05"
+        "DESIGN-20261112-A91"
       ],
       "physical_position_m": null,
       "kind": "tap"
@@ -565,7 +568,7 @@
         4,
         0.05
       ],
-      "summary": "Bồn, chân đỡ, bơm, van và ống đan xen: dựng vừa đủ nhận diện và né vật cản; không truy dựng hoàn hảo mọi nhánh.",
+      "summary": "Bối cảnh bồn và bơm hiện hữu; giữ vòi đỏ, thêm đầu đổi và DNV5. miGarden không điều khiển bơm.",
       "sources": [
         "N01",
         "N02",
@@ -597,20 +600,21 @@
     },
     {
       "id": "future-valve",
-      "label": "Vị trí van điện miGarden tương lai",
-      "short": "Van điện · dự kiến",
+      "label": "Van Zone A · VAKS V12-21 NC, 12 V DC",
+      "short": "Van NC 12 V",
       "pose": [
-        3.66,
-        3.78,
-        0
+        3.83,
+        4.155,
+        -0.32
       ],
-      "summary": "Minh họa vị trí sau van tay chặn nguồn, trước tuyến cấp. Chưa chọn/lắp/điều khiển thiết bị.",
+      "summary": "Van thường đóng (NC) đặt tại tường thấp phải. Dây mềm vào trước van; đầu ra ren ngoài 21 nối thẳng đầu chuyển sang uPVC Ø21. Vị trí gá trên hình chỉ ước lượng.",
       "sources": [
-        "FIELD-20261025"
+        "DESIGN-20261112-A91"
       ],
-      "status": "proposed",
+      "status": "selected-design",
       "kind": "valve",
-      "physical_position_m": null
+      "physical_position_m": null,
+      "display_id": "VAN A"
     },
     {
       "id": "terrace-divider",
@@ -674,7 +678,7 @@
         1.14,
         8.9
       ],
-      "summary": "Dài4,00m. Tách kết cấu hàng rào khỏi ống phân phối miGarden. Cao độ hàng rào so sàn là ≈.",
+      "summary": "Rào sắt cũ dài 4,00 m. Đầu chờ bịt nằm dưới đỉnh rào ở góc phải; cao độ rào so sàn vẫn ước lượng.",
       "sources": [
         "N06",
         "N07",
@@ -718,30 +722,150 @@
       "sources": [
         "FIELD-20261025-C2"
       ]
+    },
+    {
+      "id": "dnv5",
+      "label": "DNV5 · chia bốn, một khóa tổng",
+      "short": "DNV5",
+      "kind": "manifold",
+      "pose": [
+        3.55,
+        3.78,
+        0
+      ],
+      "status": "selected-design",
+      "summary": "Đầu vào M21 qua nối F27/F21. Bốn đầu ra M21: hai bịt, một vòi rửa, một dây mềm tới van A. Không có bốn khóa riêng.",
+      "sources": [
+        "DESIGN-20261112-A91"
+      ],
+      "physical_position_m": null
+    },
+    {
+      "id": "source-hose",
+      "label": "Dây cấp PVC mềm 1,2 m · hai tán F21",
+      "short": "Dây mềm 1,2 m",
+      "kind": "hose",
+      "pose": [
+        3.684,
+        3.887,
+        -0.507
+      ],
+      "status": "selected-design",
+      "summary": "Uốn từ DNV5 tới van tường phải. 1,2 m là chiều dài dây đã chọn; nét uốn là minh họa, chưa kiểm bán kính uốn hay độ dư.",
+      "sources": [
+        "DESIGN-20261112-A91"
+      ],
+      "physical_position_m": null
+    },
+    {
+      "id": "valve-adapter",
+      "label": "Đầu chuyển F21 → ổ dán uPVC Ø21",
+      "short": "Đầu chuyển sang uPVC",
+      "kind": "fitting",
+      "pose": [
+        3.94,
+        4.155,
+        -0.32
+      ],
+      "status": "selected-design",
+      "summary": "So ren và mặt kín với van thực, chọn ổ dán Ø21 đúng ống. Không thêm dây mềm sau van trong cấu hình này.",
+      "sources": [
+        "DESIGN-20261112-A91"
+      ],
+      "physical_position_m": null
+    },
+    {
+      "id": "capped-stub",
+      "label": "Đầu chờ có nắp · dưới đỉnh rào cũ",
+      "short": "Đầu chờ bịt",
+      "kind": "cap",
+      "pose": null,
+      "status": "selected-design",
+      "summary": "Điểm kết thúc đợt một. Nắp ren chịu áp tháo được; 10–20 cm dưới đỉnh rào là gợi ý gá, tọa độ hình là minh họa, chưa đo hoặc thử nước.",
+      "sources": [
+        "DESIGN-20261112-A91"
+      ],
+      "physical_position_m": null
+    },
+    {
+      "id": "y-deferred",
+      "label": "Bộ Y để sau · cùng Zone A",
+      "short": "Y · để sau",
+      "kind": "junction",
+      "pose": null,
+      "status": "deferred",
+      "summary": "Lắp thay nắp đầu chờ nếu triển khai. Hai hướng vẫn dùng chung van và Zone A.",
+      "sources": [
+        "DESIGN-20261112-A91"
+      ],
+      "physical_position_m": null
+    },
+    {
+      "id": "branch-door",
+      "label": "Nhánh mềm để sau · phía gần cửa",
+      "short": "Gần cửa · để sau",
+      "kind": "direction",
+      "pose": [
+        3.08,
+        0.5,
+        7.86
+      ],
+      "status": "deferred",
+      "summary": "Chỉ minh họa hướng đi gần cửa. Bố trí béc theo vùng cần phủ khi lắp.",
+      "sources": [
+        "DESIGN-20261112-A91"
+      ],
+      "physical_position_m": null
+    },
+    {
+      "id": "branch-new-balcony",
+      "label": "Nhánh mềm để sau · ban công mới / tường trái",
+      "short": "Ban công mới / tường trái",
+      "kind": "direction",
+      "pose": [
+        0.79,
+        0.36,
+        9.36
+      ],
+      "status": "deferred",
+      "summary": "Chỉ minh họa hướng mềm về ban công mới rồi có thể vòng tường trái, cùng Zone A. Chưa chốt đường đi hoặc số béc.",
+      "sources": [
+        "DESIGN-20261112-A91"
+      ],
+      "physical_position_m": null
+    },
+    {
+      "id": "balcony-extension",
+      "label": "Ban công dự tính nới ≈1,07 m",
+      "short": "Phần nới ≈1,07 m",
+      "kind": "outline",
+      "pose": [
+        2.04,
+        0,
+        10.05
+      ],
+      "status": "estimated",
+      "summary": "Đường viền chỉ biểu diễn ước lượng phần nới. Chưa có hình học đo của sàn, rào, tường mới.",
+      "sources": [
+        "DESIGN-20261112-A91"
+      ],
+      "physical_position_m": null
     }
   ],
   "water_route": {
-    "preset": "main",
+    "id": "route",
+    "stage": "first-batch",
+    "material": "uPVC Ø21 chịu áp",
     "points": [
       [
-        3.4,
-        3.78,
-        0
-      ],
-      [
-        3.915,
-        3.78,
-        0
-      ],
-      [
-        3.915,
-        4.04,
-        0
-      ],
-      [
-        3.915,
+        3.97,
         4.155,
-        0
+        -0.32
+      ],
+      [
+        4.03,
+        4.155,
+        -0.32
       ],
       [
         4.03,
@@ -775,103 +899,25 @@
       ],
       [
         4.03,
-        1.055,
+        0.99,
         8.815
-      ],
-      [
-        0.03,
-        1.055,
-        8.815
-      ]
-    ],
-    "reference_points": [
-      [
-        3.4,
-        3.78,
-        0
-      ],
-      [
-        3.93,
-        3.78,
-        0
-      ],
-      [
-        3.93,
-        4.04,
-        0
-      ],
-      [
-        3.93,
-        4.14,
-        0
-      ],
-      [
-        4.03,
-        4.14,
-        0
-      ],
-      [
-        4.03,
-        4.14,
-        7.4
-      ],
-      [
-        4.03,
-        3.74,
-        7.4
-      ],
-      [
-        4.03,
-        3.74,
-        8.9
-      ],
-      [
-        4.03,
-        1.14,
-        8.9
-      ],
-      [
-        4.03,
-        1.14,
-        8.8
-      ],
-      [
-        4.03,
-        1.04,
-        8.8
-      ],
-      [
-        0.03,
-        1.04,
-        8.8
       ]
     ],
     "point_labels": [
-      "Nguồn · sau van tay",
-      "Tiếp cận ngoài mặt tường",
-      "Leo tới đỉnh tường",
-      "Vượt phần ống sẵn Ø10cm",
+      "Sau đầu chuyển ren trong 21 → ổ dán Ø21",
+      "Rẽ men tường phải",
       "S · đặt ngang≈10cm",
       "PA2 · hết7,40m danh nghĩa",
       "PA2 · hạ40cm",
       "PA2 · men mini1,50m theo mốc",
       "Hạ260cm · đỉnh rào",
-      "Vào≈10cm phía cửa chính",
-      "Hạ≈10cm · neo hàng rào",
-      "Cuối hàng rào4m"
+      "Vào phía trong rào cũ",
+      "Đầu chờ có nắp · dưới đỉnh rào cũ"
     ],
-    "support_indices": [
-      1,
-      4,
-      5,
-      6,
-      7,
-      9,
-      10
-    ],
-    "status": "owner-selected-pa2-with-explicit-render-clearance",
-    "baseline_nominal_m": 17.09,
-    "reference_note": "Mốc đo/danh nghĩa và tim ống dựng riêng; cộng≈3cm hình học để không giao khối, chưa là chiều dài cắt."
+    "reference_route": "pa2-07",
+    "reference_span_m": 11.9,
+    "status": "selected-design-estimated-placement",
+    "reference_note": "11,90 m là mốc PA2 S → đỉnh rào. Tim uPVC minh họa gồm thêm đoạn đầu van và đầu chờ; không phải chiều dài cắt."
   },
   "observations": [
     {
@@ -1905,8 +1951,129 @@
       },
       "read_only": true
     },
-    "main": {
-      "label": "PA2 · Men mini · chính",
+    "mini-straight": {
+      "label": "PA1 · bản 07 (lịch sử)",
+      "points": [
+        [
+          3.4,
+          3.78,
+          0
+        ],
+        [
+          3.915,
+          3.78,
+          0
+        ],
+        [
+          3.915,
+          4.04,
+          0
+        ],
+        [
+          3.915,
+          4.155,
+          0
+        ],
+        [
+          4.03,
+          4.155,
+          0
+        ],
+        [
+          4.03,
+          4.155,
+          8.915
+        ],
+        [
+          4.03,
+          1.155,
+          8.915
+        ],
+        [
+          4.03,
+          1.155,
+          8.815
+        ],
+        [
+          4.03,
+          1.055,
+          8.815
+        ],
+        [
+          0.03,
+          1.055,
+          8.815
+        ]
+      ],
+      "reference_points": [
+        [
+          3.4,
+          3.78,
+          0
+        ],
+        [
+          3.93,
+          3.78,
+          0
+        ],
+        [
+          3.93,
+          4.04,
+          0
+        ],
+        [
+          3.93,
+          4.14,
+          0
+        ],
+        [
+          4.03,
+          4.14,
+          0
+        ],
+        [
+          4.03,
+          4.14,
+          8.9
+        ],
+        [
+          4.03,
+          1.14,
+          8.9
+        ],
+        [
+          4.03,
+          1.14,
+          8.8
+        ],
+        [
+          4.03,
+          1.04,
+          8.8
+        ],
+        [
+          0.03,
+          1.04,
+          8.8
+        ]
+      ],
+      "point_labels": [
+        "PA1 · điểm0",
+        "PA1 · điểm1",
+        "PA1 · điểm2",
+        "PA1 · điểm3",
+        "PA1 · điểm4",
+        "PA1 · hết8,90m danh nghĩa",
+        "PA1 · hạ300cm",
+        "PA1 · điểm7",
+        "PA1 · điểm8",
+        "PA1 · điểm10"
+      ],
+      "read_only": true,
+      "note": "So sánh hình học bản 07: 8,90 m từ S rồi hạ 3,00 m. Đoạn bắc qua mini thiếu giá đỡ; cụm nguồn và đoạn ngang rào là lịch sử."
+    },
+    "pa2-07": {
+      "label": "PA2 · bản 07 (lịch sử)",
       "points": [
         [
           3.4,
@@ -2045,129 +2212,8 @@
         "Hạ≈10cm · neo hàng rào",
         "Cuối hàng rào4m"
       ],
-      "read_only": false,
-      "note": "PA2 được chọn, chưa có sẵn giá đỡ:7,40m→hạ40cm→men1,50m→hạ260cm. Kẹp/neo trên phần nhà mình vẫn cần thiết kế."
-    },
-    "mini-straight": {
-      "label": "PA1 · Thẳng trên cao · cần đỡ",
-      "points": [
-        [
-          3.4,
-          3.78,
-          0
-        ],
-        [
-          3.915,
-          3.78,
-          0
-        ],
-        [
-          3.915,
-          4.04,
-          0
-        ],
-        [
-          3.915,
-          4.155,
-          0
-        ],
-        [
-          4.03,
-          4.155,
-          0
-        ],
-        [
-          4.03,
-          4.155,
-          8.915
-        ],
-        [
-          4.03,
-          1.155,
-          8.915
-        ],
-        [
-          4.03,
-          1.155,
-          8.815
-        ],
-        [
-          4.03,
-          1.055,
-          8.815
-        ],
-        [
-          0.03,
-          1.055,
-          8.815
-        ]
-      ],
-      "reference_points": [
-        [
-          3.4,
-          3.78,
-          0
-        ],
-        [
-          3.93,
-          3.78,
-          0
-        ],
-        [
-          3.93,
-          4.04,
-          0
-        ],
-        [
-          3.93,
-          4.14,
-          0
-        ],
-        [
-          4.03,
-          4.14,
-          0
-        ],
-        [
-          4.03,
-          4.14,
-          8.9
-        ],
-        [
-          4.03,
-          1.14,
-          8.9
-        ],
-        [
-          4.03,
-          1.14,
-          8.8
-        ],
-        [
-          4.03,
-          1.04,
-          8.8
-        ],
-        [
-          0.03,
-          1.04,
-          8.8
-        ]
-      ],
-      "point_labels": [
-        "PA1 · điểm0",
-        "PA1 · điểm1",
-        "PA1 · điểm2",
-        "PA1 · điểm3",
-        "PA1 · điểm4",
-        "PA1 · hết8,90m danh nghĩa",
-        "PA1 · hạ300cm",
-        "PA1 · điểm7",
-        "PA1 · điểm8",
-        "PA1 · điểm10"
-      ],
       "read_only": true,
-      "note": "Chỉ so sánh:8,90m từ S rồi hạ300cm. Đoạn trên mini≈1,50m chưa có giá đỡ; không chọn thi công."
+      "note": "Bản 07 để đối chiếu mốc: cụm nguồn và đoạn 4 m ngang rào đã được thay trong thiết kế đợt một."
     }
   },
   "triangle_assumption": {
@@ -2221,7 +2267,7 @@
     "selected": "main",
     "mini_option": "pa2",
     "pa1_support": "not-present",
-    "note": "PA2 đã duyệt; PA1 chỉ so sánh. Chi tiết gá và bán kính uốn thi công chưa chốt."
+    "note": "Đợt một theo PA2 tới đầu chờ bịt; PA1 và tuyến 07 chỉ để đối chiếu hình học."
   },
   "source_assembly": {
     "tank_yaw_degrees": 90,
@@ -2240,24 +2286,13 @@
     "note": "Bồn và trục bồn–vòi vuông góc mặt tường phải. Không xoay hệ trục nhà; các vị trí vẫn estimated.",
     "tap_height_estimated_m": 0.25,
     "detail_level": "recognizable-obstacles-not-exact-plumbing",
-    "manual_isolation_before_future_solenoid": true
+    "manual_isolation": "red-tap-and-dnv5-common-master"
   },
-  "source_option": "multi",
+  "source_option": "dnv5",
   "source_options": {
-    "reuse": {
-      "label": "Giữ vòi tay đỏ",
-      "ports": [
-        "migarden"
-      ],
-      "note": "Giữ vòi cũ là tham khảo; một đầu ra chưa tách sinh hoạt và miGarden."
-    },
-    "multi": {
-      "label": "Thay vòi ≥2 đầu",
-      "ports": [
-        "migarden",
-        "household"
-      ],
-      "note": "PHƯƠNG ÁN CHÍNH · Thay vòi hai đầu: một dùng sinh hoạt như cũ, một miGarden. Van tay chặn cứng ở trước vị trí van điện tương lai. Chưa chọn ren/SKU hoặc lắp thực tế."
+    "dnv5": {
+      "label": "Giữ vòi đỏ + DNV5",
+      "note": "Vòi đỏ → nối F27/F21 → DNV5 có một khóa tổng. Hai cổng bịt, một cổng vòi rửa, một cổng cấp Zone A. Bơm giữ nguyên cách hoạt động."
     }
   },
   "baseline_date": "2026-10-25",
@@ -2267,8 +2302,8 @@
       "ids": [
         "source-assembly",
         "F",
+        "dnv5",
         "household-outlet",
-        "future-valve",
         "tank",
         "pump",
         "existing-blue-valves"
@@ -2277,6 +2312,9 @@
     {
       "label": "2 · Sang phải và men tường",
       "ids": [
+        "source-hose",
+        "future-valve",
+        "valve-adapter",
         "existing-floor-pipe",
         "right-ledge",
         "existing-ledge-pipe",
@@ -2294,17 +2332,27 @@
       ]
     },
     {
-      "label": "4 · Xuống hàng rào / chậu",
+      "label": "4 · Đầu chờ và rào cũ",
       "ids": [
+        "capped-stub",
         "C",
         "fence",
-        "rail",
         "fence-base",
-        "balcony"
+        "balcony",
+        "rail"
       ]
     },
     {
-      "label": "5 · Không gian tham chiếu",
+      "label": "5 · Sau Y / phần nới · để sau",
+      "ids": [
+        "y-deferred",
+        "branch-door",
+        "branch-new-balcony",
+        "balcony-extension"
+      ]
+    },
+    {
+      "label": "6 · Không gian tham chiếu",
       "ids": [
         "terrace",
         "W",
@@ -2507,9 +2555,9 @@
     }
   ],
   "pipe_allowance": {
-    "buffer_m": 3,
-    "status": "agent-proposed-adjustable",
-    "note": "Buffer riêng để cắt dư, không cộng vào nhãn số đo. Tổng chưa gồm nhánh mềm từng chậu hoặc cuộn/khổ bán."
+    "buffer_m": 1,
+    "status": "step-09-example-adjustable",
+    "note": "Dư cắt tùy chỉnh cho uPVC; không cộng vào số đo baseline. Không gồm dây mềm 1,2 m hoặc phần sau Y."
   },
   "anchors": {
     "F": {
@@ -2713,5 +2761,359 @@
     "note": "1cm bán kính ống và5mm khoảng dựng hình là giả định; không là lựa chọn pipe/mounting. Mốc đo độc lập với tim ống vẽ. Đoạn hạ đầu mini lùi6,5cm để tránh đầu ống sẵn; đoạn cuối ra ngoài mép1,5cm. Không đổi mốc150/890cm. Tim ống dựng đặtX4,03m từ S tới rào, đoạn đặt ngang thực trên hình11,5cm quanh mốc≈10cm; không có điểm quayngược/căntrụcthừa.",
     "mini_drop_z_offset_m": 0.065,
     "sideways_rendered_m": 0.115
+  },
+  "installation_revision": "2026-11-12-a91",
+  "installation": {
+    "zone": "A",
+    "stages": {
+      "existing": {
+        "label": "Hiện hữu",
+        "color": "#748477"
+      },
+      "first-batch": {
+        "label": "Đợt một · tuyến dự tính",
+        "color": "#de651e"
+      },
+      "deferred": {
+        "label": "Để sau · chỉ hướng",
+        "color": "#657982",
+        "pattern": "dashed"
+      }
+    },
+    "source": {
+      "retained": "F",
+      "outlet": "M27",
+      "inlet_adapter": {
+        "id": "tap-adapter",
+        "ends": [
+          "F27",
+          "F21"
+        ]
+      },
+      "splitter": {
+        "id": "dnv5",
+        "model": "DNV5",
+        "inlet": "M21",
+        "outlet": "M21",
+        "common_master": true,
+        "ports": [
+          "dnv5-cap-1",
+          "dnv5-cap-2",
+          "household-outlet",
+          "source-hose"
+        ]
+      },
+      "wash_adapter": {
+        "id": "wash-adapter",
+        "ends": [
+          "F21",
+          "F21"
+        ]
+      },
+      "hose": {
+        "id": "source-hose",
+        "material": "PVC mềm",
+        "nominal_length_m": 1.2,
+        "ends": [
+          "F21",
+          "F21"
+        ]
+      },
+      "valve": {
+        "id": "future-valve",
+        "model": "VAKS V12-21",
+        "voltage_dc": 12,
+        "normally_closed": true,
+        "ends": [
+          "M21",
+          "M21"
+        ],
+        "mount_status": "estimated"
+      },
+      "valve_adapter": {
+        "id": "valve-adapter",
+        "ends": [
+          "F21",
+          "uPVC Ø21"
+        ]
+      },
+      "pump_control": "unchanged"
+    },
+    "termination": {
+      "id": "capped-stub",
+      "status": "selected-capped-estimated-placement",
+      "reference": "fence-top",
+      "suggested_drop_m": [
+        0.1,
+        0.2
+      ]
+    },
+    "deferred": {
+      "zone": "A",
+      "junction": "y-deferred",
+      "branches": [
+        "branch-door",
+        "branch-new-balcony"
+      ],
+      "extension": {
+        "id": "balcony-extension",
+        "depth_estimate_m": 1.07,
+        "status": "owner-estimate-outline-only"
+      }
+    },
+    "paths": [
+      {
+        "id": "tap-adapter",
+        "style": "fitting",
+        "points": [
+          [
+            3.4,
+            3.78,
+            0
+          ],
+          [
+            3.55,
+            3.78,
+            0
+          ]
+        ],
+        "stage": "first-batch"
+      },
+      {
+        "id": "dnv5",
+        "style": "manifold",
+        "points": [
+          [
+            3.55,
+            3.78,
+            -0.165
+          ],
+          [
+            3.55,
+            3.78,
+            0.165
+          ]
+        ],
+        "stage": "first-batch"
+      },
+      {
+        "id": "dnv5-cap-1",
+        "style": "port-cap",
+        "points": [
+          [
+            3.55,
+            3.78,
+            -0.055
+          ],
+          [
+            3.65,
+            3.78,
+            -0.055
+          ]
+        ],
+        "stage": "first-batch"
+      },
+      {
+        "id": "dnv5-cap-2",
+        "style": "port-cap",
+        "points": [
+          [
+            3.55,
+            3.78,
+            0.055
+          ],
+          [
+            3.65,
+            3.78,
+            0.055
+          ]
+        ],
+        "stage": "first-batch"
+      },
+      {
+        "id": "wash-adapter",
+        "style": "fitting",
+        "points": [
+          [
+            3.55,
+            3.78,
+            0.165
+          ],
+          [
+            3.65,
+            3.78,
+            0.165
+          ]
+        ],
+        "stage": "first-batch"
+      },
+      {
+        "id": "household-outlet",
+        "style": "wash",
+        "points": [
+          [
+            3.65,
+            3.78,
+            0.165
+          ],
+          [
+            3.68,
+            3.78,
+            0.165
+          ],
+          [
+            3.68,
+            3.78,
+            0.32
+          ],
+          [
+            3.68,
+            3.7,
+            0.32
+          ]
+        ],
+        "stage": "first-batch"
+      },
+      {
+        "id": "source-hose",
+        "style": "hose",
+        "points": [
+          [
+            3.55,
+            3.78,
+            -0.165
+          ],
+          [
+            3.875,
+            3.7,
+            -0.53
+          ],
+          [
+            3.515,
+            4.02,
+            -0.66
+          ],
+          [
+            3.75,
+            4.155,
+            -0.32
+          ]
+        ],
+        "stage": "first-batch"
+      },
+      {
+        "id": "future-valve",
+        "style": "solenoid",
+        "points": [
+          [
+            3.75,
+            4.155,
+            -0.32
+          ],
+          [
+            3.91,
+            4.155,
+            -0.32
+          ]
+        ],
+        "stage": "first-batch"
+      },
+      {
+        "id": "valve-adapter",
+        "style": "fitting",
+        "points": [
+          [
+            3.91,
+            4.155,
+            -0.32
+          ]
+        ],
+        "connect": "route-start",
+        "stage": "first-batch"
+      },
+      {
+        "id": "branch-door",
+        "style": "direction",
+        "stage": "deferred",
+        "connect": "route-end",
+        "points": [
+          [
+            3.81,
+            0.96,
+            8.57
+          ],
+          [
+            3.51,
+            0.7,
+            8.13
+          ],
+          [
+            3.08,
+            0.5,
+            7.86
+          ]
+        ]
+      },
+      {
+        "id": "branch-new-balcony",
+        "style": "direction",
+        "stage": "deferred",
+        "connect": "route-end",
+        "points": [
+          [
+            3.76,
+            0.95,
+            9.15
+          ],
+          [
+            3.29,
+            0.62,
+            9.74
+          ],
+          [
+            2.58,
+            0.4,
+            9.81
+          ],
+          [
+            1.56,
+            0.35,
+            9.63
+          ],
+          [
+            0.79,
+            0.36,
+            9.36
+          ]
+        ]
+      },
+      {
+        "id": "balcony-extension",
+        "style": "outline",
+        "stage": "deferred",
+        "points": [
+          [
+            4.13,
+            0,
+            8.98
+          ],
+          [
+            4.13,
+            0,
+            10.05
+          ],
+          [
+            0.03,
+            0,
+            10.05
+          ],
+          [
+            0.03,
+            0,
+            8.98
+          ]
+        ]
+      }
+    ]
   }
 }

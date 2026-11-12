@@ -2,6 +2,8 @@
 
 **Baseline công khai · 2026-11-03 · Asia/Saigon.** Đọc [chỉ mục và phạm vi chung](README.md). Đây là yêu cầu thiết kế, chưa phải kết quả thực nghiệm, SLA hoặc quyền mở nước thật.
 
+**Cập nhật 12/11/2026:** phân biệt hai ca mất Wi-Fi/AP và mất Internet khi AP còn hoạt động; liên kết cấu hình nút ở bước 09. Các safety outcomes giữ nguyên.
+
 ## 1. Bài toán và mục đích
 
 Người dùng trồng hoa/cây cảnh trong chậu tại ban công, thường vắng nhà vì học tập hoặc công việc. Việc tưới hiện còn phụ thuộc chủ vườn hoặc người hỗ trợ. Mong muốn là giảm thao tác trực tiếp và tích hợp quản lý trong website cá nhân microSched. Mô tả cách tưới hiện tại không đủ để suy ra lịch/lượng nước phù hợp cho cây.
@@ -17,9 +19,9 @@ Không cam kết cây luôn khỏe/đủ nước, hoạt động khi mất đi�
 | ID | Yêu cầu | Ví dụ chấp nhận cần kiểm tra |
 |---|---|---|
 | S1-FR01 | Tạo/xem/sửa/tạm dừng/bật lại lịch từng Zone qua microSched; có ngày hiệu lực, recurrence, thời lượng hữu hạn và trạng thái. Phân biệt desired đã lưu với last-known applied tại Controller; tối đa một lịch logic hoạt động local/Zone | Web sửa khi offline vẫn hiện chờ/chưa rõ; báo applied phải resolve đúng nội dung. Pause đã applied chỉ ngăn occurrence tương lai, không đổi phiên đang chạy |
-| S1-FR02 | Thực thi lịch đã áp dụng hợp lệ tại local khi chỉ mất Internet, còn điện/nguồn nước phù hợp và time/config/policy/accounting/safety đáng tin | Ngắt mạng sau applied; một cơ hội tối đa một lần, không chạy bù; từ chối/bỏ qua nếu điều kiện không đạt |
-| S1-FR03 | START/STOP vật lý tại nguồn không chờ cloud, cùng local arbiter/giới hạn như lịch và remote | START hữu hạn; STOP yêu cầu CLOSE không cần OPEN gates. Gesture, nút và manual duration chưa chọn; không thay van tay độc lập |
-| S1-FR04 | Lịch sử cho biết nguồn, Zone/context thực dùng, planned và thời điểm/thời lượng output do Controller báo khi biết, outcome/reason | Planned 45 giây nhưng STOP sau 17 giây phải giữ 17 reported; thiếu start/terminal không tạo Session thành công giả |
+| S1-FR02 | Thực thi lịch đã áp dụng hợp lệ tại local khi mất Wi-Fi/AP hoặc mất Internet, còn điện/nguồn nước phù hợp và time/config/policy/accounting/safety đáng tin | Kiểm riêng mất Wi-Fi/AP và mất Internet khi AP vẫn hoạt động, sau applied; một cơ hội tối đa một lần, không chạy bù; từ chối/bỏ qua nếu điều kiện không đạt |
+| S1-FR03 | START/STOP vật lý tại nguồn không chờ cloud, cùng local arbiter/giới hạn như lịch và remote | START hữu hạn; STOP yêu cầu CLOSE không cần OPEN gates. [Hai nút nhấn nhả ở 09](09-device-and-component-integration.vi.md#buttons); thời lượng tay còn mở, khóa tay vẫn độc lập |
+| S1-FR04 | Lịch sử cho biết nguồn, Zone/context thực dùng, planned và thời điểm/thời lượng output do Controller báo khi biết, outcome/reason. Tự cập nhật phần liên quan khi đang mở lịch sử | Planned 45 giây nhưng STOP sau 17 giây phải giữ 17 reported; thiếu start/terminal không tạo Session thành công giả. Record mới khớp bộ lọc xuất hiện khi đã đồng bộ |
 | S1-FR05 | Giữ critical events/outcomes local khi offline, đồng bộ lịch sử sau reconnect; thể hiện last-sync/freshness/unknown | Cùng record gửi lại không nhân phiên/replay; cùng identity khác payload phải conflict. Storage hỏng thể hiện degraded/evidence gap, không hứa luôn ghi đủ |
 | S1-FR06 | Tưới/dừng từ web theo quyền/đích/hiệu lực và preview/confirm đúng context; hiển thị các mức nhận/thực thi/kết quả | Đã gửi/received/authorized không là đã tưới. Remote context đổi có ý nghĩa phải confirm lại; timeout sau possible execution giữ unknown |
 | S1-FR07 | Dashboard cho biết device/kết nối, desired/applied, phiên đang được báo, lần gần nhất và lần kế tiếp khi xác định được | Dữ liệu cũ/partial/unknown hiện rõ; next planned không là action thật. Không chế soil/flow hoặc metric chưa có |
@@ -39,7 +41,7 @@ Các hàng dưới là tổ chức traceability, không là exhaustive FMEA ho�
 
 | ID | Tình huống | Kết quả bắt buộc | Thiết kế/evidence còn cần |
 |---|---|---|---|
-| S1-SAFE01 | Mất Internet khi tưới | Local limits/deadline và CLOSE vẫn có hiệu lực, không chờ cloud để kết thúc an toàn | Timer/accounting, ngắt mạng, feedback/cutoff; không buộc dừng ngay chỉ vì mất mạng nếu phiên còn hợp lệ |
+| S1-SAFE01 | Mất Wi-Fi/AP hoặc mất Internet khi tưới | Local limits/deadline và CLOSE vẫn có hiệu lực, không chờ cloud để kết thúc an toàn | Kiểm riêng mất Wi-Fi/AP và mất Internet khi AP vẫn hoạt động; timer/accounting, feedback/cutoff; không buộc dừng ngay chỉ vì mất mạng nếu phiên còn hợp lệ |
 | S1-SAFE02 | microSched down | Không mất bảo vệ local; lịch đã applied/nút còn dùng khi local hợp lệ | Outage, hiệu lực cấu hình và lưu bền; remote có thể không khả dụng |
 | S1-SAFE03 | Controller treo | Không cho nước mở vô hạn, đưa đầu ra/cấp nước về an toàn trong giới hạn sẽ chốt | Watchdog/output/fail-safe cùng driver/van; reset CPU không là bằng chứng ngắt nước |
 | S1-SAFE04 | Mất nguồn/reboot | Mất nguồn an toàn, boot fail-closed; không restore OPEN hoặc replay cơ hội lỡ | Mạch/van/cutoff, drain-down và power-loss/recovery tests |
@@ -59,7 +61,7 @@ Các hàng dưới là tổ chức traceability, không là exhaustive FMEA ho�
 - Thu record theo sự kiện: applied, occurrence disposition, request, start/end/outcome/reason và status có freshness. Cadence/retention/latency/cost/tolerance còn mở. Soil/Zigbee HOLD; không thêm sensor vì ví dụ khóa học.
 - Không có nghĩa vụ kế thừa notification lifecycle/Web Push, inventory cây/chậu/placement hoặc Area/Source/Controller CRUD. Status/error/freshness giữ nguyên. Tưới nhóm và multi-Controller không thuộc core hiện tại.
 
-[SAF-P01](README.md#saf-p01--proposed-giới-hạn-tích-lũy-và-cooldown) ghi candidate cho bước 08; chưa phê duyệt numeric policy. Bước 07 phân công trách nhiệm, bước 09 xác minh hardware/flow/fault; 02/04 cập nhật khi policy được lựa chọn.
+[08](08-operational-view-specification.vi.md#budget-d186) so các hạn mức, chưa phê duyệt ngưỡng. [07](07-functional-view-specification.vi.md) phân công trách nhiệm; [09](09-device-and-component-integration.vi.md) mô tả cấu hình và cách xác minh phần cứng, dòng nước và lỗi. Cập nhật 02/04 khi chọn policy.
 
 ## 6. Kết quả và cách đọc tiếp
 

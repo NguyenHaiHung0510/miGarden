@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1720" viewBox="0 0 1280 1720" role="img" aria-label="07-D-remote-sequence"><defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#48677E"/></marker></defs><rect width="1280" height="1720" fill="#fff"/>
+<text x="36" y="54" font-family="Segoe UI,Arial,sans-serif" font-size="30" fill="#173247" text-anchor="start"><tspan x="36" dy="0">07 • Remote chưa rõ kết quả, rồi STOP tại nguồn</tspan></text>
+<text x="36" y="92" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#506477" text-anchor="start"><tspan x="36" dy="0">Candidate / received / authorization / started / result là các mức khác nhau.</tspan></text>
+<line x1="150" y1="210" x2="150" y2="1620" stroke="#B5C5D1" stroke-width="1.5" stroke-dasharray="6 7"/>
+<rect x="35" y="140" width="230" height="70" rx="14" fill="#EAF3FF" stroke="#48677E" stroke-width="2" />
+<text x="150" y="181.16" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="150" dy="0">Browser</tspan></text>
+<line x1="465" y1="210" x2="465" y2="1620" stroke="#B5C5D1" stroke-width="1.5" stroke-dasharray="6 7"/>
+<rect x="350" y="140" width="230" height="70" rx="14" fill="#EAF3FF" stroke="#48677E" stroke-width="2" />
+<text x="465" y="181.16" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="465" dy="0">microSched</tspan></text>
+<line x1="820" y1="210" x2="820" y2="1620" stroke="#B5C5D1" stroke-width="1.5" stroke-dasharray="6 7"/>
+<rect x="705" y="140" width="230" height="70" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="820" y="181.16" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="820" dy="0">ESP32</tspan></text>
+<line x1="1120" y1="210" x2="1120" y2="1620" stroke="#B5C5D1" stroke-width="1.5" stroke-dasharray="6 7"/>
+<rect x="1005" y="140" width="230" height="70" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="1120" y="181.16" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="1120" dy="0">Input / driver</tspan></text>
+<polyline points="150,295 465,295" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="154" y="224" width="307" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="307.5" y="246" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="307.5" dy="0">I01 • Preview, confirm</tspan><tspan x="307.5" dy="26.400000000000002">và gửi START</tspan></text>
+<polyline points="465,405 820,405" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="469" y="334" width="347" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="642.5" y="356" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="642.5" dy="0">I03 • Candidate</tspan><tspan x="642.5" dy="26.400000000000002">Đúng context / hiệu lực</tspan></text>
+<polyline points="820,515 465,515" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="469" y="444" width="347" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="642.5" y="466" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="642.5" dy="0">I03 • Received</tspan><tspan x="642.5" dy="26.400000000000002">Chưa là đã tưới</tspan></text>
+<polyline points="465,625 820,625" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="469" y="554" width="347" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="642.5" y="576" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="642.5" dy="0">I03 • Authorization</tspan><tspan x="642.5" dy="26.400000000000002">Trước possible execution</tspan></text>
+<rect x="630" y="660" width="565" height="114" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="912.5" y="694.42" font-family="Segoe UI,Arial,sans-serif" font-size="21" fill="#173247" text-anchor="middle"><tspan x="912.5" dy="0">G05/G06 • I05/I06</tspan><tspan x="912.5" dy="27.720000000000002">Final local gate: còn hiệu lực / quyền</tspan><tspan x="912.5" dy="27.720000000000002">Critical state và bind deadline đủ căn cứ</tspan></text>
+<polyline points="820,875 1120,875" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="824" y="804" width="292" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="970" y="826" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="970" dy="0">I07 • Yêu cầu output</tspan><tspan x="970" dy="26.400000000000002">Chỉ khi gate hợp lệ</tspan></text>
+<rect x="36" y="930" width="1208" height="64" rx="14" fill="#FFF3D9" stroke="#48677E" stroke-width="2" />
+<text x="640" y="967.48" font-family="Segoe UI,Arial,sans-serif" font-size="22" fill="#173247" text-anchor="middle"><tspan x="640" dy="0">Mạng mất sau possible execution • web chưa nhận được kết quả cần thiết</tspan></text>
+<polyline points="465,1080 150,1080" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6" marker-end="url(#head)" />
+<rect x="154" y="1009" width="307" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="307.5" y="1031" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="307.5" dy="0">I01 • Chưa rõ kết quả</tspan><tspan x="307.5" dy="26.400000000000002">Đối soát ID; không gửi lại OPEN</tspan></text>
+<polyline points="1120,1180 820,1180" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="824" y="1109" width="292" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="970" y="1131" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="970" dy="0">I07 → I05</tspan><tspan x="970" dy="26.400000000000002">STOP tại nguồn</tspan></text>
+<polyline points="820,1280 1120,1280" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="824" y="1209" width="292" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="970" y="1231" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="970" dy="0">I07 • CLOSE ưu tiên</tspan><tspan x="970" dy="26.400000000000002">Chặn intent START cũ</tspan></text>
+<rect x="36" y="1340" width="1208" height="64" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="640" y="1377.48" font-family="Segoe UI,Arial,sans-serif" font-size="22" fill="#173247" text-anchor="middle"><tspan x="640" dy="0">Mạng về • đối soát ID, grant và STOP; đồng bộ báo cáo, không phát lại thao tác mở</tspan></text>
+<polyline points="820,1490 465,1490" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="469" y="1419" width="347" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="642.5" y="1441" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="642.5" dy="0">I04 • Reports có identity</tspan><tspan x="642.5" dy="26.400000000000002">Time quality / evidence</tspan></text>
+<polyline points="465,1570 820,1570" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="469" y="1499" width="347" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="642.5" y="1521" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="642.5" dy="0">Receipt theo record</tspan><tspan x="642.5" dy="26.400000000000002">đã lưu / conflict / lỗi</tspan></text>
+<polyline points="465,1645 150,1645" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="154" y="1574" width="307" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="307.5" y="1596" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="307.5" dy="0">I01 • Cập nhật phần</tspan><tspan x="307.5" dy="26.400000000000002">được chứng minh</tspan></text>
+<text x="36" y="1676" font-family="Segoe UI,Arial,sans-serif" font-size="18" fill="#506477" text-anchor="start"><tspan x="36" dy="0">Web thiếu report ≠ local mất state. Local unresolved thì chặn OPEN trên ranh giới chung; recovery ở 08.</tspan></text></svg>

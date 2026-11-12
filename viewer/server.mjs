@@ -6,8 +6,9 @@ import path from 'node:path';
 
 const root=path.dirname(fileURLToPath(import.meta.url));
 const repoRoot=path.dirname(root),privateRoot=path.join(repoRoot,'.local');
+const heroSource=path.join(repoRoot,'docs','assets','migarden-zone-a-hero.html');
 const within=(base,candidate)=>candidate.startsWith(base+path.sep);
-const files=new Set(['index.html','style.css','app.js','scene.js','drawing.js','route-math.js','route-editor.js','model.json']);
+const files=new Set(['index.html','style.css','app.js','scene.js','drawing.js','installation.js','route-math.js','route-editor.js','model.json']);
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml'};
 const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
 function json(res,status,value){res.writeHead(status,{...headers,'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify(value));}
@@ -16,7 +17,8 @@ export async function viewerBuildId(){const hash=createHash('sha256');for(const 
 export async function createViewerServer({feedbackDir=path.join(privateRoot,'viewer-feedback'),sourceManifest=path.join(privateRoot,'viewer-sources.json')}={}){
  const model=JSON.parse(await readFile(path.join(root,'model.json'),'utf8'));
  const buildId=await viewerBuildId();
- const versions=new Set([model.model_version,'model-v0-draft-03','model-v0-draft-04','model-v0-draft-05','model-v0-draft-06']);
+ const ownerProfile=path.resolve(feedbackDir)===path.join(privateRoot,'viewer-feedback');
+ const currentDir=path.join(feedbackDir,model.model_version);
  const sourceFiles=new Map();
  if(sourceManifest)try{
   const sources=JSON.parse((await readFile(sourceManifest,'utf8')).replace(/^\uFEFF/,''));
@@ -26,39 +28,45 @@ export async function createViewerServer({feedbackDir=path.join(privateRoot,'vie
    if(within(privateRoot,target)&&(await stat(target)).isFile())sourceFiles.set(source.id,target);
   }
  }catch(error){if(error.code!=='ENOENT')throw error;}
- const feedbackFile=path.join(feedbackDir,'current-draft.json');
+ const feedbackFile=path.join(currentDir,'current-draft.json');
  let queue=Promise.resolve();
- async function getDraft(){try{return JSON.parse(await readFile(feedbackFile,'utf8'));}catch(error){if(error.code==='ENOENT')return {revision:0,draft:null};throw error;}}
+ async function readDraft(file){try{return JSON.parse(await readFile(file,'utf8'));}catch(error){if(error.code==='ENOENT')return {revision:0,draft:null};throw error;}}
+ const getDraft=()=>readDraft(feedbackFile);
  const server=http.createServer(async(req,res)=>{
   try{
    const url=new URL(req.url,'http://127.0.0.1');
-   if(url.pathname==='/api/info'){if(req.method!=='GET'){json(res,405,{error:'Method not allowed'});return;}json(res,200,{model_version:model.model_version,build_id:buildId,profile:path.resolve(feedbackDir)===path.join(privateRoot,'viewer-feedback')?'owner':'isolated'});return;}
+   if(url.pathname==='/api/info'){if(req.method!=='GET'){json(res,405,{error:'Method not allowed'});return;}json(res,200,{model_version:model.model_version,build_id:buildId,profile:ownerProfile?'owner':'isolated'});return;}
    if(url.pathname==='/api/sources'){
     if(req.method!=='GET'){json(res,405,{error:'Method not allowed'});return;}
     json(res,200,{available:[...sourceFiles.keys()]});return;
    }
    if(url.pathname==='/api/feedback'){
-    if(req.method==='GET'){json(res,200,await getDraft());return;}
+    if(req.method==='GET'){
+     const current=await getDraft();
+     const previous=await readDraft(path.join(feedbackDir,'current-draft.json'));
+     json(res,200,previous?.draft?{...current,previous_draft:previous.draft}:current);return;
+    }
     if(req.method!=='POST'){json(res,405,{error:'Method not allowed'});return;}
     if(req.headers.origin!==`http://127.0.0.1:${server.address().port}`){json(res,403,{error:'Chỉ lưu từ viewer local.'});return;}
     let raw='';for await(const chunk of req){raw+=chunk;if(Buffer.byteLength(raw)>262144){json(res,413,{error:'Bản nháp quá lớn; hãy xuất dự phòng.'});return;}}
     let draft;try{draft=JSON.parse(raw);}catch{json(res,400,{error:'JSON không hợp lệ.'});return;}
     const points=draft?.route?.points;
-    if(!draft||!versions.has(draft.model_version)||!Number.isInteger(draft.expectedRevision)||!Array.isArray(points)||points.length<2||points.length>256||!points.every(p=>Array.isArray(p)&&p.length===3&&p.every(Number.isFinite))||typeof draft.comment!=='string'||(draft.source_option!==undefined&&!['reuse','multi'].includes(draft.source_option))){json(res,400,{error:'Bản nháp thiếu version hoặc tọa độ hợp lệ.'});return;}
+    if(!draft||draft.model_version!==model.model_version||draft.baseline_revision!==model.baseline_revision||draft.installation_revision!==model.installation_revision||!Number.isInteger(draft.expectedRevision)||!Array.isArray(points)||points.length<2||points.length>256||!points.every(p=>Array.isArray(p)&&p.length===3&&p.every(Number.isFinite))||typeof draft.comment!=='string'||draft.source_option!==model.source_option){json(res,400,{error:'Bản nháp thiếu version hoặc tọa độ hợp lệ.'});return;}
     queue=queue.then(async()=>{
      const current=await getDraft();
      if(draft.expectedRevision!==current.revision){json(res,409,{error:'Đã có bản lưu mới. Nháp trên màn hình vẫn giữ; hãy xuất dự phòng trước khi tải lại.'});return;}
      const id=randomUUID(),record={revision:current.revision+1,saved_at:new Date().toISOString(),draft};
-     await mkdir(feedbackDir,{recursive:true});const body=JSON.stringify(record,null,2)+'\n';
-     await writeFile(path.join(feedbackDir,`snapshot-${id}.json`),body,{flag:'wx'});
-     const temp=path.join(feedbackDir,`current-${id}.tmp`);await writeFile(temp,body);await rename(temp,feedbackFile);
+     await mkdir(currentDir,{recursive:true});const body=JSON.stringify(record,null,2)+'\n';
+     await writeFile(path.join(currentDir,`snapshot-${id}.json`),body,{flag:'wx'});
+     const temp=path.join(currentDir,`current-${id}.tmp`);await writeFile(temp,body);await rename(temp,feedbackFile);
      json(res,200,{revision:record.revision,saved_at:record.saved_at});
     }).catch(()=>{if(!res.headersSent)json(res,500,{error:'Chưa xác nhận lưu được. Nháp vẫn ở trình duyệt; hãy xuất dự phòng.'});});
     await queue;return;
    }
    if(!['GET','HEAD'].includes(req.method)){res.writeHead(405);res.end();return;}
    const pathname=decodeURIComponent(url.pathname);let filename;
-   if(pathname.startsWith('/source/'))filename=sourceFiles.get(pathname.slice(8));
+   if(pathname==='/hero')filename=heroSource;
+   else if(pathname.startsWith('/source/'))filename=sourceFiles.get(pathname.slice(8));
    else{
     const relative=pathname==='/'?'index.html':pathname.slice(1);
     if(files.has(relative)||relative.startsWith('node_modules/three/build/')||relative.startsWith('node_modules/three/examples/jsm/controls/')){

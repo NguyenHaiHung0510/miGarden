@@ -1,8 +1,10 @@
-# miGarden — baseline thiết kế 01–04
+# miGarden — Thiết kế 01–09
 
-**Ngày baseline: 2026-11-03 · Asia/Saigon.** Bốn bước đầu được chấp nhận cho baseline công khai: mục đích/yêu cầu, quy trình, domain và information model. Đây là thiết kế để đọc, thảo luận và phát triển tiếp; chưa là DB/API/firmware hoặc chứng nhận vận hành thiết bị/nước.
+**Cập nhật 12/11/2026 · Asia/Saigon.** 01–08 đã được duyệt ở mức thiết kế; các tham số ghi mở vẫn cần quyết định. Bước 09 là bản tích hợp hiện tại để duyệt. Chưa có firmware tưới, API triển khai hoặc kết quả nghiệm thu điện/nước.
 
 `docs/design/` là nguồn thiết kế hiện hành duy nhất được tiếp tục chỉnh sửa. Các snapshot làm việc trước khi công bố được giữ làm lịch sử riêng, không phải bản canonical song song. [Project state](../project-state.md) phân biệt thiết kế với prototype đã chạy.
+
+**Đọc nhanh:** [Đồ thị lắp đặt](09-device-and-component-integration.vi.md#installation-graph) · [Cụm nước](09-device-and-component-integration.vi.md#water-source) · [Nguồn, driver và nút](09-device-and-component-integration.vi.md#power-path) · [Linh kiện](components-zone-a.vi.md) · [Giao tiếp với microSched](09-device-and-component-integration.vi.md#integration-contracts).
 
 ## Đọc theo thứ tự
 
@@ -12,11 +14,11 @@
 | 02 | [Process Specification](02-process-specification.vi.md) — năm UC, LC01–03 và nhánh lỗi | Baseline công khai |
 | 03 | [Domain Model](03-domain-model.vi.md) — tám concept, quan hệ và quy tắc | Baseline công khai |
 | 04 | [Information Model](04-information-model.vi.md) — dữ liệu nguồn, ref bất biến, report và thời gian | Baseline công khai; giữ ý nghĩa bản 0.2 |
-| 05 | Service Specifications | Pending — chưa thiết kế |
-| 06 | IoT Level Specification | Pending — chưa thiết kế |
-| 07 | Functional View Specification | Pending — chưa thiết kế |
-| 08 | Operational View Specification | Pending — chưa thiết kế; nơi quyết định policy vận hành |
-| 09 | Device and Component Integration | Pending — chưa thiết kế/kiểm chứng phần cứng |
+| 05 | [Service Specification](05-service-specification.vi.md) — tám dịch vụ và hợp đồng | Danh mục và phối hợp đã duyệt |
+| 06 | [IoT Level Specification](06-iot-level-specification.vi.md) — ESP32, microSched, browser, tài nguyên và nguồn | Thiết kế đã duyệt; tài nguyên dưới tải cần đo |
+| 07 | [Functional View Specification](07-functional-view-specification.vi.md) — interface, nhóm chức năng và [catalogue tình huống](07-functional-view-specification.vi.md#catalogue) | Thiết kế đã duyệt |
+| 08 | [Operational View Specification](08-operational-view-specification.vi.md) — vận hành, phục hồi và đồng bộ | Hướng đã duyệt; [hạn mức và cách tính](08-operational-view-specification.vi.md#budget-d186) còn mở |
+| 09 | [Device and Component Integration](09-device-and-component-integration.vi.md) — từ nguồn tới đầu chờ, [đồ thị lắp đặt](09-device-and-component-integration.vi.md#installation-graph) | Bản thiết kế tích hợp để duyệt; chưa nghiệm thu |
 | 10 | Application Development | Pending — chưa triển khai ứng dụng điều khiển |
 
 [Bảy cảnh walkthrough offline](walkthrough/index.html) có dữ liệu synthetic, thẻ nguồn, SVG và PNG. Có thể mở trực tiếp file HTML sau khi clone; không cần server, tài khoản, Internet hoặc thư mục riêng. [Hướng dẫn và nguồn hình](walkthrough/README.vi.md) giải thích cách đọc và dựng lại dữ liệu. Đây là ví dụ về thiết kế, khác [viewer model-v0](../../viewer/README.md) đang biểu diễn hiện trường.
@@ -38,11 +40,11 @@ Chậu/hoa và chín chậu trong khảo sát vẫn là sự thật hiện trư�
 
 ## Điểm mở và policy vận hành
 
-Các safety outcomes trong 01–04 đã được giữ; thuật toán, numeric envelope, exact board/pins/framework, van/driver/power/feedback/cutoff, clock/persistence/recovery, opportunity identity/cutover, remote handoff và transport vẫn cần thiết kế/evidence. Không suy lựa chọn từ các bước còn trống hoặc từ tài liệu cũ.
+Các safety outcomes trong 01–04 được giữ ở 06–09. [09](09-device-and-component-integration.vi.md) chọn bo, chân, nguồn, driver và van cho đợt một. Thuật toán, thời lượng/hạn mức, framework, clock/persistence, giao thức, credential, cutoff/feedback thực tế và bằng chứng an toàn còn cần hoàn thiện. Thiết kế đã chọn không chứng minh lắp đúng hoặc đã tưới.
 
 ### SAF-P01 — PROPOSED: giới hạn tích lũy và cooldown
 
-**Chỉ ghi nhận candidate để quyết định ở bước 08; chưa được chọn làm numeric policy, default tưới hoặc field-tested limit. Bước 08 chưa được triển khai trong baseline này.**
+**Ứng viên lịch sử, chưa được chọn.** Xem [08 mục 1.1](08-operational-view-specification.vi.md#budget-d186) cho so sánh mới, gồm 165 phút trong 3 giờ. Không dùng số nào làm mặc định tưới hoặc giới hạn đã kiểm.
 
 | Candidate | Giá trị đề xuất để đánh giá, chưa phê duyệt |
 |---|---|

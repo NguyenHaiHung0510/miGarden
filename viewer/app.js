@@ -6,8 +6,8 @@ const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
 const model = await fetch('/model.json').then(r => { if (!r.ok) throw new Error('Không đọc được model'); return r.json(); });
 const availableSources=new Set(await fetch('/api/sources').then(r=>r.ok?r.json():{available:[]}).then(value=>value.available||[]).catch(()=>[]));
-const state = { layout: new URLSearchParams(location.search).get('layout') === 'drawing' ? 'drawing' : 'space', projection: 'section', selected: 'F', scenario: 'original', layers: { water: true, pots: true, room: true, dimensions: true }, pots: structuredClone(model.pot_samples) };
-const statusNames = { 'owner-confirmed': 'Bạn đã xác nhận', observed: 'Có trong ảnh · vị trí vẽ minh họa', inferred: 'Cần đối chiếu vị trí', estimated: 'Ước lượng · chưa đo', proposed: 'Đề xuất · chưa lắp', sample: 'Chậu mẫu · không phải inventory thật' };
+const state = { layout: new URLSearchParams(location.search).get('layout') === 'drawing' ? 'drawing' : 'space', projection: 'plan', selected: 'F', scenario: 'original', layers: { water: true, future: true, pots: true, room: true, dimensions: true }, pots: structuredClone(model.pot_samples) };
+const statusNames = { 'owner-confirmed': 'Bạn đã xác nhận', 'selected-design':'Thiết kế đã chọn · chưa lắp', deferred:'Để sau · chỉ hướng', historical:'Bản cũ · tham khảo', observed: 'Có trong ảnh · vị trí vẽ minh họa', inferred: 'Cần đối chiếu vị trí', estimated: 'Ước lượng · chưa đo', proposed: 'Đề xuất · chưa lắp', sample: 'Chậu mẫu · không phải inventory thật' };
 let scene = null, routeEditor = null, notes = {};
 try { notes = JSON.parse(localStorage.getItem('migarden-model-v0-notes') || '{}'); if (!notes || typeof notes !== 'object' || Array.isArray(notes)) notes = {}; } catch { notes = {}; }
 function entity(id) {
@@ -15,7 +15,7 @@ function entity(id) {
   if (base) return base;
   const pot = state.pots.find(p => 'pot:' + p.id === id);
   if (!pot) return model.objects[1];
-  return { id, label: 'Chậu mẫu ' + (state.pots.indexOf(pot) + 1), status: 'sample', summary: 'Chậu và nhánh mềm ở đây chỉ để bạn chỉ vị trí. Chưa chốt việc kiểm soát hoặc ghi nhận từng đầu vòi. Đổi bố trí không tạo thiết bị, telemetry hay trạng thái van thật.', sources: ['A07', 'A08'] };
+  return { id, label: 'Chậu mẫu ' + (state.pots.indexOf(pot) + 1), status: 'sample', summary: 'Chậu chỉ minh họa vị trí. Chưa bố trí béc hoặc đường ống theo từng chậu.', sources: ['A07', 'A08'] };
 }
 function renderDrawing() {
   $('#drawing').innerHTML = drawSVG(model, state);
@@ -41,6 +41,7 @@ function renderInspector() {
   const summary = document.createElement('p'); summary.textContent = object.summary;
   $('#selection-info').replaceChildren(heading, status, summary);
   $('#source-list').replaceChildren(...object.sources.map(id => {
+    if(id==='DESIGN-20261112-A91'){const label=document.createElement('span');label.className='source-thumb design-ref';label.textContent=model.sources[id].title;return label;}
     const button = document.createElement('button'); button.className = 'source-thumb'; button.setAttribute('aria-label', 'Mở ảnh ' + id + ': ' + model.sources[id].title);
     const available=availableSources.has(id);
     if(available){const img=document.createElement('img');img.src='/source/'+id;img.alt=model.sources[id].title;img.loading='lazy';button.append(img);}
@@ -77,6 +78,8 @@ function saveFile(contents, filename, type) {
 }
 $('#model-version').textContent = model.model_version;
 function quickFocus(id){select(id);scene?.focus(id);}
+$$('[data-focus]').forEach(b=>b.addEventListener('click',()=>quickFocus(b.dataset.focus)));
+$('#source-option-note').textContent=model.source_options[model.source_option].note;
 $('#object-list').replaceChildren(...model.navigation_groups.map(group=>{
   const section=document.createElement('div');section.className='object-group';const title=document.createElement('h4');title.textContent=group.label;section.append(title);
   const options=document.createElement('optgroup');options.label=group.label;
@@ -103,7 +106,7 @@ $$('[data-projection]').forEach(b => b.addEventListener('click', () => {
 $$('[data-camera]').forEach(b => b.addEventListener('click', () => {
   scene?.setCamera(b.dataset.camera); $$('[data-camera]').forEach(other => other.classList.toggle('active', other === b));
 }));
-for (const key of ['water', 'pots', 'room', 'dimensions']) $('#layer-' + key).addEventListener('change', event => { state.layers[key] = event.target.checked; scene?.setLayer(key, state.layers[key]); renderDrawing(); });
+for (const key of ['water', 'future', 'pots', 'room', 'dimensions']) $('#layer-' + key).addEventListener('change', event => { state.layers[key] = event.target.checked; scene?.setLayer(key, state.layers[key]); renderDrawing(); });
 $('#cutaway').addEventListener('change', event => scene?.cutaway(event.target.checked));
 $$('[data-scenario]').forEach(b => b.addEventListener('click', () => scenario(b.dataset.scenario)));
 $('#close-photo').addEventListener('click', () => $('#photo-dialog').close());

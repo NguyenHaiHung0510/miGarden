@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1600" viewBox="0 0 1280 1600" role="img" aria-label="07-C-offline-sequence"><defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#48677E"/></marker></defs><rect width="1280" height="1600" fill="#fff"/>
+<text x="36" y="54" font-family="Segoe UI,Arial,sans-serif" font-size="30" fill="#173247" text-anchor="start"><tspan x="36" dy="0">07 • Lịch đã applied, rồi Internet mất</tspan></text>
+<text x="36" y="92" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#506477" text-anchor="start"><tspan x="36" dy="0">Ví dụ synthetic: Zone A lúc 07:00, dự kiến 45 giây; các điều kiện local vẫn phải hợp lệ.</tspan></text>
+<line x1="150" y1="210" x2="150" y2="1500" stroke="#B5C5D1" stroke-width="1.5" stroke-dasharray="6 7"/>
+<rect x="35" y="140" width="230" height="70" rx="14" fill="#EAF3FF" stroke="#48677E" stroke-width="2" />
+<text x="150" y="181.16" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="150" dy="0">Browser</tspan></text>
+<line x1="465" y1="210" x2="465" y2="1500" stroke="#B5C5D1" stroke-width="1.5" stroke-dasharray="6 7"/>
+<rect x="350" y="140" width="230" height="70" rx="14" fill="#EAF3FF" stroke="#48677E" stroke-width="2" />
+<text x="465" y="181.16" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="465" dy="0">microSched</tspan></text>
+<line x1="820" y1="210" x2="820" y2="1500" stroke="#B5C5D1" stroke-width="1.5" stroke-dasharray="6 7"/>
+<rect x="705" y="140" width="230" height="70" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="820" y="181.16" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="820" dy="0">ESP32</tspan></text>
+<line x1="1120" y1="210" x2="1120" y2="1500" stroke="#B5C5D1" stroke-width="1.5" stroke-dasharray="6 7"/>
+<rect x="1005" y="140" width="230" height="70" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="1120" y="181.16" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="1120" dy="0">Input / driver</tspan></text>
+<polyline points="150,295 465,295" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="154" y="224" width="307" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="307.5" y="246" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="307.5" dy="0">1 • I01</tspan><tspan x="307.5" dy="26.400000000000002">Lưu lịch mong muốn</tspan></text>
+<polyline points="465,405 820,405" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="469" y="334" width="347" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="642.5" y="356" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="642.5" dy="0">2 • I02</tspan><tspan x="642.5" dy="26.400000000000002">Giao lịch để áp dụng</tspan></text>
+<rect x="650" y="435" width="510" height="84" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="905" y="468.28" font-family="Segoe UI,Arial,sans-serif" font-size="21" fill="#173247" text-anchor="middle"><tspan x="905" dy="0">G04/G06 • I06</tspan><tspan x="905" dy="27.720000000000002">Lưu và áp dụng đủ căn cứ</tspan></text>
+<polyline points="820,600 465,600" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="469" y="529" width="347" height="34.400000000000006" rx="4" fill="#fff"/>
+<text x="642.5" y="551" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="642.5" dy="0">I04 • Applied report</tspan></text>
+<polyline points="465,680 820,680" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="469" y="609" width="347" height="34.400000000000006" rx="4" fill="#fff"/>
+<text x="642.5" y="631" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="642.5" dy="0">Receipt phù hợp</tspan></text>
+<rect x="36" y="730" width="1208" height="64" rx="14" fill="#FFF3D9" stroke="#48677E" stroke-width="2" />
+<text x="640" y="767.48" font-family="Segoe UI,Arial,sans-serif" font-size="22" fill="#173247" text-anchor="middle"><tspan x="640" dy="0">Đến 07:00 • còn nối AP nhưng Internet mất; lịch đã applied từ trước</tspan></text>
+<rect x="650" y="835" width="510" height="114" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="905" y="869.42" font-family="Segoe UI,Arial,sans-serif" font-size="21" fill="#173247" text-anchor="middle"><tspan x="905" dy="0">3 • I05/I06</tspan><tspan x="905" dy="27.720000000000002">Đánh giá occurrence → arbiter</tspan><tspan x="905" dy="27.720000000000002">Gate không đạt: không START</tspan></text>
+<polyline points="820,1030 1120,1030" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="824" y="959" width="292" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="970" y="981" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="970" dy="0">4 • I07</tspan><tspan x="970" dy="26.400000000000002">Output theo phiên hợp lệ</tspan></text>
+<polyline points="820,1145 1120,1145" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="824" y="1074" width="292" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="970" y="1096" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="970" dy="0">Đến deadline / STOP / lỗi</tspan><tspan x="970" dy="26.400000000000002">Yêu cầu CLOSE / cutoff</tspan></text>
+<rect x="36" y="1205" width="1208" height="64" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="640" y="1242.48" font-family="Segoe UI,Arial,sans-serif" font-size="22" fill="#173247" text-anchor="middle"><tspan x="640" dy="0">G06 giữ critical records trong capacity; mạng về thì đối soát, không chạy bù</tspan></text>
+<polyline points="820,1350 465,1350" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="469" y="1279" width="347" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="642.5" y="1301" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="642.5" dy="0">5 • I04 • Giao records</tspan><tspan x="642.5" dy="26.400000000000002">đúng identity / event time</tspan></text>
+<polyline points="465,1430 820,1430" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="469" y="1359" width="347" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="642.5" y="1381" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="642.5" dy="0">Receipt cho record</tspan><tspan x="642.5" dy="26.400000000000002">đã lưu / đối chiếu</tspan></text>
+<polyline points="465,1510 150,1510" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="154" y="1439" width="307" height="60.800000000000004" rx="4" fill="#fff"/>
+<text x="307.5" y="1461" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="307.5" dy="0">6 • I01</tspan><tspan x="307.5" dy="26.400000000000002">History có freshness</tspan></text>
+<text x="36" y="1556" font-family="Segoe UI,Arial,sans-serif" font-size="18" fill="#506477" text-anchor="start"><tspan x="36" dy="0">Ca này dùng I01, I02, I04–I07; không có remote intent I03. Duration được báo chưa là lượng nước.</tspan></text></svg>
