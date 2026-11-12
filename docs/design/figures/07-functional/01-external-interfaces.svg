@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1090" viewBox="0 0 1280 1090" role="img" aria-label="07-A-external"><defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#48677E"/></marker></defs><rect width="1280" height="1090" fill="#fff"/>
+<text x="36" y="54" font-family="Segoe UI,Arial,sans-serif" font-size="30" fill="#173247" text-anchor="start"><tspan x="36" dy="0">07 • Sơ đồ A — Browser, server và ESP32</tspan></text>
+<text x="36" y="92" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#506477" text-anchor="start"><tspan x="36" dy="0">I01–I04: thao tác, giao lịch/lệnh và chuyển dữ liệu. Đây là interface logic.</tspan></text>
+<rect x="36" y="128" width="1208" height="158" rx="17" fill="#EAF3FF" stroke="#B5C5D1"/>
+<text x="54" y="155" font-family="Segoe UI,Arial,sans-serif" font-size="19" fill="#506477" text-anchor="start"><tspan x="54" dy="0">BROWSER</tspan></text>
+<rect x="36" y="365" width="1208" height="205" rx="17" fill="#EAF3FF" stroke="#B5C5D1"/>
+<text x="54" y="392" font-family="Segoe UI,Arial,sans-serif" font-size="19" fill="#506477" text-anchor="start"><tspan x="54" dy="0">MICROSCHED SERVER</tspan></text>
+<rect x="36" y="662" width="1208" height="337" rx="17" fill="#EAF6EF" stroke="#B5C5D1"/>
+<text x="54" y="689" font-family="Segoe UI,Arial,sans-serif" font-size="19" fill="#506477" text-anchor="start"><tspan x="54" dy="0">ESP32 • không chọn protocol hoặc task từ sơ đồ này</tspan></text>
+<rect x="420" y="165" width="440" height="90" rx="14" fill="#EAF3FF" stroke="#48677E" stroke-width="2" />
+<text x="640" y="216.5" font-family="Segoe UI,Arial,sans-serif" font-size="25" fill="#173247" text-anchor="middle"><tspan x="640" dy="0">G01 • Giao diện người dùng</tspan></text>
+<rect x="80" y="410" width="510" height="110" rx="14" fill="#EAF3FF" stroke="#48677E" stroke-width="2" />
+<text x="335" y="455.32" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="335" dy="0">G02 • Lịch mong muốn</tspan><tspan x="335" dy="31.68">và phối hợp remote</tspan></text>
+<rect x="690" y="410" width="510" height="110" rx="14" fill="#EAF3FF" stroke="#48677E" stroke-width="2" />
+<text x="945" y="455.32" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="945" dy="0">G03 • Nhận reports</tspan><tspan x="945" dy="31.68">History và trạng thái đã biết</tspan></text>
+<rect x="410" y="705" width="460" height="90" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="640" y="756.5" font-family="Segoe UI,Arial,sans-serif" font-size="25" fill="#173247" text-anchor="middle"><tspan x="640" dy="0">G07 • Giao tiếp thiết bị</tspan></text>
+<rect x="80" y="900" width="400" height="75" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="280" y="943.32" font-family="Segoe UI,Arial,sans-serif" font-size="23" fill="#173247" text-anchor="middle"><tspan x="280" dy="0">G04 • Áp dụng / lịch local</tspan></text>
+<rect x="800" y="900" width="400" height="75" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="1000" y="943.32" font-family="Segoe UI,Arial,sans-serif" font-size="23" fill="#173247" text-anchor="middle"><tspan x="1000" dy="0">G05 • Arbiter / thực thi</tspan></text>
+<polyline points="500,255 335,410" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<rect x="61" y="300" width="548" height="34.400000000000006" rx="4" fill="#fff"/>
+<text x="335" y="322" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="335" dy="0">I01 • Lịch, preview, confirm, START/STOP</tspan></text>
+<polyline points="780,255 945,410" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<rect x="676" y="300" width="538" height="34.400000000000006" rx="4" fill="#fff"/>
+<text x="945" y="322" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="945" dy="0">I01 • Status / history / freshness</tspan></text>
+<polyline points="240,520 240,620 520,620 520,705" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<rect x="51" y="573" width="348" height="34.400000000000006" rx="4" fill="#fff"/>
+<text x="225" y="595" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="225" dy="0">I02 • Desired / application</tspan></text>
+<polyline points="540,520 540,565 720,565 720,705" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<rect x="526" y="601" width="338" height="34.400000000000006" rx="4" fill="#fff"/>
+<text x="695" y="623" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="695" dy="0">I03 • Remote START/STOP</tspan></text>
+<polyline points="1030,520 1030,750 870,750" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<rect x="906" y="598" width="318" height="34.400000000000006" rx="4" fill="#fff"/>
+<text x="1065" y="620" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="1065" dy="0">I04 • Reports / receipts</tspan></text>
+<polyline points="410,750 280,750 280,900" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<text x="85" y="842" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="start"><tspan x="85" dy="0">I02 • Áp dụng lịch</tspan></text>
+<polyline points="785,795 785,854 1000,854 1000,900" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<text x="816" y="832" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="start"><tspan x="816" dy="0">I03 • Giao intent remote</tspan></text>
+<text x="36" y="1046" font-family="Segoe UI,Arial,sans-serif" font-size="18" fill="#506477" text-anchor="start"><tspan x="36" dy="0">G03 ingest/read không phát START. G07 vận chuyển thông tin; G05 vẫn kiểm quyền tác động tại local.</tspan></text></svg>

@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1530" height="842" viewBox="0 0 1530 842" role="img" aria-labelledby="title desc">
+  <title id="title">Bố trí hộp DC cho hai adapter, MKE-M06 và hai nút</title>
+  <desc id="desc">Hai dây adapter vào đáy, cáp tải đi ra van, ESP32 và MKE-M06 trên tấm gá, hai nút có gioăng bắt xuyên nắp. Đây là bố trí dự kiến, không phải bản khoan.</desc>
+  <rect width="1530" height="842" fill="#f1f5fa"/>
+  <g font-family="Arial, sans-serif">
+    <rect width="1530" height="126" fill="#152f4a"/>
+    <text x="46" y="38" font-size="19" font-weight="bold" fill="#9fdddc">MIGARDEN · BƯỚC 09 / BỐ TRÍ HỘP</text>
+    <text x="46" y="86" font-size="40" font-weight="bold" fill="#ffffff">Hai dây nguồn vào hộp, một cáp đi ra van</text>
+    <text x="1096" y="52" font-size="20" fill="#d1e8f2">Vị trí sơ bộ</text>
+    <text x="1096" y="82" font-size="20" fill="#d1e8f2">Đo hàng thật trước khi khoan</text>
+
+    <rect x="46" y="153" width="914" height="488" rx="19" fill="#ffffff" stroke="#a2b6c8" stroke-width="2"/>
+    <text x="76" y="197" font-size="25" font-weight="bold" fill="#193b59">1 · Bên trong hộp DC</text>
+    <text x="76" y="225" font-size="19" fill="#415f72">Gá linh kiện, cách mặt hàn khỏi tấm và giữ dây khỏi kéo chân cắm.</text>
+    <rect x="76" y="244" width="854" height="315" rx="15" fill="#f3f7fa" stroke="#afc3d4" stroke-width="2" stroke-dasharray="7 5"/>
+    <text x="97" y="272" font-size="17" fill="#415f72">Tấm gá</text>
+
+    <rect x="104" y="295" width="240" height="105" rx="12" fill="#e9eff7" stroke="#9bb2c6" stroke-width="2"/>
+    <text x="120" y="328" font-size="24" font-weight="bold" fill="#193b59">Vietduino ESP32</text>
+    <text x="120" y="355" font-size="18" fill="#415f72">Chừa chỗ USB và anten</text>
+    <text x="120" y="382" font-size="18" fill="#82442d">Jack DC vào bo</text>
+
+    <rect x="403" y="281" width="226" height="78" rx="12" fill="#f2eafb" stroke="#bea8d5" stroke-width="2"/>
+    <text x="418" y="313" font-size="21" font-weight="bold" fill="#583575">Cụm 2 điện trở</text>
+    <text x="418" y="340" font-size="18" fill="#583575">Nối dây hai nút trên nắp</text>
+    <path d="M344.00 320.00 L355.00 320.00 M360.00 320.00 L371.00 320.00 M376.00 320.00 L387.00 320.00 M392.00 320.00 L403.00 320.00 M344.00 365.00 L355.00 365.00 M360.00 365.00 L371.00 365.00 M371.00 365.00 L371.00 374.33 M371.00 379.33 L371.00 388.67 M371.00 393.67 L371.00 403.00 M371.00 403.00 L381.24 403.00 M386.24 403.00 L396.48 403.00 M401.48 403.00 L411.71 403.00 M416.71 403.00 L426.95 403.00 M431.95 403.00 L442.19 403.00 M447.19 403.00 L457.43 403.00 M462.43 403.00 L472.67 403.00 M477.67 403.00 L487.90 403.00 M492.90 403.00 L503.14 403.00 M508.14 403.00 L518.38 403.00 M523.38 403.00 L533.62 403.00 M538.62 403.00 L548.86 403.00 M553.86 403.00 L564.10 403.00 M569.10 403.00 L579.33 403.00 M584.33 403.00 L594.57 403.00 M599.57 403.00 L609.81 403.00 M614.81 403.00 L625.05 403.00 M630.05 403.00 L640.29 403.00 M645.29 403.00 L655.52 403.00 M660.52 403.00 L670.76 403.00 M675.76 403.00 L686.00 403.00 M686.00 403.00 L686.00 392.50 M686.00 387.50 L686.00 377.00 M686.00 372.00 L686.00 361.50 M686.00 356.50 L686.00 346.00 M686.00 346.00 L693.50 346.00 M698.50 346.00 L706.00 346.00" fill="none" stroke="#7442a1" stroke-width="4"/>
+    <text x="401" y="395" font-size="18" fill="#583575">IO27 + GND tham chiếu: dây tín hiệu</text>
+
+    <rect x="706" y="294" width="194" height="101" rx="12" fill="#e8f5ee" stroke="#90bdab" stroke-width="2"/>
+    <text x="721" y="326" font-size="24" font-weight="bold" fill="#1f5b45">MKE-M06</text>
+    <text x="721" y="370" font-size="17" fill="#82442d">IN</text>
+    <text x="811" y="370" font-size="17" fill="#334257">OUT</text>
+
+    <rect x="398" y="445" width="214" height="79" rx="12" fill="#fff2e8" stroke="#c99477" stroke-width="2"/>
+    <text x="413" y="476" font-size="22" font-weight="bold" fill="#82442d">Jack DC cái</text>
+    <text x="413" y="503" font-size="18" fill="#82442d">Nhận dây của adapter B</text>
+    <path d="M612 477 H750 V395" fill="none" stroke="#ad4b2a" stroke-width="7"/>
+    <path d="M612 491 H766 V395" fill="none" stroke="#334257" stroke-width="7"/>
+    <path d="M835 395 V657 M849 395 V657" fill="none" stroke="#334257" stroke-width="5"/>
+    <path d="M835 395 V657" fill="none" stroke="#ad4b2a" stroke-width="5"/>
+    <path d="M184 657 V400 M506 657 V524" fill="none" stroke="#ad4b2a" stroke-width="7"/>
+
+    <rect x="153" y="590" width="62" height="34" rx="7" fill="#e7edf3" stroke="#648096" stroke-width="2"/>
+    <rect x="475" y="590" width="62" height="34" rx="7" fill="#e7edf3" stroke="#648096" stroke-width="2"/>
+    <rect x="811" y="590" width="62" height="34" rx="7" fill="#e7edf3" stroke="#648096" stroke-width="2"/>
+    <text x="184" y="613" text-anchor="middle" font-size="16" font-weight="bold" fill="#193b59">Ốc A</text>
+    <text x="506" y="613" text-anchor="middle" font-size="16" font-weight="bold" fill="#193b59">Ốc B</text>
+    <text x="842" y="613" text-anchor="middle" font-size="16" font-weight="bold" fill="#193b59">Ốc V</text>
+    <text x="705" y="197" font-size="19" fill="#415f72">Dự trù 3 lối qua đáy</text>
+
+    <rect x="46" y="657" width="278" height="99" rx="12" fill="#fff2e8" stroke="#c99477" stroke-width="2"/>
+    <rect x="366" y="657" width="280" height="99" rx="12" fill="#fff2e8" stroke="#c99477" stroke-width="2"/>
+    <rect x="690" y="657" width="270" height="99" rx="12" fill="#e8f5ee" stroke="#90bdab" stroke-width="2"/>
+    <text x="64" y="695" font-size="22" font-weight="bold" fill="#82442d">Adapter A · 12 V / 2 A</text>
+    <text x="64" y="725" font-size="18" fill="#415f72">Ngoài hộp, chỗ khô</text>
+    <text x="383" y="695" font-size="22" font-weight="bold" fill="#82442d">Adapter B · 12 V / 2 A</text>
+    <text x="383" y="725" font-size="18" fill="#415f72">Ngoài hộp, chỗ khô</text>
+    <text x="706" y="695" font-size="22" font-weight="bold" fill="#1f5b45">Cáp tải tới van</text>
+    <text x="706" y="725" font-size="18" fill="#415f72">Hai lõi, một áo cáp chung</text>
+
+    <rect x="982" y="153" width="503" height="603" rx="19" fill="#ffffff" stroke="#a2b6c8" stroke-width="2"/>
+    <text x="1010" y="197" font-size="25" font-weight="bold" fill="#193b59">2 · Hai nút bắt qua nắp</text>
+    <text x="1010" y="230" font-size="19" fill="#415f72">Nhìn mặt ngoài nắp:</text>
+    <rect x="1010" y="248" width="447" height="178" rx="12" fill="#edf2f7" stroke="#a2b6c8" stroke-width="2"/>
+    <circle cx="1118" cy="319" r="44" fill="#137753" stroke="#d4e7df" stroke-width="5"/>
+    <circle cx="1342" cy="319" r="44" fill="#aa3746" stroke="#f3d4d8" stroke-width="5"/>
+    <text x="1118" y="326" text-anchor="middle" font-size="20" font-weight="bold" fill="#ffffff">START</text>
+    <text x="1342" y="326" text-anchor="middle" font-size="20" font-weight="bold" fill="#ffffff">STOP</text>
+    <text x="1118" y="395" text-anchor="middle" font-size="19" font-weight="bold" fill="#15573f">Xanh · NO</text>
+    <text x="1342" y="395" text-anchor="middle" font-size="19" font-weight="bold" fill="#8b2737">Đỏ · NO</text>
+
+    <text x="1010" y="466" font-size="20" font-weight="bold" fill="#193b59">Cắt ngang một lỗ nút:</text>
+    <rect x="1010" y="487" width="447" height="80" rx="12" fill="#f3f7fa" stroke="#afc3d4" stroke-width="2"/>
+    <text x="1031" y="516" font-size="18" fill="#193b59">Mặt nút · gioăng │ nắp │ đai giữ · chân dây</text>
+    <text x="1031" y="545" font-size="17" fill="#415f72">Ngoài hộp</text>
+    <text x="1329" y="545" font-size="17" fill="#415f72">Trong hộp</text>
+    <text x="1010" y="608" font-size="19" fill="#193b59">Nút trên nắp: dây ở trong hộp,</text>
+    <text x="1010" y="636" font-size="19" fill="#193b59">không cần ốc siết riêng cho từng nút.</text>
+    <text x="1010" y="681" font-size="19" fill="#193b59">Nếu hộp nút rời: thêm lối đi</text>
+    <text x="1010" y="708" font-size="19" fill="#193b59">cho một cáp tín hiệu ba lõi.</text>
+
+    <text x="46" y="794" font-size="19" font-weight="bold" fill="#193b59">Ốc siết ôm áo cáp; đo cả đầu phích đúc để biết có luồn qua được không.</text>
+    <text x="46" y="820" font-size="17" fill="#415f72">Nét liền đậm: nguồn hoặc tải 12 V. Nét tím đứt: tín hiệu. Sơ đồ này dùng để bố trí, xem sơ đồ đấu dây để nối từng chân.</text>
+  </g>
+</svg>

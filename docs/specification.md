@@ -1,6 +1,6 @@
 # miGarden — system specification
 
-> **LEGACY — reference only / chỉ tham khảo lịch sử.** Current product design: [baseline 01–04](design/README.md), promoted 2026-11-03. This file retains its historical text and links at the original path. Internal “current”, CHỐT/MUST, API/schema/transport, scope and numeric gates describe the old revision, not present authority. Steps 05–10 are pending; silence in the new baseline does not select old choices. Current implementation status: [project state](project-state.md). Reuse requires an explicit design choice with source, rationale and impact.
+> **LEGACY — reference only / chỉ tham khảo lịch sử.** Current product design: [design 01–09](design/README.md). This file retains its historical text and links at the original path. Internal “current”, CHỐT/MUST, API/schema/transport, scope and numeric gates describe the old revision, not present authority. Application development and field acceptance are pending; open choices do not select legacy defaults. Current implementation status: [project state](project-state.md). Reuse requires an explicit design choice with source, rationale and impact.
 
 Thiết kế hiện hành ngày **2026-10-22, Asia/Saigon**. Repository chưa có firmware, simulator, viewer hoặc microSched adapter chạy được. Specification mô tả hành vi cần triển khai và kiểm chứng; các ví dụ API/layout không phải executable đã có.
 

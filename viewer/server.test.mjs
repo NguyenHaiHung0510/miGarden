@@ -6,6 +6,7 @@ import {fileURLToPath} from 'node:url';
 import {createViewerServer} from './server.mjs';
 import {routeMetrics,validPoints,routeWallClashes,routeObstacleClashes,segmentHitsBox} from './route-math.js';
 import {drawSVG} from './drawing.js';
+import {installationFeatures,installationPose} from './installation.js';
 
 const root=path.dirname(fileURLToPath(import.meta.url)),repoRoot=path.dirname(root),localRoot=path.join(repoRoot,'.local');
 const model=JSON.parse(await readFile(path.join(root,'model.json'),'utf8'));
@@ -13,14 +14,13 @@ test('main pipe clears wall volumes including its radius',()=>{
  assert.deepEqual(routeWallClashes(model.water_route.points,model),[]);
  assert.deepEqual(routeObstacleClashes(model.water_route.points,model),[]);
  assert.deepEqual(routeObstacleClashes(model.route_presets['mini-straight'].points,model),[]);
- const bad=structuredClone(model.water_route.points);bad[1][0]=(model.layout.rightLedge.minX+model.layout.rightLedge.maxX)/2;
+ const bad=structuredClone(model.water_route.points);bad[1][1]=model.layout.rightLedge.floor+.15;
  assert.ok(routeWallClashes(bad,model).some(hit=>hit.wall==='right-ledge'));
  assert.equal(segmentHitsBox([-1,.5,.5],[2,.5,.5],{min:[0,0,0],max:[1,1,1]},.01),true);
  assert.equal(segmentHitsBox([-1,1.02,.5],[2,1.02,.5],{min:[0,0,0],max:[1,1,1]},.01),false);
 });
 test('selected and mini-comparison routes do not reverse into a collinear hairpin',()=>{
- for(const key of ['main','mini-straight']){
-  const points=model.route_presets[key].points;
+ for(const [key,{points}] of Object.entries({current:model.water_route,'pa2-07':model.route_presets['pa2-07'],'mini-straight':model.route_presets['mini-straight']})){
   for(let i=1;i<points.length-1;i++){
    const a=points[i].map((v,j)=>v-points[i-1][j]),b=points[i+1].map((v,j)=>v-points[i][j]);
    const cross=Math.hypot(a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]);
@@ -32,13 +32,13 @@ test('selected and mini-comparison routes do not reverse into a collinear hairpi
 test('shared metric baseline preserves measured endpoints, diameter and historical comparisons',()=>{
  assert.equal(model.coordinate_frame.kind,'owner-measured-with-estimates');
  assert.deepEqual(model.coordinate_frame.estimated_meters_per_scene_unit,[1,1,1]);
- const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-9,`${a} != ${b}`),p=model.water_route.reference_points,anchor=id=>model.anchors[id].position;
+ const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-9,`${a} != ${b}`),p=model.route_presets['pa2-07'].reference_points,anchor=id=>model.anchors[id].position;
  near(routeMetrics(p.slice(0,5)).total,.99);near(routeMetrics(p).total,17.09);
  near(p[1][0]-p[0][0],.53);near(p[2][1]-p[1][1],.26);near(p[4][0]-p[3][0],.1);
  assert.deepEqual(anchor('S'),p[4]);near(anchor('main-route-crest')[2]-anchor('S')[2],8.9);
  near(p[5][2]-p[4][2],7.4);near(p[5][1]-p[6][1],.4);near(p[7][2]-p[6][2],1.5);near(p[7][1]-p[8][1],2.6);
  const pa1=model.route_presets['mini-straight'];near(pa1.reference_points[5][2]-pa1.reference_points[4][2],8.9);near(pa1.reference_points[5][1]-pa1.reference_points[6][1],3);near(routeMetrics(pa1.reference_points).total,17.09);
- for(const candidate of [model.water_route,pa1]){const allowance=routeMetrics(candidate.points).total-routeMetrics(candidate.reference_points).total;assert.ok(allowance>0&&allowance<.1);}
+ for(const candidate of [model.route_presets['pa2-07'],pa1]){const allowance=routeMetrics(candidate.points).total-routeMetrics(candidate.reference_points).total;assert.ok(allowance>0&&allowance<.1);}
  near(model.existing_pipes.find(v=>v.id==='existing-ledge-pipe').radius*2,.1);
  near(anchor('main-route-crest')[1]-anchor('mini-edge')[1],.4);near(anchor('mini-edge')[1]-anchor('fence-top')[1],2.6);
  near(model.layout.zoneB.maxZ-model.layout.zoneB.minZ,1.5);
@@ -46,9 +46,9 @@ test('shared metric baseline preserves measured endpoints, diameter and historic
  near(model.layout.zoneB.maxX-model.layout.zoneB.minX,3.13);near(model.layout.zoneB.minX-model.layout.leftWall.innerX,1);
  near(Math.abs(p[9][2]-p[8][2]),.1);near(p[9][1]-p[10][1],.1);near(Math.abs(p[11][0]-p[10][0]),4);
  const ap=model.objects.find(v=>v.id==='AP').pose,window=model.objects.find(v=>v.id==='window-left').pose;
- near(ap[1],1.7);near(window[2]-ap[2],3);assert.equal(model.source_option,'multi');assert.ok(model.source_assembly.manual_isolation_before_future_solenoid);
+ near(ap[1],1.7);near(window[2]-ap[2],3);assert.equal(model.source_option,'dnv5');
  assert.equal(model.measurements.length,15);assert.equal(model.measurements.find(d=>d.id==='M03').kind,'straight');assert.equal(model.default_route_preset,'main');assert.equal(model.route_review.mini_option,'pa2');
- for(const[key,preset]of Object.entries(model.route_presets))assert.equal(preset.read_only,key!=='main');
+ for(const[key,preset]of Object.entries(model.route_presets))assert.equal(preset.read_only,true,key);
  const ids=model.navigation_groups.flatMap(g=>g.ids);assert.equal(new Set(ids).size,ids.length);for(const o of model.objects)assert.ok(ids.includes(o.id));
  assert.equal(model.layout.zoneB.maxX,model.layout.terrace.maxX);
  assert.equal(model.source_assembly.tank_yaw_degrees,90);
@@ -64,12 +64,48 @@ test('shared metric baseline preserves measured endpoints, diameter and historic
   }
  }
 });
+test('first batch connects four-port source to the capped PA2 route, with two deferred directions',()=>{
+ const {source,termination,deferred}=model.installation,features=Object.fromEntries(installationFeatures(model).map(f=>[f.id,f]));
+ assert.deepEqual(source.inlet_adapter.ends,['F27','F21']);
+ assert.deepEqual(source.splitter.ports,['dnv5-cap-1','dnv5-cap-2','household-outlet','source-hose']);
+ assert.equal(source.splitter.common_master,true);
+ assert.deepEqual(source.wash_adapter.ends,['F21','F21']);
+ assert.equal(source.hose.nominal_length_m,1.2);
+ assert.deepEqual(source.hose.ends,['F21','F21']);
+ assert.equal(source.valve.voltage_dc,12);assert.ok(source.valve.normally_closed);
+ assert.equal(source.pump_control,'unchanged');
+ assert.equal(source.valve.mount_status,'estimated');
+ const hose=features['source-hose'].points,valve=features[source.valve.id].points,adapter=features[source.valve_adapter.id].points,route=model.water_route.points;
+ assert.deepEqual(hose.at(-1),valve[0]);assert.deepEqual(valve.at(-1),adapter[0]);assert.deepEqual(adapter.at(-1),route[0]);
+ assert.deepEqual(route.slice(2,-1),model.route_presets['pa2-07'].points.slice(4,10));
+ const cap=installationPose(model,termination.id),offset=model.layout.railTop-cap[1];
+ assert.ok(offset>=.1&&offset<=.2);assert.equal(model.objects.find(o=>o.id===termination.id).physical_position_m,null);
+ assert.deepEqual(features[termination.id].points.at(-1),route.at(-1));
+ assert.deepEqual(deferred.branches,['branch-door','branch-new-balcony']);
+ for(const id of deferred.branches){assert.equal(features[id].stage,'deferred');assert.deepEqual(features[id].points[0],cap);}
+ assert.equal(deferred.zone,'A');assert.equal(features['balcony-extension'].style,'outline');
+ for(const projection of ['plan','section']){
+  const state={projection,selected:termination.id,layers:{water:true,room:true,pots:true,dimensions:true,future:true},pots:model.pot_samples};
+  const svg=drawSVG(model,state);
+  for(const id of ['dnv5-cap-1','dnv5-cap-2','source-hose','future-valve','route',termination.id])assert.ok(svg.includes('data-feature="'+id+'" data-stage="first-batch"'),id);
+  for(const id of [...deferred.branches,'balcony-extension'])assert.ok(svg.includes('data-feature="'+id+'" data-stage="deferred" stroke-dasharray'),id);
+  assert.ok(!svg.includes('data-id="rail"'));
+  const hidden=drawSVG(model,{...state,layers:{...state.layers,future:false}});
+  assert.ok(hidden.includes('data-feature="capped-stub"'));assert.ok(!hidden.includes('data-stage="deferred"'));
+ }
+ const edited=structuredClone(model);edited.water_route.points.at(-1)[1]-=.04;
+ assert.deepEqual(installationPose(edited,termination.id),edited.water_route.points.at(-1));
+ assert.deepEqual(installationFeatures(edited).find(f=>f.id===termination.id).points.at(-1),edited.water_route.points.at(-1));
+});
+
 test('standalone clone serves without raw images and persists guarded local feedback',async()=>{
  await mkdir(localRoot,{recursive:true});const fixture=await mkdtemp(path.join(localRoot,'viewer-test-'));
  const server=await createViewerServer({feedbackDir:fixture,sourceManifest:null});
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const origin=`http://127.0.0.1:${server.address().port}`;
  try{
   assert.equal((await fetch(origin+'/')).status,200);
+  assert.equal((await fetch(origin+'/hero')).status,200);
+  assert.equal((await fetch(origin+'/installation.js')).status,200);
   const info=await(await fetch(origin+'/api/info')).json();assert.equal(info.profile,'isolated');assert.match(info.build_id,/^[a-f0-9]{64}$/);
   assert.equal((await fetch(origin+'/node_modules/three/build/three.module.js')).status,200);
   assert.deepEqual(await(await fetch(origin+'/api/sources')).json(),{available:[]});
@@ -78,15 +114,22 @@ test('standalone clone serves without raw images and persists guarded local feed
   assert.equal((await fetch(origin+'/server.mjs')).status,404);
   assert.deepEqual(await(await fetch(origin+'/api/feedback')).json(),{revision:0,draft:null});
   const preset=model.route_presets.right;
-  const draft={model_version:model.model_version,expectedRevision:0,route:{points:preset.points,labels:preset.point_labels,preset:'right'},source_option:'multi',comment:'test-only feedback',notes:{},synthetic:true};
+  const draft={model_version:model.model_version,baseline_revision:model.baseline_revision,installation_revision:model.installation_revision,expectedRevision:0,route:{points:preset.points,labels:preset.point_labels,preset:'custom'},source_option:'dnv5',comment:'test-only feedback',notes:{},synthetic:true};
   const post=(value,from=origin)=>fetch(origin+'/api/feedback',{method:'POST',headers:{Origin:from,'Content-Type':'application/json'},body:JSON.stringify(value)});
   assert.equal((await post(draft,'https://example.invalid')).status,403);
   assert.equal((await post(null)).status,400);
   assert.equal((await post({...draft,source_option:'unknown'})).status,400);
+  assert.equal((await post({...draft,installation_revision:'old'})).status,400);
+  const old={...draft,model_version:'model-v0-draft-07',source_option:'multi'};
+  const legacyFile=path.join(fixture,'current-draft.json');
+  const legacyBytes=JSON.stringify({revision:24,draft:old});await writeFile(legacyFile,legacyBytes);
+  assert.deepEqual(await(await fetch(origin+'/api/feedback')).json(),{revision:0,draft:null,previous_draft:old});
+  assert.equal((await post(old)).status,400);
   const saved=await post(draft);assert.equal(saved.status,200);assert.equal((await saved.json()).revision,1);
-  const disk=JSON.parse(await readFile(path.join(fixture,'current-draft.json'),'utf8'));assert.equal(disk.draft.source_option,'multi');assert.deepEqual(disk.draft.route.points,preset.points);
+  const disk=JSON.parse(await readFile(path.join(fixture,model.model_version,'current-draft.json'),'utf8'));assert.equal(disk.draft.source_option,'dnv5');assert.deepEqual(disk.draft.route.points,preset.points);
   assert.equal((await post(draft)).status,409);
   const competing={...draft,expectedRevision:1};const replies=await Promise.all([post(competing),post(competing)]);assert.deepEqual(replies.map(r=>r.status).sort(),[200,409]);
+  assert.equal(await readFile(legacyFile,'utf8'),legacyBytes);
  }finally{
   await new Promise(resolve=>server.close(resolve));
   // Only remove this freshly-created, named fixture inside this repository's ignored state.

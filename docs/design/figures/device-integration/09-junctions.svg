@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1030" viewBox="0 0 1500 1030" role="img" aria-labelledby="title desc">
+  <title id="title">Mối nối nguồn vào MKE-M06 và cụm hai điện trở</title>
+  <desc id="desc">Hai dây trần của jack DC nối với hai dây nguồn của giắc XH cái. Điểm 0 V rẽ thêm một dây sang GND ESP32. Phần nút có bốn điểm nối riêng 3V3, IO33, IO32 và GND. Một điện trở kéo lên cho mỗi ngõ vào.</desc>
+  <rect width="1500" height="1030" fill="#f1f5fa"/>
+  <g font-family="Arial, sans-serif" fill="#193b59">
+    <rect width="1500" height="112" fill="#152f4a"/>
+    <text x="42" y="34" fill="#9fdddc" font-size="19" font-weight="bold">MIGARDEN · BƯỚC 09 / CHI TIẾT CÁC ĐẦU DÂY</text>
+    <text x="42" y="79" fill="#ffffff" font-size="39" font-weight="bold">Chỗ nào cắm giắc, chỗ nào nối dây?</text>
+    <text x="1065" y="64" fill="#d1e8f2" font-size="20">Đọc nhãn trên linh kiện thật.</text>
+
+    <rect x="38" y="134" width="1424" height="411" rx="17" fill="#ffffff" stroke="#adc1d0" stroke-width="2"/>
+    <text x="62" y="172" font-size="26" font-weight="bold">1 · Jack của adapter B và giắc nguồn vào driver</text>
+    <text x="62" y="201" font-size="18" fill="#415f72">Nét cam/xám đậm mang dòng tải. Nét xanh/tím đứt là dây tín hiệu hoặc mốc 0 V của bo.</text>
+
+    <rect x="62" y="229" width="247" height="142" rx="13" fill="#fff3e8" stroke="#d4a389" stroke-width="2"/>
+    <text x="78" y="260" font-size="22" font-weight="bold">Jack DC cái HS2319V</text>
+    <text x="78" y="287" font-size="17">Phích tròn adapter B cắm vào.</text>
+    <text x="78" y="321" font-size="18" font-weight="bold" fill="#aa482d">Dây trần +12 V</text>
+    <text x="78" y="353" font-size="18" font-weight="bold" fill="#334257">Dây trần âm 0 V</text>
+
+    <path d="M309 315 H373 M615 315 H870" fill="none" stroke="#aa482d" stroke-width="7"/>
+    <path d="M309 348 H373 M615 348 H870" fill="none" stroke="#334257" stroke-width="7"/>
+    <rect x="373" y="299" width="242" height="31" rx="6" fill="#fff3e8" stroke="#aa482d" stroke-width="2"/>
+    <rect x="373" y="332" width="242" height="33" rx="6" fill="#e8eef6" stroke="#334257" stroke-width="2"/>
+    <text x="494" y="321" text-anchor="middle" font-size="17" font-weight="bold" fill="#aa482d">Nối 2 dây · +12 V</text>
+    <text x="494" y="355" text-anchor="middle" font-size="17" font-weight="bold" fill="#334257">Nối 3 dây · 0 V chung</text>
+
+    <path d="M494 365v10 m0 5v10 m0 5v10 m0 5v10 m0 5v12" fill="none" stroke="#2362a2" stroke-width="4"/>
+    <text x="507" y="397" fill="#2362a2" font-size="17">GND bo → mối 0 V</text>
+    <rect x="352" y="437" width="300" height="71" rx="12" fill="#edf3f8" stroke="#9db2c7" stroke-width="2"/>
+    <text x="367" y="465" font-size="21" font-weight="bold">Header cái ESP32</text>
+    <text x="367" y="491" font-size="17">Đầu đực cắm vào GND và IO27</text>
+    <path d="M652 471h10 m5 0h10 m5 0h10 m5 0h10 m5 0h10 m5 0h10 m5 0h10 m5 0h10 m5 0h10 m5 0h7 V461 m0-5v-10 m0-5v-10 m0-5v-10 m0-5v-11 h10 m5 0h10 m5 0h10 m5 0h10 m5 0h10 m5 0h10" fill="none" stroke="#7442a1" stroke-width="4"/>
+    <text x="670" y="462" font-size="17" fill="#7442a1">IO27 → S</text>
+
+    <rect x="870" y="230" width="266" height="201" rx="13" fill="#edf3f8" stroke="#9db2c7" stroke-width="2"/>
+    <text x="887" y="262" font-size="22" font-weight="bold">Dây kèm · XH cái 3 chân</text>
+    <text x="887" y="289" font-size="17">Nối ở đầu dây rời:</text>
+    <text x="887" y="321" font-size="18" font-weight="bold" fill="#aa482d">Dây ứng với IN+</text>
+    <text x="887" y="354" font-size="18" font-weight="bold" fill="#334257">Dây ứng với IN−</text>
+    <text x="887" y="406" font-size="18" font-weight="bold" fill="#7442a1">Dây ứng với S</text>
+    <text x="1168" y="305" text-anchor="middle" font-size="17" font-weight="bold">Cắm</text>
+    <path d="M1136 330 H1185" fill="none" stroke="#667989" stroke-width="4"/>
+    <path d="M1185 324 L1195 330 L1185 336 Z" fill="#667989"/>
+    <rect x="1195" y="230" width="240" height="201" rx="13" fill="#e9f5ef" stroke="#94bba9" stroke-width="2"/>
+    <text x="1211" y="262" font-size="22" font-weight="bold" fill="#225e49">Driver MKE-M06</text>
+    <text x="1211" y="293" font-size="18">Giắc trắng có chân đực:</text>
+    <text x="1211" y="320" font-size="19" font-weight="bold">S và cặp IN+ / IN−</text>
+    <text x="1211" y="370" font-size="17">Cọc vít OUT+ và OUT−</text>
+    <text x="1211" y="397" font-size="17">→ cáp hai lõi → cuộn van</text>
+    <text x="870" y="473" font-size="18" font-weight="bold">OUT− đi tới van, không nối về mối 0 V.</text>
+    <text x="870" y="502" font-size="17" fill="#415f72">Mối nối dây nằm trong hộp. Cầu chì nếu cần: xem sơ đồ nguồn.</text>
+
+    <rect x="38" y="565" width="1424" height="427" rx="17" fill="#ffffff" stroke="#adc1d0" stroke-width="2"/>
+    <text x="62" y="605" font-size="26" font-weight="bold">2 · Cụm hai điện trở là bốn điểm nối riêng</text>
+    <text x="62" y="637" font-size="18" fill="#415f72">Hai điện trở 10 kΩ nối từ cùng 3V3 đến hai chân đọc khác nhau. Điện trở không phân cực.</text>
+
+    <rect x="62" y="677" width="251" height="252" rx="13" fill="#edf3f8" stroke="#9db2c7" stroke-width="2"/>
+    <text x="79" y="709" font-size="21" font-weight="bold">Bốn dây từ ESP32</text>
+    <text x="293" y="747" font-size="19" font-weight="bold" text-anchor="end" fill="#7442a1">3V3</text>
+    <text x="293" y="810" font-size="19" font-weight="bold" text-anchor="end" fill="#087651">IO33</text>
+    <text x="293" y="871" font-size="19" font-weight="bold" text-anchor="end" fill="#ad3849">IO32</text>
+    <text x="293" y="917" font-size="19" font-weight="bold" text-anchor="end" fill="#2362a2">GND</text>
+
+    <rect x="374" y="677" width="642" height="252" rx="13" fill="#f5f8fc" stroke="#9db2c7" stroke-width="2"/>
+    <text x="399" y="709" font-size="21" font-weight="bold">Mối hàn hoặc đầu nối cách điện trên tấm gá</text>
+    <path d="M313 741 H946 M542 741 V758 M542 786 V804 M783 741 V850" fill="none" stroke="#7442a1" stroke-width="4"/>
+    <path d="M313 804 H1096" fill="none" stroke="#087651" stroke-width="4"/>
+    <path d="M313 865 H1096" fill="none" stroke="#ad3849" stroke-width="4"/>
+    <path d="M313 910 H1096" fill="none" stroke="#2362a2" stroke-width="4"/>
+    <rect x="531" y="758" width="22" height="28" rx="2" fill="#f1e6fa" stroke="#7442a1" stroke-width="3"/>
+    <rect x="772" y="823" width="22" height="29" rx="2" fill="#f1e6fa" stroke="#7442a1" stroke-width="3"/>
+    <path d="M783 852 V865" fill="none" stroke="#7442a1" stroke-width="4"/>
+    <circle cx="542" cy="741" r="6" fill="#7442a1"/>
+    <circle cx="783" cy="741" r="6" fill="#7442a1"/>
+    <circle cx="542" cy="804" r="6" fill="#087651"/>
+    <circle cx="783" cy="865" r="6" fill="#ad3849"/>
+    <text x="562" y="780" font-size="17" fill="#694283">R1 · 10 kΩ</text>
+    <text x="803" y="846" font-size="17" fill="#694283">R2 · 10 kΩ</text>
+    <text x="804" y="791" font-size="15" fill="#415f72">Giao không chấm = không nối</text>
+
+    <rect x="1096" y="730" width="339" height="199" rx="13" fill="#edf3f8" stroke="#9db2c7" stroke-width="2"/>
+    <text x="1116" y="767" font-size="21" font-weight="bold">Ba đường ra phía nút</text>
+    <text x="1116" y="811" font-size="18" font-weight="bold" fill="#087651">NO của START xanh</text>
+    <text x="1116" y="871" font-size="18" font-weight="bold" fill="#ad3849">NO của STOP đỏ</text>
+    <text x="1116" y="917" font-size="18" font-weight="bold" fill="#2362a2">COM của cả hai nút</text>
+    <text x="62" y="964" font-size="17" fill="#415f72">Cả hai nút NO: nhả HIGH, bấm LOW. Đo tiếp điểm khi nhận. Cụm này dùng 3,3 V, không nhận 12 V.</text>
+  </g>
+</svg>

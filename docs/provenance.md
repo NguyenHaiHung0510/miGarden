@@ -1,10 +1,10 @@
 # Design source provenance
 
-## Current public baseline
+## Current design baseline
 
-**2026-11-03 · Asia/Saigon.** [Design 01–04](design/README.md) is the only editable current product-design source: purpose/requirements → five processes → eight domain concepts → information semantics. Earlier private working snapshots remain history, not another canonical edition. Publication-baseline acceptance is separate from code, independent review, device or water acceptance. Steps 05–10 remain pending.
+**2026-11-12 · Asia/Saigon.** [Design 01–09](design/README.md) is the current product-design source: requirements and scenarios through service, deployment, responsibilities, operations and component integration. Earlier drafts and buying records are historical inputs, not additional design sources. Application development (Step 10) and installed-system acceptance are still pending.
 
-The method follows IoT Design and Development, Chapter 4 (requirements, process, domain and information steps). The course is a method reference, not automatic authority for sensors, infrastructure or product scope. No raw slide deck or private discussions are distributed.
+The method follows *IoT Design and Development*, Chapter 4. Step 09 uses slide 26 and the *IoT & Applications Digital Notes* (UNIT III, PDF pages 74–75); see the [mapping to the original method](design/09-device-and-component-integration.vi.md#methodology). Course examples do not add product scope by themselves. Only finished diagrams, editable figure sources and public component references accompany the design.
 
 [Walkthrough W00–W06](design/walkthrough/README.vi.md) uses synthetic examples from information model 0.2. Its `prepare_data.py` defines data/derived views; `validate_data.py` checks selected semantic constraints. Finished figures are curated existing outputs from the same content, with their embedded attribution retained. Static HTML/text and public-safe lineage replace private review links; no raw QA receipts are published. See the walkthrough guide for exact provenance and reproduction limits.
 
@@ -22,7 +22,7 @@ The table identifies original input revisions used on **2026-10-22**. Hashes ide
 | S06 | Site-source inventory and sampled-frame coverage | [Site baseline](site-baseline.md) | `2fc8588b75c30d36d42815072293d8021410a5360f39e3e08cfd802aae12ed30` |
 | S07 | SVG/Three.js representation trade-offs | [Representation](representation.md) | `305deac1ec80cf381fa34ba234209c196d1f1e5e1e8f2074dfb72b37b238aa62` |
 
-Selected principles already carried into the new baseline include local autonomy, honest desired/applied/reported/physical distinctions, safety/accounting and separate system/adapter ownership. Dynamic managed-pot requirements, notification lifecycle, old schema/transport and numeric thresholds have not been carried forward automatically. Proposed SAF-P01 values are recorded at the new index for future Step 08 decision, not approved policy.
+Selected principles carried into the current baseline include local autonomy, honest desired/applied/reported/physical distinctions, safety/accounting and separate system/adapter ownership. Managed-pot requirements, notification lifecycle, old schema/transport and numerical thresholds do not follow from these inputs. Historical SAF-P01 values and later [Step 08 proposals](design/08-operational-view-specification.vi.md#budget-d186) are unselected.
 
 The spatial source remains `viewer/model.json`. Site sources have not calibrated all XYZ/scale or verified RF/hydraulics. Finished site drawings may be public under [content policy](representation.md#public-content-and-private-sources); raw captures, private identifiers and source transcripts stay private. Walkthrough illustrations are synthetic, not site reconstructions. No measured 3D/COLMAP reconstruction is supplied here.
 

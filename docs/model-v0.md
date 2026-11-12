@@ -1,21 +1,30 @@
-# Model-v0 — balcony garden prototype
+# Model-v0 — từ sân thượng đến đầu chờ
 
-Baseline **2026-10-25, Asia/Saigon**, model-v0-draft-07. [Canonical field geometry, names and readings](site-model.md) · [Viewer quickstart](../viewer/README.md). Owner corrections select PA2 following the mini. Finished geometry/names/readings are approved for publication; raw captures remain private. This is not a full survey or irrigation controller.
+**Model `model-v0-draft-08` · schema `prototype-0.3` · thiết kế 12/11/2026.** [Mốc hiện trường và vị trí](site-model.md) · [Chạy viewer](../viewer/README.md) · [Bước 09: lắp đặt](design/09-device-and-component-integration.vi.md#water-source).
 
-## Shared source and selected route
+![Nhà 3D và đường nước dự tính đợt một Zone A](assets/migarden-zone-a-hero.png)
 
-viewer/model.json is the single versioned source for SVG and Three.js: metre units, stable IDs,15 reading records, reference anchors and explicit estimated tube geometry. Main balcony/room are immediately below rooftop; window left of main door. Mini width3.13m includes both side walls; depth1.50m excludes divider and includes outer wall; left clear gap1.00m.
+Cam là tuyến dự tính, kết thúc ở **đầu chờ bịt dưới đỉnh rào cũ**. Xám đứt là hai hướng sau Y và đường viền phần nới ước lượng. Hình xuất từ Three.js, dùng cùng model với SVG. Cụm nguồn trong ô phóng to cũng là một góc nhìn của scene đó. [Nguồn và camera để xuất lại](assets/migarden-zone-a-hero.html).
 
-**890cm is straight from S**, after source approach/rise/≈10cm seating, not from the tap. Source entry≈0.99m is separate. PA2 then7.40m→down0.40m→mini1.50m→down2.60m; PA1 comparison8.90m→down3.00m.260cm starts at the top outer mini edge. Both nominal totals≈17.09m with lower two≈10cm offsets and4m fence, excluding pot branches/buffer. Displayed tube centerline≈17.12m includes explicit radius/edge offsets;5mm illustrative gap is not a mounting design. The old15.70m/source-aggregate interpretation is superseded.
+## Đi theo nước trong đợt một
 
-PA2 is main/editable; PA1 view-only and lacks an existing support bridge. Historical left/diagonal/right choices remain references. The owner's low right wall is separate from the neighbor's tall wall. Source rise/sideways seating now clears solid walls and existing pipes; rendering and radius-aware checks share the same wall boxes. Exact wall thicknesses and absolute elevations remain estimated.
+| Chặng | Thể hiện trong hai bản vẽ |
+|---|---|
+| Cụm nguồn sân thượng | Giữ vòi đỏ ren ngoài 27 → nối hai ren trong 27–21 → DNV5 (vào 21 ngoài, bốn cổng ra 21 ngoài, một khóa tổng). Hai cổng bịt; cổng rửa qua nối hai ren trong 21–21; cổng còn lại cấp Zone A. Bơm giữ hệ điều khiển hiện hữu. |
+| Từ DNV5 tới tường phải | Một dây PVC mềm 1,2 m có hai tán ren trong 21 uốn tới van thường đóng VAKS V12-21, 12 V DC. Dây dài 1,2 m theo cấu hình; nét uốn và vị trí gá van chỉ minh họa. |
+| Từ van xuống ban công | Từ ren ngoài 21 của van, đầu chuyển local ren trong 21 → ổ dán uPVC Ø21. Ống cứng theo PA2 men mini và hạ xuống đầu chờ có nắp ren chịu áp. Cao độ cụ thể chưa đo; 10–20 cm dưới đỉnh rào là gợi ý gá. |
+| Để sau | Có thể thay nắp bằng Y, một nhánh mềm về gần cửa, một nhánh ra ban công mới rồi về tường trái. Cả hai thuộc Zone A. Các nét đứt chỉ hướng, không định vị béc/chậu. Phần nới ≈1,07 m là ước lượng; không thêm sàn, tường hay rào mới dạng khối. |
 
-Main source: replacement two-outlet tap, ordinary use plus miGarden manual upstream isolation before a future electronic valve. Nine pots remain dynamic samples; one Zone A circuit/manual branch shutoffs. ZoneB irrigation remains deferred. No pipe SKU, mounting or water operation is selected by the scene.
+## Mốc giữ nguyên, lớp lắp đặt thay đổi
 
-## Viewer and evidence
+[`viewer/model.json`](../viewer/model.json) là nguồn duy nhất cho hai view. Mỗi đơn vị bằng 1 m; +Y lên, X trái→phải theo người nhìn vào cửa chính, +Z từ nguồn ra mép ngoài. SVG mặt bằng chiếu X/Z thành hai tầng, mặt cắt chiếu X/Y, Three.js đọc trực tiếp X/Y/Z. Baseline `2026-10-25-correction-02-r2` giữ nguyên 15 số đọc, mốc neo, vỏ nhà và hình học PA2.
 
-Flow quick-focus, optional highlight, clear-view dimensions toggle, free-flight/look and fullscreen from06 remain. New07-r2 cache binds baseline_revision and preserves earlier03–06 and earlier07 coordinate drafts separately and imports old notes only on explicit action; no silent old-coordinate restore. Editing creates feedback, not a baseline rewrite. Draft collisions are warned, not automatically treated as installed geometry.
+**Mốc PA2 từ S đến đỉnh rào là 11,90 m:** 7,40 m → hạ 0,40 m → men mini 1,50 m → hạ 2,60 m. **8,90 m** là đoạn thẳng từ S tới mép cao; **2,60 m** bắt đầu ở mặt trên mép mini. Tim uPVC dựng hình ≈12,56 m, gồm đoạn nối đầu van và đoạn vào/hạ đến đầu chờ. UI tách 1,2 m dây mềm và phần dư cắt khỏi tim uPVC. Không lấy chiều dài dựng hình làm số cắt hoặc mua.
 
-Six Node groups cover wall/pipe clearance, measured-reference integrity/SVG, guarded local feedback, private aliases and edits during save. The collision regression failed on06 before the fix. Independent affected QA is recorded separately; source checks do not prove field performance. Earlier qualified camera/fullscreen evidence is inherited where code is unchanged. Continuous right-drag/Shift and complete flight-motion proof remain limited.
+Bản 07 từng cộng đoạn từ nguồn và 4 m ngang rào thành ≈17,09 m danh nghĩa. PA2 bản 07 và PA1 bản 07 chỉ là lớp so sánh; không xuất hiện như tuyến đợt một. Các chậu mẫu có thể di chuyển/thêm để thảo luận không gian và không sinh nhánh tưới.
 
-Three.js0.186.1 is pinned locally. Public clones render without private photos. Source IDs N11–N13/FIELD-20261025-C2 preserve correction lineage without raw images, private transcripts/ledger, personal paths or feedback. Firmware, control simulator and microSched integration remain unimplemented. See [project state](project-state.md) and [operations](operations.md) before later device work.
+## Nháp và giới hạn
+
+Editor sửa tim uPVC, giữ vòi đỏ và các mốc nhà. Chỉnh điểm cuối kéo theo vị trí đầu chờ trên cả hai view. Bản lưu đợt một có phiên bản riêng; chỉ nạp ghi chú bản cũ bằng thao tác chủ động, không nạp tọa độ tuyến cũ. Xem [chi tiết lưu feedback](../viewer/README.md#ảnh-và-feedback-riêng-tư).
+
+Ảnh không dùng ảnh gốc. Các mã N11–N13 và FIELD-20261025-C2 giữ nguồn gốc hiệu chỉnh; mã thiết kế DESIGN-20261112-A91 không bổ sung số đo. Các kiểm tra model/render không xác nhận ren, gá, bán kính uốn, áp, lưu lượng hay trạng thái thiết bị.

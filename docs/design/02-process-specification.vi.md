@@ -2,6 +2,8 @@
 
 **Baseline công khai · 2026-11-03 · Asia/Saigon.** Năm use case (UC) mô tả lát cắt tưới core theo [01](01-purpose-and-requirements.vi.md), đã đồng bộ với [03](03-domain-model.vi.md)/[04](04-information-model.vi.md). Đây là hành vi thiết kế, chưa là API/DB/firmware hoặc device/water acceptance.
 
+**Cập nhật 12/11/2026:** tách hai ca mất kết nối và nối UC03 với hai nút, phản hồi tại nguồn ở 09; giữ hành vi tưới và safety outcomes đã duyệt.
+
 ## Mục đích và quy ước chung
 
 UC ghi bên tham gia, trigger, input, preconditions, luồng, output/feedback và nhánh lỗi. Khi coi microSched + Controller là hệ thống, chủ vườn là actor ngoài; clock/scheduler là thành phần/sự kiện nội bộ, không phải người dùng.
@@ -87,7 +89,7 @@ Các UC và bảng truy vết cuối tài liệu cùng bao phủ SAFE01–11; ri
 | Input | Lịch/version, thời điểm dự kiến, Zone và binding Controller/Actuator đã resolve, duration, policy/budget và trạng thái local/time/config/ledger/feedback |
 | Preconditions | Còn điện và điều kiện nguồn nước/phần cứng phù hợp; lịch/thời gian/config/ledger đáng tin, target xác minh được, không active/unknown chưa xử lý, đủ giới hạn an toàn. Không đòi cloud online |
 | Output | Record occurrence: source schedule, version/target, planned và reported execution, outcome/reason/feedback |
-| Feedback | Chỉ báo local theo thiết kế; web nhận khi sync, kèm freshness/clock quality |
+| Feedback | Web nhận khi sync, kèm freshness/clock quality. Đèn riêng để sau; người tại chỗ có thể quan sát nước/tiếng bơm |
 
 ### Luồng bình thường
 
@@ -105,7 +107,7 @@ Các UC và bảng truy vết cuối tài liệu cùng bao phủ SAFE01–11; ri
 | ID | Tình huống | Hành vi mong muốn |
 |---|---|---|
 | UC02-A01 | Trigger lặp hoặc version cũ/mới cùng liên quan một cơ hội | Dùng ledger/cutover theo LC02, không mở lần hai chỉ vì ID/version khác; nếu không chứng minh được trạng thái thì không OPEN |
-| UC02-A02 | Mất Internet hoặc microSched giữa phiên | Giữ kiểm soát/dừng local của phiên hợp lệ; lưu record để sync sau |
+| UC02-A02 | Mất Wi-Fi/AP, mất Internet khi AP vẫn hoạt động hoặc microSched down giữa phiên | Giữ kiểm soát/dừng local của phiên hợp lệ; lưu record để sync sau |
 | UC02-A03 | Clock/config/lịch/ledger không hợp lệ hoặc budget không chứng minh được | Không OPEN; ghi từ chối/bỏ qua/degraded, không tự catch-up sau phục hồi |
 | UC02-A04 | Remote/local START tới cùng lúc hoặc đã có phiên | Chung arbiter ngăn mở trùng/song song và vượt budget; P02: từ chối START bận thay vì tự queue. Nếu có STOP thì phải xử lý pending OPEN theo LC01 |
 | UC02-A05 | STOP tại nguồn hoặc remote hợp lệ | Ưu tiên CLOSE và LC01 để pending OPEN cũ không tự mở lại; ghi lý do dừng. Không mặc nhiên xóa/pause lịch tương lai chưa tạo intent |
@@ -141,11 +143,11 @@ flowchart LR
 | Preconditions START | Controller/điện hoạt động, duration hữu hạn hợp lệ, đủ điều kiện local/time/config/ledger/safety; không cần cloud |
 | Preconditions STOP | Có đường input/điều khiển còn hoạt động để yêu cầu CLOSE; không đòi preconditions của OPEN hoặc một phiên đã xác minh được |
 | Output | Phiên local_button hoặc record dừng/từ chối/chưa rõ, cùng feedback |
-| Feedback | Chỉ báo chấp nhận/từ chối/đang xử lý/dừng theo thiết kế; web chỉ biết sau receipt/sync |
+| Feedback | Đợt một không có đèn riêng để phân biệt chấp nhận/từ chối/đang xử lý. Người tại chỗ quan sát nước hoặc tiếng bơm; web hiển thị báo cáo sau sync |
 
 ### Luồng START bình thường
 
-1. Người tại nguồn thực hiện START theo quy ước input sẽ thiết kế.
+1. Người tại nguồn bấm nút xanh START theo [cấu hình 09](09-device-and-component-integration.vi.md#buttons).
 2. Controller nhận intent local_button, không vòng lên cloud xin phép hoặc tự suy người bấm.
 3. Lấy target/manual duration hữu hạn từ config/policy, không lấy ví dụ30giây/5phút/10phút làm default hoặc kế thừa một duration bất kỳ.
 4. Resolve/giữ ref bất biến của Zone, mapping và nội dung hiệu lực tại thực thi theo LC03; chưa xác minh được thì từ chối START. Sau đó qua cùng arbiter/limits/critical logging như UC02, hợp lệ mới chạy phiên có deadline.
@@ -154,7 +156,7 @@ flowchart LR
 
 ### Luồng STOP
 
-1. Nhận intent STOP tại nguồn.
+1. Người tại nguồn bấm nút đỏ; Controller nhận STOP. Giữ nút thì chặn START; nhả không chạy lại intent đã dừng. Hở dây làm mất nút STOP, không khóa lịch/remote.
 2. Ưu tiên CLOSE cho phạm vi tương ứng theo LC01, không đợi cloud hoặc điều kiện cho OPEN. Pending OPEN cũ cùng target phải bị hủy/từ chối/chặn, không chỉ đóng xong rồi cho chúng tự mở lại.
 3. Xác minh dừng; cập nhật phiên nếu xác định được, hoặc giữ unknown/lỗi khi chưa chứng minh nước an toàn.
 4. Ghi record/feedback cùng source/Zone/binding/time-quality khi xác định được. STOP không tự xóa/pause lịch tương lai chưa tạo intent; nếu offline thì đối soát pending remote sau reconnect, không mở lại intent cũ trước khi đối soát an toàn.
@@ -165,7 +167,7 @@ flowchart LR
 |---|---|---|
 | UC03-A01 | Mất Internet/microSched | START hợp lệ và STOP xử lý local; web giữ dữ liệu cũ đến sync |
 | UC03-A02 | Duration/config/clock/ledger/safety không hợp lệ | Từ chối START, nêu trạng thái; STOP vẫn yêu cầu CLOSE |
-| UC03-A03 | Bấm lặp/bounce hoặc START đang có phiên | Không nhân/kéo dài phiên vượt giới hạn. P02: từ chối START bận; gesture/debounce và số nút chưa chọn |
+| UC03-A03 | Bấm lặp/bounce hoặc START đang có phiên | Không nhân/kéo dài phiên vượt giới hạn. P02: từ chối START bận; hai nút NO đã chọn, debounce còn cần thiết kế |
 | UC03-A04 | Không biết người bấm | Ghi local physical operator/source nút, không ghi giả Owner/người nhà cụ thể |
 | UC03-A05 | Treo/mất điện khiến STOP điện tử không chạy | Không báo đã dừng chỉ từ nút; fail-safe/cutoff và van khóa tay độc lập là bảo vệ phải thiết kế/kiểm chứng |
 | UC03-A06 | Van/feedback bất thường hoặc kết quả trước chưa rõ | CLOSE/cutoff, giữ lỗi/unknown, chặn OPEN đến khi xác minh an toàn |
@@ -252,7 +254,7 @@ flowchart LR
 | Thành phần | Đặc tả |
 |---|---|
 | Actor/bên tham gia | Chủ vườn xem; controller và microSched đồng bộ nền |
-| Trigger | Mở/refresh dashboard, truy vấn lịch sử hoặc nhận record khi online/reconnect |
+| Trigger | Mở/refresh dashboard, mở/đổi lọc lịch sử, nhận dữ liệu mới trong lúc đang xem hoặc nhận record khi online/reconnect |
 | Input | Device/config/schedule status, execution/critical events, source/outcome/feedback, timestamps/clock quality/ref nội dung và binding và điều kiện lọc |
 | Preconditions xem | Người xem có quyền, microSched truy cập được, dữ liệu có provenance/identity. Không đòi controller online để xem lịch sử cũ |
 | Preconditions đồng bộ nền | Controller/service được xác thực, có kết nối và khả năng nhận/lưu hợp lệ theo contract. Không cần người dùng đăng nhập hoặc mở dashboard để sync |
@@ -265,7 +267,7 @@ flowchart LR
 2. Hiển thị controller/kết nối, desired/applied schedule version, phiên đang được báo cáo, lần gần nhất và lần dự kiến tiếp theo khi xác định được.
 3. Người dùng xem/lọc lịch sử theo ngày/phiên/nguồn/kết quả. Giờ Hà Nội; clock quality thiếu phải rõ, không gán mốc planned thành thực tế.
 4. Mỗi record mọi nguồn có start/end/duration khi xác định được, source schedule/local_button/remote, Zone/binding/nội dung hiệu lực thực dùng, outcome/reason và physical feedback thực có; thiếu dữ liệu phải thể hiện thiếu.
-5. Khi dữ liệu tới, cập nhật/đối chiếu theo ID/version; history quá khứ không rewrite vì cấu hình/mapping hiện tại đổi.
+5. Khi dữ liệu tới, cập nhật/đối chiếu theo ID/version; màn hình lịch sử đang mở tự cập nhật phần khớp bộ lọc. History quá khứ không rewrite vì cấu hình/mapping hiện tại đổi. Đồng bộ nền vẫn chạy khi người dùng đóng tab.
 
 ### Luồng đồng bộ nền
 
@@ -352,7 +354,7 @@ LC01–03 là hành vi đã chọn, cùng P01–03 bên dưới. Thuật toán/s
 | NFR02 tự chủ | UC02-A02/A03; UC03-A01/A02; UC01-A02 không giả pause đã áp dụng |
 | NFR03 an toàn | Quy ước chung; UC02/03/04 preconditions/STOP/cutoff/unknown |
 | NFR04 trung thực | UC01 receipt/applied; UC02-A10; UC04-A04/A09; UC05-A01/A03/A07/A09 |
-| SAFE01 mất Internet | UC02-A02; UC03-A01; UC04-A02/A09; UC05-A01 |
+| SAFE01 mất Wi-Fi/AP hoặc Internet | UC02-A02; UC03-A01; UC04-A02/A09; UC05-A01; hai ca nghiệm thu kết nối bên dưới |
 | SAFE02 microSched down | UC02-A02; UC03-A01; UC05-A02 |
 | SAFE03 treo | UC02-A07; UC03-A05; UC04-A07 |
 | SAFE04 mất nguồn/reboot | UC02-A07; UC03-A05; UC04-A07; không restore/replay |
@@ -366,6 +368,17 @@ LC01–03 là hành vi đã chọn, cùng P01–03 bên dưới. Thuật toán/s
 
 **Kết luận phạm vi:** năm UC tổ chức các mục tiêu của FR01–07 trong lát cắt tưới hiện tại. NFR/faults có nhánh yêu cầu/process, không có nghĩa hardware/algorithms/cutoff đã được chứng minh. Review độc lập phải kiểm tra nội dung, không lấy số5 hoặc số nhánh làm proof completeness.
 
+### Hai ca nghiệm thu mất kết nối
+
+Đây là ca cần thực hiện khi có hệ thống tích hợp, **chưa chạy trong S01**. Cả hai dùng lịch đã applied, còn điện/nguồn nước phù hợp và time/config/policy/accounting/safety local đáng tin; không kéo dài khả năng tự chủ vượt các điều kiện đó. Mỗi ca kiểm cả mất kết nối trước một cơ hội hợp lệ và mất giữa phiên.
+
+| ID | Điều kiện mất kết nối cần phân biệt | Kết quả cần đối chiếu |
+|---|---|---|
+| S2-AT-NET01 | ESP32 mất kết nối Wi-Fi/AP; không dùng kết nối cloud | UC02 vẫn đánh giá lịch applied tại local; phiên hợp lệ giữ giới hạn/deadline và CLOSE. START/STOP vật lý theo UC03 không chờ cloud. Critical records giữ trong capacity thiết kế, không hứa lưu vô hạn |
+| S2-AT-NET02 | ESP32 vẫn nối AP nhưng đường Internet không dùng được | Giữ cùng kết quả local như S2-AT-NET01; AP còn nối không đồng nghĩa microSched nhận được request/report hoặc remote đã được thực thi |
+
+Khi đường truyền phục hồi, đối chiếu UC05 và LC01–02: sync không nhân record/phiên hoặc chạy bù, không replay START cũ sau STOP, không xóa unknown. Web chỉ hiển thị phần nhận được cùng freshness/chưa rõ. microSched down là tình huống riêng theo S1-SAFE02, không dùng thay một trong hai ca trên. Hai ca không tự chọn thời gian timeout, retry/backoff hoặc SLA.
+
 ## Quyết định hành vi và điểm mở
 
 | ID | Nội dung | Trạng thái / nơi giải quyết |
@@ -374,13 +387,13 @@ LC01–03 là hành vi đã chọn, cùng P01–03 bên dưới. Thuật toán/s
 | P02 | START đồng thời, priority và pending intent | Đã chọn: START bận bị từ chối, không queue muộn; LC01 xử lý pending/possibly-authorized START khi STOP. Priority còn lại, thứ tự và cooldown còn mở |
 | P03 | Context thay đổi | LC03 đã chọn: đúng Zone/binding/nội dung; remote đổi context cần confirm mới; lịch sử bất biến. Xử lý đổi mapping/cấu hình trong phiên còn mở |
 | P04 | Clock recovery và critical storage | Safety outcomes đã rõ; clock source/tolerance/drift/persistence, retention/capacity và evidence ở bước 08–09 |
-| P05 | Van/driver/feedback/cutoff và numeric envelope | Cần thiết kế/evidence trước enable nước; 15 giây chỉ là độ chia cấu hình. SAF-P01 ở chỉ mục là candidate chưa chọn, decision home bước 08 |
-| P06 | Gesture/manual duration/chỉ báo local | Chưa chọn số nút, debounce, default duration, vị trí hoặc outdoor design |
+| P05 | Van/driver/feedback/cutoff và numeric envelope | [09](09-device-and-component-integration.vi.md) chọn van/driver; cần kiểm bằng chứng đóng/ngắt, feedback/cutoff và chọn ngưỡng ở [08](08-operational-view-specification.vi.md#budget-d186). 15 giây chỉ là độ chia cấu hình |
+| P06 | Nút, thời lượng tay và chỉ báo local | [09](09-device-and-component-integration.vi.md#buttons) chọn hai nút NO, hoãn đèn. Debounce, thời lượng tay và chi tiết gá theo thực tế còn mở |
 | P07 | Notification lifecycle/Web Push | Ngoài baseline hiện tại; không tự kế thừa nghĩa vụ từ thiết kế cũ. UC05 vẫn có status/error/freshness; muốn mở notification cần yêu cầu mới |
 | P08 | Inventory cây/chậu/placement, CRUD bản đồ | Không thuộc nghiệp vụ hiện tại. Các hình/chậu trong prototype là biểu diễn hiện trường, không tạo requirements CRUD hoặc affected-pot list |
 | P09 | Provisioning/credentials/firmware/maintenance | Các preconditions hoặc thiết kế tương lai; không tuyên bố đã hoàn tất lifecycle |
 
-Điểm mở không được dùng để bỏ interlock/unknown/accounting hoặc gọi field-ready. [Bước 04](04-information-model.vi.md) làm rõ immutable refs và time/report; bước 05–10 chưa được thiết kế, không tự lấy API/lease/transport/schema cũ làm đáp án.
+Điểm mở không được dùng để bỏ interlock/unknown/accounting hoặc gọi field-ready. [04](04-information-model.vi.md) làm rõ immutable refs và time/report; [05–09](README.md) nối các luồng trên với dịch vụ, vận hành và thiết bị. API, transport, schema và triển khai bước 10 còn mở.
 
 ## Kết quả và giới hạn
 

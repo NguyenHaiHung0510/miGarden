@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="880" viewBox="0 0 1280 880" role="img" aria-label="06-topology"><defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#48677E"/></marker></defs><rect width="1280" height="880" fill="#fff"/>
+<text x="36" y="54" font-family="Segoe UI,Arial,sans-serif" font-size="30" fill="#173247" text-anchor="start"><tspan x="36" dy="0">06 • Trách nhiệm nằm ở đâu?</tspan></text>
+<text x="36" y="92" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#506477" text-anchor="start"><tspan x="36" dy="0">Một ESP32 giữ điều khiển local; microSched giữ mong muốn và dữ liệu đã nhận.</tspan></text>
+<rect x="45" y="170" width="300" height="110" rx="14" fill="#EAF3FF" stroke="#48677E" stroke-width="2" />
+<text x="195" y="215.32" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="195" dy="0">Browser</tspan><tspan x="195" dy="31.68">Thao tác và xem dữ liệu</tspan></text>
+<rect x="435" y="155" width="365" height="140" rx="14" fill="#EAF3FF" stroke="#48677E" stroke-width="2" />
+<text x="617.5" y="215.32" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="617.5" dy="0">microSched server</tspan><tspan x="617.5" dy="31.68">Desired • remote • history</tspan></text>
+<rect x="890" y="170" width="345" height="110" rx="14" fill="#EAF3FF" stroke="#48677E" stroke-width="2" />
+<text x="1062.5" y="215.32" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="1062.5" dy="0">Internet + Wi-Fi/AP</tspan><tspan x="1062.5" dy="31.68">Chuyển kết nối</tspan></text>
+<rect x="890" y="415" width="345" height="140" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="1062.5" y="475.32" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="1062.5" dy="0">Một ESP32</tspan><tspan x="1062.5" dy="31.68">Lịch • arbiter • critical state</tspan></text>
+<rect x="45" y="430" width="330" height="110" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="210" y="475.32" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="210" dy="0">START / STOP tại nguồn</tspan><tspan x="210" dy="31.68">Phản hồi local</tspan></text>
+<rect x="435" y="665" width="365" height="100" rx="14" fill="#FFF3D9" stroke="#48677E" stroke-width="2" />
+<text x="617.5" y="705.32" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="617.5" dy="0">Driver + van nhánh</tspan><tspan x="617.5" dy="31.68">Chưa tích hợp</tspan></text>
+<rect x="890" y="665" width="345" height="100" rx="14" fill="#FFF3D9" stroke="#48677E" stroke-width="2" />
+<text x="1062.5" y="705.32" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="1062.5" dy="0">Zone A trước</tspan><tspan x="1062.5" dy="31.68">B/C/D nếu đủ capacity</tspan></text>
+<rect x="45" y="665" width="330" height="100" rx="14" fill="#FFF3D9" stroke="#48677E" stroke-width="2" />
+<text x="210" y="705.32" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="210" dy="0">Van khóa tay độc lập</tspan><tspan x="210" dy="31.68">Cô lập nước trực tiếp</tspan></text>
+<polyline points="345,225 435,225" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<polyline points="800,225 890,225" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<polyline points="1062,280 1062,415" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<rect x="876" y="324" width="373" height="34.400000000000006" rx="4" fill="#fff"/>
+<text x="1062.5" y="346" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="1062.5" dy="0">Cấu hình / intent / records</tspan></text>
+<polyline points="375,485 890,485" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<rect x="441" y="441" width="368" height="34.400000000000006" rx="4" fill="#fff"/>
+<text x="625" y="463" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="625" dy="0">Không cần cloud cho mỗi lần bấm</tspan></text>
+<polyline points="1062,555 1062,605 617,605 617,665" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<rect x="436" y="564" width="478" height="34.400000000000006" rx="4" fill="#fff"/>
+<text x="675" y="586" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="middle"><tspan x="675" dy="0">Điều khiển theo thiết kế phần cứng sau</tspan></text>
+<polyline points="800,715 890,715" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<polyline points="210,765 210,805 1062,805 1062,765" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6" marker-end="url(#head)" />
+<text x="36" y="836" font-family="Segoe UI,Arial,sans-serif" font-size="18" fill="#506477" text-anchor="start"><tspan x="36" dy="0">Các khối là đích thiết kế. Output/ACK không chứng minh van đã đóng hoặc nước đã ngừng.</tspan></text></svg>

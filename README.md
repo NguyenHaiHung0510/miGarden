@@ -1,8 +1,28 @@
 # miGarden
 
-miGarden thiết kế tưới có kiểm soát cho vườn hoa/cây cảnh ở ban công, dự kiến tích hợp quản lý vào microSched. Zone là đơn vị tưới, lịch và lịch sử; thiết bị hướng tới chạy lịch hợp lệ và START/STOP local khi mất Internet nhưng vẫn có điện và điều kiện an toàn đáng tin.
+**Từ vòi nước trên sân thượng xuống vườn ban công.** miGarden thiết kế hệ tưới cho vườn hoa và cây cảnh, quản lý lịch và xem kết quả qua microSched.
 
-**[Baseline thiết kế 01–04](docs/design/README.md) là nguồn thiết kế hiện hành.** Có bảy [ví dụ synthetic mở offline](docs/design/walkthrough/index.html) để đọc domain/information model; bước 05–10 còn pending. Đã có prototype SVG/3D model-v0 chạy local. Chưa triển khai firmware, simulator điều khiển hoặc tích hợp microSched; [project state](docs/project-state.md) phân biệt rõ các mức này.
+[![Mô hình 3D nhà miGarden với tuyến nước dự tính từ vòi sân thượng qua van đến đầu chờ dưới rào ban công](docs/assets/migarden-zone-a-hero.png)](docs/design/09-device-and-component-integration.vi.md#installation-graph)
+
+Đường cam là tuyến dự tính của đợt đầu: vòi đỏ → bộ chia → van trên tường phải → ống cứng → đầu chờ dưới đỉnh rào cũ. Nét xám đứt chỉ hai hướng tưới để sau và phần ban công nới ước lượng. [Xem cách lắp từng cụm](docs/design/09-device-and-component-integration.vi.md#installation-graph) · [Xoay mô hình 3D trên máy](viewer/README.md).
+
+## Đọc thiết kế
+
+Nếu muốn hiểu hệ thống ngay, mở **[09 · Đồ thị lắp đặt và tích hợp](docs/design/09-device-and-component-integration.vi.md)**. Tài liệu đi từ ổ điện, vòi và web tới van, nút và đầu chờ; có [danh mục linh kiện](docs/design/components-zone-a.vi.md) kèm quy cách và link sản phẩm.
+
+| Bước | Tài liệu |
+|---|---|
+| 01 | [Mục đích và yêu cầu](docs/design/01-purpose-and-requirements.vi.md) |
+| 02 | [Quy trình và năm tình huống sử dụng](docs/design/02-process-specification.vi.md) |
+| 03 | [Mô hình nghiệp vụ](docs/design/03-domain-model.vi.md) |
+| 04 | [Mô hình thông tin](docs/design/04-information-model.vi.md) |
+| 05 | [Tám dịch vụ](docs/design/05-service-specification.vi.md) |
+| 06 | [Bố trí thiết bị, server và browser](docs/design/06-iot-level-specification.vi.md) |
+| 07 | [Chức năng và phối hợp](docs/design/07-functional-view-specification.vi.md) |
+| 08 | [Vận hành, giới hạn và phục hồi](docs/design/08-operational-view-specification.vi.md) |
+| 09 | [Tích hợp thiết bị, đồ thị lắp đặt và kiểm chứng](docs/design/09-device-and-component-integration.vi.md) |
+
+[Chỉ mục thiết kế](docs/design/README.md) ghi trạng thái từng bước. Có prototype SVG/3D và [bảy ví dụ dữ liệu mẫu mở offline](docs/design/walkthrough/index.html). Firmware tưới, simulator điều khiển, tích hợp microSched và nghiệm thu tại vườn chưa hoàn tất; xem [trạng thái dự án](docs/project-state.md).
 
 ## Xem và sửa mô hình
 
@@ -23,8 +43,8 @@ Mở [viewer local](http://127.0.0.1:4179/?layout=space). Xoay/bay tự do, focu
 ## Thiết kế hiện tại
 
 - **Area nhóm Zone; điều khiển/lịch/history theo Zone.** Ban đầu triển khai A. Mô hình cho phép B/C/D trong khả năng thực tế chưa xác minh của một ESP32 nhiều Actuator, phương án một van nhánh/Zone, tối đa một lịch logic đang hoạt động local/Zone. Không quản lý chậu/placement hoặc danh sách chậu bị tác động. Chín chậu trong khảo sát là hiện trường của prototype.
-- **Remote, local schedule và source START/STOP cùng qua local safety arbiter.** Giữ all-source cumulative budget, STOP ưu tiên/ngăn pending START cũ, no-double/no-catch-up/no-replay, unknown block, fail-closed boot và van khóa tay độc lập. Numeric water policy/hardware chưa được chọn hoặc kiểm chứng; candidate [SAF-P01](docs/design/README.md#saf-p01--proposed-giới-hạn-tích-lũy-và-cooldown) chỉ để quyết định ở bước 08.
-- **A/SVG + B/Three.js dùng chung `viewer/model.json`.** [Site baseline 2026-10-25 bản 07](docs/site-model.md) giữ số đo, tên chuẩn và phần còn ước lượng; geometry không chứng minh RF/hydraulics.
+- **Lịch local, nút tại nguồn và lệnh từ xa qua cùng bộ phân xử trên ESP32.** STOP ưu tiên; không chạy bù, mở lại intent cũ hoặc khôi phục OPEN sau reboot. Lắp đầu tiên một van NC 12 V và hai nút NO; thời lượng tối đa và hạn mức tích lũy [còn mở ở 08](docs/design/08-operational-view-specification.vi.md#budget-d186). Khóa tay vẫn độc lập.
+- **SVG và Three.js dùng chung `viewer/model.json`.** [Mô hình hiện trường](docs/site-model.md) giữ số đo và phần ước lượng; ảnh mô hình minh họa tuyến, không chứng minh đã lắp hoặc đã kiểm nước.
 - **Soil/Zigbee HOLD.** Không tự kế thừa notification lifecycle, inventory CRUD hoặc tưới nhóm vào baseline; nhóm chỉ là mở rộng tương lai.
 - **miGarden giữ system source; microSched giữ human web/API/storage adapter.** Contract/revision của hai bên phải được gắn khi tích hợp; chưa chọn API/schema/transport bằng việc công bố thiết kế này.
 
@@ -32,7 +52,6 @@ Mở [viewer local](http://127.0.0.1:4179/?layout=space). Xoay/bay tự do, focu
 
 | Bạn muốn tìm hiểu | Tài liệu |
 |---|---|
-| Mục đích, yêu cầu, năm UC, domain và dữ liệu | [Design 01–04](docs/design/README.md) |
 | Ví dụ desired/applied, lịch sử bất biến, unknown/time | [Walkthrough offline](docs/design/walkthrough/index.html), [hướng dẫn](docs/design/walkthrough/README.vi.md) |
 | Đã có gì, còn thiếu gì | [Project state](docs/project-state.md) |
 | Mô hình thực địa, tên gọi và số đo | [Site model](docs/site-model.md), [site baseline](docs/site-baseline.md) |

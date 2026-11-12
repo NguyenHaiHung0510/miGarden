@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1060" viewBox="0 0 1280 1060" role="img" aria-label="07-B-local"><defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#48677E"/></marker></defs><rect width="1280" height="1060" fill="#fff"/>
+<text x="36" y="54" font-family="Segoe UI,Arial,sans-serif" font-size="30" fill="#173247" text-anchor="start"><tspan x="36" dy="0">07 • Sơ đồ B — Local và phần cứng</tspan></text>
+<text x="36" y="92" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#506477" text-anchor="start"><tspan x="36" dy="0">I05–I07: ba nguồn chung arbiter, dựa vào time/persistence và điều khiển phần cứng.</tspan></text>
+<rect x="40" y="165" width="355" height="110" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="217.5" y="226.5" font-family="Segoe UI,Arial,sans-serif" font-size="25" fill="#173247" text-anchor="middle"><tspan x="217.5" dy="0">G04 • Lịch local</tspan></text>
+<rect x="462" y="165" width="355" height="110" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="639.5" y="226.5" font-family="Segoe UI,Arial,sans-serif" font-size="25" fill="#173247" text-anchor="middle"><tspan x="639.5" dy="0">G07 • Intent từ mạng</tspan></text>
+<rect x="885" y="165" width="355" height="110" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="1062.5" y="210" font-family="Segoe UI,Arial,sans-serif" font-size="25" fill="#173247" text-anchor="middle"><tspan x="1062.5" dy="0">Nút START / STOP</tspan><tspan x="1062.5" dy="33">tại nguồn</tspan></text>
+<rect x="440" y="440" width="400" height="140" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="640" y="483.5" font-family="Segoe UI,Arial,sans-serif" font-size="25" fill="#173247" text-anchor="middle"><tspan x="640" dy="0">G05 • Arbiter / Execution</tspan><tspan x="640" dy="33">START có điều kiện</tspan><tspan x="640" dy="33">STOP ưu tiên CLOSE</tspan></text>
+<rect x="70" y="740" width="520" height="160" rx="14" fill="#EAF6EF" stroke="#48677E" stroke-width="2" />
+<text x="330" y="793.5" font-family="Segoe UI,Arial,sans-serif" font-size="25" fill="#173247" text-anchor="middle"><tspan x="330" dy="0">G06 • Căn cứ tin cậy</tspan><tspan x="330" dy="33">Time • critical persistence</tspan><tspan x="330" dy="33">Accounting • recovery</tspan></text>
+<rect x="735" y="740" width="505" height="160" rx="14" fill="#FFF3D9" stroke="#48677E" stroke-width="2" stroke-dasharray="9 6"/>
+<text x="987.5" y="794.48" font-family="Segoe UI,Arial,sans-serif" font-size="24" fill="#173247" text-anchor="middle"><tspan x="987.5" dy="0">Driver • van</tspan><tspan x="987.5" dy="31.68">Output và feedback nếu có</tspan><tspan x="987.5" dy="31.68">Tích hợp / kiểm chứng ở 09</tspan></text>
+<polyline points="217,275 217,385 510,385 510,440" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<text x="230" y="360" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="start"><tspan x="230" dy="0">I05 • START theo lịch</tspan></text>
+<polyline points="640,275 640,440" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<text x="652" y="339" font-family="Segoe UI,Arial,sans-serif" font-size="19" fill="#173247" text-anchor="start"><tspan x="652" dy="0">I03 → I05</tspan><tspan x="652" dy="25.080000000000002">Cùng intent remote</tspan></text>
+<polyline points="1062,275 1062,385 770,385 770,440" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" />
+<text x="840" y="363" font-family="Segoe UI,Arial,sans-serif" font-size="19" fill="#173247" text-anchor="start"><tspan x="840" dy="0">I07 input → I05 intent</tspan></text>
+<polyline points="40,220 31,220 31,795 70,795" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<text x="49" y="644" font-family="Segoe UI,Arial,sans-serif" font-size="19" fill="#173247" text-anchor="start"><tspan x="49" dy="0">I06 • Applied, occurrence, clock</tspan></text>
+<polyline points="595,165 595,134 14,134 14,850 70,850" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<text x="247" y="123" font-family="Segoe UI,Arial,sans-serif" font-size="19" fill="#173247" text-anchor="start"><tspan x="247" dy="0">I06 • Records / recovery</tspan></text>
+<polyline points="560,580 560,740" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<text x="579" y="627" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="start"><tspan x="579" dy="0">I06 • Budget, time,</tspan><tspan x="579" dy="26.400000000000002">ledger, outcome</tspan></text>
+<polyline points="840,510 1155,510 1155,740" fill="none" stroke="#48677E" stroke-width="2.5" stroke-linejoin="round"  marker-end="url(#head)" marker-start="url(#head)"/>
+<text x="865" y="625" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#173247" text-anchor="start"><tspan x="865" dy="0">I07 • Output command</tspan><tspan x="865" dy="26.400000000000002">Feedback chỉ nếu thực có</tspan></text>
+<text x="70" y="956" font-family="Segoe UI,Arial,sans-serif" font-size="21" fill="#506477" text-anchor="start"><tspan x="70" dy="0">G06 không là service cloud. G07 không có đường OPEN riêng.</tspan><tspan x="70" dy="27.720000000000002">Output được báo không thay bằng chứng vị trí van / flow; van khóa tay vẫn độc lập.</tspan></text>
+<text x="36" y="1016" font-family="Segoe UI,Arial,sans-serif" font-size="18" fill="#506477" text-anchor="start"><tspan x="36" dy="0">Sơ đồ chỉ phân công trách nhiệm; chưa chọn GPIO, gesture/debounce, driver, cảm biến hay cutoff.</tspan></text></svg>

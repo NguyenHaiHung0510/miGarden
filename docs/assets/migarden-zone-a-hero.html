@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="vi">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>miGarden · Xuất ảnh tuyến Zone A</title>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+<style>
+  :root{color-scheme:light;font:16px/1.5 "Segoe UI",system-ui,sans-serif;color:#263e35;background:#f1f1eb}
+  body{margin:20px} canvas{max-width:100%;height:auto;display:block;border-radius:10px;margin-top:14px}
+  button{padding:8px 14px;font:inherit} #render-host{position:fixed;left:-20px;top:0;width:8px;height:8px;overflow:hidden}
+</style>
+<button id="download" disabled>Tải PNG 1920 × 1080</button>
+<span id="status" role="status">Đang dựng từ viewer/model.json…</span>
+<canvas id="hero" width="1920" height="1080" role="img" aria-label="Nhà 3D, tuyến dự tính từ vòi đỏ qua van tường phải đến đầu chờ bịt dưới rào cũ."></canvas>
+<div id="render-host" aria-hidden="true"></div><div id="labels" hidden></div>
+<script type="module">
+import {createScene} from '/scene.js';
+
+// Orthographic camera positions and targets use the model's world frame in m.
+// The section at right is another view of the same scene, not a second model.
+const cameras={
+  house:{position:[-9.5,10,14.8],target:[2.05,2.55,4.42],span:9.9,width:1220,height:880,anchors:['dnv5','route','capped-stub']},
+  source:{position:[3.27,5.75,.85],target:[3.65,3.96,-.12],span:1.10,width:530,height:385,anchors:['F','dnv5','future-valve','household-outlet']}
+};
+const canvas=document.querySelector('#hero'),ctx=canvas.getContext('2d');
+const status=document.querySelector('#status'),download=document.querySelector('#download');
+const ink='#213e34',muted='#52635a',paper='#f7f7ef',cream='#fffdf6',accent='#bb4e17';
+const font=(size,weight=400)=>weight+' '+size+'px "Segoe UI", system-ui, sans-serif';
+function text(value,x,y,size,color=ink,weight=400){
+  ctx.font=font(size,weight);ctx.fillStyle=color;ctx.fillText(value,x,y);
+}
+function rounded(x,y,w,h,r,fill,stroke){
+  ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();
+  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();}
+}
+function line(points,color,width,dashes=[]){
+  ctx.save();ctx.setLineDash(dashes);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();ctx.restore();
+}
+function badge(value,[x,y],anchor){
+  ctx.font=font(23,650);const w=Math.ceil(ctx.measureText(value).width)+34;
+  const attachX=anchor[0]<x?x:anchor[0]>x+w?x+w:x+w/2;
+  line([anchor,[attachX,y+22]],'#81604b',2);
+  ctx.beginPath();ctx.arc(...anchor,5.5,0,2*Math.PI);ctx.fillStyle=accent;ctx.fill();
+  rounded(x,y,w,44,9,cream,'#dfd9c7');text(value,x+17,y+30,23,ink,650);
+}
+async function place({image,locations},x,y){
+  const img=new Image();img.src=image;await img.decode();ctx.drawImage(img,x,y);
+  return Object.fromEntries(Object.entries(locations).map(([id,[px,py]])=>[id,[x+px,y+py]]));
+}
+let renderer;
+try{
+  const response=await fetch('/model.json');
+  if(!response.ok)throw Error('Không đọc được model');
+  const model=await response.json();
+  renderer=createScene(document.querySelector('#render-host'),document.querySelector('#labels'),model,()=>{},{},{pixelRatio:1,pipeRadius:.026});
+  renderer.setHighlight(false);
+  renderer.setLayer('dimensions',false);
+  renderer.setLayer('pots',false);
+  const house=renderer.renderStill(cameras.house);
+  renderer.setLayer('future',false);
+  const source=renderer.renderStill(cameras.source);
+  ctx.fillStyle=paper;ctx.fillRect(0,0,canvas.width,canvas.height);
+  rounded(38,140,1218,880,24,'#efefe5');
+  const h=await place(house,36,140);
+  rounded(1284,140,598,655,24,cream,'#e1e2d5');
+  text('CỤM NGUỒN · SÂN THƯỢNG',1314,192,23,muted,700);
+  rounded(1314,216,538,385,13,'#edece1');
+  ctx.save();ctx.beginPath();ctx.roundRect(1314,216,538,385,13);ctx.clip();
+  const s=await place(source,1318,216);ctx.restore();
+  badge('Vòi đỏ', [1330,416],s.F);
+  badge('DNV5', [1660,487],s.dnv5);
+  badge('Van NC 12 V', [1610,242],s['future-valve']);
+  text('Hai cổng bịt · một vòi rửa · một nhánh A',1314,654,24,ink,600);
+  text('Dây mềm PVC 1,2 m tới van tường phải',1314,699,24,muted);
+  text('Sau van: đầu chuyển sang uPVC Ø21',1314,739,24,muted);
+  badge('Vòi đỏ + DNV5',[217,218],h.dnv5);
+  badge('uPVC Ø21 · PA2',[317,495],h.route);
+  badge('Đầu chờ bịt dưới rào cũ',[745,903],h['capped-stub']);
+  text('miGarden  /  ĐỢT MỘT · ZONE A',56,56,23,muted,700);
+  text('Từ sân thượng đến đầu chờ',53,115,55,ink,720);
+  line([[1318,851],[1391,851]],model.installation.stages['first-batch'].color,7);
+  text('Tuyến dự tính · chưa lắp',1411,860,25,ink,650);
+  line([[1318,900],[1391,900]],model.installation.stages.deferred.color,4,[9,9]);
+  text('Sau Y và phần nới · để sau',1411,909,25,ink,650);
+  text('Vị trí gá và phần nới là ước lượng.',1317,973,23,muted);
+  text('Mô hình dùng chung SVG / Three.js · '+model.model_version,55,1056,19,muted);
+  canvas.dataset.modelVersion=model.model_version;
+  download.disabled=false;
+  status.textContent='Ảnh đã dựng · '+model.model_version;
+  download.addEventListener('click',()=>{
+    canvas.toBlob(blob=>{
+      const href=URL.createObjectURL(blob),link=document.createElement('a');
+      link.href=href;link.download='migarden-zone-a-hero.png';link.click();setTimeout(()=>URL.revokeObjectURL(href),1000);
+    },'image/png');
+  });
+}catch(error){
+  status.textContent='Không dựng được ảnh: '+error.message;
+  console.error(error);
+}finally{renderer?.dispose();}
+</script>
+</html>

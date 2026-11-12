@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1530" height="1805" viewBox="0 0 1530 1805">
+<title>miGarden: hai adapter 12 V và hai nút thường hở</title>
+<rect width="1530" height="1805" fill="#f1f5fa"/>
+
+
+
+<rect width="1530" height="835" fill="#f4f7fb"/>
+<g font-family="Arial, sans-serif">
+  <text x="48" y="45" font-size="19" font-weight="bold" fill="#35627d">MIGARDEN / BƯỚC 09 · CẤU HÌNH MỘT ZONE / CHỈ VẼ PHẦN DC</text>
+  <text x="48" y="96" font-size="43" font-weight="bold" fill="#122938">Hai adapter 12 V: tách nguồn, chung mốc 0 V</text>
+  <text x="48" y="130" font-size="20" fill="#415f72">Hai adapter cắm riêng vào ổ chia ở chỗ khô. Chỉ nối chung âm DC; không chập hai cực dương.</text>
+
+  <rect x="48" y="163" width="270" height="121" rx="15" fill="#fff3e1" stroke="#d9a45c" stroke-width="2"/>
+  <text x="68" y="197" font-size="23" font-weight="bold" fill="#634014">Adapter A · 12 V / 2 A</text>
+  <text x="68" y="237" font-size="19" fill="#583e20">Giữ phích tròn nguyên dây</text>
+  <path d="M318 222 H382" fill="none" stroke="#b65325" stroke-width="7"/>
+  <path d="M376 214 L388 222 L376 230 Z" fill="#b65325"/>
+
+  <rect x="388" y="163" width="293" height="121" rx="15" fill="#e9edff" stroke="#949be0" stroke-width="2"/>
+  <text x="408" y="197" font-size="24" font-weight="bold" fill="#342c66">Vietduino ESP32</text>
+  <text x="408" y="245" font-size="19" fill="#342c66">Jack DC: phích A</text>
+  <text x="604" y="227" font-size="17" font-weight="bold" fill="#7442a1">IO27</text>
+  <text x="604" y="262" font-size="17" font-weight="bold" fill="#235571">GND</text>
+
+  <rect x="48" y="387" width="270" height="132" rx="15" fill="#fff3e1" stroke="#d9a45c" stroke-width="2"/>
+  <text x="68" y="423" font-size="23" font-weight="bold" fill="#634014">Adapter B · 12 V / 2 A</text>
+  <text x="68" y="460" font-size="19" fill="#583e20">Nguồn của riêng nhánh van</text>
+  <path d="M318 450 H379" fill="none" stroke="#b65325" stroke-width="7"/>
+  <path d="M371 442 L383 450 L371 458 Z" fill="#b65325"/>
+
+  <rect x="383" y="365" width="237" height="170" rx="15" fill="#ffffff" stroke="#96adba" stroke-width="2"/>
+  <text x="403" y="405" font-size="22" font-weight="bold" fill="#122938">Jack DC cái</text>
+  <text x="403" y="438" font-size="19" fill="#415f72">Tách phích thành</text>
+  <text x="403" y="466" font-size="19" fill="#415f72">hai dây nguồn.</text>
+  <text x="570" y="423" font-size="18" font-weight="bold" fill="#235571">0 V</text>
+  <text x="543" y="501" font-size="18" font-weight="bold" fill="#ac4129">+12 V</text>
+
+  <path d="M681.00 222.00 L690.14 222.00 M695.14 222.00 L704.29 222.00 M709.29 222.00 L718.43 222.00 M723.43 222.00 L732.57 222.00 M737.57 222.00 L746.71 222.00 M751.71 222.00 L760.86 222.00 M765.86 222.00 L775.00 222.00 M775.00 222.00 L775.00 232.25 M775.00 237.25 L775.00 247.50 M775.00 252.50 L775.00 262.75 M775.00 267.75 L775.00 278.00 M775.00 283.00 L775.00 293.25 M775.00 298.25 L775.00 308.50 M775.00 313.50 L775.00 323.75 M775.00 328.75 L775.00 339.00 M775.00 339.00 L785.40 339.00 M790.40 339.00 L800.80 339.00 M805.80 339.00 L816.20 339.00 M821.20 339.00 L831.60 339.00 M836.60 339.00 L847.00 339.00" fill="none" stroke="#7442a1" stroke-width="4"/>
+  <text x="692" y="209" font-size="17" fill="#7442a1">Lệnh 3,3 V</text>
+  <path d="M620 418 H847" fill="none" stroke="#334257" stroke-width="7"/>
+  <path d="M681.00 257.00 L689.25 257.00 M694.25 257.00 L702.50 257.00 M707.50 257.00 L715.75 257.00 M720.75 257.00 L729.00 257.00 M729.00 257.00 L729.00 267.09 M729.00 272.09 L729.00 282.18 M729.00 287.18 L729.00 297.27 M729.00 302.27 L729.00 312.36 M729.00 317.36 L729.00 327.45 M729.00 332.45 L729.00 342.55 M729.00 347.55 L729.00 357.64 M729.00 362.64 L729.00 372.73 M729.00 377.73 L729.00 387.82 M729.00 392.82 L729.00 402.91 M729.00 407.91 L729.00 418.00" fill="none" stroke="#2362a2" stroke-width="4"/>
+  <circle cx="729" cy="418" r="7" fill="#334257"/>
+  <text x="636" y="404" font-size="17" fill="#235571">Âm chung</text>
+  <path d="M620 496 H651 M802 496 H847" fill="none" stroke="#ac4129" stroke-width="7"/>
+  <rect x="651" y="477" width="151" height="38" rx="7" fill="#fff0e9" stroke="#ac4129" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="726" y="502" text-anchor="middle" font-size="17" font-weight="bold" fill="#8f321e">Cầu chì nếu cần</text>
+
+  <rect x="847" y="280" width="310" height="255" rx="15" fill="#eef8f3" stroke="#79ab95" stroke-width="2"/>
+  <text x="868" y="317" font-size="24" font-weight="bold" fill="#205441">Driver MKE-M06</text>
+  <text x="868" y="345" font-size="18" font-weight="bold" fill="#7442a1">S</text>
+  <text x="868" y="381" font-size="17" fill="#425d56">Giắc trắng 3 chân</text>
+  <text x="868" y="423" font-size="18" font-weight="bold" fill="#235571">IN−</text>
+  <text x="868" y="501" font-size="18" font-weight="bold" fill="#ac4129">IN+</text>
+  <path d="M1012 352 V510" fill="none" stroke="#c8ddd3" stroke-width="1.5"/>
+  <text x="1025" y="370" font-size="17" fill="#425d56">Hai cọc vít</text>
+  <text x="1025" y="408" font-size="18" font-weight="bold" fill="#ac4129">OUT+</text>
+  <text x="1025" y="474" font-size="18" font-weight="bold" fill="#334257">OUT−</text>
+  <path d="M1157 469 H1240" fill="none" stroke="#334257" stroke-width="7"/>
+  <path d="M1157 402 H1240" fill="none" stroke="#ac4129" stroke-width="7"/>
+  <text x="1173" y="389" font-size="15" fill="#415f72">Cáp tải</text>
+  <rect x="1240" y="365" width="242" height="170" rx="15" fill="#ffffff" stroke="#79ab95" stroke-width="2"/>
+  <text x="1260" y="414" font-size="21" font-weight="bold" fill="#205441">Cuộn van NC 12 V</text>
+  <text x="1260" y="454" font-size="17" fill="#425d56">S HIGH: cấp điện cuộn</text>
+  <text x="1260" y="481" font-size="17" fill="#425d56">S LOW: ngắt điện cuộn</text>
+
+  <rect x="48" y="563" width="1434" height="115" rx="14" fill="#e8f1f5"/>
+  <text x="68" y="597" font-size="21" font-weight="bold" fill="#122938">Đường dòng tải dự kiến khi bật:</text>
+  <text x="68" y="630" font-size="22" fill="#122938">B+ → IN+ → OUT+ → cuộn van → OUT− → MOSFET → IN− → B−</text>
+  <text x="68" y="658" font-size="17" fill="#415f72">Thợ quyết có cần cầu chì DC sau khi so tải, dây và nguồn. Có điện cuộn chưa chứng minh van mở nước.</text>
+  <text x="48" y="706" font-size="17" fill="#415f72">OUT− là dây tải do MOSFET đóng/ngắt, không nối tắt về GND. IO27 không cấp điện cho cuộn.</text>
+  <rect x="48" y="724" width="1434" height="87" rx="14" fill="#ffffff" stroke="#bacbda" stroke-width="2"/>
+  <path d="M74 752 H110" stroke="#ac4129" stroke-width="7"/>
+  <path d="M74 771 H110" stroke="#334257" stroke-width="7"/>
+  <text x="128" y="755" font-size="21" font-weight="bold" fill="#122938">Nét liền đậm · Nguồn và dây tải 12 V</text>
+  <text x="128" y="784" font-size="17" fill="#415f72">Cam: +12 V hoặc dây adapter nguyên phích. Xám: đường về. Không dùng jumper.</text>
+  <path d="M800.00 752.00 L808.67 752.00 M813.67 752.00 L822.33 752.00 M827.33 752.00 L836.00 752.00" stroke="#7442a1" stroke-width="4"/>
+  <path d="M800.00 771.00 L808.67 771.00 M813.67 771.00 L822.33 771.00 M827.33 771.00 L836.00 771.00" stroke="#2362a2" stroke-width="4"/>
+  <text x="854" y="755" font-size="21" font-weight="bold" fill="#122938">Nét đứt · Tín hiệu và mốc 0 V của bo</text>
+  <text x="854" y="784" font-size="17" fill="#415f72">Tím: IO27 → S. Xanh: GND bo → mối nối. Có thể dùng jumper ngắn.</text>
+</g>
+
+<g transform="translate(45 855)">
+
+
+
+  <rect width="1440" height="950" fill="#f1f5fa"/>
+  <g font-family="Arial, sans-serif">
+    <rect width="1440" height="122" fill="#152f4a"/>
+    <text x="44" y="35" font-size="17" font-weight="bold" fill="#9fdddc">MIGARDEN · HAI NÚT THƯỜNG HỞ</text>
+    <text x="44" y="80" font-size="39" font-weight="bold" fill="#ffffff">Đấu hai nút START và STOP vào ESP32</text>
+    <text x="1040" y="56" font-size="20" fill="#d1e8f2">Tiếp điểm vẽ lúc nhả nút</text>
+    <text x="1040" y="84" font-size="19" fill="#d1e8f2">Chưa thử trên thiết bị</text>
+
+    <rect x="38" y="145" width="902" height="532" rx="18" fill="#ffffff" stroke="#b3c5d6" stroke-width="2"/>
+    <text x="64" y="178" font-size="21" font-weight="bold" fill="#294b67">TRONG HỘP BO · CHÂN CẮM VÀ MỐI NỐI</text>
+    <rect x="973" y="145" width="429" height="532" rx="18" fill="#ffffff" stroke="#b3c5d6" stroke-width="2"/>
+    <text x="999" y="178" font-size="21" font-weight="bold" fill="#294b67">NẮP HỘP HOẶC HỘP NÚT RỜI</text>
+
+    <rect x="64" y="205" width="260" height="432" rx="16" fill="#e9eff7" stroke="#91abc4" stroke-width="2"/>
+    <text x="87" y="244" font-size="23" font-weight="bold" fill="#163655">Vietduino ESP32</text>
+    <text x="87" y="273" font-size="17" fill="#294b67">Đọc chữ in cạnh chân</text>
+    <text x="87" y="295" font-size="17" fill="#294b67">trên bo thực.</text>
+    <text x="306" y="273" text-anchor="end" font-size="20" font-weight="bold" fill="#6d3b95">3V3</text>
+    <text x="306" y="365" text-anchor="end" font-size="20" font-weight="bold" fill="#087651">IO33</text>
+    <text x="306" y="498" text-anchor="end" font-size="20" font-weight="bold" fill="#b13b47">IO32</text>
+    <text x="306" y="609" text-anchor="end" font-size="20" font-weight="bold" fill="#2362a2">GND</text>
+    <text x="87" y="552" font-size="18" fill="#294b67">IO27 vẫn đi tới S</text>
+    <text x="87" y="578" font-size="18" fill="#294b67">của driver van.</text>
+
+    <text x="361" y="237" font-size="19" fill="#694283">Một chân 3V3 cấp qua hai điện trở riêng</text>
+    <path d="M324 266 H824 M548 266 V282 M548 313 V358 M824 266 V404 M824 444 V490" fill="none" stroke="#7442a1" stroke-width="4"/>
+    <rect x="537" y="282" width="22" height="31" rx="2" fill="#f1e6fa" stroke="#7442a1" stroke-width="3"/>
+    <rect x="813" y="404" width="22" height="40" rx="2" fill="#f1e6fa" stroke="#7442a1" stroke-width="3"/>
+    <text x="570" y="304" font-size="19" font-weight="bold" fill="#694283">10 kΩ kéo IO33 lên</text>
+    <text x="802" y="430" text-anchor="end" font-size="19" font-weight="bold" fill="#694283">10 kΩ kéo IO32 lên</text>
+    <circle cx="548" cy="266" r="6" fill="#7442a1"/>
+    <circle cx="824" cy="266" r="6" fill="#7442a1"/>
+
+    <rect x="907" y="305" width="78" height="324" rx="18" fill="#dce6f1" opacity="0.75" stroke="#8ca3ba" stroke-width="2" stroke-dasharray="7 5"/>
+    <path d="M324 358 H1075" fill="none" stroke="#087651" stroke-width="5"/>
+    <path d="M324 490 H1075" fill="none" stroke="#b13b47" stroke-width="5"/>
+    <path d="M324 602 H1354 V358 H1175 M1175 490 H1354" fill="none" stroke="#2362a2" stroke-width="5" stroke-linejoin="round"/>
+    <circle cx="324" cy="266" r="6" fill="#7442a1"/>
+    <circle cx="324" cy="358" r="6" fill="#087651"/>
+    <circle cx="324" cy="490" r="6" fill="#b13b47"/>
+    <circle cx="324" cy="602" r="6" fill="#2362a2"/>
+    <circle cx="548" cy="358" r="7" fill="#087651"/>
+    <circle cx="824" cy="490" r="7" fill="#b13b47"/>
+    <circle cx="1354" cy="490" r="7" fill="#2362a2"/>
+    <text x="356" y="389" font-size="18" fill="#087651">Dây tín hiệu START</text>
+    <text x="356" y="521" font-size="18" fill="#b13b47">Dây tín hiệu STOP</text>
+    <text x="356" y="634" font-size="18" fill="#2362a2">Một dây GND chung về bo</text>
+    <text x="675" y="635" font-size="16" fill="#294b67">Giao dây không có chấm: không nối.</text>
+
+    <text x="999" y="231" font-size="23" font-weight="bold" fill="#087651">START xanh · thường hở (NO)</text>
+    <text x="999" y="258" font-size="18" fill="#294b67">Nhả: hở. Bấm: hai chân chạm nhau.</text>
+    <text x="1075" y="389" text-anchor="middle" font-size="18" font-weight="bold" fill="#087651">NO</text>
+    <text x="1175" y="389" text-anchor="middle" font-size="18" font-weight="bold" fill="#2362a2">COM</text>
+    <path d="M1075 358 L1151 322" fill="none" stroke="#087651" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="1075" cy="358" r="7" fill="#087651"/>
+    <circle cx="1175" cy="358" r="7" fill="#2362a2"/>
+
+    <text x="999" y="433" font-size="23" font-weight="bold" fill="#b13b47">STOP đỏ · thường hở (NO)</text>
+    <text x="999" y="460" font-size="18" fill="#294b67">Nhả: hở. Bấm: hai chân chạm nhau.</text>
+    <text x="1075" y="521" text-anchor="middle" font-size="18" font-weight="bold" fill="#b13b47">NO</text>
+    <text x="1175" y="521" text-anchor="middle" font-size="18" font-weight="bold" fill="#2362a2">COM</text>
+    <path d="M1075 490 L1151 470" fill="none" stroke="#b13b47" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="1075" cy="490" r="7" fill="#b13b47"/>
+    <circle cx="1175" cy="490" r="7" fill="#2362a2"/>
+    <text x="999" y="562" font-size="18" fill="#294b67">Chỉ mang hai tín hiệu và GND.</text>
+    <text x="999" y="586" font-size="18" fill="#294b67">Không kéo dây cấp nguồn ra nút.</text>
+    <text x="999" y="638" font-size="16" fill="#294b67">Hộp rời: dùng một cáp 3 lõi qua ốc siết.</text>
+    <text x="356" y="659" font-size="17" fill="#294b67">Trong hộp có thể dùng jumper tín hiệu ngắn; cố định các đầu cắm.</text>
+
+    <rect x="38" y="699" width="665" height="177" rx="16" fill="#e5f4ee" stroke="#b0d6c7" stroke-width="2"/>
+    <text x="64" y="734" font-size="22" font-weight="bold" fill="#075b41">ESP32 đọc IO33 để nhận START</text>
+    <text x="64" y="770" font-size="19" fill="#173b36">Nhả: HIGH (~3,3 V) → chờ.</text>
+    <text x="64" y="806" font-size="19" fill="#173b36">Bấm: LOW (~0 V) → yêu cầu tưới một lần.</text>
+    <text x="64" y="842" font-size="19" fill="#173b36">Đứt dây ra nút: HIGH → không phát START.</text>
+
+    <rect x="721" y="699" width="681" height="177" rx="16" fill="#fcebed" stroke="#e3c0c5" stroke-width="2"/>
+    <text x="747" y="734" font-size="22" font-weight="bold" fill="#8b2737">ESP32 đọc IO32 để nhận STOP</text>
+    <text x="747" y="770" font-size="19" fill="#522f3a">Nhả hoặc hở dây: HIGH → không phát STOP.</text>
+    <text x="747" y="806" font-size="19" fill="#522f3a">Bấm / giữ: LOW → dừng và chặn START khi giữ.</text>
+    <text x="747" y="842" font-size="19" fill="#522f3a">Nhả STOP không chạy lại phiên đã dừng.</text>
+
+    <text x="42" y="917" font-size="19" fill="#294b67">STOP gửi tín hiệu cho bo; khóa nước tay vẫn dùng được nếu bo hoặc driver gặp lỗi.</text>
+  </g>
+
+</g>
+</svg>

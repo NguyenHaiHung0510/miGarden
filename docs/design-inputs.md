@@ -1,6 +1,6 @@
 # Design inputs and requirement rationale
 
-> **LEGACY — reference only / chỉ tham khảo lịch sử.** Current product design: [baseline 01–04](design/README.md), promoted 2026-11-03. This file retains its historical text and links at the original path. Internal “current”, CHỐT/MUST, API/schema/transport, scope and numeric gates describe the old revision, not present authority. Steps 05–10 are pending; silence in the new baseline does not select old choices. Current implementation status: [project state](project-state.md). Reuse requires an explicit design choice with source, rationale and impact.
+> **LEGACY — reference only / chỉ tham khảo lịch sử.** Current product design: [design 01–09](design/README.md). This file retains its historical text and links at the original path. Internal “current”, CHỐT/MUST, API/schema/transport, scope and numeric gates describe the old revision, not present authority. Application development and field acceptance are pending; open choices do not select legacy defaults. Current implementation status: [project state](project-state.md). Reuse requires an explicit design choice with source, rationale and impact.
 
 miGarden addresses a real garden with changing pots, a shared water source, intermittent connectivity and maintenance at more than one level of the house. These constraints shape the product more directly than a particular protocol or hardware catalog.
 

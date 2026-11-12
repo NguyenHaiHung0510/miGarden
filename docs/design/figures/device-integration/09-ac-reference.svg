@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1504" viewBox="0 0 1600 1504" role="img" aria-labelledby="title desc"><title id="title">Điều khiển van 220 V qua relay</title><desc id="desc">ESP32 đưa tín hiệu IO27 tới mạch đóng ngắt DC. Hai dây OUT cấp cuộn relay 12 V ở khoang thấp áp của hộp relay. Ổ chia có dây cấp điện lưới riêng tới tiếp điểm relay; dây pha đi qua tiếp điểm thường hở, dây trung tính đi riêng, dây tiếp địa nối theo cấp bảo vệ của thiết bị. Dây điện lưới không đi qua hộp điều khiển.</desc><defs><marker id="signal" markerWidth="8" markerHeight="8" refX="9" refY="5" viewBox="0 0 10 10" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#684093"/></marker><marker id="edge" markerWidth="8" markerHeight="8" refX="9" refY="5" viewBox="0 0 10 10" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8773a3"/></marker></defs><g font-family="Segoe UI, Arial, sans-serif"><rect x="0" y="0" width="1600" height="1504" rx="0" fill="#f8fafc" stroke="none" stroke-width="2"/>
+<text x="40" y="42" font-size="20" font-weight="730" fill="#126683" text-anchor="start">MIGARDEN  /  BẢN 09  /  SƠ ĐỒ 5 · PHƯƠNG ÁN THAM KHẢO</text>
+<text x="40" y="100" font-size="50" font-weight="740" fill="#172d3c" text-anchor="start">Điều khiển van 220 V qua relay</text>
+<text x="40" y="145" font-size="26" font-weight="400" fill="#365366" text-anchor="start">ESP32 và hai nút vẫn dùng điện thấp áp. Relay nhận lệnh ở cuộn 12 V và đóng điện lưới cho van.</text>
+<rect x="40" y="180" width="1520" height="228" rx="22" fill="#edf7fb" stroke="#c5dce5" stroke-width="2"/>
+<text x="66" y="222" font-size="29" font-weight="740" fill="#126683" text-anchor="start">1. Ba phích trên ổ chia, ba việc khác nhau</text>
+<text x="66" y="254" font-size="22" font-weight="400" fill="#365366" text-anchor="start">Giữ ổ chia ở chỗ khô có che chắn. Chừa thêm 1–2 ổ trống.</text>
+<rect x="66" y="276" width="482" height="100" rx="14" fill="#edf1f5" stroke="#bdcdd4" stroke-width="2"/>
+<text x="86" y="315" font-size="25" font-weight="730" fill="#526477" text-anchor="start">1 · Bơm có sẵn</text>
+<text x="86" y="347" font-size="21" font-weight="400" fill="#365366" text-anchor="start">Vẫn chạy như cũ, độc lập với van.</text>
+<rect x="559" y="276" width="482" height="100" rx="14" fill="#e7f3f8" stroke="#bdcdd4" stroke-width="2"/>
+<text x="579" y="315" font-size="25" font-weight="730" fill="#126683" text-anchor="start">2 · Adapter 12 V</text>
+<text x="579" y="347" font-size="21" font-weight="400" fill="#365366" text-anchor="start">Cáp 2 lõi cấp vào hộp điều khiển.</text>
+<rect x="1052" y="276" width="482" height="100" rx="14" fill="#fff2e2" stroke="#bdcdd4" stroke-width="2"/>
+<text x="1072" y="315" font-size="25" font-weight="730" fill="#914c11" text-anchor="start">3 · Nguồn hộp relay</text>
+<text x="1072" y="347" font-size="21" font-weight="400" fill="#365366" text-anchor="start">Cáp điện lưới riêng cho nhánh van.</text>
+<rect x="40" y="428" width="1520" height="769" rx="22" fill="#edf7fb" stroke="#c5dce5" stroke-width="2"/>
+<text x="66" y="470" font-size="29" font-weight="740" fill="#126683" text-anchor="start">2. Theo hai đường riêng tới cùng relay</text>
+<text x="66" y="502" font-size="22" font-weight="400" fill="#365366" text-anchor="start">Dây thấp áp đi tới cuộn relay. Dây điện lưới đi qua tiếp điểm cách ly của relay rồi ra van.</text>
+<rect x="66" y="535" width="396" height="350" rx="19" fill="#e7f3f8" stroke="#9fbdcc" stroke-width="2"/>
+<text x="84" y="574" font-size="25" font-weight="740" fill="#126683" text-anchor="start">Hộp điều khiển 12 V</text>
+<text x="84" y="603" font-size="19" font-weight="400" fill="#365366" text-anchor="start">Nhận 12 V từ adapter qua đầu siết vào.</text>
+<rect x="85" y="624" width="352" height="81" rx="14" fill="#fff" stroke="#abc8d4" stroke-width="2"/>
+<text x="100" y="655" font-size="21" font-weight="720" fill="#172d3c" text-anchor="start">Bo ESP32 và nút START/STOP</text>
+<text x="100" y="682" font-size="19" font-weight="400" fill="#365366" text-anchor="start">Nguồn và dây nút như sơ đồ 4.</text>
+<polyline points="253,705 253,751" fill="none" stroke="#684093" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#signal)"/>
+<text x="272" y="735" font-size="19" font-weight="730" fill="#684093" text-anchor="start">IO27 → S</text>
+<rect x="85" y="751" width="352" height="114" rx="14" fill="#fff" stroke="#c1afd8" stroke-width="2"/>
+<text x="100" y="785" font-size="22" font-weight="730" fill="#172d3c" text-anchor="start">Mạch đóng/ngắt DC</text>
+<text x="100" y="817" font-size="19" font-weight="400" fill="#365366" text-anchor="start">Cấp điện cho cuộn relay.</text>
+<text x="423" y="799" font-size="17" font-weight="720" fill="#684093" text-anchor="end">OUT+</text>
+<text x="423" y="842" font-size="17" font-weight="720" fill="#684093" text-anchor="end">OUT−</text>
+<rect x="549" y="535" width="704" height="642" rx="19" fill="#fff5e8" stroke="#d1ae86" stroke-width="2"/>
+<text x="570" y="574" font-size="25" font-weight="740" fill="#914c11" text-anchor="start">Hộp relay riêng</text>
+<text x="570" y="603" font-size="19" font-weight="400" fill="#365366" text-anchor="start">Có tấm che đầu điện lưới và lối đi dây tách riêng.</text>
+<rect x="628" y="645" width="599" height="224" rx="14" fill="#f4eefb" stroke="#c4b0dc" stroke-width="2"/>
+<text x="649" y="680" font-size="25" font-weight="740" fill="#684093" text-anchor="start">Cuộn relay 12 V DC</text>
+<text x="649" y="711" font-size="21" font-weight="400" fill="#365366" text-anchor="start">Khi cuộn có điện, relay kéo tiếp điểm đóng.</text>
+<text x="649" y="747" font-size="19" font-weight="400" fill="#365366" text-anchor="start">A1/A2 là tên chân của mẫu relay tham chiếu.</text>
+<rect x="445" y="783" width="183" height="63" rx="10" fill="#eee8f7" stroke="#c4b0dc" stroke-width="2"/>
+<rect x="452" y="779" width="20" height="71" rx="4" fill="#e4d9ef" stroke="#a98fc6" stroke-width="2"/>
+<rect x="539" y="779" width="20" height="71" rx="4" fill="#e4d9ef" stroke="#a98fc6" stroke-width="2"/>
+<rect x="641" y="778.5" width="78" height="29" rx="6" fill="#eee8f7" stroke="none" stroke-width="2"/>
+<text x="680" y="798.6666666666666" font-size="17" font-weight="720" fill="#684093" text-anchor="middle">A1 +</text>
+<rect x="641" y="821.5" width="78" height="29" rx="6" fill="#eee8f7" stroke="none" stroke-width="2"/>
+<text x="680" y="841.6666666666666" font-size="17" font-weight="720" fill="#684093" text-anchor="middle">A2 −</text>
+<polyline points="437,793 641,793" fill="none" stroke="#684093" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="437,836 641,836" fill="none" stroke="#684093" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="437" cy="793" r="4.5" fill="#684093"/>
+<circle cx="437" cy="836" r="4.5" fill="#684093"/>
+<circle cx="641" cy="793" r="4.5" fill="#684093"/>
+<circle cx="641" cy="836" r="4.5" fill="#684093"/>
+<text x="534" y="772" font-size="17" font-weight="690" fill="#684093" text-anchor="middle">Cáp 12 V · hai lõi</text>
+<polyline points="592,904 1228,904" fill="none" stroke="#8773a3" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<polyline points="951,869 951,976" fill="none" stroke="#8773a3" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#edge)"/>
+<rect x="969" y="882" width="245" height="44" rx="6" fill="#fff5e8" stroke="none" stroke-width="2"/>
+<text x="977" y="909" font-size="19" font-weight="720" fill="#684093" text-anchor="start">Tác động cơ khí</text>
+<text x="570" y="933" font-size="23" font-weight="740" fill="#914c11" text-anchor="start">Phía điện lưới 220 V AC</text>
+<rect x="66" y="934" width="396" height="227" rx="14" fill="#fff5e8" stroke="#d1ae86" stroke-width="2"/>
+<text x="86" y="970" font-size="24" font-weight="740" fill="#914c11" text-anchor="start">Cáp cấp riêng từ ổ chia</text>
+<text x="86" y="998" font-size="19" font-weight="400" fill="#365366" text-anchor="start">Có bảo vệ và điểm cô lập phù hợp.</text>
+<text x="86" y="1043" font-size="20" font-weight="700" fill="#914c11" text-anchor="start">L: dây pha</text>
+<text x="86" y="1081" font-size="20" font-weight="700" fill="#526477" text-anchor="start">N: trung tính</text>
+<text x="86" y="1119" font-size="20" font-weight="700" fill="#245b48" text-anchor="start">PE: tiếp địa bảo vệ</text>
+<rect x="401" y="1008.5" width="40" height="29" rx="6" fill="#fff2e2" stroke="none" stroke-width="2"/>
+<text x="421" y="1028.6666666666667" font-size="17" font-weight="720" fill="#914c11" text-anchor="middle">L</text>
+<rect x="401" y="1063.5" width="40" height="29" rx="6" fill="#edf1f5" stroke="none" stroke-width="2"/>
+<text x="421" y="1083.6666666666667" font-size="17" font-weight="720" fill="#526477" text-anchor="middle">N</text>
+<rect x="392" y="1117.5" width="49" height="29" rx="6" fill="#e7f3eb" stroke="none" stroke-width="2"/>
+<text x="416.5" y="1137.6666666666667" font-size="17" font-weight="720" fill="#245b48" text-anchor="middle">PE</text>
+<polyline points="441,1023 851,1023" fill="none" stroke="#914c11" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="851,1023 1013,987" fill="none" stroke="#914c11" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1043,1023 1341,1023" fill="none" stroke="#914c11" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="851" cy="1023" r="6" fill="#914c11"/>
+<circle cx="1043" cy="1023" r="6" fill="#914c11"/>
+<rect x="804" y="1035.5" width="94" height="29" rx="6" fill="#fff2e2" stroke="none" stroke-width="2"/>
+<text x="851" y="1055.6666666666667" font-size="17" font-weight="720" fill="#914c11" text-anchor="middle">11 · COM</text>
+<rect x="998" y="1035.5" width="90" height="29" rx="6" fill="#fff2e2" stroke="none" stroke-width="2"/>
+<text x="1043" y="1055.6666666666667" font-size="17" font-weight="720" fill="#914c11" text-anchor="middle">14 · NO</text>
+<text x="783" y="990" font-size="20" font-weight="720" fill="#914c11" text-anchor="start">Tiếp điểm thường hở</text>
+<polyline points="441,1078 1341,1078" fill="none" stroke="#526477" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="441,1132 1156,1132" fill="none" stroke="#245b48" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1156,1132 1341,1132" fill="none" stroke="#245b48" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<circle cx="602" cy="1023" r="4.5" fill="#914c11"/>
+<circle cx="1341" cy="1023" r="4.5" fill="#914c11"/>
+<circle cx="602" cy="1078" r="4.5" fill="#526477"/>
+<circle cx="1341" cy="1078" r="4.5" fill="#526477"/>
+<circle cx="602" cy="1132" r="4.5" fill="#245b48"/>
+<circle cx="1341" cy="1132" r="4.5" fill="#245b48"/>
+<text x="582" y="1158" font-size="17" font-weight="400" fill="#365366" text-anchor="start">Cọc đấu và nắp che chạm trong hộp relay.</text>
+<rect x="1341" y="960" width="193" height="199" rx="14" fill="#fff" stroke="#d1ae86" stroke-width="2"/>
+<text x="1355" y="992" font-size="22" font-weight="740" fill="#914c11" text-anchor="start">Van 220 V AC</text>
+<text x="1355" y="1029" font-size="17" font-weight="700" fill="#914c11" text-anchor="start">L qua relay</text>
+<text x="1355" y="1054" font-size="17" font-weight="400" fill="#365366" text-anchor="start">Thường đóng</text>
+<text x="1355" y="1084" font-size="17" font-weight="700" fill="#526477" text-anchor="start">N</text>
+<text x="1355" y="1138" font-size="17" font-weight="700" fill="#245b48" text-anchor="start">PE nếu yêu cầu</text>
+<text x="1297" y="992" font-size="16" font-weight="720" fill="#914c11" text-anchor="middle">Cáp van</text>
+<text x="1297" y="1012" font-size="16" font-weight="720" fill="#914c11" text-anchor="middle">riêng</text>
+<rect x="40" y="1216" width="754" height="244" rx="22" fill="#fff" stroke="#c5dce5" stroke-width="2"/>
+<text x="66" y="1257" font-size="26" font-weight="740" fill="#126683" text-anchor="start">Khi có lệnh tưới</text>
+<text x="66" y="1292" font-size="21" font-weight="400" fill="#172d3c" text-anchor="start">ESP32 → mạch DC → cuộn relay có điện.</text>
+<text x="66" y="1323" font-size="21" font-weight="400" fill="#172d3c" text-anchor="start">Tiếp điểm đóng → van nhận 220 V và mở.</text>
+<text x="66" y="1360" font-size="20" font-weight="400" fill="#365366" text-anchor="start">Khi dừng bình thường, relay nhả và van đóng.</text>
+<text x="66" y="1410" font-size="20" font-weight="400" fill="#365366" text-anchor="start">Hai hộp: 2 đầu siết ở hộp DC + 3 ở hộp relay.</text>
+<rect x="812" y="1216" width="748" height="244" rx="22" fill="#fff" stroke="#ddc5aa" stroke-width="2"/>
+<text x="838" y="1257" font-size="26" font-weight="740" fill="#914c11" text-anchor="start">Chốt trước khi lắp</text>
+<text x="838" y="1292" font-size="21" font-weight="400" fill="#172d3c" text-anchor="start">Chọn tiếp điểm đúng tải cảm của cuộn van.</text>
+<text x="838" y="1323" font-size="21" font-weight="400" fill="#172d3c" text-anchor="start">Kiểm bảo vệ, tiếp địa và giữ đúng pha qua ổ/phích.</text>
+<text x="838" y="1360" font-size="20" font-weight="400" fill="#365366" text-anchor="start">Nếu phích có thể đảo, so phương án đóng/ngắt hai cực.</text>
+<text x="838" y="1410" font-size="20" font-weight="400" fill="#365366" text-anchor="start">STOP không cô lập điện để bảo trì.</text>
+<text x="40" y="1487" font-size="20" font-weight="400" fill="#365366" text-anchor="start">Phương án lưu tham khảo. Phần điện lưới cần người có chuyên môn chốt và đo kiểm nếu dùng.</text></g></svg>
