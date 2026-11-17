@@ -2,6 +2,7 @@
 #include <ArduinoJson.h>
 #include <atomic>
 #include <driver/gpio.h>
+#include <esp_core_dump.h>
 #include <esp_littlefs.h>
 #include <esp_partition.h>
 #include <esp_random.h>
@@ -22,6 +23,9 @@ extern "C" esp_err_t __wrap_esp_partition_erase_range(const esp_partition_t* p,s
         at==0 && n>=p->size) return ESP_ERR_INVALID_STATE;
     return __real_esp_partition_erase_range(p,at,n);
 }
+// The stock panic writer can capture task stacks containing a provision frame
+// or authorization header. Leave the existing coredump partition untouched.
+extern "C" void IRAM_ATTR __wrap_esp_core_dump_write(panic_info_t*) {}
 
 namespace mg::esp {
 namespace {

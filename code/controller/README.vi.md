@@ -46,7 +46,7 @@ python -B code/controller/tests/verify-wire.py
 & .\code\controller\build-esp32.ps1 -Profile release
 ```
 
-Build không upload. Mỗi artifact có build ID mới và [manifest dưới staging riêng](../../.local/n01/build/) với command/revision, hash source/config/partition, app-only BIN, ELF, MAP; script kiểm slot, profile/marker và link guard NVS. Khi đưa cho USB v1 chỉ chọn file `MiGardenController.ino.bin` có đúng digest trong manifest LAB đã review; không chọn file merged/bootloader/partition hay release. Firmware không chứa pass, token, private host hoặc CA mẫu.
+Build không upload. Mỗi artifact có build ID mới và manifest dưới staging riêng `.local/n01/build/` với command/revision, hash source/config/partition, app-only BIN, ELF, MAP; script kiểm slot, profile/marker và link guard NVS. Khi đưa cho USB v1 chỉ chọn file `MiGardenController.ino.bin` có đúng digest trong manifest LAB đã review; không chọn file merged/bootloader/partition hay release. Firmware không chứa pass, token, private host hoặc CA mẫu. Chẩn đoán mạng dùng mã đã lọc; build chặn panic dump của runtime để tránh lưu stack chứa thông tin provision, giữ nguyên partition dump hiện hữu.
 
 Nếu thiết bị thiếu LittleFS/correct journal, bước phần mềm tiếp theo là tạo **file offline**, ví dụ:
 ```powershell

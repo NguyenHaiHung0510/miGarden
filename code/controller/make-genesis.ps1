@@ -22,10 +22,14 @@ foreach ($item in $profiles) {
     if ($LASTEXITCODE) { throw 'Journal genesis failed' }
 }
 $img=Join-Path $out 'littlefs-genesis.bin'
-& $MkLittleFs -c $src -p 256 -b 4096 -s 1441792 $img
-if ($LASTEXITCODE -or (Get-Item -LiteralPath $img).Length -ne 0x160000) { throw 'Filesystem packing failed' }
-& $MkLittleFs -u $roundtrip -p 256 -b 4096 -s 1441792 $img
-if ($LASTEXITCODE) { throw 'Filesystem unpack failed' }
+Push-Location -LiteralPath $out
+try {
+    # On Windows the tool prepends './' to its unpack directory.
+    & $MkLittleFs -c blank -p 256 -b 4096 -s 1441792 littlefs-genesis.bin
+    if ($LASTEXITCODE -or (Get-Item -LiteralPath $img).Length -ne 0x160000) { throw 'Filesystem packing failed' }
+    & $MkLittleFs -u unpacked -p 256 -b 4096 -s 1441792 littlefs-genesis.bin
+    if ($LASTEXITCODE) { throw 'Filesystem unpack failed' }
+} finally { Pop-Location }
 foreach ($item in $profiles) {
     if ((Get-FileHash -LiteralPath (Join-Path $src "$item-v1.journal")).Hash -ne
         (Get-FileHash -LiteralPath (Join-Path $roundtrip "$item-v1.journal")).Hash) { throw 'Journal roundtrip mismatch' }

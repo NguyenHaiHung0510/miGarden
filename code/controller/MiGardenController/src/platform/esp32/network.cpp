@@ -1,6 +1,7 @@
 #include "network.hpp"
 #include <WiFi.h>
 #include <esp_http_client.h>
+#include <esp_log.h>
 #include <esp_random.h>
 #include <esp_sntp.h>
 #include <esp_tls.h>
@@ -106,6 +107,10 @@ bool Network::begin(Provision&& p) {
 }
 void Network::run(void* arg) { static_cast<Network*>(arg)->work(); }
 void Network::work() {
+    // IDF's resolver can print the private hostname on an error. Emit only
+    // the redacted adapter status (AUTH_REJECTED, TLS_VERIFY, RETRY, ...).
+    for (const char* tag:{"esp-tls","esp-tls-mbedtls","transport_base","HTTP_CLIENT","wifi"})
+        esp_log_level_set(tag,ESP_LOG_NONE);
     WiFi.persistent(false);
     WiFi.mode(WIFI_STA);
     WiFi.setAutoReconnect(false);

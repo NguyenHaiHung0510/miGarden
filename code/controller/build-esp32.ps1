@@ -37,7 +37,7 @@ $f="-DMG_BUILD_ID=$id"
 if ($Profile -eq 'lab') { $f+=' -DMG_LAB=1' }
 $argsList=@('compile','--config-file',$CliConfig,'--fqbn',$fqbn,'--build-path',$out,
     '--library',$JsonLibrary,'--build-property',"compiler.cpp.extra_flags=$f",
-    '--build-property','compiler.c.elf.extra_flags=-Wl,--wrap=esp_partition_erase_range',
+    '--build-property','compiler.c.elf.extra_flags=-Wl,--wrap=esp_partition_erase_range,--wrap=esp_core_dump_write',
     '--warnings','all','--jobs',"$Jobs",(Join-Path $PSScriptRoot 'MiGardenController'))
 function Hash-Entry([string]$path) {
     $item=Get-Item -LiteralPath $path
