@@ -15,6 +15,22 @@ kết quả USB bootstrap seed làm kết quả của candidate N01.
 
 ## Đủ 54 dòng Step 07
 
+Delta theo independent review ea140ed (không thay evidence cũ):
+
+| Finding | Ca mới / disposition | Bằng chứng cần ghép |
+|---|---|---|
+| F1 | `accountingAcrossReboot`, `uptimeAgesCarriedBudgetWithoutDowntimeCredit`: forward/backward jump, reboot không refill, 15 đã dùng vẫn còn105, powered uptime đủ3h | Reset/time/storage thật riêng; downtime không được suy từ SNTP. |
+| F2 | `actualDelayedDeadlineIsAccounted`: delay7ms giữ elapsed thật qua reboot; PM chấp nhận small transient, không giảm duration/cap bằng headroom mới | Deadline/task lease latency/tải vật lý UNVERIFIED; không hứa zero-ms. |
+| F3 | `stopReceiptSurvivesFullQueueAckAndRetry`, `deferredStopRecoversAfterReboot`, `deferredStopJournalFailureIsNotProof` | STOP close/dedup tách receipt, lưu16 pending receipt; full-queue+ACK, retry, reboot, lỗi ghi. Không physical proof. |
+| F4 | `configRefBoundariesSurviveCompactAndBoot`: 255/256/257, stale ref, reboot+compact giữ trần | CONFIG_CAPACITY là giới hạn v1 explicit; không reset/GC protocol. |
+| Capacity | `maximumLedgerAndDeferredReceiptsFit`: tối đa interval/ref/deferred cùng frame | Kiểm serialized bounds, không endurance/RAM peak/timing benchmark bo. |
+| Commissioning | [CLI tests](tests/test_commission.py): 8 ca offline pack/parse, no-overwrite/nonblank/fixture/secret-redaction/tamper FAIL→restore PASS | Actual NVS/data write HOLD; SDK mount trên bo chưa kiểm. |
+
+[review_regressions.py](tests/review_regressions.py) đối chiếu binary ea140ed đã
+giữ nguyên với simulator mới: hai guard F1/F3 phải FAIL trên bản cũ rồi PASS bản
+sửa. Chạy full host cũ + ca mới một lượt, sau đó QA độc lập delta theo freeze mới.
+Không biến kết quả cũ thành kết quả candidate mới.
+
 Nguồn: [catalogue gốc](../../docs/design/07-functional-view-specification.vi.md#catalogue).
 
 | ID | Ca host có phần liên quan | Giới hạn và lane còn lại |

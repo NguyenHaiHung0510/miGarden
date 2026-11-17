@@ -66,6 +66,8 @@ uint32_t checksum(const uint8_t* data, size_t n) {
     return ~c;
 }
 uint32_t word(const uint8_t* data) { Reader r(data,4); return uint32_t(r.u(4)); }
+Bytes encodeEvent(const Event&);
+bool decodeEvent(const uint8_t*, size_t, Event&, bool deferred = false);
 
 void writeConfig(Writer& w, const Config& c) {
     w.text(c.ref.view());
@@ -106,6 +108,13 @@ Bytes encodeState(const Ledger& d) {
     for (const auto& i : d.history) { w.time(i.start); w.time(i.end); }
     w.u(d.configRefs.size(),2);
     for (auto h : d.configRefs) w.u(h,8);
+    if (!d.deferredStops.empty()) {
+        w.u(0x53,1); w.u(d.deferredStops.size(),1);
+        for (const auto& e : d.deferredStops) {
+            const auto data=encodeEvent(e);
+            w.u(data.size(),2); w.add(data);
+        }
+    }
     return std::move(w.b);
 }
 bool decodeState(const uint8_t* data, size_t bytes, Ledger& d) {
@@ -146,6 +155,24 @@ bool decodeState(const uint8_t* data, size_t bytes, Ledger& d) {
     for (size_t n=0; n<refs; ++n) d.configRefs.push_back(r.u(8));
     if ((!d.applied.ref.empty() && (d.configRefs.empty() || d.configRefs.back() != idFingerprint(d.applied.ref.view()))) ||
         (d.scheduleFloor != none && d.scheduleFloor % minute)) return false;
+    d.deferredStops.clear();
+    if (r.left()) {
+        if (r.u(1)!=0x53) return false;
+        const auto count=r.u(1);
+        if (!count || count>deferredStopMax) return false;
+        for (size_t n=0;n<count;++n) {
+            const size_t len=r.u(2);
+            Event e;
+            if (len>r.left() || !decodeEvent(r.p,len,e,true) || e.sequence || e.kind!=Kind::stop_processed ||
+                e.source!=Source::remote || e.request.empty() || !e.session.empty() ||
+                (e.outcome!=Outcome::close_requested && e.outcome!=Outcome::already_off &&
+                 e.outcome!=Outcome::unconfirmed)) return false;
+            for (const auto& old : d.deferredStops)
+                if (old.boot==e.boot && old.request==e.request) return false;
+            d.deferredStops.push_back(e);
+            r.p+=len;
+        }
+    }
     return r.okay && !r.left();
 }
 Bytes encodeEvent(const Event& e) {
@@ -156,13 +183,13 @@ Bytes encodeEvent(const Event& e) {
     w.time(e.started); w.time(e.ended); w.time(e.occurrence); w.u(e.plannedSeconds,4); w.time(e.outputMs);
     return std::move(w.b);
 }
-bool decodeEvent(const uint8_t* data, size_t bytes, Event& e) {
+bool decodeEvent(const uint8_t* data, size_t bytes, Event& e, bool deferred) {
     Reader r(data,bytes);
     r.text(e.boot); e.sequence=r.u(8); e.kind=r.en(Kind::occurrence_decided); e.occurred=r.time();
     e.quality=r.en(Quality::holdover); r.text(e.config); r.text(e.request); r.text(e.session);
     e.source=r.en(Source::remote); e.reason=r.en(Reason::unsafe_output); e.outcome=r.en(Outcome::rejected);
     e.started=r.time(); e.ended=r.time(); e.occurrence=r.time(); e.plannedSeconds=int32_t(r.u(4)); e.outputMs=r.time();
-    return r.okay && !r.left() && e.sequence && e.sequence <= uint64_t(INT64_MAX) &&
+    return r.okay && !r.left() && (e.sequence || deferred) && e.sequence <= uint64_t(INT64_MAX) &&
         !e.boot.empty() && ((e.occurred == none) == (e.quality == Quality::unknown));
 }
 Bytes frame(const Bytes& state, const std::vector<Bytes>& reports, const std::vector<uint64_t>& acks) {
@@ -222,7 +249,7 @@ bool Journal::indexFrame(const Bytes& b, uint32_t at, Ledger* restored) {
         if (!len || len>r.left() || !decodeEvent(r.p,len,e) || e.sequence>sequence_ ||
             (!index_.empty() && e.sequence<=index_.back().sequence) || index_.size()>=backlogMax)
             return false;
-        index_.push_back({e.sequence,at+uint32_t(r.p-b.data()),checksum(r.p,len),uint16_t(len)});
+        index_.push_back({e.sequence,at+uint32_t(r.p-b.data()),checksum(r.p,len),uint16_t(len),e.kind});
         r.p+=len;
     }
     for (size_t n=0; n<acks; ++n) {
@@ -284,6 +311,16 @@ std::vector<Event> Journal::pending(uint64_t priority) {
     for (size_t i=0; i<count; ++i) if (!add(index_[i])) return out;
     if (tail!=index_.end()) add(*tail);
     return out;
+}
+bool Journal::hasStopReceipt(const BootId& boot, const Id& request) {
+    if (!okay_) return false;
+    for (const auto& i : index_) {
+        if (i.kind!=Kind::stop_processed) continue;
+        Event e;
+        if (!readEvent(i,e)) { okay_=false; return false; }
+        if (e.boot==boot && e.source==Source::remote && e.request==request) return true;
+    }
+    return false;
 }
 
 bool Journal::commit(const Ledger* state, const std::vector<Event>& add, const std::vector<EventId>& ack) {

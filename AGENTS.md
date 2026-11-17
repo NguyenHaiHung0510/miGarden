@@ -1,16 +1,16 @@
 # AGENTS.md — miGarden
 
-Start with the assigned task, read this entry, then only the product documents needed for that task and the matching skill. No README reread or full-document sweep is required. This repository contains design documentation, technical skills and a runnable model-v0 prototype in viewer/. Firmware, control simulator and microSched integration are not implemented.
+Start with the assigned task, read this entry, then only the product documents needed for that task and the matching skill. No README reread or full-document sweep is required. This repository contains design documentation, technical skills, a runnable model-v0 prototype in viewer/ and the N01 Zone A firmware/host simulator candidate in code/controller/. microSched integration is a separate repository and acceptance lane; a candidate build does not establish device, field or production readiness.
 
 ## Task routing
 
 | Task | Read as needed |
 |---|---|
 | Scope or implementation status | [Project state](docs/project-state.md) |
-| Current requirements, process, domain, information, services or schedule | [Design index](docs/design/README.md), then the relevant step 01–09; application implementation is pending |
+| Current requirements, process, domain, information, services or schedule | [Design index](docs/design/README.md), then the relevant step 01–10; [firmware candidate](code/controller/README.vi.md) and [wire v1](contracts/zone-a/v1/README.md) for implementation |
 | Installation, selected components or wiring | [Step 09 installation graph](docs/design/09-device-and-component-integration.vi.md#installation-graph) and [component catalogue](docs/design/components-zone-a.vi.md); distinguish selected design from installed/tested hardware |
 | Geometry, map or scene | [Representation](docs/representation.md), [model-v0](docs/model-v0.md), relevant [site readings](docs/site-baseline.md) |
-| Board, firmware, build or recovery | [Operations runbook](docs/operations.md), [08 operational policy](docs/design/08-operational-view-specification.vi.md) and [09 hardware](docs/design/09-device-and-component-integration.vi.md); numeric limits and field verification remain open |
+| Board, firmware, build or recovery | [Operations runbook](docs/operations.md), [firmware](code/controller/README.vi.md), [commissioning package](code/controller/COMMISSIONING.vi.md), [08 operational policy](docs/design/08-operational-view-specification.vi.md) and [09 hardware](docs/design/09-device-and-component-integration.vi.md); device/field acceptance stays separate |
 | Technical skill | Matching entry in [skills](docs/skills.md), then only needed references |
 
 Every Agent may automatically select suitable available skills within the assigned task. A named invocation is optional; do not read all skills for every task or restrict selection by role. Keep one writer per file and one executor per exclusive device/serial resource.
@@ -31,9 +31,9 @@ The Owner reads miGarden technical documents directly to understand and review t
 - Local deterministic schedule and source START/STOP are selected designs. Remote, schedule and local input converge at one safety arbiter. Soil/Zigbee sensing is HOLD; its conditional contracts do not make it a current requirement.
 - A/SVG and B/Three.js share one canonical versioned spatial source. Do not invent coordinates, calibrated scale or RF/hydraulic performance to fill gaps.
 - miGarden owns firmware/local arbiter, simulator, spatial source and integration contracts. microSched owns its human web/API/storage adapter under that repository's rules. Bind both revisions and contract versions for integration changes.
-- Preserve the safety outcomes in design 01/02/04: fail-closed boot, all-source cumulative local budget, STOP priority and no old pending START after STOP, no-double/no-catch-up/no-replay, critical-storage safe stop/degraded, and independent manual shutoff. Unknown after possible execution blocks every source and all Zones on a common source/accounting boundary unless independence is proven. Implementation details and numerical policy remain open under Step 08; SAF-P01 and 165 min/3 h are unselected candidates. Step 09 specifies first-stage hardware; it does not establish field safety or runtime acceptance.
+- Preserve the safety outcomes in design 01/02/04: fail-closed boot, all-source cumulative local budget, STOP priority and no old pending START after STOP, no-double/no-catch-up/no-replay, critical-storage safe stop/degraded, and independent manual shutoff. Unknown after possible execution blocks every source and all Zones on a common source/accounting boundary unless independence is proven. Selected defaults are 15 min manual, 30 min/session and 120 min in any fixed-length rolling 180 min window; the three durations/limits are editable coherently. SAF-P01 and 165/180 remain historical unselected candidates. Step 09 specifies first-stage hardware; it does not establish field safety or runtime acceptance.
 
-`docs/design/` is the only editable current product-design source. Earlier working snapshots are history. Specification, architecture and design-inputs at their old paths are LEGACY/reference-only; their internal CHỐT/MUST/API/thresholds do not automatically govern current work. Application development and end-to-end acceptance remain pending. No implicit inventory/Area/Source/Controller CRUD, revision/application management, notification lifecycle or group domain is selected. Viewer geometry remains `viewer/model.json`.
+`docs/design/` is the only editable current product-design source. Earlier working snapshots are history. Specification, architecture and design-inputs at their old paths are LEGACY/reference-only; their internal CHỐT/MUST/API/thresholds do not automatically govern current work. N01 application candidates and host QA do not replace end-to-end/device/field acceptance. No implicit inventory/Area/Source/Controller CRUD, revision/application management, notification lifecycle or group domain is selected. Viewer geometry remains `viewer/model.json`.
 
 ## Changes and evidence
 

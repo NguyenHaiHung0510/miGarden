@@ -20,6 +20,8 @@ flowchart LR
 
 Một request web chỉ được mở sau khi đã lưu receipt và nhận grant có cùng nội dung, boot, epoch và config. Việc kiểm hạn 45 giây lặp lại **sau** khi ghi reservation; mốc hết hạn được ràng với cả thời gian trôi từ khi nhận candidate. STOP làm mất hiệu lực epoch cũ, không tạm dừng lịch cho tương lai. Sau khi đã mở hợp lệ, mất Wi‑Fi hoặc hết TTL không chỉnh deadline của phiên. Một STOP có thể ghi `stop_processed` khi không có phiên; giá trị đó không xác nhận nước đã ngừng.
 
+Sau review F1/F3: accounting qua reboot neo ở `accountingFloor` bền và chỉ cộng uptime boot mới, không tin wall downtime. Đã dùng15/120 phút vẫn còn105 nếu các gate khác đủ; không khóa toàn bộ3h. STOP remote khi queue full giữ tối đa16 receipt bền riêng, promote khi ACK mở chỗ; retry không tăng epoch/đóng lặp nếu receipt đã có. Boot/time/outcome của lần xử lý gốc được giữ. Extension journal này đọc dữ liệu ea140ed, nhưng firmware ea140ed không đọc extension mới: rollback phải kiểm compatibility, không reset journal.
+
 Lịch xét ranh giới phút theo UTC+7, xử lý once/daily/weekly/interval, hiệu lực [from, until). Một mốc phút Zone A có cùng identity xuyên `config_ref`. Đổi bản cấu hình khi active sẽ chờ lần exchange idle sau; firmware không giữ bản nháp để tự apply lúc rảnh. Apply chỉ tác động kỳ sau phiên/ranh giới cutover; kỳ ngay phút apply nếu chưa chứng minh được an toàn sẽ bỏ qua. Khi mới boot, mất time hoặc nhảy qua ranh giới, firmware không lặp các kỳ đã lỡ. Có clock SNTP, thời gian tiếp tục chạy từ đồng hồ của bo khi offline (holdover); clock mất căn cứ sau reboot thì cấm START. Bộ đếm deadline/accounting dựa vào elapsed time ổn định cùng boot, nên chỉnh giờ không mua thêm hạn mức. Cần SNTP tin cậy lại sau mất điện; firmware không dùng `server_time` của response làm đồng hồ.
 
 ### Journal và khả năng phục hồi
@@ -27,12 +29,17 @@ Lịch xét ranh giới phút theo UTC+7, xử lý once/daily/weekly/interval, h
 Partition bảng **default 4 MiB**: app0 `0x10000`/ `0x140000`, app1 `0x150000`/ `0x140000`; data `spiffs` `0x290000`/ `0x160000`. Dùng LittleFS trên đúng vùng data này, không format/grow khi mount. LAB dùng `lab-v1.journal`, release dùng `release-v1.journal`; ứng dụng không tạo ledger mới khi thiếu/hỏng. Build bọc lệnh erase cả NVS của Arduino khi init lỗi; không đụng user profile hoặc xóa NVS. GC theo trang của NVS và cập nhật file LittleFS vẫn diễn ra trong các write hợp lệ.
 
 - Mỗi transaction có length/CRC, là một frame append rồi fsync/close. Reservation ghi bền và đọc kiểm lại trước OPEN. `armed` chỉ giữ chỗ; `running` mới có evidence đã điều khiển output. Sau CLOSE, frame giải quyết reservation thành interval thực tế và report terminal; dữ liệu UTC thiếu không được điền bằng planned time. Sổ dùng ms, wire `output_duration_seconds` là số giây nguyên đã trôi.
-- Log có trần 448 KiB; compact khi idle tạo file mới đã sync rồi đổi tên nguyên tử. Hai file tối đa 896 KiB trước filesystem overhead, trong vùng 1.375 MiB. Queue tối đa 512 records; gửi tối đa 16/lần. Admission giữ trước 6 slot report và 5 frame × 20 KiB cho ghi reservation/start/terminal, STOP và ACK. Không thu hồi report chưa ACK. Snapshot không dùng queue. Khi không còn ô cho audit tùy tình huống, ghi evidence gap, tiếp tục giữ STOP và không cho START khi thiếu chỗ. Các số này là bounds của code; power-loss, thời gian ghi và wear trên bo cần đo riêng. LittleFS [atomicity](https://github.com/littlefs-project/littlefs) là nền thiết kế, không là kết quả đo bo.
+- Log có trần 448 KiB; compact khi idle tạo file mới đã sync rồi đổi tên nguyên tử. Hai file tối đa 896 KiB trước filesystem overhead, trong vùng 1.375 MiB. Queue tối đa 512 records; gửi tối đa 16/lần. Admission giữ trước 6 slot report và 5 frame × 24 KiB cho ghi reservation/start/terminal, STOP và ACK. Không thu hồi report chưa ACK. Snapshot không dùng queue. Khi không còn ô cho audit tùy tình huống, ghi evidence gap, tiếp tục giữ STOP và không cho START khi thiếu chỗ. Các số này là bounds của code; power-loss, thời gian ghi và wear trên bo cần đo riêng. LittleFS [atomicity](https://github.com/littlefs-project/littlefs) là nền thiết kế, không là kết quả đo bo.
 - Accounting giữ tối đa 768 khoảng đang còn liên quan trong 3 giờ, gộp khoảng liền nhau. Admission kiểm điểm cực đại trong **suốt** interval dự kiến. Vì chỉ một output, khi phiên mới đi vào cửa sổ thì tối đa một khoảng cũ đi ra với cùng tốc độ; tổng tăng hoặc đứng yên đến cuối phiên dự kiến. Nếu gần trần, phần cũ rời cửa sổ đúng lúc vẫn được trừ. Đủ dữ liệu terminal thì dùng interval đã quyết toán; ACK không tác động accounting.
 - Reboot không khôi phục OPEN. Nếu mất xác nhận terminal sau possible execution, giữ reservation và trạng thái unknown chung, không tự xóa khi TTL hết, có STOP/ACK hoặc qua 3 giờ. Không cung cấp reset/bypass qua UART/web; cần quy trình recovery đã có bằng chứng và quyền riêng nếu lỗi xảy ra. Nếu ổ lưu hỏng, trạng thái đủ an toàn để OPEN không chứng minh được; CLOSE vẫn được ưu tiên và `DIAG`/snapshot có thể báo lỗi dù không lưu nổi một record.
 - Các trần còn lại: 256 ref cấu hình đã dùng (qua reboot); 4.096 START ID và 128 STOP ID hợp lệ mỗi boot. Chạm trần ref không thay bundle hiện dùng; thiết bị từ chối START remote mới nếu hết bộ nhớ dedup START. Khi không giữ được STOP ID mới, vẫn CLOSE và khóa START đến boot mới đã phục hồi sổ an toàn. Không nới trần bằng xóa sổ/đổi identity tùy ý. Thời lượng outage xử lý được tùy số record và write load, không chỉ dung lượng app slot.
 
 Output adapter có task kiểm mỗi 5 ms, đọc STOP thô và giữ khóa đến khi nhả ổn định 35 ms. START chỉ nhận cạnh nhấn sau mức nhả ổn định, không lặp vì giữ. Output dừng theo deadline hoặc lease của control task mất 2 giây; task control có watchdog trong release. HTTPS dùng task khác. Flash stall/RTOS/reset và mức S khi bo mất điện/sự cố driver chưa được đo, vì vậy các con số này chưa là giới hạn phản ứng ở tủ. Giữ van khóa tay độc lập theo [operations](../../docs/operations.md).
+
+PM disposition F2: task có thể đóng trễ deadline danh nghĩa. Sổ giữ elapsed thực
+(host kiểm delay7ms và reboot), không ép bằng planned duration hoặc tự giảm
+1800/7200 bằng headroom mới. Không cam kết hard real-time0ms; task/deadline/lease
+timing bound tại thiết bị và tủ vẫn UNVERIFIED.
 
 ### Build và test host
 
@@ -41,12 +48,17 @@ Dùng PowerShell, Arduino CLI 1.6.0, Arduino-ESP32 3.3.12, GNU g++17 trở lên 
 ```powershell
 git clone --depth 1 --branch v7.4.3 https://github.com/bblanchon/ArduinoJson.git .local/n01/deps/ArduinoJson
 & .\code\controller\test-host.ps1
-python -B code/controller/tests/verify-wire.py
+python -B code/controller/tests/verify-wire.py .local/n01/host-builds/HOST_OUTPUT/sim.exe
 & .\code\controller\build-esp32.ps1 -Profile lab
 & .\code\controller\build-esp32.ps1 -Profile release
 ```
 
 Build không upload. Mỗi artifact có build ID mới và manifest dưới staging riêng `.local/n01/build/` với command/revision, hash source/config/partition, app-only BIN, ELF, MAP; script kiểm slot, profile/marker và link guard NVS. Khi đưa cho USB v1 chỉ chọn file `MiGardenController.ino.bin` có đúng digest trong manifest LAB đã review; không chọn file merged/bootloader/partition hay release. Firmware không chứa pass, token, private host hoặc CA mẫu. Chẩn đoán mạng dùng mã đã lọc; build chặn panic dump của runtime để tránh lưu stack chứa thông tin provision, giữ nguyên partition dump hiện hữu.
+
+Host script in `HOST_OUTPUT` trỏ thư mục mới mỗi lần; dùng đúng đường đó cho
+wire/QA, giữ nguyên các BIN/manifest cũ. [Commissioning CLI](COMMISSIONING.vi.md)
+tạo và kiểm offline bundle cho profile release; không mở COM hoặc khởi tạo dữ
+liệu thật. Nếu NVS/data hiện hữu, công cụ giữ HOLD thay vì đè ảnh mới.
 
 Nếu thiết bị thiếu LittleFS/correct journal, bước phần mềm tiếp theo là tạo **file offline**, ví dụ:
 ```powershell
@@ -59,6 +71,14 @@ LAB `STORAGE` đọc và phân loại: `BLANK_FF` nếu tất cả bytes là `0x
 ### LAB: USB v1 và provision riêng
 
 Giữ `PING`, `INFO`, `BEGIN <length> <sha256>`, ACK từng 1.024 bytes, `REBOOT`, heartbeat/RESYNC của USB bootstrap v1. Update và provision bắt đầu được khi **idle + OFF**; vào maintenance vô hiệu pending START và cắt reply mạng cũ. Trong lúc nhận binary chưa có active session và không có đường START. LAB không biên dịch adapter chân IO27/32/33 trong core điều khiển. `DIAG` trả profile/build, gate, time quality, kích thước queue/log, evidence gaps, kết nối và heap; không echo giá trị provision. Output LAB `virtual_on` là mô phỏng của software; UART là kênh giao tiếp bench.
+
+LAB `DIAG` có thêm `wifi_status` (numeric SDK WiFi.status) và
+`disconnect_reason` (numeric reason từ event disconnect gần nhất, 0 nếu chưa
+có event). Hai số giúp phân biệt chưa thấy AP, auth và link timeout; chúng không
+chứng minh nguyên nhân cuối. Không SSID/password/token/BSSID/IP trong DIAG.
+Parent đã báo giải quyết đúng AP/Wi-Fi và đồng bộ giờ trên candidate cũ; kết quả
+TLS/exchange được theo dõi riêng, không ghi private identity trong handback và
+không cấp quyền builder thử NIC/SSID mới. Storage vẫn blank/no-OPEN ở mốc báo đó.
 
 Lệnh LAB `NETINFO` trả duy nhất `NETINFO <IPv4>` hoặc `NETINFO LINK_PENDING`, chỉ khi parent yêu cầu; giữ kết quả ở receipt riêng. Parent có thể chuẩn bị relay/firewall với luật mặc định đóng, lấy IP từ UART sau DHCP rồi chỉ mở cho địa chỉ đó. Firmware tự thử kết nối khi clock sẵn sàng, kể cả khi relay vẫn đóng.
 

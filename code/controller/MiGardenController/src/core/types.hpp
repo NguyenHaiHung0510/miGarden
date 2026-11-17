@@ -15,6 +15,7 @@ inline constexpr int windowSeconds = 10800;
 inline constexpr int ttlSeconds = 45;
 inline constexpr size_t backlogMax = 512, batchMax = 16, remoteBatchMax = 16;
 inline constexpr size_t intervalMax = 768, configHistoryMax = 256;
+inline constexpr size_t deferredStopMax = 16;
 inline constexpr size_t idMax = 128;
 inline constexpr char protocol[] = "migarden.zone-a.v1";
 inline constexpr char zone[] = "zone-a";
@@ -147,11 +148,12 @@ struct Ledger {
     Session session;
     Pending pending;
     Ms scheduleFloor = none;  // logical Zone A slot, independent of config_ref
-    Ms accountingFloor = none; // newest durable accounting time; checked after boot
+    Ms accountingFloor = none; // safety timeline; reboot credits uptime only, never wall downtime
     bool unknown = false;    // shared source boundary, not a per-START flag
     uint64_t sequence = 0;   // persisted independently of ACK/compaction
     std::vector<Range> history;
     std::vector<uint64_t> configRefs; // bounded, retained for stale ref refusal
+    std::vector<Event> deferredStops; // processed remote STOP, not enqueued; sequence assigned at promotion
 };
 struct Snapshot {
     Sample time;

@@ -20,12 +20,20 @@ public:
     void submit(Controller&);
     void fence() { ++generation_; }
     const char* status() const;
+#ifdef MG_LAB
+    int wifiStatus() const { return wifiStatus_.load(); }
+    unsigned disconnectReason() const { return disconnectReason_.load(); }
+#endif
 private:
     struct Job;
     Provision provision_;
     QueueHandle_t outbound_=nullptr, inbound_=nullptr;
     std::atomic<bool> wifi_{false};
     std::atomic<unsigned> status_{0};
+#ifdef MG_LAB
+    std::atomic<int> wifiStatus_{0};
+    std::atomic<unsigned> disconnectReason_{0};
+#endif
     bool inFlight_=false;
     uint32_t generation_=0;
     uint64_t lastSubmitted_=0;

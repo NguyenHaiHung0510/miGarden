@@ -218,12 +218,12 @@ void LabUsb::command() {
     }
     if (!strcmp(line_,"DIAG")) {
         const auto s=controller_.snapshot();
-        Serial.printf("DIAG profile=lab build=%s phase=%s ready=%u output=%s reason=%s time=%s queue=%u journal=%lu gaps=%llu network=%s heap=%u min_heap=%u\n",
+        Serial.printf("DIAG profile=lab build=%s phase=%s ready=%u output=%s reason=%s time=%s queue=%u journal=%lu gaps=%llu network=%s heap=%u min_heap=%u wifi_status=%d disconnect_reason=%u\n",
             buildId,uncertain_?"UNKNOWN":controller_.maintenance()?"MAINTENANCE":"IDLE",s.ready,
             s.on?"virtual_on":"off",s.blocked==Reason::none?"NONE":label(s.blocked),label(s.time.quality),
             unsigned(controller_.queued()),static_cast<unsigned long>(controller_.logBytes()),
             static_cast<unsigned long long>(controller_.evidenceGaps()),network_.status(),
-            unsigned(ESP.getFreeHeap()),unsigned(ESP.getMinFreeHeap()));
+            unsigned(ESP.getFreeHeap()),unsigned(ESP.getMinFreeHeap()),network_.wifiStatus(),network_.disconnectReason());
         return;
     }
     if (uncertain_) { Serial.println("ERR ACTIVATION_UNKNOWN"); return; }

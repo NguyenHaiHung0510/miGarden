@@ -419,7 +419,183 @@ void clockChangesDoNotMoveDeadlineOrRefill() {
     CHECK(end && end->outputMs==15000 && end->ended==none);
     f.clock.s.wall=baseTime;
     f.reboot(false); f.tick(true);
-    CHECK(!f.c->snapshot().ready && f.c->snapshot().blocked==Reason::time_unknown && f.actuator.opens==1);
+    CHECK(f.c->snapshot().ready && f.actuator.opens==1);
+    // Civil time cannot move the carried accounting intervals backwards or
+    // forwards. The already-used 15 s still prevent another 15/15 START.
+    CHECK(find(f.offer(),Kind::request_rejected,Reason::rolling_limit));
+}
+void accountingAcrossReboot() {
+    for (auto jump : {4*60*minute, -4*60*minute}) {
+        Fixture f;
+        f.apply(f.config("default"));
+        f.tick(true); f.advance(900*second);
+        CHECK(f.c->ledger().history.size()==1);
+        const auto carried=f.c->ledger().history;
+        const auto floor=f.c->ledger().accountingFloor;
+        f.clock.s.wall+=jump;
+        f.reboot();
+        CHECK(f.c->ledger().accountingFloor==floor);
+        CHECK(f.c->ledger().history.front().start==carried.front().start);
+        f.clock.s.quality=Quality::synced; f.tick();
+        CHECK(f.c->snapshot().ready);
+        for (int i=0;i<7;++i) {
+            f.tick(true); CHECK(f.c->snapshot().on); f.advance(900*second);
+            f.offer(); f.ack(); // inspect the final refusal without the earlier 16-record batch hiding it
+        }
+        CHECK(f.actuator.opens==8); // carried15 + usable105 = default120
+        f.tick(true);
+        CHECK(f.actuator.opens==8 && find(f.offer(),Kind::request_rejected,Reason::rolling_limit));
+    }
+}
+void uptimeAgesCarriedBudgetWithoutDowntimeCredit() {
+    Fixture f;
+    f.apply(f.config("tight",{15,15,windowSeconds,15}));
+    f.tick(true); f.advance(15*second);
+    f.clock.s.wall+=10*day;
+    f.reboot(false);
+    f.tick(true); CHECK(f.actuator.opens==1); // SNTP jump + reboot did not refill
+    f.gap(windowSeconds*second-15001);
+    f.tick(true); CHECK(f.actuator.opens==1);
+    f.gap(15001);
+    f.tick(true); CHECK(f.actuator.opens==2); // actual powered uptime now permits a new run
+    f.advance(15*second);
+    f.reboot(false); f.tick(true); CHECK(f.actuator.opens==2);
+}
+void actualDelayedDeadlineIsAccounted() {
+    Fixture f;
+    f.apply(f.config("exact",{1800,1800,windowSeconds,7200}));
+    f.actuator.exactDeadline=false;
+    f.tick(true);
+    CHECK(f.c->snapshot().active.duration==1800);
+    f.clock.elapse(1800*second+7);
+    f.tick();
+    CHECK(f.c->ledger().history.back().end-f.c->ledger().history.back().start==1800007);
+    CHECK(!f.c->snapshot().on && !f.c->ledger().unknown);
+    f.reboot(false);
+    CHECK(f.c->ledger().history.back().end-f.c->ledger().history.back().start==1800007);
+    f.tick(true); CHECK(f.c->snapshot().active.duration==1800);
+}
+void fillTo512(Fixture& f) {
+    f.apply(f.config());
+    for (int i=0;i<510;++i) f.tick(true,true);
+    CHECK(f.c->queued()==511);
+    f.stop("filler");
+    CHECK(f.c->queued()==512);
+}
+void stopReceiptSurvivesFullQueueAckAndRetry() {
+    Fixture f;
+    fillTo512(f);
+    auto events=f.offer();
+    const auto e=f.c->snapshot().epoch;
+    Exchange x;
+    x.acked=f.sent;
+    x.stops={{id("stop-full"),f.c->bootId(),f.clock.s.wall,true}};
+    f.exchange(x);
+    CHECK(f.c->snapshot().epoch==e+1 && f.c->queued()==497);
+    CHECK(f.c->ledger().deferredStops.empty());
+    x.acked.clear(); f.exchange(x);
+    CHECK(f.c->snapshot().epoch==e+1 && f.c->queued()==497);
+    bool seen=false;
+    while (f.c->queued()) {
+        events=f.offer();
+        for (const auto& r:events) if (r.kind==Kind::stop_processed && r.request==id("stop-full")) {
+            seen=true; CHECK(r.outcome==Outcome::already_off);
+        }
+        f.ack();
+    }
+    CHECK(seen);
+}
+void deferredStopRecoversAfterReboot() {
+    Fixture f;
+    fillTo512(f);
+    const auto oldBoot=f.c->bootId();
+    f.stop("recover");
+    CHECK(f.c->queued()==512 && f.c->ledger().deferredStops.size()==1);
+    f.reboot(false);
+    CHECK(f.c->ledger().deferredStops.size()==1);
+    f.offer(); f.ack();
+    CHECK(f.c->ledger().deferredStops.empty() && f.c->queued()==497);
+    Exchange retry;
+    retry.stops={{id("recover"),oldBoot,f.clock.s.wall,true}};
+    f.exchange(retry);
+    CHECK(f.c->snapshot().epoch==0 && f.c->queued()==497);
+    bool seen=false;
+    while (f.c->queued()) {
+        const auto events=f.offer();
+        for (const auto& r:events) if (r.kind==Kind::stop_processed && r.request==id("recover")) {
+            CHECK(r.boot==oldBoot && r.outcome==Outcome::already_off && r.occurred==baseTime);
+            seen=true;
+        }
+        f.ack();
+    }
+    CHECK(seen);
+}
+void deferredStopJournalFailureIsNotProof() {
+    Fixture f;
+    fillTo512(f);
+    const auto oldBoot=f.c->bootId();
+    f.storage.failAt=f.storage.appendNumber+1;
+    f.stop("failed-stop");
+    CHECK(!f.c->snapshot().on && f.c->snapshot().blocked==Reason::storage_fault);
+    f.reboot(false); f.offer(); f.ack();
+    Exchange old;
+    old.stops={{id("failed-stop"),oldBoot,f.clock.s.wall,true}};
+    f.exchange(old);
+    bool unconfirmed=false;
+    while (f.c->queued()) {
+        const auto events=f.offer();
+        for (const auto& r:events) if (r.request==id("failed-stop")) {
+            CHECK(r.kind==Kind::stop_processed && r.outcome==Outcome::unconfirmed);
+            unconfirmed=true;
+        }
+        f.ack();
+    }
+    CHECK(unconfirmed);
+}
+void configRefBoundariesSurviveCompactAndBoot() {
+    Fixture f;
+    for (int n=1;n<=255;++n) {
+        f.apply(f.config("cfg-"+std::to_string(n)));
+        f.offer(); f.ack();
+    }
+    CHECK(f.c->ledger().configRefs.size()==255);
+    f.apply(f.config("cfg-256")); f.offer(); f.ack();
+    CHECK(f.c->ledger().configRefs.size()==256 && f.c->snapshot().applied==id("cfg-256"));
+    f.apply(f.config("cfg-257"));
+    CHECK(find(f.offer(),Kind::config_rejected,Reason::config_capacity));
+    for (int n=0;n<1000;++n) { f.tick(true,true); if (n%12==11) { f.offer(); f.ack(); } }
+    CHECK(f.storage.replacements>0);
+    f.reboot(false);
+    f.apply(f.config("cfg-257"));
+    CHECK(f.c->ledger().configRefs.size()==256 && f.c->snapshot().applied==id("cfg-256"));
+    f.apply(f.config("cfg-1"));
+    CHECK(find(f.offer(),Kind::config_rejected,Reason::stale_config));
+}
+void maximumLedgerAndDeferredReceiptsFit() {
+    Memory store;
+    Journal journal(store);
+    Ledger d;
+    CHECK(journal.restore(d));
+    d.applied.ref=id(std::string(128,'c'));
+    d.accountingFloor=100000;
+    for (size_t n=0;n<intervalMax;++n) d.history.push_back({Ms(2*n),Ms(2*n+1)});
+    for (size_t n=0;n<configHistoryMax-1;++n) d.configRefs.push_back(n);
+    d.configRefs.push_back(idFingerprint(d.applied.ref.view()));
+    for (size_t n=0;n<deferredStopMax;++n) {
+        Event e;
+        e.boot.set(std::string(64,'b'));
+        e.config=d.applied.ref;
+        auto name=std::string(125,'r')+std::to_string(n);
+        e.request=id(name);
+        e.kind=Kind::stop_processed; e.source=Source::remote; e.outcome=Outcome::already_off;
+        d.deferredStops.push_back(e);
+    }
+    const auto before=journal.bytes();
+    CHECK(journal.commit(&d) && journal.bytes()-before<=Journal::maxFrame);
+    Journal restored(store); Ledger read;
+    CHECK(restored.restore(read) && read.history.size()==intervalMax &&
+          read.configRefs.size()==configHistoryMax && read.deferredStops.size()==deferredStopMax);
+    CHECK(restored.prepare(5));
 }
 void boundedQueueCompactionAndAck() {
     Fixture f;
@@ -550,6 +726,10 @@ int main(int argc,char** argv) {
     TEST(failureAfterOutputAndTerminal); TEST(damageDuringSession); TEST(corruptionBeforeAdmissionAndMissingStore);
     TEST(uncertainClosure); TEST(schedulePatternsAndCutover); TEST(missedAndRejectedNotReplayed);
     TEST(clockChangesDoNotMoveDeadlineOrRefill); TEST(boundedQueueCompactionAndAck); TEST(compactFailureKeepsOriginal);
+    TEST(accountingAcrossReboot); TEST(uptimeAgesCarriedBudgetWithoutDowntimeCredit); TEST(actualDelayedDeadlineIsAccounted);
+    TEST(stopReceiptSurvivesFullQueueAckAndRetry); TEST(deferredStopRecoversAfterReboot);
+    TEST(deferredStopJournalFailureIsNotProof); TEST(configRefBoundariesSurviveCompactAndBoot);
+    TEST(maximumLedgerAndDeferredReceiptsFit);
     TEST(ackOnlySentAndPriorityReceipt); TEST(maintenanceGate); TEST(syncCadence); TEST(timeCodec);
     test("wireVectors",[&] { CHECK(argc==2); wireVectors(argv[1]); });
     std::cout<<"TOTAL "<<pass<<" PASS, "<<fail<<" FAIL\n";

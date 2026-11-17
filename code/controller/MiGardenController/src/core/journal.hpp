@@ -26,13 +26,14 @@ public:
     bool prepare(size_t frames); // idle only: reserve log bytes or compact
     bool verifyTail();
     std::vector<Event> pending(uint64_t prioritySequence = 0);
+    bool hasStopReceipt(const BootId&, const Id&);
     bool healthy() const { return okay_; }
     size_t queued() const { return index_.size(); }
     uint32_t bytes() const { return used_; }
     static std::vector<uint8_t> genesis(); // host first-use tool only; never called by firmware
-    static constexpr uint32_t maxFrame = 20 * 1024, maxLog = 448 * 1024;
+    static constexpr uint32_t maxFrame = 24 * 1024, maxLog = 448 * 1024;
 private:
-    struct Index { uint64_t sequence; uint32_t offset, crc; uint16_t length; };
+    struct Index { uint64_t sequence; uint32_t offset, crc; uint16_t length; Kind kind; };
     using Bytes = std::vector<uint8_t>;
     LogFile& file_;
     bool okay_ = false;

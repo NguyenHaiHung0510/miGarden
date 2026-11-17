@@ -76,6 +76,7 @@ private:
     bool save(Ledger&&, const std::vector<Event>& = {}, bool critical = false);
     void breakStorage();
     void handleStop(Sample, Source, const Id&, bool stale = false);
+    void flushStopReceipts();
     void finish(Ledger&, std::vector<Event>&, Sample, Drive, Reason);
     void rejected(Sample, Source, Reason, const Id&, const Id& config = {});
     void cancelPending(Ledger&, std::vector<Event>&, Sample, Reason);

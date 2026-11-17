@@ -21,6 +21,13 @@ void Controller::boot() {
     auto d = output_.read();
     observedStops_ = d.stopHeld ? d.stops - 1 : d.stops;
     if (bootId_.empty() || !journal_.restore(state_)) { breakStorage(); return; }
+    const auto bootTime=clock_.now();
+    if (state_.accountingFloor!=none && bootTime.mono>=0) {
+        // Existing v1 ledgers already store this floor. Downtime cannot be
+        // proved by SNTP after a reboot: retain all carried intervals at the
+        // last durable point, then age them only by this boot's elapsed time.
+        anchor_={bootTime.mono,state_.accountingFloor,Quality::holdover};
+    }
     if (state_.session.phase==Session::Phase::armed || state_.session.phase==Session::Phase::running ||
         state_.pending.receivedSequence) {
         Ledger next=state_;
@@ -70,7 +77,7 @@ bool Controller::observe(Sample s) {
         return false;
     }
     lastMonotonic_=s.mono;
-    if (!anchor_.usable() && s.usable() && s.wall >= state_.accountingFloor) anchor_=s;
+    if (!anchor_.usable() && s.usable()) anchor_=s; // virgin safety timeline only
     return true;
 }
 
@@ -144,9 +151,10 @@ bool Controller::save(Ledger&& next, const std::vector<Event>& reports, bool cri
     if (journal_.queued()+reports.size()>backlogMax ||
         (!critical && journal_.queued()+reports.size()>backlogMax-(running_ ? 3 : 1))) {
         ++gaps_; ++change_;
+        if (critical) breakStorage();
         return false;
     }
-    if ((!running_ && !critical && !journal_.prepare(2)) ||
+    if ((!running_ && !journal_.prepare(2)) ||
         (running_ && !critical && journal_.bytes()>Journal::maxLog-3*Journal::maxFrame)) {
         if (!journal_.healthy()) breakStorage(); else { ++gaps_; ++change_; }
         return false;
@@ -228,13 +236,37 @@ void Controller::handleStop(Sample now, Source source, const Id& request, bool s
         e.outcome=stale || after.on ? Outcome::unconfirmed :
             (before.on || stoppedByInput ? Outcome::close_requested : Outcome::already_off);
         events.push_back(e);
-    } else ++gaps_;
+    } else if (source==Source::remote && !stale && next.deferredStops.size()<deferredStopMax) {
+        auto e=make(next,Kind::stop_processed,now,source);
+        --next.sequence; e.sequence=0; // not an exposed report/event ID until it fits the queue
+        e.request=request;
+        e.outcome=after.on ? Outcome::unconfirmed :
+            (before.on || stoppedByInput ? Outcome::close_requested : Outcome::already_off);
+        next.deferredStops.push_back(e);
+    } else { ++gaps_; if (!stale) remoteStopCapacity_=true; }
     // Do not consume the last terminal slot reporting a stale STOP while active.
     if (!stale && after.on) {
         possible_=true; next.unknown=true;
     }
-    if (!events.empty() || state_.pending.receivedSequence!=next.pending.receivedSequence)
+    if (!events.empty() || state_.pending.receivedSequence!=next.pending.receivedSequence ||
+        state_.deferredStops.size()!=next.deferredStops.size())
         save(std::move(next),events,!stale);
+}
+void Controller::flushStopReceipts() {
+    if (broken_ || !journal_.healthy() || state_.deferredStops.empty()) return;
+    const auto keep=running_ ? size_t{3} : size_t{0};
+    const auto available=backlogMax-journal_.queued();
+    if (available<=keep) return;
+    const auto count=std::min({available-keep,state_.deferredStops.size(),batchMax});
+    Ledger next=state_;
+    std::vector<Event> out;
+    for (size_t n=0;n<count;++n) {
+        auto e=next.deferredStops[n];
+        e.sequence=++next.sequence;
+        out.push_back(e); // keep original processing boot/time/outcome, no new physical claim
+    }
+    next.deferredStops.erase(next.deferredStops.begin(),next.deferredStops.begin()+count);
+    save(std::move(next),out,true);
 }
 
 void Controller::rejected(Sample now, Source source, Reason why, const Id& request, const Id& ref) {
@@ -442,6 +474,11 @@ void Controller::tick(bool localStart, bool busyEdge, const Exchange* x, const s
     }
     if (x) for (const auto& s : x->stops) {
         if (!s.target || s.request.empty()) continue;
+        const bool deferred=std::any_of(state_.deferredStops.begin(),state_.deferredStops.end(),[&](const Event& e) {
+            return e.boot==s.boot && e.request==s.request;
+        });
+        if (deferred || journal_.hasStopReceipt(s.boot,s.request)) continue;
+        if (!journal_.healthy()) breakStorage();
         const bool stale=s.boot!=bootId_;
         if (stale) {
             const auto h=idFingerprint(s.request.view());
@@ -482,6 +519,7 @@ void Controller::tick(bool localStart, bool busyEdge, const Exchange* x, const s
         if (!acks.empty() && ((!running_ && !journal_.prepare(2)) || !journal_.commit(nullptr,{},acks)))
             breakStorage();
     }
+    flushStopReceipts(); // including space freed by ACK after immediate CLOSE
     if (state_.pending.receivedSequence && !broken_) {
         const auto why=remote(state_.pending.intent,clock_.now());
         if (why!=Reason::none || busyAtArrival) {

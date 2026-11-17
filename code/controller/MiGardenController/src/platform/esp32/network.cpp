@@ -112,6 +112,12 @@ void Network::work() {
     for (const char* tag:{"esp-tls","esp-tls-mbedtls","transport_base","HTTP_CLIENT","wifi"})
         esp_log_level_set(tag,ESP_LOG_NONE);
     WiFi.persistent(false);
+#ifdef MG_LAB
+    WiFi.onEvent([this](arduino_event_id_t event, arduino_event_info_t info) {
+        if (event==ARDUINO_EVENT_WIFI_STA_DISCONNECTED)
+            disconnectReason_.store(info.wifi_sta_disconnected.reason);
+    },ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
+#endif
     WiFi.mode(WIFI_STA);
     WiFi.setAutoReconnect(false);
     sntp_set_time_sync_notification_cb(WallClock::synchronized);
@@ -120,6 +126,9 @@ void Network::work() {
     for (;;) {
         const Ms now=monoNow();
         const bool connected=WiFi.status()==WL_CONNECTED;
+#ifdef MG_LAB
+        wifiStatus_.store(int(WiFi.status()));
+#endif
         if (!connected && now>=nextWifi) {
             WiFi.begin(provision_.ssid.c_str(),provision_.password.c_str());
             nextWifi=now+30*second;

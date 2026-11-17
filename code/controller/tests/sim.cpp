@@ -28,6 +28,21 @@ int main(int argc,char** argv) {
         f.write(reinterpret_cast<const char*>(image.data()),image.size());
         return f.good()?0:2;
     }
+    if (argc==3 && std::string_view(argv[1])=="verify-journal") {
+        std::ifstream input(argv[2],std::ios::binary);
+        if (!input) return 2;
+        Memory memory;
+        memory.live.assign(std::istreambuf_iterator<char>(input),{});
+        Journal journal(memory);
+        Ledger state;
+        const bool valid=journal.restore(state);
+        std::cout<<"{\"valid\":"<<(valid?"true":"false");
+        if (valid) std::cout<<",\"queued\":"<<journal.queued()<<",\"unknown\":"<<(state.unknown?"true":"false")
+            <<",\"intervals\":"<<state.history.size()<<",\"config_refs\":"<<state.configRefs.size()
+            <<",\"deferred_stops\":"<<state.deferredStops.size();
+        std::cout<<"}\n";
+        return valid?0:2;
+    }
     Id device=id("qa-controller-a");
     if (argc>1 && (argc!=3 || std::string_view(argv[1])!="--device-id" ||
                    !visible(argv[2]) || !device.set(argv[2]))) {
