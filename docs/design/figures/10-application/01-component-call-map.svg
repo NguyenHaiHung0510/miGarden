@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="925" viewBox="0 0 1240 925" role="img" aria-labelledby="title desc">
+<title id="title">microSched: màn hình gọi tới cơ sở dữ liệu ra sao</title><desc id="desc">Một ứng dụng FastAPI và một SPA hiện có; hai cửa API với danh tính riêng.</desc>
+<defs><marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L10 5.5 L0 11 Z" fill="#43637f"/></marker></defs>
+<rect x="0" y="0" width="1240" height="925" rx="0" fill="#f3f7fb" stroke="none" stroke-width="1.5"/>
+<rect x="0" y="0" width="1240" height="116" rx="0" fill="#172e49" stroke="none" stroke-width="1.5"/>
+<text x="42" y="29" fill="#a8dfcf" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="17">MIGARDEN  /  BƯỚC 10  /  KIẾN TRÚC ĐỀ XUẤT</text>
+<text x="42" y="72" fill="#ffffff" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="34">microSched: màn hình gọi tới cơ sở dữ liệu ra sao</text>
+<text x="42" y="100" fill="#d2e2f2" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Một ứng dụng FastAPI và một SPA hiện có; hai cửa API với danh tính riêng.</text>
+<rect x="55" y="139" width="522" height="127" rx="14" fill="#ffffff" stroke="#bbcbd9" stroke-width="1.5"/>
+<text x="75" y="171" fill="#172a40" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">A · Người dùng trong browser  /  G01</text>
+<text x="75" y="199" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">App / menu → MiGardenScreen</text>
+<text x="75" y="222" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">Hook TanStack Query → apiRequest()</text>
+<text x="75" y="245" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Thao tác lịch, remote, trạng thái và lịch sử.</text>
+<rect x="663" y="139" width="522" height="127" rx="14" fill="#e9f6f2" stroke="#a4cfc4" stroke-width="1.5"/>
+<text x="683" y="171" fill="#176050" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">B · Thiết bị kết nối ra ngoài  /  G07</text>
+<text x="683" y="199" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">DeviceSync → HTTPS/JSON (đề xuất)</text>
+<text x="683" y="222" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">ESP32 chủ động lấy lịch, lệnh và gửi report.</text>
+<text x="683" y="245" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Browser không nối thẳng tới ESP32.</text>
+<rect x="30" y="298" width="1180" height="566" rx="14" fill="#e9f0f7" stroke="#bed0e0" stroke-width="1.5"/>
+<text x="620" y="324" fill="#415873" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="16">FASTAPI MICROSCHED  /  CHUNG APP VÀ DATABASE</text>
+<polyline points="316,267 316,337" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="924,267 924,337" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="55" y="339" width="522" height="112" rx="14" fill="#ffffff" stroke="#bbcbd9" stroke-width="1.5"/>
+<text x="75" y="371" fill="#172a40" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">Router người dùng  /  I01</text>
+<text x="75" y="399" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">web/routers/migarden_human.py</text>
+<text x="75" y="422" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Session hiện có, kiểm quyền và context ở server.</text>
+<rect x="663" y="339" width="522" height="112" rx="14" fill="#e9f6f2" stroke="#a4cfc4" stroke-width="1.5"/>
+<text x="683" y="371" fill="#176050" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">Router thiết bị  /  I02, I03, I04</text>
+<text x="683" y="399" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">web/routers/migarden_device.py</text>
+<text x="683" y="422" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Xác thực thiết bị, ràng buộc đúng Zone/Controller.</text>
+<polyline points="316,452 316,480" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="924,452 924,480" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="55" y="482" width="522" height="145" rx="14" fill="#ffffff" stroke="#bbcbd9" stroke-width="1.5"/>
+<text x="75" y="514" fill="#172a40" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">Nghiệp vụ  /  domain/migarden/</text>
+<text x="75" y="542" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">schedule.py → lưu desired / content ref</text>
+<text x="75" y="565" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">commands.py → preview, confirm, grant, STOP</text>
+<text x="75" y="588" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">queries.py → dựng status và history để đọc</text>
+<rect x="663" y="482" width="522" height="145" rx="14" fill="#e9f6f2" stroke="#a4cfc4" stroke-width="1.5"/>
+<text x="683" y="514" fill="#176050" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">Giao tiếp thiết bị  /  domain/migarden/</text>
+<text x="683" y="542" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">exchange.py → giao lịch / lệnh đúng thiết bị</text>
+<text x="683" y="565" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">reports.py → kiểm, lưu, đối soát và trả receipt</text>
+<text x="683" y="588" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Tra policy của schedule/commands; ingest không OPEN.</text>
+<polyline points="662,545 579,545" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" stroke-dasharray="6 6" marker-end="url(#arrow)"/>
+<polyline points="316,628 316,663" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="924,628 924,663" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="146" y="665" width="948" height="101" rx="14" fill="#ffffff" stroke="#bbcbd9" stroke-width="1.5"/>
+<text x="166" y="697" fill="#172a40" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">storage.py · repository và giao dịch</text>
+<text x="166" y="725" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">SQLModel/AsyncSession: nội dung bất biến, desired, command, report và ràng buộc duy nhất.</text>
+<text x="166" y="748" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Giữ đúng bản đã dùng để lịch sử không đổi khi sửa lịch mới.</text>
+<polyline points="620,767 620,796" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="245" y="798" width="750" height="48" rx="12" fill="#dce8f3" stroke="#a9bdcf" stroke-width="1.5"/>
+<text x="620" y="829" fill="#172a40" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="20">PostgreSQL hiện có  ·  schema tiến hóa qua Alembic</text>
+<text x="54" y="899" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="18">Các tên file là đề xuất. Cửa thiết bị không dùng cookie người dùng và không tự tạo lệnh tưới.</text>
+</svg>

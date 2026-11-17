@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="936" viewBox="0 0 1240 936" role="img" aria-labelledby="title desc">
+<title id="title">ESP32: ba nguồn START, một nơi quyết định</title><desc id="desc">Một firmware trên một bo; quản lý lịch, an toàn local và giao tiếp là các module trong cùng image.</desc>
+<defs><marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L10 5.5 L0 11 Z" fill="#43637f"/></marker></defs>
+<rect x="0" y="0" width="1240" height="936" rx="0" fill="#f3f7fb" stroke="none" stroke-width="1.5"/>
+<rect x="0" y="0" width="1240" height="116" rx="0" fill="#172e49" stroke="none" stroke-width="1.5"/>
+<text x="42" y="29" fill="#a8dfcf" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="17">MIGARDEN  /  BƯỚC 10  /  KIẾN TRÚC ĐỀ XUẤT</text>
+<text x="42" y="72" fill="#ffffff" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="34">ESP32: ba nguồn START, một nơi quyết định</text>
+<text x="42" y="100" fill="#d2e2f2" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Một firmware trên một bo; quản lý lịch, an toàn local và giao tiếp là các module trong cùng image.</text>
+<rect x="40" y="149" width="361" height="129" rx="14" fill="#ffffff" stroke="#bbcbd9" stroke-width="1.5"/>
+<text x="60" y="181" fill="#172a40" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">Nút START / STOP  ·  I07</text>
+<text x="60" y="209" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">platform/esp32/buttons</text>
+<text x="60" y="232" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Đọc IO33 / IO32 và lọc dội.</text>
+<text x="60" y="255" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">STOP đi đường ưu tiên.</text>
+<rect x="439" y="149" width="362" height="129" rx="14" fill="#ffffff" stroke="#bbcbd9" stroke-width="1.5"/>
+<text x="459" y="181" fill="#172a40" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">Lịch đã áp dụng  ·  G04</text>
+<text x="459" y="209" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">core/schedule</text>
+<text x="459" y="232" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Xét cơ hội theo giờ đủ tin cậy.</text>
+<text x="459" y="255" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Bỏ qua kỳ lỡ hoặc đã xử lý.</text>
+<rect x="839" y="149" width="361" height="129" rx="14" fill="#e9f6f2" stroke="#a4cfc4" stroke-width="1.5"/>
+<text x="859" y="181" fill="#176050" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">Lệnh từ microSched  ·  G07</text>
+<text x="859" y="209" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">app/device_sync → esp32/http</text>
+<text x="859" y="232" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Nhận candidate, grant và STOP.</text>
+<text x="859" y="255" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Gửi report qua luồng mạng riêng.</text>
+<polyline points="220,279 220,319 507,319 507,344" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="620,279 620,344" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1020,279 1020,319 733,319 733,344" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="635" y="311" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="15">I05</text>
+<rect x="376" y="346" width="488" height="172" rx="14" fill="#edf3fa" stroke="#9ab4ce" stroke-width="1.5"/>
+<text x="396" y="378" fill="#172a40" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">core/arbiter  ·  G05</text>
+<text x="396" y="406" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Kiểm đúng đích, hiệu lực và giới hạn chung.</text>
+<text x="396" y="429" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">START: phải xác nhận ghi bền trước OPEN.</text>
+<text x="396" y="452" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">STOP thắng, vô hiệu START cũ; không chờ mạng.</text>
+<text x="396" y="475" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Firmware khởi tạo OFF và giữ deadline local.</text>
+<rect x="40" y="367" width="294" height="136" rx="14" fill="#ffffff" stroke="#bbcbd9" stroke-width="1.5"/>
+<text x="60" y="399" fill="#172a40" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">Clock  ·  I06</text>
+<text x="60" y="427" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Giờ lịch và chất lượng.</text>
+<text x="60" y="450" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Thời gian trôi cho deadline.</text>
+<text x="60" y="473" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Thiếu căn cứ: không START.</text>
+<rect x="905" y="367" width="295" height="136" rx="14" fill="#ffffff" stroke="#bbcbd9" stroke-width="1.5"/>
+<text x="925" y="399" fill="#172a40" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">SafetyJournal  ·  I06</text>
+<text x="925" y="427" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">platform/esp32/nvs</text>
+<text x="925" y="450" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Bản lịch, sổ an toàn, phục hồi.</text>
+<text x="925" y="473" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Ghi lỗi: safe stop / degraded.</text>
+<polyline points="375,440 335,440" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="865,440 904,440" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="620,519 620,558" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="376" y="560" width="488" height="100" rx="14" fill="#ffffff" stroke="#bbcbd9" stroke-width="1.5"/>
+<text x="396" y="592" fill="#172a40" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">OutputPort  ·  I07</text>
+<text x="396" y="620" fill="#415873" text-anchor="start" font-family="Consolas,monospace" font-weight="400" font-size="17">Vận hành: platform/esp32/gpio</text>
+<text x="396" y="643" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Mô phỏng: ghi lệnh trong RAM trên PC.</text>
+<polyline points="620,661 620,698" fill="none" stroke="#43637f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="376" y="700" width="488" height="104" rx="14" fill="#fff5e2" stroke="#d7bc82" stroke-width="1.5"/>
+<text x="396" y="732" fill="#735018" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="22">IO27 → S của MKE-M06 → cuộn van</text>
+<text x="396" y="760" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Nguồn B cấp riêng. Firmware chỉ phát lệnh.</text>
+<text x="396" y="783" fill="#415873" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Đo driver để xác nhận đầu ra điện thực tế.</text>
+<rect x="40" y="831" width="1160" height="75" rx="13" fill="#e9f6f2" stroke="#a4cfc4" stroke-width="1.5"/>
+<text x="64" y="862" fill="#176050" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="18">Report quay về microSched qua DeviceSync (I04); không có đường tắt từ mạng tới GPIO.</text>
+<text x="64" y="889" fill="#176050" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-weight="400" font-size="17">Không có phản hồi xác nhận vị trí van ở cấu hình hiện tại. Điện mặc định OFF phải kiểm riêng.</text>
+</svg>
