@@ -1,8 +1,8 @@
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory)][ValidateSet('lab','release')][string]$Profile,
-    [string]$Cli='C:\Users\os\AppData\Local\Programs\Arduino IDE\resources\app\lib\backend\resources\arduino-cli.exe',
-    [string]$CliConfig='C:\Users\os\Desktop\ai_eng_path\migarden\.local\bench\S01\arduino-cli.yaml',
+    [Parameter(Mandatory)][ValidateSet('lab','release','commissioner')][string]$Profile,
+    [string]$Cli,
+    [Parameter(Mandatory)][string]$CliConfig,
     [string]$JsonLibrary,
     [ValidateRange(1,8)][int]$Jobs=4
 )
@@ -10,14 +10,22 @@ $ErrorActionPreference='Stop'
 $nl=[Environment]::NewLine
 $repo=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
 $staging=Join-Path $repo '.local/n01'
+if (!$Cli) {
+    $installedCli=Get-Command arduino-cli -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($installedCli) { $Cli=$installedCli.Source }
+    elseif ($env:LOCALAPPDATA) {
+        $Cli=Join-Path $env:LOCALAPPDATA 'Programs/Arduino IDE/resources/app/lib/backend/resources/arduino-cli.exe'
+    }
+}
 if (!$JsonLibrary) { $JsonLibrary=Join-Path $staging 'deps/ArduinoJson' }
 $expected='77771d3c07668e01d8f52acb03910c1110bb373f'
 if ((& git -C $JsonLibrary rev-parse HEAD) -ne $expected -or
     (& git -C $JsonLibrary status --porcelain)) { throw 'Require a clean ArduinoJson 7.4.3 checkout' }
-if (!(Test-Path -LiteralPath $Cli -PathType Leaf) -or !(Test-Path -LiteralPath $CliConfig -PathType Leaf)) {
-    throw 'Arduino CLI/config missing'
+if (!$Cli -or !(Test-Path -LiteralPath $Cli -PathType Leaf) -or !(Test-Path -LiteralPath $CliConfig -PathType Leaf)) {
+    throw 'Specify Arduino CLI and an existing config with -Cli and -CliConfig'
 }
 $head=& git -C $repo rev-parse HEAD
+if ($LASTEXITCODE -or (& git -C $repo status --porcelain)) { throw 'Build from a clean source commit' }
 $fqbn='esp32:esp32:esp32:CPUFreq=240,FlashFreq=80,FlashMode=qio,FlashSize=4M,PartitionScheme=default,PSRAM=disabled'
 $id='n01_'+$Profile+'_'+[DateTime]::UtcNow.ToString('yyyyMMddTHHmmss')+'_'+[guid]::NewGuid().ToString('N').Substring(0,12)
 $out=Join-Path $staging "build/$id"
@@ -34,10 +42,13 @@ $env:ARDUINO_DIRECTORIES_DOWNLOADS=Join-Path $staging 'downloads'
 $env:ARDUINO_DIRECTORIES_USER=Join-Path $staging 'arduino-user'
 $utf8=New-Object System.Text.UTF8Encoding($false)
 $f="-DMG_BUILD_ID=$id"
-if ($Profile -eq 'lab') { $f+=' -DMG_LAB=1' }
+if ($Profile -ne 'release') { $f+=' -DMG_LAB=1' }
+if ($Profile -eq 'commissioner') { $f+=' -DMG_COMMISSION=1' }
+$link='-Wl,--wrap=esp_partition_erase_range,--wrap=esp_core_dump_write'
+if ($Profile -eq 'commissioner') { $link+=',--wrap=esp_partition_write,--wrap=esp_partition_write_raw' }
 $argsList=@('compile','--config-file',$CliConfig,'--fqbn',$fqbn,'--build-path',$out,
     '--library',$JsonLibrary,'--build-property',"compiler.cpp.extra_flags=$f",
-    '--build-property','compiler.c.elf.extra_flags=-Wl,--wrap=esp_partition_erase_range,--wrap=esp_core_dump_write',
+    '--build-property',"compiler.c.elf.extra_flags=$link",
     '--warnings','all','--jobs',"$Jobs",(Join-Path $PSScriptRoot 'MiGardenController'))
 function Hash-Entry([string]$path) {
     $item=Get-Item -LiteralPath $path
@@ -76,18 +87,26 @@ try {
         $partitions=Get-Content -Raw -LiteralPath (Join-Path $out 'partitions.csv')
         $map=Join-Path $out 'MiGardenController.ino.map'
         $guard=Select-String -LiteralPath $map -Pattern '^\s+0x[0-9a-f]+\s+__wrap_esp_partition_erase_range\s*$' -Quiet
+        $writeGuard=($Profile -ne 'commissioner' -or
+            ((Select-String -LiteralPath $map -Pattern '^\s+0x[0-9a-f]+\s+__wrap_esp_partition_write\s*$' -Quiet) -and
+             (Select-String -LiteralPath $map -Pattern '^\s+0x[0-9a-f]+\s+__wrap_esp_partition_write_raw\s*$' -Quiet)))
+        $partitionHash=(Get-FileHash -LiteralPath (Join-Path $out 'MiGardenController.ino.partitions.bin') -Algorithm SHA256).Hash
         if ($raw.Length -gt 0x140000 -or $raw[0] -ne 0xe9 -or !$body.Contains($id) -or
-            $isLab -ne ($Profile -eq 'lab') -or
+            $isLab -ne ($Profile -ne 'release') -or
+            ($Profile -eq 'commissioner' -and !$body.Contains('MG-COMMISSION-V1')) -or
+            ($Profile -ne 'commissioner' -and $body.Contains('MG-COMMISSION-V1')) -or
             ($isLab -and (!$body.Contains('NETINFO LINK_PENDING') -or !$body.Contains('BLANK_FF'))) -or
             (!$isLab -and ($body.Contains('PROVISION_READY') -or $body.Contains('BOOTSTRAP_USB') -or
                            $body.Contains('NETINFO LINK_PENDING') -or $body.Contains('BLANK_FF'))) -or
             $partitions -notmatch '(?m)^app0,\s*app,\s*ota_0,\s*0x10000,\s*0x140000,?\r?$' -or
-            $partitions -notmatch '(?m)^app1,\s*app,\s*ota_1,\s*0x150000,\s*0x140000,?\r?$' -or !$guard) {
+            $partitions -notmatch '(?m)^app1,\s*app,\s*ota_1,\s*0x150000,\s*0x140000,?\r?$' -or
+            $partitionHash -ne '148b959cbff1c38aa8e1d5c0ba9d612c54997b945e56a63f41223eef650653a1' -or
+            !$guard -or !$writeGuard) {
             $gate='REJECTED_ARTIFACT'
         } else { $gate='PASS' }
     }
     $usbProtocol=$null
-    if ($Profile -eq 'lab') { $usbProtocol=1 }
+    if ($Profile -ne 'release') { $usbProtocol=1 }
     $record=[ordered]@{
         build_id=$id; profile=$Profile; wire='migarden.zone-a.v1'; head_at_compile=$head
         toolchain=$version; esp32_core='3.3.12'; arduinojson_commit=$expected; command=@($Cli)+$argsList
@@ -95,7 +114,8 @@ try {
         configured_flash_bytes=4194304; observed_physical_flash_bytes_parent=16777216
         app0=[ordered]@{start=0x10000; bytes=0x140000}; app1=[ordered]@{start=0x150000; bytes=0x140000}
         data=[ordered]@{start=0x290000; bytes=0x160000; mount='LittleFS (no format, no grow)'}
-        usb_compatible=($Profile -eq 'lab' -and $gate -eq 'PASS'); usb_protocol=$usbProtocol
+        usb_compatible=($Profile -ne 'release' -and $gate -eq 'PASS'); usb_protocol=$usbProtocol
+        commissioner_injection=($Profile -eq 'commissioner')
         gpio_outputs_in_profile=($Profile -eq 'release')
         device='NOT_RUN by builder'; bootloader_rollback='UNVERIFIED'
         source_inputs=$inputs; artifacts=$artifacts

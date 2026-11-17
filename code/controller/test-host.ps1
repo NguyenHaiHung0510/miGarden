@@ -24,9 +24,14 @@ try {
         & $compilerPath -std=c++17 -O2 -Wall -Wextra -Wpedantic -Werror -static @include @sources (Join-Path $PSScriptRoot "tests/$name.cpp") -o (Join-Path $build "$name.exe")
         if ($LASTEXITCODE) { throw "Compile failed: $name (exit $LASTEXITCODE)" }
     }
+    $commission=Join-Path $PSScriptRoot 'MiGardenController/src/commissioning/transaction.cpp'
+    & $compilerPath -std=c++17 -O2 -Wall -Wextra -Wpedantic -Werror -static @include $commission (Join-Path $PSScriptRoot 'tests/commissioner_tests.cpp') -o (Join-Path $build 'commissioner_tests.exe')
+    if ($LASTEXITCODE) { throw 'Commissioner host compile failed' }
     if (!$BuildOnly) {
         & (Join-Path $build 'core_tests.exe') (Join-Path $repo 'contracts/zone-a/v1/vectors.json')
         if ($LASTEXITCODE) { throw 'Test failure' }
+        & (Join-Path $build 'commissioner_tests.exe')
+        if ($LASTEXITCODE) { throw 'Commissioner test failure' }
     }
     Write-Output "HOST_OUTPUT $build"
 } finally {

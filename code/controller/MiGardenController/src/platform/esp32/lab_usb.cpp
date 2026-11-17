@@ -1,5 +1,6 @@
 #ifdef MG_LAB
 #include "lab_usb.hpp"
+#include "commissioner.hpp"
 #include <WiFi.h>
 #include <esp_flash_encrypt.h>
 #include <esp_secure_boot.h>
@@ -103,7 +104,9 @@ void LabUsb::begin() {
     heartbeat();
 }
 bool LabUsb::maintenance() {
+#ifndef MG_COMMISSION
     controller_.tick();
+#endif
     if (!controller_.enterMaintenance()) { Serial.println("ERR CONTROLLER_BUSY"); return false; }
     network_.fence(); // any previous exchange reply, including a grant, becomes stale
     return true;
@@ -114,6 +117,9 @@ void LabUsb::fail(const char* code,size_t n) {
     lastInput_=monoNow();
 }
 void LabUsb::update(size_t length,const uint8_t* expected,const char* hex) {
+#ifdef MG_COMMISSION
+    if(!Commissioner::instance().mayBeginUpdate(length,hex)){Serial.println("ERR PINNED_TARGET_NOT_VERIFIED");return;}
+#endif
     const auto* active=esp_ota_get_running_partition();
     const auto* next=target();
     if (!next) { Serial.println("ERR PARTITION_LAYOUT_OR_BOOT_PENDING"); return; }
@@ -159,7 +165,13 @@ void LabUsb::update(size_t length,const uint8_t* expected,const char* hex) {
         delay(1);
     }
     if (!readback.matches(expected)) { fail("FLASH_SHA256",received); return; }
-    if (!compatible) { fail("LAB_PROFILE_MARKER_REQUIRED",received); return; }
+    if (!compatible) {
+#ifdef MG_COMMISSION
+        if(!Commissioner::instance().approvedTarget(length,hex)){fail("PINNED_TARGET_NOT_VERIFIED",received);return;}
+#else
+        fail("LAB_PROFILE_MARKER_REQUIRED",received); return;
+#endif
+    }
     if (Serial.available()) { fail("EXTRA_BYTES",received); return; }
     if (!same(target(),next) || !same(esp_ota_get_running_partition(),active)) {
         fail("PARTITION_CHANGED",received); return;
@@ -194,6 +206,10 @@ void LabUsb::provision(size_t length) {
     }
 }
 void LabUsb::command() {
+#ifdef MG_COMMISSION
+    if(Commissioner::instance().command(line_))return;
+    if(!strncmp(line_,"PROVISION ",10)){Serial.println("ERR COMMISSIONER_USE_PINNED_PLAN");return;}
+#endif
     if (!strcmp(line_,"PING")) { Serial.printf("PONG BOOTSTRAP_USB %s\n",buildId); return; }
     if (!strcmp(line_,"NETINFO")) {
         if (WiFi.status()!=WL_CONNECTED) Serial.println("NETINFO LINK_PENDING");

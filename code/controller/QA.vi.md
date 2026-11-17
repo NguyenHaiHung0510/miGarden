@@ -15,6 +15,17 @@ kết quả USB bootstrap seed làm kết quả của candidate N01.
 
 ## Đủ 54 dòng Step 07
 
+Delta FD1–FD5/current-board tooling:
+
+| ID | Contract / test | Giới hạn |
+|---|---|---|
+| FD1 | Windows DACL/POSIX modes before secret writes, protected input/generated files; shared synthetic refusal→restore PASS | Owner real-file ACL chưa đọc, không tự thay. |
+| FD2 | Exact app alphabet/token43, private device-binding digest, firmware-compatible origin, actual CA constraints; incompatible values rejected | Actual provisioning still HOLD. |
+| FD3 | Exact required bundle set + separately pinned digest; actual current image unpacked, missing-entry/same-size tamper rejected then restored | Local integrity guard không tự là authorization/independent QA. |
+| FD4 | [Whole-journal rollback caveat](COMMISSIONING.vi.md#rollback-và-compatibility) includes historical extended frames/cap24KiB, independent of current deferred0 | Old-reader/runtime rollback UNVERIFIED, never reset journal. |
+| FD5 | `stopUsesMemoryProofBeforeStorage`: exact bounded RAM receipt index populated restore/commit; duplicate STOP giữ phiên mới, fresh STOP CLOSE trước mọi read | Actual STOP latency/tủ vẫn chưa đo. |
+| Current commissioner | `commissioner_tests`:7 nhóm transaction conflict/partial/no-NVS-write/preservation; `test_current_commission.py`: prepare/capture pin/manifest/peer giả | Cùng transaction source dùng MCU; adapters NVS/LittleFS thực NOT_RUN. |
+
 Delta theo independent review ea140ed (không thay evidence cũ):
 
 | Finding | Ca mới / disposition | Bằng chứng cần ghép |

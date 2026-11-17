@@ -16,6 +16,7 @@ Controller* controller=nullptr;
 LabUsb* lab=nullptr;
 #endif
 
+#ifndef MG_COMMISSION
 void outputService(void*) {
     auto last=xTaskGetTickCount();
     for (;;) {
@@ -23,16 +24,20 @@ void outputService(void*) {
         vTaskDelayUntil(&last,pdMS_TO_TICKS(5));
     }
 }
+#endif
 }
 
 size_t getArduinoLoopTaskStackSize() { return 12288; }
 
 void setup() {
     output.initialize();
+#ifndef MG_COMMISSION
     file.mount();
+#endif
     auto* c=new (std::nothrow) Controller(clockPort,output,journal,newBootId());
     if (!c) return; // hardware was already made inactive
     controller=c;
+#ifndef MG_COMMISSION
     c->boot();
     const bool timer=xTaskCreatePinnedToCore(outputService,"mg-output",3072,nullptr,5,nullptr,1)==pdPASS;
     Provision p;
@@ -41,9 +46,13 @@ void setup() {
         output.enable(timer && p.fixtureVerified);
         network.begin(std::move(p));
     }
+#endif
 #ifdef MG_LAB
     lab=new (std::nothrow) LabUsb(*c,network,file);
     if (lab) lab->begin();
+#ifdef MG_COMMISSION
+    Serial.println("COMMISSIONER_READY MG-COMMISSION-V1 no_control=1 gpio=inactive");
+#endif
 #else
     Serial.begin(115200);
     enableLoopWDT();
@@ -52,6 +61,10 @@ void setup() {
 
 void loop() {
     if (!controller) { delay(20); return; }
+#ifdef MG_COMMISSION
+    if(lab)lab->visit();
+    delay(5);return;
+#else
     output.touch();
     bool wasBusy=false;
     const bool start=output.startEdge(wasBusy);
@@ -76,4 +89,5 @@ void loop() {
     }
 #endif
     delay(5);
+#endif
 }

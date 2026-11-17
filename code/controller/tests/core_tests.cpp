@@ -597,6 +597,22 @@ void maximumLedgerAndDeferredReceiptsFit() {
           read.configRefs.size()==configHistoryMax && read.deferredStops.size()==deferredStopMax);
     CHECK(restored.prepare(5));
 }
+void stopUsesMemoryProofBeforeStorage() {
+    Fixture f;f.apply(f.config());f.stop("old-stop");
+    BootId other;CHECK(other.set("old-boot"));
+    Exchange stale;
+    stale.stops={{id("new-stop"),other,f.clock.s.wall,true}};
+    f.exchange(stale);
+    CHECK(find(f.offer(),Kind::stop_processed,Reason::stale_boot));
+    f.tick(true);
+    CHECK(f.c->snapshot().on);
+    f.stop("old-stop"); // duplicate must not cancel a newer session
+    CHECK(f.c->snapshot().on);
+    f.storage.beforeRead=[&]{CHECK(!f.actuator.d.on);};
+    f.stop("new-stop"); // every subsequent storage read is after immediate CLOSE
+    f.storage.beforeRead={};
+    CHECK(!f.c->snapshot().on);
+}
 void boundedQueueCompactionAndAck() {
     Fixture f;
     f.apply(f.config("a",{15,15,windowSeconds,7200}));
@@ -730,6 +746,7 @@ int main(int argc,char** argv) {
     TEST(stopReceiptSurvivesFullQueueAckAndRetry); TEST(deferredStopRecoversAfterReboot);
     TEST(deferredStopJournalFailureIsNotProof); TEST(configRefBoundariesSurviveCompactAndBoot);
     TEST(maximumLedgerAndDeferredReceiptsFit);
+    TEST(stopUsesMemoryProofBeforeStorage);
     TEST(ackOnlySentAndPriorityReceipt); TEST(maintenanceGate); TEST(syncCadence); TEST(timeCodec);
     test("wireVectors",[&] { CHECK(argc==2); wireVectors(argv[1]); });
     std::cout<<"TOTAL "<<pass<<" PASS, "<<fail<<" FAIL\n";

@@ -8,13 +8,16 @@ import hashlib
 import importlib.metadata
 import importlib.util
 import json
+import os
 from pathlib import Path
 import re
+import shutil
 import ssl
 import subprocess
 import sys
 import tempfile
 from urllib.parse import urlsplit
+import private_acl
 
 ROOT = Path(__file__).resolve().parents[2]
 PARSER_SHA = "621bdbf0ac60e34ae190f63be10f0f1a4dd4d18c25ebab0cf56ff53a6f2b6c2c"
@@ -22,7 +25,15 @@ NVS_BYTES, DATA_BYTES = 0x5000, 0x160000
 OFFSETS = {"nvs": 0x9000, "data": 0x290000}
 PROFILES = {"release": ("mg-rel-v1", "release-v1.journal"),
             "lab": ("mg-lab-v1", "lab-v1.journal")}
-DEFAULT_MKFS = Path(r"C:\Users\os\AppData\Local\Arduino15\packages\esp32\tools\mklittlefs\4.0.2-db0513a\mklittlefs.exe")
+def default_mkfs() -> Path | None:
+    program = shutil.which("mklittlefs")
+    if program:
+        return Path(program)
+    local = os.environ.get("LOCALAPPDATA")
+    return Path(local)/"Arduino15/packages/esp32/tools/mklittlefs/4.0.2-db0513a/mklittlefs.exe" if local else None
+
+
+DEFAULT_MKFS = default_mkfs()
 DEFAULT_PARSER = ROOT / ".local/n01/deps/nvs-tool-v5.5.5/nvs_parser.py"
 
 
@@ -61,7 +72,7 @@ def profile_bytes(data: bytes, profile: str) -> bytes:
          "INVALID_PROFILE_KEYS")
     for key in required:
         need(isinstance(p[key], str) and "\0" not in p[key], "INVALID_PROFILE_FIELD")
-    need(bool(re.fullmatch(r"[!-~]{1,128}", p["device_id"])), "INVALID_DEVICE_ID")
+    need(bool(re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,127}", p["device_id"])), "INVALID_DEVICE_ID")
     need(0 < len(p["wifi_ssid"].encode()) <= 32 and len(p["wifi_password"].encode()) <= 64, "INVALID_WIFI_SIZE")
     pw = p["wifi_password"].encode()
     need(not pw or 8 <= len(pw) < 64 or len(pw) == 64 and bool(re.fullmatch(rb"[0-9a-fA-F]{64}", pw)),
@@ -73,16 +84,35 @@ def profile_bytes(data: bytes, profile: str) -> bytes:
         raise Stop("INVALID_HTTPS_ORIGIN") from None
     need(len(p["base_url"].encode()) <= 256 and url.scheme == "https" and bool(url.hostname) and
          bool(re.fullmatch(r"[A-Za-z0-9.-]+", url.hostname or "")) and
+         not (url.hostname or "").startswith(".") and not (url.hostname or "").endswith(".") and
+         bool(re.fullmatch(r"https://[A-Za-z0-9.-]+(?::[0-9]{1,5})?/?",p["base_url"])) and
          not url.username and not url.password and url.path in ("", "/") and
          not url.query and not url.fragment and (port is None or 0 < port <= 65535), "INVALID_HTTPS_ORIGIN")
-    need(bool(re.fullmatch(r"[A-Za-z0-9._~+/=-]{32,256}", p["device_token"])), "INVALID_TOKEN")
+    need(bool(re.fullmatch(r"[A-Za-z0-9_-]{43}", p["device_token"])), "INVALID_TOKEN")
     ca = p["ca_pem"].encode()
     need(len(ca) <= 6144 and b"PRIVATE KEY" not in ca and b"BEGIN CERTIFICATE" in ca, "INVALID_CA")
+    need(bool(re.fullmatch(rb"-----BEGIN CERTIFICATE-----[\r\n]+[A-Za-z0-9+/=\r\n]+-----END CERTIFICATE-----[\r\n]*",ca)),
+         "INVALID_CA_PEM")
     try:
         ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
         ctx.load_verify_locations(cadata=p["ca_pem"])
     except (ValueError, ssl.SSLError):
         raise Stop("INVALID_CA") from None
+    from cryptography import x509
+    from datetime import datetime, timezone
+    try:
+        certs=x509.load_pem_x509_certificates(ca)
+        need(len(certs)==1 and certs[0].extensions.get_extension_for_class(x509.BasicConstraints).value.ca,
+             "INVALID_CA_CONSTRAINTS")
+        cert=certs[0]
+        now=datetime.now(timezone.utc)
+        need(cert.not_valid_before_utc<=now<=cert.not_valid_after_utc,"INVALID_CA_VALIDITY")
+        try:
+            need(cert.extensions.get_extension_for_class(x509.KeyUsage).value.key_cert_sign,"INVALID_CA_KEY_USAGE")
+        except x509.ExtensionNotFound:
+            pass
+    except (ValueError,x509.ExtensionNotFound):
+        raise Stop("INVALID_CA_CONSTRAINTS") from None
     need(type(p.get("fixture_verified", False)) is bool, "INVALID_FIXTURE_FLAG")
     need(profile != "release" or p.get("fixture_verified") is True, "FIXTURE_REVIEW_REQUIRED", 3)
     out = json.dumps(p, ensure_ascii=False, separators=(",", ":")).encode()
@@ -91,13 +121,31 @@ def profile_bytes(data: bytes, profile: str) -> bytes:
 
 
 def private(path: Path):
+    absolute=path.absolute()
     path = path.resolve()
+    need(absolute==path,"REPARSE_OR_SYMLINK_PATH_REFUSED",3)
     need(".local" in path.parts or "provisioning-private" in path.parts, "PRIVATE_DESTINATION_REQUIRED")
     return path
 
+def read_private(path: Path):
+    path=private(path)
+    private_acl.verify(path)
+    return path.read_bytes()
+
+def bind_profile(profile: bytes,binding: bytes,expected_profile: str):
+    p=load_unique(profile)
+    b=load_unique(binding)
+    need(isinstance(b,dict) and set(b)=={"protocol","zone_id","binding_ref","device_id","token_hash","environment","app_ref"},
+         "INVALID_DEVICE_BINDING")
+    need(b["protocol"]=="migarden.zone-a.v1" and b["zone_id"]=="zone-a" and b["binding_ref"]=="zone-a-v1" and
+         b["device_id"]==p["device_id"] and b["token_hash"]==digest(p["device_token"].encode("ascii")) and
+         b["environment"]==("production" if expected_profile=="release" else "qa") and
+         isinstance(b["app_ref"],str) and bool(re.fullmatch("[a-f0-9]{40}",b["app_ref"])),"DEVICE_BINDING_MISMATCH",3)
+    return b
+
 
 def blank(path: Path, n: int, code: str):
-    data = path.read_bytes()
+    data = read_private(path)
     need(len(data) == n, "SNAPSHOT_SIZE_MISMATCH")
     need(data == b"\xff" * n, code, 3)
     return {"bytes": n, "sha256": digest(data)}
@@ -170,8 +218,10 @@ def prepare(a):
     need(not out.exists(), "DESTINATION_EXISTS", 3)
     need(a.private_config == "-" or ".local" in Path(a.private_config).resolve().parts or
          "provisioning-private" in Path(a.private_config).resolve().parts, "PRIVATE_INPUT_REQUIRED")
-    data = sys.stdin.buffer.read(8193) if a.private_config == "-" else Path(a.private_config).read_bytes()
+    data = sys.stdin.buffer.read(8193) if a.private_config == "-" else read_private(Path(a.private_config))
     profile = profile_bytes(data, a.profile)
+    binding=read_private(a.device_binding)
+    bind_profile(profile,binding,a.profile)
     evidence = {
         "nvs": blank(a.nvs_before, NVS_BYTES, "EXISTING_NVS_HOLD"),
         "data": blank(a.data_before, DATA_BYTES, "EXISTING_DATA_HOLD"),
@@ -186,12 +236,14 @@ def prepare(a):
         return
     need(importlib.metadata.version("esp-idf-nvs-partition-gen") == "0.3.0", "NVS_GENERATOR_VERSION", 4)
     parser_at(a.nvs_parser)
-    need(a.mkfs.is_file() and a.sim.is_file(), "OFFLINE_TOOL_MISSING", 4)
+    need(a.mkfs is not None and a.mkfs.is_file() and a.sim.is_file(), "OFFLINE_TOOL_MISSING", 4)
     # Exclusive new bundle; no existing file/namespace/journal can be overwritten.
-    out.mkdir(parents=True, exist_ok=False)
+    private_acl.directory(out)
     (out / "blank").mkdir()
     (out / "unpacked").mkdir()
-    (out / "profile.json").write_bytes(profile)
+    private_acl.lock(out/"blank"); private_acl.lock(out/"unpacked")
+    private_acl.write_new(out/"profile.json",profile)
+    private_acl.write_new(out/"device-binding.json",binding)
     with (out / "nvs.csv").open("x", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
         writer.writerows([["key", "type", "encoding", "value"],
@@ -199,12 +251,14 @@ def prepare(a):
                          ["profile-v1", "file", "binary", "profile.json"]])
     run([sys.executable, "-m", "esp_idf_nvs_partition_gen", "generate", "--version", "2",
          "nvs.csv", "profile-nvs.bin", hex(NVS_BYTES)], out)
+    private_acl.protect_generated(out)
     check_nvs(out / "profile-nvs.bin", profile, namespace, a.nvs_parser)
     run([a.sim.resolve(), "genesis", out / "blank" / journal], out)
     run([a.mkfs.resolve(), "-c", "blank", "-p", "256", "-b", "4096", "-s", str(DATA_BYTES),
          "data-genesis.bin"], out)
     run([a.mkfs.resolve(), "-u", "unpacked", "-p", "256", "-b", "4096", "-s", str(DATA_BYTES),
          "data-genesis.bin"], out)
+    private_acl.protect_generated(out)
     need((out / "blank" / journal).read_bytes() == (out / "unpacked" / journal).read_bytes(),
          "GENESIS_ROUNDTRIP")
     files = {}
@@ -230,14 +284,26 @@ def prepare(a):
         "After authorized transfer, read back both ranges privately and compare hashes before normal boot.\n"
         "Flash only the separately pinned app by its approved method; verify build/profile, "
         "journal, trust clock/config and output fixture separately before enable.\n", encoding="utf-8")
+    note=(out/"OWNER-APPLY.txt").read_bytes()
+    m["files"]["OWNER-APPLY.txt"]={"bytes":len(note),"sha256":digest(note)}
+    (out/"manifest.json").write_text(json.dumps(m,indent=2)+"\n",encoding="utf-8")
+    private_acl.protect_generated(out)
     print(json.dumps({"result": "PREPARED", "out": str(out), "profile": a.profile, "write_grant": False}))
 
 
 def validate(a):
     out = private(a.bundle)
+    need(a.mkfs is not None and a.mkfs.is_file(),"OFFLINE_TOOL_MISSING",4)
+    private_acl.verify_tree(out)
     m = load_unique((out / "manifest.json").read_bytes())
+    need(a.manifest_sha256==digest((out/"manifest.json").read_bytes()),"BUNDLE_REVIEW_DIGEST")
     need(m["mode"] == "OFFLINE_ONLY" and m["write_grant"] is False, "INVALID_BUNDLE")
     need(m["profile"] in PROFILES, "INVALID_PROFILE")
+    journal=PROFILES[m["profile"]][1]
+    need(set(m["files"])=={"profile.json","device-binding.json","nvs.csv","profile-nvs.bin","data-genesis.bin","OWNER-APPLY.txt",
+                          "blank/"+journal,"unpacked/"+journal},"BUNDLE_REQUIRED_FILES")
+    need({f.relative_to(out).as_posix() for f in out.rglob("*") if f.is_file()}==set(m["files"])|{"manifest.json"},
+         "BUNDLE_EXTRA_OR_MISSING_FILE")
     for name, entry in m["files"].items():
         p = (out / name).resolve()
         need(p.is_relative_to(out) and p.is_file(), "BUNDLE_PATH")
@@ -245,10 +311,21 @@ def validate(a):
         need(len(raw) == entry["bytes"] and digest(raw) == entry["sha256"], "BUNDLE_HASH")
     profile = (out / "profile.json").read_bytes()
     need(profile_bytes(profile, m["profile"]) == profile, "PROFILE_CANONICAL")
+    bind_profile(profile,(out/"device-binding.json").read_bytes(),m["profile"])
     namespace, journal = PROFILES[m["profile"]]
     check_nvs(out / "profile-nvs.bin", profile, namespace, a.nvs_parser)
     need((out / "blank" / journal).read_bytes() == (out / "unpacked" / journal).read_bytes(), "GENESIS_ROUNDTRIP")
     need((out / "data-genesis.bin").stat().st_size == DATA_BYTES, "FILESYSTEM_IMAGE_SIZE")
+    # Unpack the actual image being handed to the operator, not the prior
+    # unpacked copy from prepare. No data/credential bytes leave the private dir.
+    with tempfile.TemporaryDirectory(dir=out,prefix="verify-") as temp:
+        root=Path(temp); private_acl.lock(root)
+        (root/"image.bin").write_bytes((out/"data-genesis.bin").read_bytes())
+        (root/"actual").mkdir()
+        run([a.mkfs.resolve(),"-u","actual","-p","256","-b","4096","-s",str(DATA_BYTES),"image.bin"],root)
+        actual=[p for p in (root/"actual").rglob("*") if p.is_file()]
+        need(len(actual)==1 and actual[0].name==journal and
+             actual[0].read_bytes()==(out/"blank"/journal).read_bytes(),"ACTUAL_FILESYSTEM_CONTENT")
     print(json.dumps({"result": "VALID", "profile": m["profile"], "write_grant": False}))
 
 
@@ -262,6 +339,7 @@ def main():
     prep.add_argument("--nvs-before", type=Path, required=True, help="Private exact 0x5000-byte blank readback")
     prep.add_argument("--data-before", type=Path, required=True, help="Private exact 0x160000-byte blank readback")
     prep.add_argument("--app-manifest", type=Path, required=True)
+    prep.add_argument("--device-binding",type=Path,required=True,help="Private pinned device identity/token digest/app ref")
     prep.add_argument("--sim", type=Path, required=True)
     prep.add_argument("--mkfs", type=Path, default=DEFAULT_MKFS)
     prep.add_argument("--nvs-parser", type=Path, default=DEFAULT_PARSER)
@@ -270,6 +348,8 @@ def main():
     check = sub.add_parser("validate", help="Verify private bundle bytes and NVS profile roundtrip without a device")
     check.add_argument("--bundle", type=Path, required=True)
     check.add_argument("--nvs-parser", type=Path, default=DEFAULT_PARSER)
+    check.add_argument("--manifest-sha256",required=True,help="Exact separately reviewed bundle manifest digest")
+    check.add_argument("--mkfs",type=Path,default=DEFAULT_MKFS)
     a = p.parse_args()
     try:
         if a.command == "prepare":
@@ -280,6 +360,9 @@ def main():
     except Stop as e:
         print("ERROR " + e.code, file=sys.stderr)
         return e.status
+    except private_acl.PrivacyError:
+        print("ERROR PRIVATE_ACCESS_REQUIRED; no values displayed",file=sys.stderr)
+        return 3
     except (OSError, ValueError, KeyError, TypeError, ImportError, importlib.metadata.PackageNotFoundError,
             subprocess.SubprocessError):
         print("ERROR OFFLINE_INPUT_OR_TOOL_FAILURE; private values suppressed", file=sys.stderr)

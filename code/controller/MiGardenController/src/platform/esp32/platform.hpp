@@ -79,6 +79,11 @@ struct Provision {
 };
 enum class ProvisionStatus { ok, missing, invalid, storage_error, device_change };
 ProvisionStatus loadProvision(Provision&);
+#ifdef MG_COMMISSION
+bool validCommissionProfile(const char*,size_t,bool lab);
+enum class CommissionStore : uint8_t { closed, nvs, data };
+void permitCommissionWrite(CommissionStore);
+#endif
 #ifdef MG_LAB
 ProvisionStatus saveProvision(const char*,size_t);
 #endif

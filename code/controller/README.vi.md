@@ -20,7 +20,7 @@ flowchart LR
 
 Một request web chỉ được mở sau khi đã lưu receipt và nhận grant có cùng nội dung, boot, epoch và config. Việc kiểm hạn 45 giây lặp lại **sau** khi ghi reservation; mốc hết hạn được ràng với cả thời gian trôi từ khi nhận candidate. STOP làm mất hiệu lực epoch cũ, không tạm dừng lịch cho tương lai. Sau khi đã mở hợp lệ, mất Wi‑Fi hoặc hết TTL không chỉnh deadline của phiên. Một STOP có thể ghi `stop_processed` khi không có phiên; giá trị đó không xác nhận nước đã ngừng.
 
-Sau review F1/F3: accounting qua reboot neo ở `accountingFloor` bền và chỉ cộng uptime boot mới, không tin wall downtime. Đã dùng15/120 phút vẫn còn105 nếu các gate khác đủ; không khóa toàn bộ3h. STOP remote khi queue full giữ tối đa16 receipt bền riêng, promote khi ACK mở chỗ; retry không tăng epoch/đóng lặp nếu receipt đã có. Boot/time/outcome của lần xử lý gốc được giữ. Extension journal này đọc dữ liệu ea140ed, nhưng firmware ea140ed không đọc extension mới: rollback phải kiểm compatibility, không reset journal.
+Sau review F1/F3: accounting qua reboot neo ở `accountingFloor` bền và chỉ cộng uptime boot mới, không tin wall downtime. Đã dùng15/120 phút vẫn còn105 nếu các gate khác đủ; không khóa toàn bộ3h. STOP remote khi queue full giữ tối đa16 receipt bền riêng, promote khi ACK mở chỗ; retry không tăng epoch/đóng lặp nếu receipt đã có. Boot/time/outcome của lần xử lý gốc được giữ. STOP dedup dùng exact RAM index dựng trước đường control, không scan storage trước CLOSE. Rollback cần kiểm toàn journal: extension ở frame lịch sử và24KiB cap vẫn có thể làm ea140ed fail closed dù deferred hiện0; compatibility/device rollback UNVERIFIED, không reset journal.
 
 Lịch xét ranh giới phút theo UTC+7, xử lý once/daily/weekly/interval, hiệu lực [from, until). Một mốc phút Zone A có cùng identity xuyên `config_ref`. Đổi bản cấu hình khi active sẽ chờ lần exchange idle sau; firmware không giữ bản nháp để tự apply lúc rảnh. Apply chỉ tác động kỳ sau phiên/ranh giới cutover; kỳ ngay phút apply nếu chưa chứng minh được an toàn sẽ bỏ qua. Khi mới boot, mất time hoặc nhảy qua ranh giới, firmware không lặp các kỳ đã lỡ. Có clock SNTP, thời gian tiếp tục chạy từ đồng hồ của bo khi offline (holdover); clock mất căn cứ sau reboot thì cấm START. Bộ đếm deadline/accounting dựa vào elapsed time ổn định cùng boot, nên chỉnh giờ không mua thêm hạn mức. Cần SNTP tin cậy lại sau mất điện; firmware không dùng `server_time` của response làm đồng hồ.
 
@@ -49,24 +49,28 @@ Dùng PowerShell, Arduino CLI 1.6.0, Arduino-ESP32 3.3.12, GNU g++17 trở lên 
 git clone --depth 1 --branch v7.4.3 https://github.com/bblanchon/ArduinoJson.git .local/n01/deps/ArduinoJson
 & .\code\controller\test-host.ps1
 python -B code/controller/tests/verify-wire.py .local/n01/host-builds/HOST_OUTPUT/sim.exe
-& .\code\controller\build-esp32.ps1 -Profile lab
-& .\code\controller\build-esp32.ps1 -Profile release
+& .\code\controller\build-esp32.ps1 -Profile lab -CliConfig .local/arduino-cli.yaml
+& .\code\controller\build-esp32.ps1 -Profile release -CliConfig .local/arduino-cli.yaml
 ```
 
-Build không upload. Mỗi artifact có build ID mới và manifest dưới staging riêng `.local/n01/build/` với command/revision, hash source/config/partition, app-only BIN, ELF, MAP; script kiểm slot, profile/marker và link guard NVS. Khi đưa cho USB v1 chỉ chọn file `MiGardenController.ino.bin` có đúng digest trong manifest LAB đã review; không chọn file merged/bootloader/partition hay release. Firmware không chứa pass, token, private host hoặc CA mẫu. Chẩn đoán mạng dùng mã đã lọc; build chặn panic dump của runtime để tránh lưu stack chứa thông tin provision, giữ nguyên partition dump hiện hữu.
+Build từ commit sạch và config Arduino CLI do operator chỉ định; có thể truyền `-Cli` nếu tool không ở PATH hoặc vị trí Arduino IDE chuẩn. Build không upload. Mỗi artifact có build ID mới và manifest private dưới `.local/n01/build/` với command/revision, hash source/partition, app-only BIN, ELF, MAP; script kiểm slot, profile/marker và link guard NVS. Khi đưa cho USB v1 chỉ chọn file `MiGardenController.ino.bin` có đúng digest trong manifest LAB đã review; không chọn file merged/bootloader/partition hay release. Firmware không chứa pass, token, private host hoặc CA mẫu. Chẩn đoán mạng dùng mã đã lọc; build chặn panic dump của runtime để tránh lưu stack chứa thông tin provision, giữ nguyên partition dump hiện hữu.
 
 Host script in `HOST_OUTPUT` trỏ thư mục mới mỗi lần; dùng đúng đường đó cho
-wire/QA, giữ nguyên các BIN/manifest cũ. [Commissioning CLI](COMMISSIONING.vi.md)
-tạo và kiểm offline bundle cho profile release; không mở COM hoặc khởi tạo dữ
-liệu thật. Nếu NVS/data hiện hữu, công cụ giữ HOLD thay vì đè ảnh mới.
+wire/QA, giữ nguyên các BIN/manifest cũ. [Current commissioner/CLI](CURRENT-COMMISSIONING.vi.md)
+có temporary image không GPIO/network/control, capture private backup và plan
+LAB journal-only hoặc release new-namespace-only. Actual execution cần grant
+riêng; preparation/dry-run không mở COM. Existing target journal/namespace là
+conflict, không overwrite hoặc reset. Build bằng `-Profile commissioner`;
+normal LAB/release không link injection. [Portable CI](ci-host.sh) kiểm core/wire,
+không chứng minh hardware hay actual commissioning.
 
 Nếu thiết bị thiếu LittleFS/correct journal, bước phần mềm tiếp theo là tạo **file offline**, ví dụ:
 ```powershell
-& .\code\controller\make-genesis.ps1 -Profile lab
+& .\code\controller\make-genesis.ps1 -Profile lab -Simulator .local/n01/host-builds/HOST_OUTPUT/sim.exe
 ```
 Script tạo ảnh 1.441.792 bytes chứa đúng journal rỗng, dùng block 4.096/page 256, đóng gói rồi unpack đối chiếu. `-Profile both` chỉ thích hợp cho lần khởi tạo hoàn toàn mới được phê duyệt với cả hai namespace rỗng. Ảnh này **không phải payload v1 updater**. Ghi vùng data sẽ thay cả partition `0x290000..0x3EFFFF`; cần parent xác định backup/blank/layout và có quyền riêng trước khi làm. Nếu vùng đã là LittleFS tương thích, chỉ cần cung cấp file genesis đúng profile vào vùng đã biết an toàn cho lần cấp mới; không thay ledger đã tồn tại bằng file rỗng. Không đụng NVS hoặc đổi partition để giúp mount.
 
-LAB `STORAGE` đọc và phân loại: `BLANK_FF` nếu tất cả bytes là `0xff`, `UNMOUNTABLE_HAS_DATA` nếu có dữ liệu chưa nhận diện, hoặc `LITTLEFS_JOURNAL_PRESENT/MISSING` nếu mount được. PRESENT chỉ là file tồn tại; DIAG mới cho biết journal usable. `LAYOUT_UNVERIFIED` và `READ_ERROR` giữ nguyên. Khi thiếu journal, có thể kiểm TLS/exchange với snapshot `STORAGE_FAULT`, không OPEN. Khởi tạo tối thiểu nếu chứng minh blank là đúng **một** ảnh LAB rỗng cho đúng data range nói trên; đừng format một vùng đã có dữ liệu chỉ để hoàn thành bench.
+LAB `STORAGE` đọc và phân loại: `BLANK_FF` nếu tất cả bytes là `0xff`, `UNMOUNTABLE_HAS_DATA` nếu có dữ liệu chưa nhận diện, hoặc `LITTLEFS_JOURNAL_PRESENT/MISSING` nếu mount được. PRESENT chỉ là file tồn tại; DIAG mới cho biết journal usable. `LAYOUT_UNVERIFIED` và `READ_ERROR` giữ nguyên. Khi thiếu journal, có thể kiểm TLS/exchange với snapshot `STORAGE_FAULT`, không OPEN. [Commissioner](CURRENT-COMMISSIONING.vi.md) có thể tạo LittleFS và một journal LAB theo đúng layout/blank/preimage đã được Owner duyệt; không format vùng đã có dữ liệu để hoàn thành bench.
 
 ### LAB: USB v1 và provision riêng
 
@@ -76,9 +80,6 @@ LAB `DIAG` có thêm `wifi_status` (numeric SDK WiFi.status) và
 `disconnect_reason` (numeric reason từ event disconnect gần nhất, 0 nếu chưa
 có event). Hai số giúp phân biệt chưa thấy AP, auth và link timeout; chúng không
 chứng minh nguyên nhân cuối. Không SSID/password/token/BSSID/IP trong DIAG.
-Parent đã báo giải quyết đúng AP/Wi-Fi và đồng bộ giờ trên candidate cũ; kết quả
-TLS/exchange được theo dõi riêng, không ghi private identity trong handback và
-không cấp quyền builder thử NIC/SSID mới. Storage vẫn blank/no-OPEN ở mốc báo đó.
 
 Lệnh LAB `NETINFO` trả duy nhất `NETINFO <IPv4>` hoặc `NETINFO LINK_PENDING`, chỉ khi parent yêu cầu; giữ kết quả ở receipt riêng. Parent có thể chuẩn bị relay/firewall với luật mặc định đóng, lấy IP từ UART sau DHCP rồi chỉ mở cho địa chỉ đó. Firmware tự thử kết nối khi clock sẵn sàng, kể cả khi relay vẫn đóng.
 

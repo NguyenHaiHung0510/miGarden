@@ -15,10 +15,38 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+#ifdef MG_COMMISSION
+namespace {
+std::atomic<uint8_t> commissionWrite{0};
+bool blockedWrite(const esp_partition_t* p) {
+    using mg::esp::CommissionStore;
+    if (!p || p->type!=ESP_PARTITION_TYPE_DATA) return false;
+    const auto allow=static_cast<CommissionStore>(commissionWrite.load());
+    if (p->address==0x9000 || p->subtype==ESP_PARTITION_SUBTYPE_DATA_NVS)
+        return allow!=CommissionStore::nvs || p->address!=0x9000 || p->size!=0x5000 || strcmp(p->label,"nvs");
+    if (p->address==0x290000 || !strcmp(p->label,"spiffs"))
+        return allow!=CommissionStore::data || p->address!=0x290000 || p->size!=0x160000 || strcmp(p->label,"spiffs");
+    return false; // OTA app/otadata are handled by the retained updater
+}
+}
+void mg::esp::permitCommissionWrite(CommissionStore s) { commissionWrite.store(uint8_t(s)); }
+extern "C" esp_err_t __real_esp_partition_write(const esp_partition_t*,size_t,const void*,size_t);
+extern "C" esp_err_t __wrap_esp_partition_write(const esp_partition_t* p,size_t at,const void* b,size_t n) {
+    return blockedWrite(p)?ESP_ERR_INVALID_STATE:__real_esp_partition_write(p,at,b,n);
+}
+extern "C" esp_err_t __real_esp_partition_write_raw(const esp_partition_t*,size_t,const void*,size_t);
+extern "C" esp_err_t __wrap_esp_partition_write_raw(const esp_partition_t* p,size_t at,const void* b,size_t n) {
+    return blockedWrite(p)?ESP_ERR_INVALID_STATE:__real_esp_partition_write_raw(p,at,b,n);
+}
+#endif
+
 // Arduino-ESP32 3.3.12 initArduino otherwise erases the complete default NVS
 // partition on NO_FREE_PAGES or NEW_VERSION_FOUND. Allow ordinary per-page GC.
 extern "C" esp_err_t __real_esp_partition_erase_range(const esp_partition_t*,size_t,size_t);
 extern "C" esp_err_t __wrap_esp_partition_erase_range(const esp_partition_t* p,size_t at,size_t n) {
+#ifdef MG_COMMISSION
+    if (blockedWrite(p)) return ESP_ERR_INVALID_STATE;
+#endif
     if (p && p->type==ESP_PARTITION_TYPE_DATA && p->subtype==ESP_PARTITION_SUBTYPE_DATA_NVS &&
         at==0 && n>=p->size) return ESP_ERR_INVALID_STATE;
     return __real_esp_partition_erase_range(p,at,n);
@@ -338,6 +366,25 @@ ProvisionStatus loadProvision(Provision& p) {
     nvs_close(n);
     return status;
 }
+#ifdef MG_COMMISSION
+bool validCommissionProfile(const char* bytes,size_t n,bool lab) {
+    Provision p;
+    if(!decodeProvision(bytes,n,p))return false;
+    JsonDocument doc;
+    if(deserializeJson(doc,bytes,n,DeserializationOption::NestingLimit(2)))return false;
+    const auto o=doc.as<JsonObjectConst>();
+    if((!lab&&(!o["fixture_verified"].is<bool>()||!o["fixture_verified"].as<bool>()))||
+       p.device.empty()||p.token.size()!=43)return false;
+    for(size_t i=0;i<p.device.size();++i){
+        const char c=p.device.data[i];
+        const bool alpha=(c>='A'&&c<='Z')||(c>='a'&&c<='z')||(c>='0'&&c<='9');
+        if(!alpha&&(i==0||(c!='_'&&c!='.'&&c!=':'&&c!='-')))return false;
+    }
+    for(char c:p.token.view())
+        if(!((c>='A'&&c<='Z')||(c>='a'&&c<='z')||(c>='0'&&c<='9')||c=='_'||c=='-'))return false;
+    return true;
+}
+#endif
 #ifdef MG_LAB
 ProvisionStatus saveProvision(const char* data,size_t size) {
     Provision next;

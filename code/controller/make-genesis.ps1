@@ -1,15 +1,26 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)][ValidateSet('lab','release','both')][string]$Profile,
-    [string]$MkLittleFs='C:\Users\os\AppData\Local\Arduino15\packages\esp32\tools\mklittlefs\4.0.2-db0513a\mklittlefs.exe'
+    [string]$Simulator,
+    [string]$MkLittleFs
 )
 # Creates a local file only. This script never opens a device or writes a partition.
 $ErrorActionPreference='Stop'
 $repo=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
-$sim=Join-Path $repo '.local/n01/host/sim.exe'
-if (!(Test-Path -LiteralPath $sim) -or !(Test-Path -LiteralPath $MkLittleFs)) {
-    throw 'Build the host simulator and locate the installed mklittlefs first'
+if (!$Simulator) { $Simulator=Join-Path $repo '.local/n01/host/sim.exe' }
+if (!$MkLittleFs) {
+    $installed=Get-Command mklittlefs -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($installed) { $MkLittleFs=$installed.Source }
+    elseif ($env:LOCALAPPDATA) {
+        $MkLittleFs=Join-Path $env:LOCALAPPDATA 'Arduino15/packages/esp32/tools/mklittlefs/4.0.2-db0513a/mklittlefs.exe'
+    }
 }
+if (!$MkLittleFs -or !(Test-Path -LiteralPath $Simulator -PathType Leaf) -or
+    !(Test-Path -LiteralPath $MkLittleFs -PathType Leaf)) {
+    throw 'Specify the built host -Simulator and installed -MkLittleFs paths'
+}
+$sim=(Resolve-Path -LiteralPath $Simulator).Path
+$MkLittleFs=(Resolve-Path -LiteralPath $MkLittleFs).Path
 $stamp=[DateTime]::UtcNow.ToString('yyyyMMddTHHmmss')+'_'+[guid]::NewGuid().ToString('N').Substring(0,8)
 $out=Join-Path $repo ".local/n01/genesis/$($Profile)_$stamp"
 $src=Join-Path $out 'blank'

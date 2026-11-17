@@ -19,8 +19,10 @@ struct Memory : LogFile {
     bool readable=true, failReplace=false;
     int appendNumber=0, failAt=0, replacements=0;
     std::function<void()> afterAppend;
+    std::function<void()> beforeRead;
     int64_t size() override { return readable?int64_t(live.size()):-1; }
     bool read(uint32_t at,uint8_t* out,size_t n) override {
+        if(beforeRead)beforeRead();
         if (!readable || at>live.size() || n>live.size()-at) return false;
         std::copy_n(live.data()+at,n,out);
         return true;

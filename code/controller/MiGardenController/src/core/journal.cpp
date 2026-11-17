@@ -66,6 +66,12 @@ uint32_t checksum(const uint8_t* data, size_t n) {
     return ~c;
 }
 uint32_t word(const uint8_t* data) { Reader r(data,4); return uint32_t(r.u(4)); }
+std::string stopProof(const BootId& boot,const Id& request) {
+    std::string key;
+    key.reserve(boot.size()+1+request.size());
+    key.append(boot.view());key.push_back('\0');key.append(request.view());
+    return key; // exact boot + request identity, no hash collision on CLOSE decisions
+}
 Bytes encodeEvent(const Event&);
 bool decodeEvent(const uint8_t*, size_t, Event&, bool deferred = false);
 
@@ -249,7 +255,11 @@ bool Journal::indexFrame(const Bytes& b, uint32_t at, Ledger* restored) {
         if (!len || len>r.left() || !decodeEvent(r.p,len,e) || e.sequence>sequence_ ||
             (!index_.empty() && e.sequence<=index_.back().sequence) || index_.size()>=backlogMax)
             return false;
-        index_.push_back({e.sequence,at+uint32_t(r.p-b.data()),checksum(r.p,len),uint16_t(len),e.kind});
+        index_.push_back({e.sequence,at+uint32_t(r.p-b.data()),checksum(r.p,len),uint16_t(len)});
+        // A stale-target audit has the processing boot, not the target boot.
+        // It is never proof that a real STOP for this boot already ran.
+        if(e.kind==Kind::stop_processed && e.source==Source::remote && e.reason!=Reason::stale_boot)
+            stops_.push_back({e.sequence,stopProof(e.boot,e.request)});
         r.p+=len;
     }
     for (size_t n=0; n<acks; ++n) {
@@ -257,6 +267,7 @@ bool Journal::indexFrame(const Bytes& b, uint32_t at, Ledger* restored) {
         auto i=std::lower_bound(index_.begin(),index_.end(),seq,[](const Index& x,uint64_t s){return x.sequence<s;});
         if (i==index_.end() || i->sequence!=seq) return false;
         index_.erase(i);
+        stops_.erase(std::remove_if(stops_.begin(),stops_.end(),[&](const Receipt& s){return s.sequence==seq;}),stops_.end());
     }
     if (!r.okay || r.left()) return false;
     lastFrame_=at;
@@ -265,7 +276,7 @@ bool Journal::indexFrame(const Bytes& b, uint32_t at, Ledger* restored) {
 }
 
 bool Journal::restore(Ledger& out) {
-    okay_=false; used_=0; sequence_=0; index_.clear(); stateBytes_.clear();
+    okay_=false; used_=0; sequence_=0; index_.clear(); stops_.clear(); stateBytes_.clear();
     const auto n=file_.size();
     if (n<=0 || n>maxLog) return false;
     used_=uint32_t(n);
@@ -273,7 +284,7 @@ bool Journal::restore(Ledger& out) {
     Bytes b;
     Ledger read;
     for (uint32_t at=0; at<used_;) {
-        if (!readFrame(at,b) || !indexFrame(b,at,&read)) { index_.clear(); return false; }
+        if (!readFrame(at,b) || !indexFrame(b,at,&read)) { index_.clear();stops_.clear();return false; }
         at+=uint32_t(b.size());
     }
     out=std::move(read);
@@ -314,11 +325,11 @@ std::vector<Event> Journal::pending(uint64_t priority) {
 }
 bool Journal::hasStopReceipt(const BootId& boot, const Id& request) {
     if (!okay_) return false;
-    for (const auto& i : index_) {
-        if (i.kind!=Kind::stop_processed) continue;
-        Event e;
-        if (!readEvent(i,e)) { okay_=false; return false; }
-        if (e.boot==boot && e.source==Source::remote && e.request==request) return true;
+    const auto b=boot.view(),r=request.view();
+    for (const auto& i : stops_) {
+        const std::string_view k=i.key;
+        if(k.size()==b.size()+1+r.size()&&k[b.size()]=='\0'&&
+           k.substr(0,b.size())==b&&k.substr(b.size()+1)==r)return true;
     }
     return false;
 }
