@@ -1,0 +1,449 @@
+[
+  {
+    "name": "idle",
+    "valid": true,
+    "document": {
+      "protocol": "migarden.zone-a.v1",
+      "device_id": "qa-controller-a",
+      "boot_id": "boot-1",
+      "control_epoch": 0,
+      "snapshot": {
+        "observed_at": "2026-11-18T00:00:00Z",
+        "time_quality": "synced",
+        "output": "off",
+        "active_session": null,
+        "applied_config_ref": "cfg-1",
+        "ready": true,
+        "blocked_reason": null
+      },
+      "reports": []
+    }
+  },
+  {
+    "name": "unconfigured",
+    "valid": true,
+    "document": {
+      "protocol": "migarden.zone-a.v1",
+      "device_id": "qa-controller-a",
+      "boot_id": "boot-1",
+      "control_epoch": 0,
+      "snapshot": {
+        "observed_at": null,
+        "time_quality": "unknown",
+        "output": "off",
+        "active_session": null,
+        "applied_config_ref": null,
+        "ready": false,
+        "blocked_reason": "CONFIG_MISSING"
+      },
+      "reports": []
+    }
+  },
+  {
+    "name": "desired",
+    "valid": true,
+    "document": {
+      "protocol": "migarden.zone-a.v1",
+      "server_time": "2026-11-18T00:00:00Z",
+      "desired_config": {
+        "config_ref": "cfg-1",
+        "zone_id": "zone-a",
+        "binding_ref": "zone-a-v1",
+        "policy": {
+          "manual_duration_seconds": 900,
+          "max_session_seconds": 1800,
+          "window_seconds": 10800,
+          "max_window_seconds": 7200
+        },
+        "schedule": {
+          "enabled": false,
+          "effective_from": "2026-11-18T00:00:00Z",
+          "effective_until": null,
+          "duration_seconds": 900,
+          "recurrence": {
+            "kind": "daily",
+            "at_local_time": "07:00"
+          }
+        }
+      },
+      "candidates": [],
+      "grants": [],
+      "stops": [],
+      "acked_event_ids": [],
+      "retry_after_seconds": null
+    }
+  },
+  {
+    "name": "candidate",
+    "valid": true,
+    "document": {
+      "protocol": "migarden.zone-a.v1",
+      "server_time": "2026-11-18T00:00:00Z",
+      "desired_config": null,
+      "candidates": [
+        {
+          "request_id": "req-1",
+          "kind": "start",
+          "zone_id": "zone-a",
+          "binding_ref": "zone-a-v1",
+          "config_ref": "cfg-1",
+          "boot_id": "boot-1",
+          "control_epoch": 0,
+          "confirmed_at": "2026-11-18T00:00:00Z",
+          "expires_at": "2026-11-18T00:00:45Z",
+          "duration_seconds": 900
+        }
+      ],
+      "grants": [],
+      "stops": [],
+      "acked_event_ids": [],
+      "retry_after_seconds": null
+    }
+  },
+  {
+    "name": "receipt",
+    "valid": true,
+    "document": {
+      "protocol": "migarden.zone-a.v1",
+      "device_id": "qa-controller-a",
+      "boot_id": "boot-1",
+      "control_epoch": 0,
+      "snapshot": {
+        "observed_at": "2026-11-18T00:00:00Z",
+        "time_quality": "synced",
+        "output": "off",
+        "active_session": null,
+        "applied_config_ref": "cfg-1",
+        "ready": true,
+        "blocked_reason": null
+      },
+      "reports": [
+        {
+          "event_id": "boot-1.42",
+          "boot_id": "boot-1",
+          "sequence": 42,
+          "kind": "request_received",
+          "occurred_at": "2026-11-18T00:00:00Z",
+          "time_quality": "synced",
+          "zone_id": "zone-a",
+          "binding_ref": "zone-a-v1",
+          "config_ref": "cfg-1",
+          "request_id": "req-1",
+          "trigger_source": "remote",
+          "payload": {}
+        }
+      ]
+    }
+  },
+  {
+    "name": "grant_and_ack",
+    "valid": true,
+    "document": {
+      "protocol": "migarden.zone-a.v1",
+      "server_time": "2026-11-18T00:00:00Z",
+      "desired_config": null,
+      "candidates": [],
+      "grants": [
+        {
+          "request_id": "req-1",
+          "kind": "start",
+          "zone_id": "zone-a",
+          "binding_ref": "zone-a-v1",
+          "config_ref": "cfg-1",
+          "boot_id": "boot-1",
+          "control_epoch": 0,
+          "confirmed_at": "2026-11-18T00:00:00Z",
+          "expires_at": "2026-11-18T00:00:45Z",
+          "duration_seconds": 900,
+          "grant_id": "grant-1"
+        }
+      ],
+      "stops": [],
+      "acked_event_ids": [
+        "boot-1.42"
+      ],
+      "retry_after_seconds": null
+    }
+  },
+  {
+    "name": "stop_without_session",
+    "valid": true,
+    "document": {
+      "protocol": "migarden.zone-a.v1",
+      "device_id": "qa-controller-a",
+      "boot_id": "boot-1",
+      "control_epoch": 0,
+      "snapshot": {
+        "observed_at": "2026-11-18T00:00:00Z",
+        "time_quality": "synced",
+        "output": "off",
+        "active_session": null,
+        "applied_config_ref": "cfg-1",
+        "ready": true,
+        "blocked_reason": null
+      },
+      "reports": [
+        {
+          "event_id": "boot-1.42",
+          "boot_id": "boot-1",
+          "sequence": 42,
+          "kind": "stop_processed",
+          "occurred_at": "2026-11-18T00:00:00Z",
+          "time_quality": "synced",
+          "zone_id": "zone-a",
+          "binding_ref": "zone-a-v1",
+          "config_ref": null,
+          "request_id": "stop-1",
+          "trigger_source": "remote",
+          "payload": {
+            "outcome": "already_off"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "rejected_occurrence",
+    "valid": true,
+    "document": {
+      "protocol": "migarden.zone-a.v1",
+      "device_id": "qa-controller-a",
+      "boot_id": "boot-1",
+      "control_epoch": 0,
+      "snapshot": {
+        "observed_at": "2026-11-18T00:00:00Z",
+        "time_quality": "synced",
+        "output": "off",
+        "active_session": null,
+        "applied_config_ref": "cfg-1",
+        "ready": true,
+        "blocked_reason": null
+      },
+      "reports": [
+        {
+          "event_id": "boot-1.42",
+          "boot_id": "boot-1",
+          "sequence": 42,
+          "kind": "occurrence_decided",
+          "occurred_at": "2026-11-18T00:00:00Z",
+          "time_quality": "synced",
+          "zone_id": "zone-a",
+          "binding_ref": "zone-a-v1",
+          "config_ref": "cfg-1",
+          "request_id": "req-1",
+          "trigger_source": "schedule",
+          "payload": {
+            "occurrence_id": "zone-a.29916000",
+            "scheduled_at": "2026-11-18T00:00:00Z",
+            "disposition": "rejected",
+            "reason": "BUSY"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "started",
+    "valid": true,
+    "document": {
+      "protocol": "migarden.zone-a.v1",
+      "device_id": "qa-controller-a",
+      "boot_id": "boot-1",
+      "control_epoch": 0,
+      "snapshot": {
+        "observed_at": "2026-11-18T00:00:00Z",
+        "time_quality": "synced",
+        "output": "off",
+        "active_session": null,
+        "applied_config_ref": "cfg-1",
+        "ready": true,
+        "blocked_reason": null
+      },
+      "reports": [
+        {
+          "event_id": "boot-1.42",
+          "boot_id": "boot-1",
+          "sequence": 42,
+          "kind": "session_started",
+          "occurred_at": "2026-11-18T00:00:00Z",
+          "time_quality": "synced",
+          "zone_id": "zone-a",
+          "binding_ref": "zone-a-v1",
+          "config_ref": "cfg-1",
+          "request_id": "req-1",
+          "trigger_source": "remote",
+          "payload": {
+            "started_at": "2026-11-18T00:00:00Z",
+            "duration_seconds": 900
+          },
+          "session_id": "session-1"
+        }
+      ]
+    }
+  },
+  {
+    "name": "unresolved_terminal",
+    "valid": true,
+    "document": {
+      "protocol": "migarden.zone-a.v1",
+      "device_id": "qa-controller-a",
+      "boot_id": "boot-1",
+      "control_epoch": 0,
+      "snapshot": {
+        "observed_at": "2026-11-18T00:00:00Z",
+        "time_quality": "synced",
+        "output": "off",
+        "active_session": null,
+        "applied_config_ref": "cfg-1",
+        "ready": true,
+        "blocked_reason": null
+      },
+      "reports": [
+        {
+          "event_id": "boot-1.42",
+          "boot_id": "boot-1",
+          "sequence": 42,
+          "kind": "session_ended",
+          "occurred_at": null,
+          "time_quality": "unknown",
+          "zone_id": "zone-a",
+          "binding_ref": "zone-a-v1",
+          "config_ref": "cfg-1",
+          "request_id": "req-1",
+          "trigger_source": "remote",
+          "payload": {
+            "started_at": "2026-11-18T00:00:00Z",
+            "ended_at": null,
+            "output_duration_seconds": null,
+            "outcome": "unknown",
+            "reason": "REBOOT_INTERRUPTED"
+          },
+          "session_id": "session-1"
+        }
+      ]
+    }
+  },
+  {
+    "name": "wrong_protocol",
+    "valid": false,
+    "document": {
+      "protocol": "migarden.zone-a.v2",
+      "server_time": "2026-11-18T00:00:00Z",
+      "desired_config": null,
+      "candidates": [],
+      "grants": [],
+      "stops": [],
+      "acked_event_ids": [],
+      "retry_after_seconds": null
+    }
+  },
+  {
+    "name": "wrong_window",
+    "valid": false,
+    "document": {
+      "protocol": "migarden.zone-a.v1",
+      "server_time": "2026-11-18T00:00:00Z",
+      "desired_config": {
+        "config_ref": "cfg-1",
+        "zone_id": "zone-a",
+        "binding_ref": "zone-a-v1",
+        "policy": {
+          "manual_duration_seconds": 900,
+          "max_session_seconds": 1800,
+          "window_seconds": 3600,
+          "max_window_seconds": 7200
+        },
+        "schedule": {
+          "enabled": false,
+          "effective_from": "2026-11-18T00:00:00Z",
+          "effective_until": null,
+          "duration_seconds": 900,
+          "recurrence": {
+            "kind": "daily",
+            "at_local_time": "07:00"
+          }
+        }
+      },
+      "candidates": [],
+      "grants": [],
+      "stops": [],
+      "acked_event_ids": [],
+      "retry_after_seconds": null
+    }
+  },
+  {
+    "name": "missing_stop_request",
+    "valid": false,
+    "document": {
+      "protocol": "migarden.zone-a.v1",
+      "device_id": "qa-controller-a",
+      "boot_id": "boot-1",
+      "control_epoch": 0,
+      "snapshot": {
+        "observed_at": "2026-11-18T00:00:00Z",
+        "time_quality": "synced",
+        "output": "off",
+        "active_session": null,
+        "applied_config_ref": "cfg-1",
+        "ready": true,
+        "blocked_reason": null
+      },
+      "reports": [
+        {
+          "event_id": "boot-1.42",
+          "boot_id": "boot-1",
+          "sequence": 42,
+          "kind": "stop_processed",
+          "occurred_at": "2026-11-18T00:00:00Z",
+          "time_quality": "synced",
+          "zone_id": "zone-a",
+          "binding_ref": "zone-a-v1",
+          "config_ref": "cfg-1",
+          "trigger_source": "remote",
+          "payload": {
+            "outcome": "already_off"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "invented_config_for_session",
+    "valid": false,
+    "document": {
+      "protocol": "migarden.zone-a.v1",
+      "device_id": "qa-controller-a",
+      "boot_id": "boot-1",
+      "control_epoch": 0,
+      "snapshot": {
+        "observed_at": "2026-11-18T00:00:00Z",
+        "time_quality": "synced",
+        "output": "off",
+        "active_session": null,
+        "applied_config_ref": "cfg-1",
+        "ready": true,
+        "blocked_reason": null
+      },
+      "reports": [
+        {
+          "event_id": "boot-1.42",
+          "boot_id": "boot-1",
+          "sequence": 42,
+          "kind": "session_started",
+          "occurred_at": "2026-11-18T00:00:00Z",
+          "time_quality": "synced",
+          "zone_id": "zone-a",
+          "binding_ref": "zone-a-v1",
+          "config_ref": null,
+          "request_id": "req-1",
+          "trigger_source": "remote",
+          "payload": {
+            "started_at": "2026-11-18T00:00:00Z",
+            "duration_seconds": 900
+          },
+          "session_id": "session-1"
+        }
+      ]
+    }
+  }
+]

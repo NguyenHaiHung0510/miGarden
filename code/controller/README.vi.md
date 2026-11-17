@@ -1,0 +1,88 @@
+# MiGardenController · Zone A v1
+
+Đây là firmware Zone A và simulator chạy cùng lõi C++17. LAB dùng output **ảo** để kiểm logic/network trên bo USB. Release dùng GPIO27 active HIGH, START IO33 và STOP IO32 active LOW theo [Step 09](../../docs/design/09-device-and-component-integration.vi.md#buttons). Cả hai dùng [wire v1](../../contracts/zone-a/v1/README.md). Việc build hoặc chạy LAB chưa chứng minh mạch, van hay dòng nước. [Ma trận QA](QA.vi.md) chỉ rõ phần đã kiểm ở host và phần còn phải chạy.
+
+Nếu nút, lịch và web cùng muốn bắt đầu, chúng dùng cùng phiên duy nhất và cùng sổ giới hạn. STOP đi trước; START đến lúc bận hoặc có mặt cùng STOP bị từ chối. Nút mặc định 900 giây, một lượt tối đa 1.800 giây, tổng tối đa 7.200 giây trong bất kỳ 10.800 giây nào. Ba giá trị đầu có thể chỉnh trong một bundle; cửa sổ giữ nguyên. Trước bundle đầu tiên, thiết bị luôn đóng. Không kèm lịch bật sẵn.
+
+```mermaid
+flowchart LR
+    S[STOP và deadline local] --> O[Output adapter]
+    B[Nút START] --> A[Controller]
+    C[Lịch đã applied] --> A
+    W[TLS exchange] --> A
+    A --> J[Ghi bền reservation và context]
+    J --> K[Kiểm lại STOP và hiệu lực]
+    K --> O
+    O --> R[Report start và terminal]
+    R --> W
+    W --> N[ACK chỉ dọn report]
+```
+
+Một request web chỉ được mở sau khi đã lưu receipt và nhận grant có cùng nội dung, boot, epoch và config. Việc kiểm hạn 45 giây lặp lại **sau** khi ghi reservation; mốc hết hạn được ràng với cả thời gian trôi từ khi nhận candidate. STOP làm mất hiệu lực epoch cũ, không tạm dừng lịch cho tương lai. Sau khi đã mở hợp lệ, mất Wi‑Fi hoặc hết TTL không chỉnh deadline của phiên. Một STOP có thể ghi `stop_processed` khi không có phiên; giá trị đó không xác nhận nước đã ngừng.
+
+Lịch xét ranh giới phút theo UTC+7, xử lý once/daily/weekly/interval, hiệu lực [from, until). Một mốc phút Zone A có cùng identity xuyên `config_ref`. Đổi bản cấu hình khi active sẽ chờ lần exchange idle sau; firmware không giữ bản nháp để tự apply lúc rảnh. Apply chỉ tác động kỳ sau phiên/ranh giới cutover; kỳ ngay phút apply nếu chưa chứng minh được an toàn sẽ bỏ qua. Khi mới boot, mất time hoặc nhảy qua ranh giới, firmware không lặp các kỳ đã lỡ. Có clock SNTP, thời gian tiếp tục chạy từ đồng hồ của bo khi offline (holdover); clock mất căn cứ sau reboot thì cấm START. Bộ đếm deadline/accounting dựa vào elapsed time ổn định cùng boot, nên chỉnh giờ không mua thêm hạn mức. Cần SNTP tin cậy lại sau mất điện; firmware không dùng `server_time` của response làm đồng hồ.
+
+### Journal và khả năng phục hồi
+
+Partition bảng **default 4 MiB**: app0 `0x10000`/ `0x140000`, app1 `0x150000`/ `0x140000`; data `spiffs` `0x290000`/ `0x160000`. Dùng LittleFS trên đúng vùng data này, không format/grow khi mount. LAB dùng `lab-v1.journal`, release dùng `release-v1.journal`; ứng dụng không tạo ledger mới khi thiếu/hỏng. Build bọc lệnh erase cả NVS của Arduino khi init lỗi; không đụng user profile hoặc xóa NVS. GC theo trang của NVS và cập nhật file LittleFS vẫn diễn ra trong các write hợp lệ.
+
+- Mỗi transaction có length/CRC, là một frame append rồi fsync/close. Reservation ghi bền và đọc kiểm lại trước OPEN. `armed` chỉ giữ chỗ; `running` mới có evidence đã điều khiển output. Sau CLOSE, frame giải quyết reservation thành interval thực tế và report terminal; dữ liệu UTC thiếu không được điền bằng planned time. Sổ dùng ms, wire `output_duration_seconds` là số giây nguyên đã trôi.
+- Log có trần 448 KiB; compact khi idle tạo file mới đã sync rồi đổi tên nguyên tử. Hai file tối đa 896 KiB trước filesystem overhead, trong vùng 1.375 MiB. Queue tối đa 512 records; gửi tối đa 16/lần. Admission giữ trước 6 slot report và 5 frame × 20 KiB cho ghi reservation/start/terminal, STOP và ACK. Không thu hồi report chưa ACK. Snapshot không dùng queue. Khi không còn ô cho audit tùy tình huống, ghi evidence gap, tiếp tục giữ STOP và không cho START khi thiếu chỗ. Các số này là bounds của code; power-loss, thời gian ghi và wear trên bo cần đo riêng. LittleFS [atomicity](https://github.com/littlefs-project/littlefs) là nền thiết kế, không là kết quả đo bo.
+- Accounting giữ tối đa 768 khoảng đang còn liên quan trong 3 giờ, gộp khoảng liền nhau. Admission kiểm điểm cực đại trong **suốt** interval dự kiến. Vì chỉ một output, khi phiên mới đi vào cửa sổ thì tối đa một khoảng cũ đi ra với cùng tốc độ; tổng tăng hoặc đứng yên đến cuối phiên dự kiến. Nếu gần trần, phần cũ rời cửa sổ đúng lúc vẫn được trừ. Đủ dữ liệu terminal thì dùng interval đã quyết toán; ACK không tác động accounting.
+- Reboot không khôi phục OPEN. Nếu mất xác nhận terminal sau possible execution, giữ reservation và trạng thái unknown chung, không tự xóa khi TTL hết, có STOP/ACK hoặc qua 3 giờ. Không cung cấp reset/bypass qua UART/web; cần quy trình recovery đã có bằng chứng và quyền riêng nếu lỗi xảy ra. Nếu ổ lưu hỏng, trạng thái đủ an toàn để OPEN không chứng minh được; CLOSE vẫn được ưu tiên và `DIAG`/snapshot có thể báo lỗi dù không lưu nổi một record.
+- Các trần còn lại: 256 ref cấu hình đã dùng (qua reboot); 4.096 START ID và 128 STOP ID hợp lệ mỗi boot. Chạm trần ref không thay bundle hiện dùng; thiết bị từ chối START remote mới nếu hết bộ nhớ dedup START. Khi không giữ được STOP ID mới, vẫn CLOSE và khóa START đến boot mới đã phục hồi sổ an toàn. Không nới trần bằng xóa sổ/đổi identity tùy ý. Thời lượng outage xử lý được tùy số record và write load, không chỉ dung lượng app slot.
+
+Output adapter có task kiểm mỗi 5 ms, đọc STOP thô và giữ khóa đến khi nhả ổn định 35 ms. START chỉ nhận cạnh nhấn sau mức nhả ổn định, không lặp vì giữ. Output dừng theo deadline hoặc lease của control task mất 2 giây; task control có watchdog trong release. HTTPS dùng task khác. Flash stall/RTOS/reset và mức S khi bo mất điện/sự cố driver chưa được đo, vì vậy các con số này chưa là giới hạn phản ứng ở tủ. Giữ van khóa tay độc lập theo [operations](../../docs/operations.md).
+
+### Build và test host
+
+Dùng PowerShell, Arduino CLI 1.6.0, Arduino-ESP32 3.3.12, GNU g++17 trở lên (đã test g++ 15.1), Python với `jsonschema` cho kiểm shape. Dependency [ArduinoJson 7.4.3](https://github.com/bblanchon/ArduinoJson/releases/tag/v7.4.3) lấy từ tag, script xác nhận commit `77771d3c07668e01d8f52acb03910c1110bb373f`.
+
+```powershell
+git clone --depth 1 --branch v7.4.3 https://github.com/bblanchon/ArduinoJson.git .local/n01/deps/ArduinoJson
+& .\code\controller\test-host.ps1
+python -B code/controller/tests/verify-wire.py
+& .\code\controller\build-esp32.ps1 -Profile lab
+& .\code\controller\build-esp32.ps1 -Profile release
+```
+
+Build không upload. Mỗi artifact có build ID mới và [manifest dưới staging riêng](../../.local/n01/build/) với command/revision, hash source/config/partition, app-only BIN, ELF, MAP; script kiểm slot, profile/marker và link guard NVS. Khi đưa cho USB v1 chỉ chọn file `MiGardenController.ino.bin` có đúng digest trong manifest LAB đã review; không chọn file merged/bootloader/partition hay release. Firmware không chứa pass, token, private host hoặc CA mẫu.
+
+Nếu thiết bị thiếu LittleFS/correct journal, bước phần mềm tiếp theo là tạo **file offline**, ví dụ:
+```powershell
+& .\code\controller\make-genesis.ps1 -Profile lab
+```
+Script tạo ảnh 1.441.792 bytes chứa đúng journal rỗng, dùng block 4.096/page 256, đóng gói rồi unpack đối chiếu. `-Profile both` chỉ thích hợp cho lần khởi tạo hoàn toàn mới được phê duyệt với cả hai namespace rỗng. Ảnh này **không phải payload v1 updater**. Ghi vùng data sẽ thay cả partition `0x290000..0x3EFFFF`; cần parent xác định backup/blank/layout và có quyền riêng trước khi làm. Nếu vùng đã là LittleFS tương thích, chỉ cần cung cấp file genesis đúng profile vào vùng đã biết an toàn cho lần cấp mới; không thay ledger đã tồn tại bằng file rỗng. Không đụng NVS hoặc đổi partition để giúp mount.
+
+LAB `STORAGE` đọc và phân loại: `BLANK_FF` nếu tất cả bytes là `0xff`, `UNMOUNTABLE_HAS_DATA` nếu có dữ liệu chưa nhận diện, hoặc `LITTLEFS_JOURNAL_PRESENT/MISSING` nếu mount được. PRESENT chỉ là file tồn tại; DIAG mới cho biết journal usable. `LAYOUT_UNVERIFIED` và `READ_ERROR` giữ nguyên. Khi thiếu journal, có thể kiểm TLS/exchange với snapshot `STORAGE_FAULT`, không OPEN. Khởi tạo tối thiểu nếu chứng minh blank là đúng **một** ảnh LAB rỗng cho đúng data range nói trên; đừng format một vùng đã có dữ liệu chỉ để hoàn thành bench.
+
+### LAB: USB v1 và provision riêng
+
+Giữ `PING`, `INFO`, `BEGIN <length> <sha256>`, ACK từng 1.024 bytes, `REBOOT`, heartbeat/RESYNC của USB bootstrap v1. Update và provision bắt đầu được khi **idle + OFF**; vào maintenance vô hiệu pending START và cắt reply mạng cũ. Trong lúc nhận binary chưa có active session và không có đường START. LAB không biên dịch adapter chân IO27/32/33 trong core điều khiển. `DIAG` trả profile/build, gate, time quality, kích thước queue/log, evidence gaps, kết nối và heap; không echo giá trị provision. Output LAB `virtual_on` là mô phỏng của software; UART là kênh giao tiếp bench.
+
+Lệnh LAB `NETINFO` trả duy nhất `NETINFO <IPv4>` hoặc `NETINFO LINK_PENDING`, chỉ khi parent yêu cầu; giữ kết quả ở receipt riêng. Parent có thể chuẩn bị relay/firewall với luật mặc định đóng, lấy IP từ UART sau DHCP rồi chỉ mở cho địa chỉ đó. Firmware tự thử kết nối khi clock sẵn sàng, kể cả khi relay vẫn đóng.
+
+Firmware ghi đúng slot inactive đã xác minh, kiểm SHA input và SHA toàn bộ bytes đọc lại từ flash, rồi kiểm image bằng ESP-IDF trước khi chọn boot. Có marker N01 cho adapter tương thích; nguồn tin cho build ID/digest vẫn là manifest đã review ở host. Từ chối flash encryption/secure boot hoặc app đang pending verify; không đổi các cờ đó. Hai giây đầu có thể chưa hiện target trong INFO; app trì hoãn xác nhận rollback mặc định và chỉ xác nhận khi đã vào vòng điều khiển an toàn, serial đã hoạt động. Đây không xác nhận TLS, config, journal hoặc output vật lý; bootloader đang cài và rollback khi bootloop vẫn chưa test. Cần giữ ROM recovery đã được parent kiểm trước khi dùng unattended. Lỗi/lost receipt gần activation là unknown: ngừng writer, chờ thụ động marker, đối chiếu boot/slot/build/digest với giao dịch đã lưu trước khi bất kỳ retry. Sau timeout quiet/resync v1 giảm nhầm đuôi binary, không chứng minh chống được tail vô hạn; chỉ dùng sender stop-and-wait và không thêm writer khác.
+
+Provision cho parent giữ file JSON riêng: đúng các trường `device_id`, `wifi_ssid`, `wifi_password`, `base_url`, `device_token`, `ca_pem`. `base_url` là origin HTTPS DNS/IPv4 (có thể có port, không thêm path); CA PEM là trust root dùng cho origin, không có private key. Dùng UTF‑8 không BOM. Gửi cổng parent đã lease ở 115200:
+
+1. Gửi ASCII `PROVISION <số-byte>\n` (1..8.192), đợi đúng `PROVISION_READY`.
+2. Gửi đúng các byte file, không newline thêm/mix lệnh và không in file hoặc payload. Nếu lỗi/timeout, dừng writer, quan sát thụ động `RESYNC READY` khi có raw frame đang dở.
+3. `PROVISION_OK reboot_required=1` nghĩa blob đã commit và đọc kiểm trong NVS namespace LAB `mg-lab-v1`, key `profile-v1`. Sau đó lệnh `REBOOT` riêng. Fail trả mã chung. Chỉ đổi Wi‑Fi/password/token của đúng identity/origin/CA; không chuyển safety state sang server khác bằng provision.
+
+Release đọc blob riêng ở `mg-rel-v1/profile-v1` (NVS key `profile-v1`); không nhận file qua UART. Production trust root và thiết lập `fixture_verified:true` cần quy trình Owner đã kiểm mạch/fixture; ảnh release chưa có profile nào. Không tự provision production. TLS kiểm chain/name của API; riêng LAB IPAddress SAN được [Mbed TLS 3.6.6 hỗ trợ](https://github.com/Mbed-TLS/mbedtls/blob/v3.6.6/library/x509_crt.c#L2697-L2714). Device phải có clock qua SNTP trước TLS. HTTP không follow redirect; thực hiện retry 5/15/30/60 giây cộng jitter và Retry-After; lỗi xác thực/cấu hình dừng retry đến khi có can thiệp. Số đo TLS đúng/sai CA, SAN/IP, latency, heap và flash runtime chờ bench.
+
+### Simulator không thiết bị
+
+`\.local\n01\host\sim.exe --help` (dùng `.` trước đường dẫn tương đối trong PowerShell). Mỗi process giữ một journal trong RAM, clock mặc định 2026‑11‑18T00:00:00Z và boot synthetic. Không cần socket, serial hoặc credential. Default device ID `qa-controller-a`, có thể truyền `--device-id` cho fixture dùng disposable backend. Mỗi dòng input trả đúng một object JSON (trừ `quit`).
+
+| Lệnh | Kết quả |
+|---|---|
+| `snapshot` | Request exchange v1, gồm reports chưa ACK. |
+| `exchange <response-json>` | Nhận một response device, chạy arbiter và trả request v1 mới. |
+| `advance <ms>` / `gap <ms>` | Cho clock chạy đều với scheduler / nhảy tiến do mất vòng tick. |
+| `jump <UTC>` / `clock unknown\|synced\|holdover` | Đổi civil time / chất lượng timestamp. |
+| `start` / `stop` / `release` | Cạnh START ảo / bấm STOP ảo / nhả STOP. |
+| `reboot` / `diag` / `quit` | Boot mới giữ journal, mất đồng bộ clock / xem gates, queue, số lần OPEN / thoát. |
+
+Ví dụ không cần cài config: `'snapshot','start','stop','snapshot','quit' | & ./.local/n01/host/sim.exe`. Ca có apply → candidate/receipt → grant → dừng sau 17 giây → ACK/reboot nằm trong [verify-wire.py](tests/verify-wire.py). Dùng seed/test bên simulator và LAB riêng; artifact release không link test hoặc lệnh synthetic. Không đổi board, nạp hoặc gửi lệnh ở tủ từ các lệnh host trên.
