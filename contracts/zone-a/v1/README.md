@@ -34,3 +34,27 @@ semantics, authentication and provenance.
   most 16 reports. Controller may wake sync on a critical record, use a
   15-second idle / 5-second active poll, and respect the retry delay when
   provided. Server time is not a source of trusted controller clock.
+# Reboot recovery and foreground hint
+
+The existing `recovered` event uses exactly
+`payload.reason: "REBOOT_INTERRUPTED_RECOVERED"` for a verified reboot
+interruption settled by a fresh STOP. Its `session_id`, `request_id`,
+`config_ref` and `trigger_source` match the original interrupted reservation.
+The event boot/sequence/time are those of recovery. The previous unknown
+`session_ended` remains unchanged, with null measured duration. An armed
+reservation is recorded as unknown with null `started_at` and `ended_at`;
+there is no started report or assertion of OPEN. The marker has no measured
+duration. An unacknowledged marker can arrive in a later boot's exchange.
+App correlation must not
+release unrelated fences, amend the old outcome, or confuse the STOP request
+ID with the original START request ID. The current schema and endpoints remain
+unchanged. Deploy a correlated recipient before enabling this sender.
+
+On a successful otherwise idle exchange, exactly `retry_after_seconds: 2`
+can be a soft poll hint while the app's foreground presence lease is fresh.
+It applies to one response only. No hint with desired work, candidates,
+grants, STOP, reports, ACKs or in-flight work. Device progress and events
+can wake immediately; a `Retry-After` HTTP header and error backoff remain
+hard waits. Without the hint the base is 15 s idle / 5 s active. First page
+open can still wait the remainder of the previous idle interval; no
+physical latency guarantee follows.

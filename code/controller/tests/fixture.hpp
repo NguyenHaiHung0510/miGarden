@@ -17,7 +17,7 @@ struct Clock : ClockPort {
 struct Memory : LogFile {
     std::vector<uint8_t> live=Journal::genesis(), draft;
     bool readable=true, failReplace=false;
-    int appendNumber=0, failAt=0, replacements=0;
+    int appendNumber=0, failAt=0, partialAt=0, replacements=0;
     std::function<void()> afterAppend;
     std::function<void()> beforeRead;
     int64_t size() override { return readable?int64_t(live.size()):-1; }
@@ -29,6 +29,7 @@ struct Memory : LogFile {
     }
     bool append(const uint8_t* p,size_t n) override {
         if (++appendNumber==failAt) return false;
+        if(appendNumber==partialAt){live.insert(live.end(),p,p+n/2);return false;}
         live.insert(live.end(),p,p+n);
         if (afterAppend) afterAppend();
         return true;
