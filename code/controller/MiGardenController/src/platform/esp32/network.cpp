@@ -112,27 +112,42 @@ void Network::work() {
     for (const char* tag:{"esp-tls","esp-tls-mbedtls","transport_base","HTTP_CLIENT","wifi"})
         esp_log_level_set(tag,ESP_LOG_NONE);
     WiFi.persistent(false);
-#ifdef MG_LAB
     WiFi.onEvent([this](arduino_event_id_t event, arduino_event_info_t info) {
-        if (event==ARDUINO_EVENT_WIFI_STA_DISCONNECTED)
+        if (event==ARDUINO_EVENT_WIFI_STA_DISCONNECTED) {
+            disconnects_.fetch_add(1);
+#ifdef MG_LAB
             disconnectReason_.store(info.wifi_sta_disconnected.reason);
-    },ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
+#else
+            (void)info;
 #endif
+        }
+    },ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
     WiFi.mode(WIFI_STA);
     WiFi.setAutoReconnect(false);
+    WiFi.disconnect(false,false); // no erase; all station config stays RAM-only
     sntp_set_time_sync_notification_cb(WallClock::synchronized);
-    Ms nextWifi=0;
+    WifiPolicy wifiPolicy(provision_.hasFallback);
+    uint32_t observedDisconnects=disconnects_.load();
     bool ntp=false, link=false;
     for (;;) {
         const Ms now=monoNow();
-        const bool connected=WiFi.status()==WL_CONNECTED;
+        bool connected=WiFi.status()==WL_CONNECTED;
+        const auto disconnects=disconnects_.load();
+        const auto action=wifiPolicy.step(now,connected,disconnects!=observedDisconnects);
+        observedDisconnects=disconnects;
 #ifdef MG_LAB
         wifiStatus_.store(int(WiFi.status()));
 #endif
-        if (!connected && now>=nextWifi) {
-            WiFi.begin(provision_.ssid.c_str(),provision_.password.c_str());
-            nextWifi=now+30*second;
+        if(action!=WifiPolicy::Action::none) {
+            WiFi.disconnect(false,false); // async cancel, never erase or rewrite profile
+            if(action==WifiPolicy::Action::preferred)
+                WiFi.begin(provision_.ssid.c_str(),provision_.password.c_str());
+            else if(action==WifiPolicy::Action::fallback)
+                WiFi.begin(provision_.fallbackSsid.c_str(),provision_.fallbackPassword.c_str());
+            connected=false;
         }
+        connected=connected&&wifiPolicy.phase()==WifiPolicy::Phase::connected;
+        wifiSlot_=wifiPolicy.slot();wifiPhase_=wifiPolicy.phase();
         if (connected && !ntp) {
             configTime(0,0,"pool.ntp.org","time.google.com","time.cloudflare.com");
             ntp=true;

@@ -11,11 +11,12 @@ test ! -e "$out"
 mkdir -p "$out"
 core="$repo/code/controller/MiGardenController/src/core"
 args=(-std=c++17 -O2 -Wall -Wextra -Wpedantic -Werror -I "$core" -I "$dep/src")
-for target in core_tests sim; do
+for target in core_tests sim wifi_tests; do
     g++ "${args[@]}" "$core"/*.cpp "$repo/code/controller/tests/$target.cpp" -o "$out/$target"
 done
 g++ "${args[@]}" "$repo/code/controller/MiGardenController/src/commissioning/transaction.cpp" \
     "$repo/code/controller/tests/commissioner_tests.cpp" -o "$out/commissioner_tests"
 "$out/core_tests" "$repo/contracts/zone-a/v1/vectors.json"
 "$out/commissioner_tests"
+"$out/wifi_tests"
 python "$repo/code/controller/tests/verify-wire.py" "$out/sim"

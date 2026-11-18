@@ -38,10 +38,11 @@ class Current(unittest.TestCase):
               .not_valid_after(now+timedelta(days=1)).add_extension(x509.BasicConstraints(ca=True,path_length=None),True)
               .sign(key,hashes.SHA256()))
         cls.profile={"device_id":"qa-preserve-test","wifi_ssid":"SYNTHETIC-ONLY","wifi_password":"synthetic-not-real",
+            "wifi_fallback_ssid":"SYNTHETIC-SECONDARY","wifi_fallback_password":"synthetic-alternate",
             "base_url":"https://example.invalid:8765","device_token":"a"*43,
             "ca_pem":cert.public_bytes(serialization.Encoding.PEM).decode(),"fixture_verified":True}
         cls.payload=commission.profile_bytes(json.dumps(cls.profile).encode(),"release")
-        cls.labStored=(json.dumps(cls.profile,indent=2)+"\n").encode()
+        cls.labStored=(json.dumps({k:v for k,v in cls.profile.items() if not k.startswith("wifi_fallback_")},indent=2)+"\n").encode()
         cls.profileFile=cls.root/"profile.json";private_acl.write_new(cls.profileFile,cls.payload)
         cls.binding=cls.root/"binding.json"
         private_acl.write_new(cls.binding,json.dumps({"protocol":"migarden.zone-a.v1","zone_id":"zone-a",
@@ -74,13 +75,14 @@ class Current(unittest.TestCase):
     def command(self,*args):
         r=subprocess.run([sys.executable,"-B",ROOT/"code/controller/commission_current.py",*map(str,args)],
             text=True,capture_output=True,timeout=120)
-        for s in (self.profile["device_token"],self.profile["wifi_password"],self.profile["wifi_ssid"],self.profile["base_url"]):
+        for s in (self.profile["device_token"],self.profile["wifi_password"],self.profile["wifi_ssid"],self.profile["base_url"],
+                  self.profile["wifi_fallback_ssid"],self.profile["wifi_fallback_password"]):
             self.assertNotIn(s,r.stdout+r.stderr)
         return r
-    def prep(self,name="release",profile="release",capture=None,binding=None,target=None):
+    def prep(self,name="release",profile="release",capture=None,binding=None,target=None,private=None):
         cap=capture or self.capture
         return ["prepare","--capture",cap,"--capture-sha256",hashlib.sha256((cap/"capture.json").read_bytes()).hexdigest(),
-                "--profile",profile,"--private-config",self.profileFile,
+                "--profile",profile,"--private-config",private or self.profileFile,
                 "--device-binding",binding or self.binding,"--app-manifest",target or self.rm,
                 "--commissioner-manifest",self.cm,"--sim",self.sim,"--sim-sha256",hashlib.sha256(self.sim.read_bytes()).hexdigest(),
                 "--genesis",self.genesis,"--out",self.root/name]
@@ -89,6 +91,9 @@ class Current(unittest.TestCase):
         r=self.command(*self.prep(),"--dry-run");self.assertEqual(r.returncode,0,r.stderr)
         self.assertFalse((self.root/"release").exists())
         r=self.command(*self.prep());self.assertEqual(r.returncode,0,r.stderr)
+        expected=json.loads((self.root/"release/profile.json").read_bytes())
+        self.assertEqual(expected["wifi_fallback_ssid"],self.profile["wifi_fallback_ssid"])
+        self.assertEqual(expected["wifi_fallback_password"],self.profile["wifi_fallback_password"])
         out=self.root/"release";m=hashlib.sha256((out/"manifest.json").read_bytes()).hexdigest()
         r=self.command("validate","--bundle",out,"--manifest-sha256",m)
         self.assertEqual(r.returncode,0,r.stderr)
@@ -103,7 +108,7 @@ class Current(unittest.TestCase):
         private_acl.write_new(cap/"capture.json",json.dumps(doc).encode())
         binding=json.loads(self.binding.read_bytes());binding["environment"]="qa"
         b=self.root/"lab-binding.json";private_acl.write_new(b,json.dumps(binding).encode())
-        r=self.command(*self.prep("lab","lab",cap,b,self.lm))
+        r=self.command(*self.prep("lab","lab",cap,b,self.lm,self.capture/"lab-profile.json"))
         self.assertEqual(r.returncode,0,r.stderr)
         req=json.loads((self.root/"lab/request.json").read_bytes())
         self.assertEqual(req["plan"]["profile"],"lab")

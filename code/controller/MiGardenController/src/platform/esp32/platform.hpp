@@ -1,6 +1,7 @@
 #pragma once
 #include "../../core/controller.hpp"
 #include "../../core/wire.hpp"
+#include "../../connectivity/wifi_profile.hpp"
 #include <Arduino.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -68,10 +69,8 @@ private:
     bool mounted_=false;
     int replacement_=-1;
 };
-struct Provision {
+struct Provision : WifiProfile {
     Id device;
-    Text<32> ssid;
-    Text<64> password;
     Text<256> baseUrl;
     Text<256> token;
     std::string ca;

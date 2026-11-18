@@ -33,6 +33,10 @@ environment,app_ref`. Identity alphabet và token43-base64url đúng app v1;
 origin HTTPS được so với firmware; một CA certificate có CA-basic-constraints,
 validity và keyCertSign nếu extension KeyUsage có mặt. Release đòi
 `fixture_verified:true` do Owner đã nghiệm thu, không do build/USB tự suy.
+Profile cho phép một cặp optional `wifi_fallback_ssid/wifi_fallback_password`;
+hai key Wi-Fi cũ luôn là preferred. Validators dùng cùng ASCII/length/password
+contract cho cả hai, không nhận half-pair/null/duplicate SSID. Legacy một mạng
+vẫn hợp lệ; chuẩn bị release hai mạng không sửa LAB profile đang có.
 [Chi tiết và command sequence](CURRENT-COMMISSIONING.vi.md#trước-khi-dùng-chuẩn-bị-và-quyền).
 
 ### Helper first-blank (reference riêng)

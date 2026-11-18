@@ -82,10 +82,11 @@ void loop() {
     if (now-last>=30000) {
         last=now;
         const auto s=controller->snapshot();
-        Serial.printf("MG build=%s profile=release ready=%u output=%s reason=%s time=%s queue=%u gaps=%llu network=%s\n",
+        Serial.printf("MG build=%s profile=release ready=%u output=%s reason=%s time=%s queue=%u gaps=%llu network=%s wifi_slot=%u wifi_phase=%s\n",
                       buildId,s.ready,s.on?"on":"off",s.blocked==Reason::none?"NONE":label(s.blocked),
                       label(s.time.quality),unsigned(controller->queued()),
-                      static_cast<unsigned long long>(controller->evidenceGaps()),network.status());
+                      static_cast<unsigned long long>(controller->evidenceGaps()),network.status(),
+                      network.wifiSlot(),network.wifiPhase());
     }
 #endif
     delay(5);

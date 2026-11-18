@@ -20,7 +20,7 @@ $oldPath=$env:Path
 try {
     # The installed MinGW compiler's child executables require its own DLLs first.
     $env:Path=(Split-Path $compilerPath)+[IO.Path]::PathSeparator+$env:Path
-    foreach ($name in @('core_tests','sim')) {
+    foreach ($name in @('core_tests','sim','wifi_tests')) {
         & $compilerPath -std=c++17 -O2 -Wall -Wextra -Wpedantic -Werror -static @include @sources (Join-Path $PSScriptRoot "tests/$name.cpp") -o (Join-Path $build "$name.exe")
         if ($LASTEXITCODE) { throw "Compile failed: $name (exit $LASTEXITCODE)" }
     }
@@ -32,6 +32,8 @@ try {
         if ($LASTEXITCODE) { throw 'Test failure' }
         & (Join-Path $build 'commissioner_tests.exe')
         if ($LASTEXITCODE) { throw 'Commissioner test failure' }
+        & (Join-Path $build 'wifi_tests.exe')
+        if ($LASTEXITCODE) { throw 'Wi-Fi test failure' }
     }
     Write-Output "HOST_OUTPUT $build"
 } finally {
