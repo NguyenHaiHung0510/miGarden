@@ -1,6 +1,6 @@
-# miGarden — Thiết kế 01–09
+# miGarden — Thiết kế 01–10
 
-**Cập nhật 12/11/2026 · Asia/Saigon.** 01–08 đã được duyệt ở mức thiết kế; các tham số ghi mở vẫn cần quyết định. Bước 09 là bản tích hợp hiện tại để duyệt. Chưa có firmware tưới, API triển khai hoặc kết quả nghiệm thu điện/nước.
+**Cập nhật 18/11/2026 · Asia/Saigon.** 01–08 đã được duyệt ở mức thiết kế, với mặc định production ở 08. Bước 09 mô tả tích hợp phần cứng; 10 gom kiến trúc và kế hoạch triển khai. N01 có [firmware và simulator Zone A](../../code/controller/README.vi.md) theo [wire v1 đã khóa](../../contracts/zone-a/v1/README.md). Bằng chứng host và kết quả nghiệm thu điện/nước là các mốc riêng.
 
 `docs/design/` là nguồn thiết kế hiện hành duy nhất được tiếp tục chỉnh sửa. Các snapshot làm việc trước khi công bố được giữ làm lịch sử riêng, không phải bản canonical song song. [Project state](../project-state.md) phân biệt thiết kế với prototype đã chạy.
 
@@ -17,9 +17,9 @@
 | 05 | [Service Specification](05-service-specification.vi.md) — tám dịch vụ và hợp đồng | Danh mục và phối hợp đã duyệt |
 | 06 | [IoT Level Specification](06-iot-level-specification.vi.md) — ESP32, microSched, browser, tài nguyên và nguồn | Thiết kế đã duyệt; tài nguyên dưới tải cần đo |
 | 07 | [Functional View Specification](07-functional-view-specification.vi.md) — interface, nhóm chức năng và [catalogue tình huống](07-functional-view-specification.vi.md#catalogue) | Thiết kế đã duyệt |
-| 08 | [Operational View Specification](08-operational-view-specification.vi.md) — vận hành, phục hồi và đồng bộ | Hướng đã duyệt; [hạn mức và cách tính](08-operational-view-specification.vi.md#budget-d186) còn mở |
+| 08 | [Operational View Specification](08-operational-view-specification.vi.md) — vận hành, phục hồi và đồng bộ | Hướng và [mặc định production Zone A](08-operational-view-specification.vi.md#budget-d186) đã duyệt; chi tiết triển khai và nghiệm thu còn mở |
 | 09 | [Device and Component Integration](09-device-and-component-integration.vi.md) — từ nguồn tới đầu chờ, [đồ thị lắp đặt](09-device-and-component-integration.vi.md#installation-graph) | Bản thiết kế tích hợp để duyệt; chưa nghiệm thu |
-| 10 | Application Development | Pending — chưa triển khai ứng dụng điều khiển |
+| 10 | [Application Development](10-application-development.vi.md) — stack/module, luồng bàn giao, giao thức, QA và phát hành | Đã duyệt hướng chia pha/kiến trúc và UI C; firmware candidate N01 chờ nghiệm thu tích hợp |
 
 [Bảy cảnh walkthrough offline](walkthrough/index.html) có dữ liệu synthetic, thẻ nguồn, SVG và PNG. Có thể mở trực tiếp file HTML sau khi clone; không cần server, tài khoản, Internet hoặc thư mục riêng. [Hướng dẫn và nguồn hình](walkthrough/README.vi.md) giải thích cách đọc và dựng lại dữ liệu. Đây là ví dụ về thiết kế, khác [viewer model-v0](../../viewer/README.md) đang biểu diễn hiện trường.
 
@@ -40,11 +40,11 @@ Chậu/hoa và chín chậu trong khảo sát vẫn là sự thật hiện trư�
 
 ## Điểm mở và policy vận hành
 
-Các safety outcomes trong 01–04 được giữ ở 06–09. [09](09-device-and-component-integration.vi.md) chọn bo, chân, nguồn, driver và van cho đợt một. Thuật toán, thời lượng/hạn mức, framework, clock/persistence, giao thức, credential, cutoff/feedback thực tế và bằng chứng an toàn còn cần hoàn thiện. Thiết kế đã chọn không chứng minh lắp đúng hoặc đã tưới.
+Các safety outcomes trong 01–04 được giữ ở 06–09. [09](09-device-and-component-integration.vi.md) chọn bo, chân, nguồn, driver và van cho đợt một. [08](08-operational-view-specification.vi.md#budget-d186) ghi các mặc định hạn mức đã chọn. Chi tiết thuật toán, clock/persistence, giao thức, credential, cutoff/feedback thực tế và bằng chứng an toàn còn cần hoàn thiện. Thiết kế đã chọn không chứng minh lắp đúng hoặc đã tưới.
 
 ### SAF-P01 — PROPOSED: giới hạn tích lũy và cooldown
 
-**Ứng viên lịch sử, chưa được chọn.** Xem [08 mục 1.1](08-operational-view-specification.vi.md#budget-d186) cho so sánh mới, gồm 165 phút trong 3 giờ. Không dùng số nào làm mặc định tưới hoặc giới hạn đã kiểm.
+**Ứng viên lịch sử, chưa được chọn.** Xem [08 mục 1.1](08-operational-view-specification.vi.md#budget-d186) cho mặc định hiện hành. Không dùng số của SAF-P01 làm mặc định tưới hoặc giới hạn đã kiểm.
 
 | Candidate | Giá trị đề xuất để đánh giá, chưa phê duyệt |
 |---|---|

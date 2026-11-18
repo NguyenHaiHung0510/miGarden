@@ -1,14 +1,24 @@
 # Operations and recovery design
 
-These runbooks describe prerequisites, observations and recovery for future implementation. **No runnable watering firmware or control simulator is supplied by this design batch.** The spatial viewer and static information walkthrough are separate runnable artifacts. The steps below define evidence to collect when implementation and the target are available.
+These runbooks describe prerequisites, observations and recovery. The N01 [controller candidate and host simulator](../code/controller/README.vi.md) use the [Zone A v1 contract](../contracts/zone-a/v1/README.md). Builder host evidence and compiled LAB/release profiles are distinct from runtime, physical shutoff and field acceptance. The spatial viewer and static information walkthrough are separate runnable artifacts.
 
 ## Current design versus historical operational choices
 
-Current safety outcomes are in [01](design/01-purpose-and-requirements.vi.md), [02](design/02-process-specification.vi.md) and [04](design/04-information-model.vi.md). Use [08](design/08-operational-view-specification.vi.md) for operation and recovery and [09](design/09-device-and-component-integration.vi.md) for selected first-stage hardware, wiring and installation checks. Firmware framework, API/transport, network cadence, numerical limits and field-enable evidence remain open.
+Current safety outcomes are in [01](design/01-purpose-and-requirements.vi.md), [02](design/02-process-specification.vi.md) and [04](design/04-information-model.vi.md). Use [08](design/08-operational-view-specification.vi.md) for operation and recovery and [09](design/09-device-and-component-integration.vi.md) for selected first-stage hardware, wiring and installation checks. N01 uses Arduino-ESP32 3.3.12, HTTPS/JSON v1 and bounded exchange/retry cadence; their actual device behavior and field-enable evidence remain separate.
 
 Every source uses the same local arbiter and cumulative accounting; STOP prioritizes CLOSE and prevents old pending START from opening later. Boot never restores OPEN or resets budget. Unknown after possible execution blocks all sources and all Zones on common source/accounting until independence and safe recovery are proven. Critical-storage failure during execution requires safe stop/cutoff/degraded handling, with honest evidence gaps. Independent mechanical shutoff and hardware feedback/cutoff remain necessary.
 
-[The numerical candidates in 08](design/08-operational-view-specification.vi.md#budget-d186) are not active limits, defaults or measured safe values. Software limits cannot certify physical shutoff. Technical device work still requires its own authorization, target identity and safe recovery path.
+[Selected defaults in 08](design/08-operational-view-specification.vi.md#budget-d186) are 15 min physical START, 30 min/session and 120 min in any rolling 180 min window. Three values are editable; window length is fixed. These are chosen policy, not measured physical safety. Software limits cannot certify physical shutoff. Technical device work still requires its own authorization, target identity and safe recovery path.
+
+## First commissioning and preserving data
+
+The [commissioning package](../code/controller/CURRENT-COMMISSIONING.vi.md) supplies a temporary USB-compatible commissioner and explicit host capture/prepare/execute/verify/finalize tooling for the current device with LAB NVS. LAB plan never writes NVS; release plan adds only a new `mg-rel-v1` namespace through the NVS API and preserves other logical content. Data formatting occurs only for an explicit approved plan after full backup, exact layout/beforehash and whole-region0xff checks. Tool preparation is not actual initialization authority. Without a valid journal, keep `STORAGE_FAULT` and no OPEN even if TLS/exchange can run.
+
+Release expects `mg-rel-v1/profile-v1` with a privately supplied `fixture_verified:true` and `release-v1.journal`. That flag records the operator's separately accepted fixture decision; no builder or tool may infer it from a build or USB receipt. Current-layout tooling preserves LAB/other namespaces, refuses any existing target namespace/journal and creates a journal only with exclusive-create. No NVS repack, existing ledger reset, unknown clear or automatic mount-format is allowed. Actual credentials/data execution and device proof remain separate Owner grants. Legacy first-blank image helper is not the current-board method.
+
+Ordinary app updates preserve the complete data/NVS regions. On reboot the candidate carries its durable accounting timeline and credits only current powered uptime; SNTP jumps and presumed downtime do not refill it. An existing 15 min usage under the default 120 min budget still leaves 105 min, subject to normal gates. Unresolved possible execution remains blocked regardless of time. v1 journal input is retained; an optional deferred-STOP extension is accepted by the new reader. Rollback compatibility depends on every historical frame, including extended state left after deferred promotion and the24KiB cap: current empty deferred count does not prove an ea140ed restore will work. Exact old-reader/device rollback remains UNVERIFIED; never reset the journal to bypass it.
+
+The ref catalogue is bounded at 256 applied refs. At 255 one more can apply; at 256 any 257th ref is rejected with `CONFIG_CAPACITY`, including pause/policy changes. The applied bundle and STOP remain; reboot, ACK and compaction do not reset this count. Surface the limit and use STOP to end an active session as needed; no ref-GC or ledger-reset operation is authorized by this runbook.
 
 ## Evidence and resource identity
 
@@ -30,7 +40,7 @@ Start the target, verify executable/config/resource identity, exercise frozen co
 
 ## Dry LED on a real board
 
-Require verified unit/cable/USB identity, selected pins/resistor/button wiring and safe power, plus an explicit dry profile and bounded simulator/dev-test endpoint. Dry-profile semantics and numeric water policy remain open; do not invent limits, reuse old flags as current permission, or bypass the task's permitted effects.
+Require verified unit/cable/USB identity, selected pins/resistor/button wiring and safe power, plus an explicit dry fixture grant. The current LAB firmware has virtual output only, and release uses the chosen policy; do not turn a LAB UART/GPIO log into dry LED or water evidence, reuse old flags as current permission, or bypass the task's permitted effects.
 
 Exercise local button and web intent through received/accepted-or-rejected/started/terminal events tied to command/build/config/boot. Check bounded duration, local STOP, disconnect/reconnect, duplicate/stale input and reboot default-OFF. LED results prove the test output; they do not establish delivered water, valve closure or field readiness.
 

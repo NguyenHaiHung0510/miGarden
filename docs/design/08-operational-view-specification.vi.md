@@ -1,10 +1,10 @@
 # miGarden — Bước 08: Quy tắc vận hành đề xuất
 
-2026-11-12 · Asia/Saigon. **Đã chọn hướng vận hành và phục hồi.** Hạn mức và cách tính ở mục 1.1 vẫn là đề xuất. Các ngưỡng, giao thức và thông tin xác thực chưa chốt; [09](09-device-and-component-integration.vi.md) mô tả cấu hình thiết bị đã chọn để lắp và kiểm.
+2026-11-17 · Asia/Saigon. **Đã chọn hướng vận hành, phục hồi và mặc định production ban đầu cho Zone A** (A113). Chi tiết triển khai cách tính, hiệu lực lệnh, giao thức và thông tin xác thực còn mở. [09](09-device-and-component-integration.vi.md) mô tả cấu hình thiết bị đã chọn để lắp và kiểm.
 
 **Đề xuất cho Zone A:** Giữ lịch đã áp dụng trên ESP32. Thiết bị tự xét kỳ đến hạn, tự dừng theo giới hạn đã giữ tại chỗ, và nói rõ vì sao phải chờ. Web quản lý mong muốn, giao lệnh từ xa và hiển thị mức kết quả biết được. Mở rộng B/C/D và độc lập nguồn nước/hạn mức cần bằng chứng riêng. Bản này đi tiếp từ [06](06-iot-level-specification.vi.md) và [07](07-functional-view-specification.vi.md), giữ nguyên [01](01-purpose-and-requirements.vi.md), [02](02-process-specification.vi.md) và [04](04-information-model.vi.md).
 
-Đọc theo điều cần quyết: [tưới hằng ngày](#1-kỳ-tưới-bình-thường), [hạn mức đang bàn](#budget-d186), [phục hồi sau lỗi](#2-khi-nào-được-xét-tưới-tiếp), [giao lệnh và đồng bộ](#3-giao-lệnh-và-đồng-bộ), [tham số còn mở](#4-tham-số-và-căn-cứ), [tiêu chí cho 09–10](#5-tiêu-chí-chuyển-sang-0910).
+Đọc theo điều cần quyết: [tưới hằng ngày](#1-kỳ-tưới-bình-thường), [hạn mức production](#budget-d186), [phục hồi sau lỗi](#2-khi-nào-được-xét-tưới-tiếp), [giao lệnh và đồng bộ](#3-giao-lệnh-và-đồng-bộ), [tham số còn mở](#4-tham-số-và-căn-cứ), [tiêu chí cho 09–10](#5-tiêu-chí-chuyển-sang-0910).
 
 ## 1. Kỳ tưới bình thường
 
@@ -14,9 +14,11 @@
 4. **Dừng và ghi kết quả.** Hết thời lượng, STOP hoặc lỗi cần dừng đều đi đường CLOSE; STOP được ưu tiên, không đòi qua các điều kiện của OPEN. Chỉ báo mức có bằng chứng: đã yêu cầu đóng, output đã báo, hay đã xác minh nước an toàn. Đường khóa tay tại nguồn vẫn độc lập. Sau khi có kết quả, đồng bộ theo ID; web giữ đúng nguồn, thời điểm biết và phần còn thiếu.
 
 <a id="budget-d186"></a>
-### 1.1 Hạn mức bản đầu — đề xuất, chưa chốt
+### 1.1 Hạn mức production ban đầu của Zone A
 
-**Đề xuất:** Bảo vệ phải vừa với vườn và mức thiệt hại có thể chấp nhận. Mình nghiêng về **cửa sổ trượt 3 giờ** để đánh giá, giữ **165 phút/180 phút là ứng viên**, và chọn riêng thời gian tối đa của một phiên. Chưa có căn cứ chọn 50/60 làm mặc định, cũng chưa có căn cứ khẳng định 165/180 là ngưỡng phù hợp. Giới hạn phiên là lớp chính chặn một lần mở kéo dài; tích lũy là lớp phụ chặn nhiều phiên ngắn nối nhau. Không tự thêm cảm biến hoặc một hệ thống bảo vệ phức tạp chỉ vì muốn có một con số đẹp.
+**Mặc định đã chọn:** Nút START tại tủ tưới **15 phút**; một phiên tối đa **30 phút**; tổng thời gian bật đầu ra tối đa **120 phút trong bất kỳ 180 phút nào**, tính chung lịch, web và nút. Ba giá trị chỉnh được trong **miGarden → Cấu hình**. Chiều dài cửa sổ trượt cố định **3 giờ** ở bản đầu. Bản mới chỉ có hiệu lực ở ESP32 khi áp dụng thành công, giữ nguyên sổ hạn mức đã dùng. Giới hạn 25 phút từng đề xuất không còn áp dụng.
+
+Ví dụ khi sổ trống, bốn phiên 30 phút liền nhau có thể dùng hết 120 phút; phiên tiếp theo phải bị từ chối nếu làm tổng vượt trần trong cửa sổ. Giới hạn mỗi phiên kiểm từng lần, không buộc nghỉ giữa các phiên. Những con số này giới hạn thời gian đầu ra do phần mềm điều khiển; van kẹt hoặc nước còn chảy phải xử lý bằng đường ngắt tại chỗ.
 
 | Lớp bảo vệ | Chặn lỗi gì? | Chọn dựa trên gì? |
 |---|---|---|
@@ -24,14 +26,7 @@
 | **Tích lũy trong cửa sổ trượt** | Lịch/nút/web tạo nhiều lần mở liên tiếp; đổi nguồn lệnh hoặc reboot không được cấp lại ngân sách | Tổng nhu cầu hợp lệ trong một khoảng thời gian, khoảng nghỉ mong muốn và phần dư cho thao tác tay |
 | **Khả năng dừng nước thật** | Ngõ ra đã tắt nhưng van kẹt, còn dòng chảy hoặc có đường nước ngoài điều khiển | Cấu hình van/driver/cutoff và khóa tay ở 09. Bộ đếm thời gian phần mềm không tự giải quyết lỗi cơ khí |
 
-**So hai con số Owner nêu, giả sử chỉ xét hạn mức tích lũy, sổ ban đầu trống và chưa áp giới hạn phiên riêng:**
-
-| Ví dụ chưa duyệt | Tỷ lệ thời gian tối đa trong cửa sổ | Một đợt liên tục có thể dài đến | Tối đa trong bất kỳ 3 giờ |
-|---|---:|---:|---:|
-| 50 phút / 60 phút | 83,3% | 50 phút | 150 phút |
-| 165 phút / 180 phút | 91,7% | 165 phút | 165 phút |
-
-Cửa sổ dài hơn tránh ép mọi giờ phải giống nhau. Tuy nhiên, 165/180 vẫn cho phép dùng nước gần như cả buổi, nên **không đồng nghĩa cho phép mỗi phiên chạy 165 phút**. Nếu lỗi cứ đóng rồi mở lại, giới hạn phiên riêng vẫn cần lớp tích lũy. Ngược lại, một hệ nhỏ giọt có nhu cầu dài hợp lệ không nên bị từ chối chỉ vì đã chạm một mức chọn tùy ý. 50/60 trong bảng là ví dụ so sánh; [SAF-P01 lịch sử](README.md#saf-p01--proposed-giới-hạn-tích-lũy-và-cooldown) là ứng viên 45/60, cũng chưa được chọn.
+Các mức 50/60, 165/180 và [SAF-P01](README.md#saf-p01--proposed-giới-hạn-tích-lũy-và-cooldown) là phương án đã xem trước khi chọn mặc định ở trên.
 
 **Cách tính đề xuất:** luôn nhìn lùi từ thời điểm đang xét, cộng phần thời gian output thuộc cửa sổ đó từ **mọi nguồn START chung một sổ**; một phiên chỉ tính một lần theo ID. Không dùng các khối cố định 09–12 rồi reset lúc 12:00. Với Zone A hiện tại, START lúc bận bị từ chối nên không có hai phiên đồng thời. Mở thêm Zone không tự chứng minh ngân sách hay nguồn nước độc lập.
 
@@ -50,17 +45,19 @@ Nếu local có thể đã thực thi nhưng chưa rõ kết quả, giữ phần
 
 Với cửa sổ dài `W`, mỗi khoảng output đã ghi nhận là `[sᵢ, eᵢ)`, phần tính của nó tại `t` là `max(0, min(eᵢ, t) − max(sᵢ, t − W))`. Tổng các phần này là thời gian đã dùng trong cửa sổ. Khi xét phiên mới, thêm khoảng dự kiến và kiểm tổng không vượt `C` ở các thời điểm bị ảnh hưởng; không chỉ kiểm số dư tại START. Chỗ giữ cho phiên ấy được thay bằng phần đã quyết toán, không cộng trùng. Phần chưa rõ không được tự đưa vào công thức như thể đã có mốc kết thúc chắc chắn.
 
-Một phương án đơn giản hơn là yêu cầu `đã dùng hiện tại + toàn bộ phiên mới ≤ C`. Cách này bảo thủ, có thể từ chối oan: với 50/60, sau phiên phút 0–50, phiên phút 60–70 vẫn có thể giữ tổng đúng 50 vì phút cũ rời cửa sổ cùng tốc độ phút mới đi vào; trừ ngay cả 10 phút ở START lại từ chối. Đề xuất tính theo các khoảng thời gian để tránh bất tiện này. Đây là thay đổi đề xuất trong phần hạn mức còn mở, chưa là thuật toán đã duyệt hoặc đã triển khai.
+Một phương án đơn giản hơn là yêu cầu `đã dùng hiện tại + toàn bộ phiên mới ≤ C`. Cách này bảo thủ, có thể từ chối oan: trong ví dụ 50/60, sau phiên phút 0–50, phiên phút 60–70 vẫn có thể giữ tổng đúng 50 vì phút cũ rời cửa sổ cùng tốc độ phút mới đi vào; trừ ngay cả 10 phút ở START lại từ chối. Đề xuất tính theo các khoảng thời gian để tránh bất tiện này. Chi tiết thuật toán và kiểm thử còn mở.
 
 </details>
 
-**Căn cứ để chốt số:** ở 09, xác định nhu cầu tưới dài nhất của đầu ra đã chọn, lưu lượng bình thường và đường có thể xả nhiều hơn nếu tuột/rò, khả năng thoát nước, thời gian từ yêu cầu dừng đến ngừng nước. Ở cùng lưu lượng giả lập 1 lít/phút, 50 và 165 phút tương ứng 50 và 165 lít; đây không phải lưu lượng đã đo của vườn. [USU hướng dẫn đo lưu lượng từ thể tích và thời gian](https://extension.usu.edu/yardandgarden/research/the-do-it-yourself-guide-to-backyard-drip-irrigation); không nhất thiết lắp thêm cảm biến chỉ để có số đo thiết kế.
+**Căn cứ kiểm trước khi đưa vào dùng:** ở 09, xác định nhu cầu tưới dài nhất của đầu ra đã chọn, khả năng chạy liên tục của cuộn, lưu lượng bình thường và đường có thể xả nhiều hơn nếu tuột/rò, khả năng thoát nước, thời gian từ yêu cầu dừng đến ngừng nước. [USU hướng dẫn đo lưu lượng từ thể tích và thời gian](https://extension.usu.edu/yardandgarden/research/the-do-it-yourself-guide-to-backyard-drip-irrigation); không nhất thiết lắp thêm cảm biến chỉ để có số đo thiết kế.
 
 Ước tính thiệt hại chỉ vài trăm nghìn tiền nước là một giả định hợp lý để xem xét, chưa phải mức thiệt hại tối đa đã xác minh. [Hiện trường](../site-baseline.md#physical-and-operating-context) có sàn và đường thoát nước theo mô tả Owner, nhưng mới đủ cho tưới tay thường. [EPA phân biệt lãng phí nước với hư hại do rò nước](https://www.epa.gov/watersense/leak-detection-and-flow-monitoring-devices). Với miGarden, kiểm đúng đường xả/thoát trước khi chốt mức chịu lỗi; không suy một cảnh báo chung thành yêu cầu mua thêm thiết bị.
 
 ## 2. Khi nào được xét tưới tiếp?
 
 Khi khởi động, ESP32 giữ ngõ ra ở trạng thái không cấp OPEN, không tiếp tục phiên dở. [Sơ đồ điều kiện mở của 07](07-functional-view-specification.vi.md#63-start-stop-và-phục-hồi-ở-mức-hành-vi-đã-chọn) cho biết đường STOP; bảng này thêm cách xét phục hồi.
+
+**Đồng hồ khi mất mạng:** Sau khi đã đồng bộ và ESP32 tiếp tục chạy với nguồn giờ đáng tin, không vô hiệu giờ chỉ vì đã offline lâu. Dùng đồng bộ định kỳ có sẵn khi online; chưa cần thêm cấu hình chu kỳ riêng. [Espressif mô tả bộ đếm khi thức và SNTP](https://docs.espressif.com/projects/esp-idf/en/release-v5.5/esp32/api-reference/system/system_time.html). Mất điện có thể làm mất mốc giờ; nếu không xác định được giờ hoặc sổ hạn mức để mở an toàn thì chặn START, vẫn xử lý STOP. Chỉnh giờ khi mạng trở lại không cho chạy bù hay chạy trùng kỳ.
 
 | Tình trạng | Người dùng thấy gì | Khi nào xét START mới |
 |---|---|---|
@@ -74,6 +71,8 @@ Bằng chứng có thể là phản hồi thiết bị đã kiểm chứng hoặ
 ## 3. Giao lệnh và đồng bộ
 
 **Mặc định giữ candidate → received → grant → kiểm lần cuối ở ESP32.** Candidate là yêu cầu chưa được cấp quyền; received chỉ xác nhận đã nhận. Việc cấp quyền gắn với cùng ID, nội dung đã xác nhận, đích và trạng thái thiết bị hiện hành. Khi microSched xử lý STOP, hủy hoặc giữ chặn START cũ cùng đích nếu chứng minh chưa cấp quyền, và không cấp quyền sau đó cho intent cũ. Nếu có thể đã cấp, yêu cầu dừng/đối soát và chỉ báo điều biết được; STOP chưa tới ESP32 thì web chưa được báo đã dừng. ESP32 kiểm thời hạn và quyền còn hợp lệ ngay trước tác động, kể cả đã kiểm ở server. Dùng danh tính Owner và thiết bị riêng theo 07; chưa chọn khóa hay cách cấp phát.
+
+**Không có hàng đợi tưới.** START khi tủ bận bị từ chối; khi chưa thể bàn giao, không giữ lệnh để tự tưới muộn sau khi mạng trở lại. Có thể lưu trạng thái của chính lần bàn giao đang diễn ra để đối soát. Hạn hiệu lực (TTL) là mốc muộn nhất cho phép **bắt đầu** trong lần đó; giá trị số chưa chọn. Phiên đã bắt đầu hợp lệ tiếp tục theo bộ đếm tại tủ nếu chỉ mất mạng, trừ STOP hay lỗi cần đóng. Hàng chờ báo cáo là đường gửi dữ liệu đã ghi khi nối lại.
 
 **Một ca đại diện cho lệnh cũ sau STOP.** Khi ESP32 xử lý STOP, làm mất hiệu lực các START đang chờ trong phạm vi đó. Một cách đơn giản để thử thiết kế: ràng ý định remote lúc Owner xác nhận với dấu trạng thái local còn mới mà web đã biết; STOP hoặc boot mới làm dấu cũ không hợp lệ. Cả candidate và grant phải giữ dấu đó. Không gán dấu mới chỉ vì một intent cũ đến muộn. Nếu dấu không khớp hoặc không chứng minh được lệnh là ý định mới, từ chối mở và báo lý do. Một kỳ lịch thật sự đến hạn về sau vẫn được xét qua các điều kiện thường; STOP một phiên không tự pause lịch. Kiểm **một** ca grant cũ còn hiệu lực danh nghĩa nhưng đến sau STOP tại nguồn. Reboot chung được kiểm riêng bằng ca mất điện; không nhân mọi tổ hợp thứ tự.
 
@@ -91,11 +90,11 @@ Với kết nối, đề xuất thử lại sớm khi lỗi thoáng qua, tăng k
 | Cần chốt | Căn cứ trước khi kích hoạt |
 |---|---|
 | Nguồn clock, sai số, độ trôi, thời gian local còn dùng được; ranh giới kỳ | Xác minh clock sau đồng bộ/reset và khi mất mạng. Nếu sai số/ranh giới không xác định thì không OPEN; giữ mốc dừng bằng elapsed time đáng tin. Không dùng giờ mới nhảy tới để chạy bù |
-| Giới hạn phiên, cửa sổ tích lũy và cooldown nếu chọn | Nhu cầu tưới của A, độ trễ dừng, nước còn chảy, phản ứng van/driver/cutoff và ranh giới nguồn nước. [SAF-P01](README.md#saf-p01--proposed-giới-hạn-tích-lũy-và-cooldown) chỉ là ứng viên; không kích hoạt theo tài liệu này |
+| Kiểm cấu hình hạn mức ở mục 1.1 trên hệ thống thật | Nhu cầu tưới của A, độ trễ dừng, nước còn chảy, phản ứng van/driver/cutoff và ranh giới nguồn nước. Chưa chọn khoảng nghỉ bắt buộc riêng |
 | Hiệu lực START, tuổi trạng thái web, retry ngắn/dài và tải khi nối lại | Mục tiêu phản hồi người dùng, độ trễ quan sát đúng đường mạng, ngân sách tài nguyên và backlog. Trần 30 giây chỉ là ứng viên pha ngắn, không là nhịp mặc định cả đêm |
 | Chỗ lưu bền, retention, nhiệt và nguồn hoạt động liên tục | Kích thước/rate bản ghi, dung lượng cần dành cho an toàn, độ bền ghi và margin của firmware/hộp/nguồn thật. S01 là dữ liệu diagnostic; chưa đủ để cam kết tuổi thọ hoặc sức chứa firmware sản phẩm |
 
-Cách tính/hạn mức ở mục 1.1 đang mở. [09 · Tích hợp thiết bị](09-device-and-component-integration.vi.md#installation-and-checks) nhận phần đo/tương thích theo cấu hình; chưa có bằng chứng thì chưa cấp chế độ tưới thật.
+Mặc định ở mục 1.1 đã chọn; chi tiết triển khai và bằng chứng còn mở. [09 · Tích hợp thiết bị](09-device-and-component-integration.vi.md#installation-and-checks) nhận phần đo/tương thích theo cấu hình; chưa có bằng chứng thì chưa cấp chế độ tưới thật.
 
 ## 5. Tiêu chí chuyển sang 09–10
 
@@ -110,4 +109,4 @@ Bảng này là thứ tự ưu tiên kiểm cho bước sau; **chưa chạy**. K
 | Nguồn, driver, van, khóa tay và vận hành liên tục | 09 kiểm cấu hình thật, khi đóng cắt tải/mất-cấp điện và hỏng phù hợp. Tách giả lập, thử khô, nước có kiểm soát và hiện trường. USB-C dùng thử/bảo trì; lắp cố định dùng jack DC 12 V riêng cho bo theo 09. Khóa tay có tác dụng độc lập |
 | Trạng thái và đối soát trên microSched | 10 kiểm *đã lưu/đã áp dụng*, *đã nhận/được cấp quyền*, kết quả báo/unknown, lý do từ chối và lần cập nhật. Không suy ra nước đã ngừng chỉ từ ACK |
 
-**Trạng thái:** thiết kế hành vi và hướng phục hồi đã được duyệt. Hạn mức/cách tính mục 1.1, tham số cụ thể và kết quả tích hợp vẫn mở. Đây là thiết kế, chưa là bằng chứng lắp hay vận hành.
+**Trạng thái:** thiết kế hành vi, hướng phục hồi và mặc định hạn mức production Zone A đã được duyệt. Chi tiết triển khai, tham số giao lệnh và nghiệm thu tích hợp vẫn mở.

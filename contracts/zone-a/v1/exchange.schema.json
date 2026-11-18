@@ -1,0 +1,1203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "miGarden Zone A device exchange v1 (clarification A)",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/request"
+    },
+    {
+      "$ref": "#/$defs/response"
+    }
+  ],
+  "$defs": {
+    "config": {
+      "type": "object",
+      "required": [
+        "config_ref",
+        "zone_id",
+        "binding_ref",
+        "policy",
+        "schedule"
+      ],
+      "properties": {
+        "config_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[!-~]+$"
+        },
+        "zone_id": {
+          "const": "zone-a"
+        },
+        "binding_ref": {
+          "const": "zone-a-v1"
+        },
+        "policy": {
+          "type": "object",
+          "required": [
+            "manual_duration_seconds",
+            "max_session_seconds",
+            "window_seconds",
+            "max_window_seconds"
+          ],
+          "properties": {
+            "manual_duration_seconds": {
+              "type": "integer",
+              "minimum": 15,
+              "maximum": 10800,
+              "multipleOf": 15
+            },
+            "max_session_seconds": {
+              "type": "integer",
+              "minimum": 15,
+              "maximum": 10800,
+              "multipleOf": 15
+            },
+            "window_seconds": {
+              "const": 10800
+            },
+            "max_window_seconds": {
+              "type": "integer",
+              "minimum": 15,
+              "maximum": 10800,
+              "multipleOf": 15
+            }
+          },
+          "additionalProperties": false
+        },
+        "schedule": {
+          "type": "object",
+          "required": [
+            "enabled",
+            "effective_from",
+            "effective_until",
+            "duration_seconds",
+            "recurrence"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "effective_from": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+              "format": "date-time"
+            },
+            "effective_until": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "duration_seconds": {
+              "type": "integer",
+              "minimum": 15,
+              "maximum": 10800,
+              "multipleOf": 15
+            },
+            "recurrence": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "kind",
+                    "at"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "once"
+                    },
+                    "at": {
+                      "type": "string",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+                      "format": "date-time"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "kind",
+                    "at_local_time"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "daily"
+                    },
+                    "at_local_time": {
+                      "type": "string",
+                      "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "kind",
+                    "at_local_time",
+                    "days_of_week"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "weekly"
+                    },
+                    "at_local_time": {
+                      "type": "string",
+                      "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+                    },
+                    "days_of_week": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 7
+                      },
+                      "minItems": 1,
+                      "maxItems": 7,
+                      "uniqueItems": true
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "kind",
+                    "anchor_at",
+                    "interval_minutes"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "interval"
+                    },
+                    "anchor_at": {
+                      "type": "string",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+                      "format": "date-time"
+                    },
+                    "interval_minutes": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 4294967295
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "required": [
+        "event_id",
+        "boot_id",
+        "sequence",
+        "kind",
+        "occurred_at",
+        "time_quality",
+        "zone_id",
+        "binding_ref",
+        "config_ref",
+        "payload"
+      ],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 96,
+          "pattern": "^[!-~]+$"
+        },
+        "boot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[!-~]+$"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "kind": {
+          "enum": [
+            "config_applied",
+            "config_rejected",
+            "request_received",
+            "request_rejected",
+            "session_started",
+            "session_ended",
+            "fault",
+            "recovered",
+            "stop_processed",
+            "occurrence_decided"
+          ]
+        },
+        "occurred_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "time_quality": {
+          "enum": [
+            "synced",
+            "holdover",
+            "unknown"
+          ]
+        },
+        "zone_id": {
+          "const": "zone-a"
+        },
+        "binding_ref": {
+          "const": "zone-a-v1"
+        },
+        "config_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[!-~]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[!-~]+$"
+        },
+        "session_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[!-~]+$"
+        },
+        "trigger_source": {
+          "enum": [
+            "remote",
+            "schedule",
+            "local_button"
+          ]
+        },
+        "payload": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "config_applied"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "required": [],
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "additionalProperties": false
+              },
+              "config_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[!-~]+$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "config_rejected"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "required": [],
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "additionalProperties": false
+              },
+              "config_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[!-~]+$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "request_received"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "required": [],
+                "properties": {},
+                "additionalProperties": false
+              },
+              "config_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[!-~]+$"
+              }
+            },
+            "required": [
+              "request_id",
+              "trigger_source"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "request_rejected"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "required": [
+                  "reason"
+                ],
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "request_id",
+              "trigger_source"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "session_started"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "required": [
+                  "started_at",
+                  "duration_seconds"
+                ],
+                "properties": {
+                  "started_at": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+                    "format": "date-time"
+                  },
+                  "duration_seconds": {
+                    "type": "integer",
+                    "minimum": 15,
+                    "maximum": 10800,
+                    "multipleOf": 15
+                  }
+                },
+                "additionalProperties": false
+              },
+              "config_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[!-~]+$"
+              }
+            },
+            "required": [
+              "session_id",
+              "request_id",
+              "trigger_source"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "session_ended"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "required": [
+                  "started_at",
+                  "ended_at",
+                  "output_duration_seconds",
+                  "outcome",
+                  "reason"
+                ],
+                "properties": {
+                  "started_at": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+                        "format": "date-time"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ended_at": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+                        "format": "date-time"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "output_duration_seconds": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "outcome": {
+                    "enum": [
+                      "completed",
+                      "stopped",
+                      "fault",
+                      "unknown"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "additionalProperties": false
+              },
+              "config_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[!-~]+$"
+              }
+            },
+            "required": [
+              "session_id",
+              "request_id",
+              "trigger_source"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "fault"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "required": [
+                  "reason"
+                ],
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "recovered"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "required": [
+                  "reason"
+                ],
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "stop_processed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "required": [
+                  "outcome"
+                ],
+                "properties": {
+                  "outcome": {
+                    "enum": [
+                      "close_requested",
+                      "already_off",
+                      "unconfirmed"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "additionalProperties": false
+              },
+              "trigger_source": {
+                "enum": [
+                  "local_button",
+                  "remote"
+                ]
+              }
+            },
+            "required": [
+              "trigger_source"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "occurrence_decided"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "required": [
+                  "occurrence_id",
+                  "scheduled_at",
+                  "disposition"
+                ],
+                "properties": {
+                  "occurrence_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^[!-~]+$"
+                  },
+                  "scheduled_at": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+                    "format": "date-time"
+                  },
+                  "disposition": {
+                    "enum": [
+                      "started",
+                      "skipped",
+                      "rejected",
+                      "unknown"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "additionalProperties": false
+              },
+              "config_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[!-~]+$"
+              },
+              "trigger_source": {
+                "const": "schedule"
+              }
+            },
+            "required": [
+              "trigger_source"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "time_quality": {
+                "const": "unknown"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "occurred_at": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "occurred_at": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+                "format": "date-time"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "stop_processed"
+              },
+              "trigger_source": {
+                "const": "remote"
+              }
+            },
+            "required": [
+              "trigger_source"
+            ]
+          },
+          "then": {
+            "required": [
+              "request_id"
+            ]
+          }
+        }
+      ]
+    },
+    "snapshot": {
+      "type": "object",
+      "required": [
+        "observed_at",
+        "time_quality",
+        "output",
+        "active_session",
+        "applied_config_ref",
+        "ready",
+        "blocked_reason"
+      ],
+      "properties": {
+        "observed_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "time_quality": {
+          "enum": [
+            "synced",
+            "holdover",
+            "unknown"
+          ]
+        },
+        "output": {
+          "enum": [
+            "off",
+            "on"
+          ]
+        },
+        "active_session": {
+          "anyOf": [
+            {
+              "type": "object",
+              "required": [
+                "session_id",
+                "request_id",
+                "trigger_source",
+                "started_at",
+                "duration_seconds",
+                "elapsed_seconds",
+                "config_ref"
+              ],
+              "properties": {
+                "session_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[!-~]+$"
+                },
+                "request_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[!-~]+$"
+                },
+                "trigger_source": {
+                  "enum": [
+                    "remote",
+                    "schedule",
+                    "local_button"
+                  ]
+                },
+                "started_at": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+                  "format": "date-time"
+                },
+                "duration_seconds": {
+                  "type": "integer",
+                  "minimum": 15,
+                  "maximum": 10800,
+                  "multipleOf": 15
+                },
+                "elapsed_seconds": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "config_ref": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[!-~]+$"
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "applied_config_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[!-~]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "blocked_reason": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[!-~]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "candidate": {
+      "type": "object",
+      "required": [
+        "request_id",
+        "kind",
+        "zone_id",
+        "binding_ref",
+        "config_ref",
+        "boot_id",
+        "control_epoch",
+        "confirmed_at",
+        "expires_at",
+        "duration_seconds"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[!-~]+$"
+        },
+        "kind": {
+          "const": "start"
+        },
+        "zone_id": {
+          "const": "zone-a"
+        },
+        "binding_ref": {
+          "const": "zone-a-v1"
+        },
+        "config_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[!-~]+$"
+        },
+        "boot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[!-~]+$"
+        },
+        "control_epoch": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "confirmed_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+          "format": "date-time"
+        },
+        "expires_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+          "format": "date-time"
+        },
+        "duration_seconds": {
+          "type": "integer",
+          "minimum": 15,
+          "maximum": 10800,
+          "multipleOf": 15
+        }
+      },
+      "additionalProperties": false
+    },
+    "grant": {
+      "type": "object",
+      "required": [
+        "request_id",
+        "kind",
+        "zone_id",
+        "binding_ref",
+        "config_ref",
+        "boot_id",
+        "control_epoch",
+        "confirmed_at",
+        "expires_at",
+        "duration_seconds",
+        "grant_id"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[!-~]+$"
+        },
+        "kind": {
+          "const": "start"
+        },
+        "zone_id": {
+          "const": "zone-a"
+        },
+        "binding_ref": {
+          "const": "zone-a-v1"
+        },
+        "config_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[!-~]+$"
+        },
+        "boot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[!-~]+$"
+        },
+        "control_epoch": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "confirmed_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+          "format": "date-time"
+        },
+        "expires_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+          "format": "date-time"
+        },
+        "duration_seconds": {
+          "type": "integer",
+          "minimum": 15,
+          "maximum": 10800,
+          "multipleOf": 15
+        },
+        "grant_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[!-~]+$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "stop": {
+      "type": "object",
+      "required": [
+        "request_id",
+        "kind",
+        "zone_id",
+        "binding_ref",
+        "boot_id",
+        "confirmed_at"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[!-~]+$"
+        },
+        "kind": {
+          "const": "stop"
+        },
+        "zone_id": {
+          "const": "zone-a"
+        },
+        "binding_ref": {
+          "const": "zone-a-v1"
+        },
+        "boot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[!-~]+$"
+        },
+        "confirmed_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    },
+    "request": {
+      "type": "object",
+      "required": [
+        "protocol",
+        "device_id",
+        "boot_id",
+        "control_epoch",
+        "snapshot",
+        "reports"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "migarden.zone-a.v1"
+        },
+        "device_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[!-~]+$"
+        },
+        "boot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[!-~]+$"
+        },
+        "control_epoch": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "snapshot": {
+          "$ref": "#/$defs/snapshot"
+        },
+        "reports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/event"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        }
+      },
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "required": [
+        "protocol",
+        "server_time",
+        "desired_config",
+        "candidates",
+        "grants",
+        "stops",
+        "acked_event_ids",
+        "retry_after_seconds"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "migarden.zone-a.v1"
+        },
+        "server_time": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$",
+          "format": "date-time"
+        },
+        "desired_config": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/config"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/candidate"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "grants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/grant"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "stops": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stop"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "acked_event_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 96,
+            "pattern": "^[!-~]+$"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "retry_after_seconds": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2147483647
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
