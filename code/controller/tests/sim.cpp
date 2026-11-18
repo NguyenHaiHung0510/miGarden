@@ -10,6 +10,7 @@ using namespace mg::test;
 namespace {
 void usage(std::ostream& out) {
     out<<"usage: sim [--device-id ID] | sim genesis <new-offline-file>\n"
+        "       sim recovery-check <private-journal-copy>\n"
         "stdin: snapshot, exchange <v1 response-json>, advance <ms>, gap <ms>, jump <UTC>,\n"
         "clock unknown|synced|holdover, start, stop, release, reboot, diag, quit\n";
 }
@@ -28,14 +29,26 @@ int main(int argc,char** argv) {
         f.write(reinterpret_cast<const char*>(image.data()),image.size());
         return f.good()?0:2;
     }
-    if (argc==3 && std::string_view(argv[1])=="verify-journal") {
-        std::ifstream input(argv[2],std::ios::binary);
+    if (argc==3 && (std::string_view(argv[1])=="verify-journal"||std::string_view(argv[1])=="recovery-check")) {
+        std::ifstream input(argv[2],std::ios::binary|std::ios::ate);
         if (!input) return 2;
+        const auto size=input.tellg();
+        if(size<=0||size>Journal::maxLog)return 2;
+        input.seekg(0);
         Memory memory;
         memory.live.assign(std::istreambuf_iterator<char>(input),{});
         Journal journal(memory);
         Ledger state;
         const bool valid=journal.restore(state);
+        if(std::string_view(argv[1])=="recovery-check") {
+            const bool eligible=valid&&(state.recoveryCause==RecoveryCause::reboot_running||
+                                        state.recoveryCause==RecoveryCause::reboot_armed);
+            std::cout<<"{\"valid\":"<<(valid?"true":"false")<<",\"eligible_reboot\":"<<(eligible?"true":"false")
+                <<",\"legacy_proof\":"<<(journal.inferredReboot()?"true":"false")
+                <<",\"operator_proof_required\":"<<(valid&&state.unknown&&!eligible?"true":"false")
+                <<",\"conservative_charge_ms\":"<<state.recoveryDebt<<"}\n";
+            return valid?0:2;
+        }
         std::cout<<"{\"valid\":"<<(valid?"true":"false");
         if (valid) std::cout<<",\"queued\":"<<journal.queued()<<",\"unknown\":"<<(state.unknown?"true":"false")
             <<",\"intervals\":"<<state.history.size()<<",\"config_refs\":"<<state.configRefs.size()

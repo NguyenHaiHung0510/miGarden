@@ -56,7 +56,8 @@ enum class Reason : uint8_t {
     invalid_config, config_conflict, stale_config, config_capacity, wrong_target, context_changed,
     stale_boot, stale_epoch, invalid_duration, expired, invalid_ttl, no_candidate, intent_conflict,
     rolling_limit, interval_capacity, report_capacity, storage_fault, outcome_unknown, output_fault,
-    reboot_interrupted, interlock, missed_boundary, deadline, remote_capacity, maintenance, unsafe_output
+    reboot_interrupted, interlock, missed_boundary, deadline, remote_capacity, maintenance, unsafe_output,
+    reboot_interrupted_recovered
 };
 enum class Outcome : uint8_t {
     none, completed, stopped, fault, unknown, close_requested, already_off, unconfirmed,
@@ -143,6 +144,7 @@ struct Pending {
     Intent intent;
     uint64_t receivedSequence = 0;
 };
+enum class RecoveryCause : uint8_t { unspecified, reboot_running, reboot_armed, other };
 struct Ledger {
     Config applied;
     Session session;
@@ -154,7 +156,12 @@ struct Ledger {
     std::vector<Range> history;
     std::vector<uint64_t> configRefs; // bounded, retained for stale ref refusal
     std::vector<Event> deferredStops; // processed remote STOP, not enqueued; sequence assigned at promotion
+    RecoveryCause recoveryCause=RecoveryCause::unspecified;
+    Ms recoveryDebt=0,recoveryDebtAt=none; // full planned reservation, never measured output
 };
+inline Ms recoveryCharge(const Ledger& l,Ms at) {
+    return l.recoveryDebt>0&&(at<l.recoveryDebtAt||at-l.recoveryDebtAt<windowSeconds*second)?l.recoveryDebt:0;
+}
 struct Snapshot {
     Sample time;
     uint32_t epoch = 0;

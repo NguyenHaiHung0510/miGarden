@@ -287,12 +287,13 @@ void unknownAcrossSourcesAndAck() {
     f.clock.s.quality=Quality::synced; f.tick(true);
     f.advance(minute);
     auto remote=f.intent(); f.candidate(remote); f.offer(); f.grant(remote);
-    f.stop();
     cfg.ref=id("b"); f.apply(cfg);
     f.gap(4*60*minute); f.tick(true);
     CHECK(f.actuator.opens==1 && f.c->ledger().unknown);
     f.reboot(false); f.tick(true);
     CHECK(f.actuator.opens==1 && f.c->snapshot().blocked==Reason::outcome_unknown);
+    f.stop();
+    CHECK(!f.c->ledger().unknown&&f.c->ledger().recoveryDebt==15*second&&!f.c->snapshot().on);
 }
 void persistBeforeOutput() {
     Fixture f;
@@ -317,7 +318,9 @@ void failureAfterOutputAndTerminal() {
     CHECK(f.actuator.opens==1 && !f.c->snapshot().on && f.c->snapshot().blocked==Reason::outcome_unknown);
     f.reboot(false);
     auto events=f.offer();
-    CHECK(find(events,Kind::fault,Reason::outcome_unknown) && !find(events,Kind::session_started));
+    const auto* terminal=find(events,Kind::session_ended,Reason::reboot_interrupted);
+    CHECK(terminal&&terminal->outcome==Outcome::unknown&&terminal->started==none&&terminal->outputMs==none&&
+          !find(events,Kind::session_started));
     CHECK(f.c->ledger().unknown);
     Fixture g;
     g.apply(g.config());
@@ -733,6 +736,16 @@ int main(int argc,char** argv) {
         catch (const std::exception& e) { ++fail; std::cerr<<"FAIL "<<name<<": "<<e.what()<<"\n"; }
     };
 #define TEST(f) test(#f,f)
+    if(argc==3&&std::string_view(argv[2])=="--recovery-delta") {
+        TEST(stopBeatsGrantAndLocal);TEST(remoteContextAndReboot);TEST(unknownAcrossSourcesAndAck);
+        TEST(persistBeforeOutput);TEST(failureAfterOutputAndTerminal);TEST(damageDuringSession);
+        TEST(corruptionBeforeAdmissionAndMissingStore);TEST(uncertainClosure);
+        TEST(accountingAcrossReboot);TEST(uptimeAgesCarriedBudgetWithoutDowntimeCredit);
+        TEST(stopReceiptSurvivesFullQueueAckAndRetry);TEST(deferredStopRecoversAfterReboot);
+        TEST(maximumLedgerAndDeferredReceiptsFit);TEST(maintenanceGate);TEST(syncCadence);
+        test("wireVectors",[&]{wireVectors(argv[1]);});
+        std::cout<<"TOTAL "<<pass<<" PASS, "<<fail<<" FAIL\n";return fail!=0;
+    }
     TEST(configAndBoot); TEST(defaultsAndDeadline); TEST(configInvalidConflictAndStale); TEST(applyCutover);
     TEST(exactBudgetOracle); TEST(allSourcesOneBudget); TEST(sourceBusyIsNotFifo);
     TEST(stopWithoutReadinessAndDedup); TEST(stopBeatsGrantAndLocal); TEST(stopBetweenReservationAndOutput);

@@ -14,7 +14,9 @@ public:
         Exchange exchange;
         std::vector<EventId> sent;
         bool accepted=false;
+        bool idleRequest=false;
         uint32_t generation=0;
+        int32_t headerRetry=-1;
     };
     Reply* take();
     void after(const Reply&,Controller&);

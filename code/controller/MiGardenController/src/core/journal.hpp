@@ -28,6 +28,7 @@ public:
     bool verifyTail();
     std::vector<Event> pending(uint64_t prioritySequence = 0);
     bool hasStopReceipt(const BootId&, const Id&); // exact RAM index, no storage before CLOSE
+    bool inferredReboot()const{return inferredReboot_;}
     bool healthy() const { return okay_; }
     size_t queued() const { return index_.size(); }
     uint32_t bytes() const { return used_; }
@@ -38,7 +39,7 @@ private:
     struct Receipt { uint64_t sequence; std::string key; };
     using Bytes = std::vector<uint8_t>;
     LogFile& file_;
-    bool okay_ = false;
+    bool okay_ = false,inferredReboot_=false;
     uint32_t used_ = 0, lastFrame_ = 0, lastCrc_ = 0;
     uint64_t sequence_ = 0;
     std::vector<Index> index_;
@@ -48,5 +49,6 @@ private:
     bool indexFrame(const Bytes&, uint32_t offset, Ledger* restored = nullptr);
     bool readFrame(uint32_t offset, Bytes&);
     bool readEvent(const Index&, Event&);
+    bool legacyRebootProof(const Ledger&);
 };
 }

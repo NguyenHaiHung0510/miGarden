@@ -121,6 +121,10 @@ Bytes encodeState(const Ledger& d) {
             w.u(data.size(),2); w.add(data);
         }
     }
+    if(d.recoveryCause!=RecoveryCause::unspecified||d.recoveryDebt>0) {
+        w.u(0x52,1);w.u(1,1);w.u(uint8_t(d.recoveryCause),1);
+        w.time(d.recoveryDebt);w.time(d.recoveryDebtAt);
+    }
     return std::move(w.b);
 }
 bool decodeState(const uint8_t* data, size_t bytes, Ledger& d) {
@@ -162,8 +166,8 @@ bool decodeState(const uint8_t* data, size_t bytes, Ledger& d) {
     if ((!d.applied.ref.empty() && (d.configRefs.empty() || d.configRefs.back() != idFingerprint(d.applied.ref.view()))) ||
         (d.scheduleFloor != none && d.scheduleFloor % minute)) return false;
     d.deferredStops.clear();
-    if (r.left()) {
-        if (r.u(1)!=0x53) return false;
+    if (r.left()&&*r.p==0x53) {
+        r.u(1);
         const auto count=r.u(1);
         if (!count || count>deferredStopMax) return false;
         for (size_t n=0;n<count;++n) {
@@ -179,6 +183,16 @@ bool decodeState(const uint8_t* data, size_t bytes, Ledger& d) {
             r.p+=len;
         }
     }
+    d.recoveryCause=RecoveryCause::unspecified;d.recoveryDebt=0;d.recoveryDebtAt=none;
+    if(r.left()) {
+        if(r.u(1)!=0x52||r.u(1)!=1)return false;
+        d.recoveryCause=r.en(RecoveryCause::other);
+        d.recoveryDebt=r.time();d.recoveryDebtAt=r.time();
+        if(d.recoveryDebt<0||d.recoveryDebt>windowSeconds*second||
+           ((d.recoveryDebt==0)!=(d.recoveryDebtAt==none))||d.recoveryDebtAt>d.accountingFloor)return false;
+        if((d.recoveryCause==RecoveryCause::reboot_running||d.recoveryCause==RecoveryCause::reboot_armed)&&
+           (!d.unknown||s.phase!=Session::Phase::unresolved))return false;
+    }
     return r.okay && !r.left();
 }
 Bytes encodeEvent(const Event& e) {
@@ -193,7 +207,7 @@ bool decodeEvent(const uint8_t* data, size_t bytes, Event& e, bool deferred) {
     Reader r(data,bytes);
     r.text(e.boot); e.sequence=r.u(8); e.kind=r.en(Kind::occurrence_decided); e.occurred=r.time();
     e.quality=r.en(Quality::holdover); r.text(e.config); r.text(e.request); r.text(e.session);
-    e.source=r.en(Source::remote); e.reason=r.en(Reason::unsafe_output); e.outcome=r.en(Outcome::rejected);
+    e.source=r.en(Source::remote); e.reason=r.en(Reason::reboot_interrupted_recovered); e.outcome=r.en(Outcome::rejected);
     e.started=r.time(); e.ended=r.time(); e.occurrence=r.time(); e.plannedSeconds=int32_t(r.u(4)); e.outputMs=r.time();
     return r.okay && !r.left() && (e.sequence || deferred) && e.sequence <= uint64_t(INT64_MAX) &&
         !e.boot.empty() && ((e.occurred == none) == (e.quality == Quality::unknown));
@@ -276,7 +290,7 @@ bool Journal::indexFrame(const Bytes& b, uint32_t at, Ledger* restored) {
 }
 
 bool Journal::restore(Ledger& out) {
-    okay_=false; used_=0; sequence_=0; index_.clear(); stops_.clear(); stateBytes_.clear();
+    okay_=false;inferredReboot_=false; used_=0; sequence_=0; index_.clear(); stops_.clear(); stateBytes_.clear();
     const auto n=file_.size();
     if (n<=0 || n>maxLog) return false;
     used_=uint32_t(n);
@@ -287,8 +301,63 @@ bool Journal::restore(Ledger& out) {
         if (!readFrame(at,b) || !indexFrame(b,at,&read)) { index_.clear();stops_.clear();return false; }
         at+=uint32_t(b.size());
     }
+    if(read.unknown&&read.session.phase==Session::Phase::unresolved&&
+       read.recoveryCause==RecoveryCause::unspecified&&legacyRebootProof(read)) {
+        read.recoveryCause=RecoveryCause::reboot_running;
+        inferredReboot_=true; // Controller must persist this inference before STOP settlement.
+    }
     out=std::move(read);
     return okay_=true;
+}
+
+bool Journal::legacyRebootProof(const Ledger& target) {
+    // Only a complete validated running->reboot-terminal transition proves
+    // legacy provenance. ACK alone may retain it; compaction may erase it.
+    auto same=[&](const Session& s) {
+        const auto& t=target.session;
+        return s.id==t.id&&s.request==t.request&&s.config==t.config&&s.source==t.source&&
+            s.duration==t.duration&&s.started==t.started&&s.occurrence==t.occurrence&&s.accountedAt==t.accountedAt;
+    };
+    Bytes b;Ledger previous;
+    bool have=false,eligible=false,knownRunning=false;
+    BootId startBoot;
+    for(uint32_t at=0;at<used_;) {
+        if(!readFrame(at,b))return false;
+        Reader r(b.data()+headerSize,b.size()-headerSize-trailerSize);
+        const auto len=r.u(2),count=r.u(1);r.u(1);
+        Ledger current=previous;
+        bool transition=false;
+        if(len) {
+            if(len>r.left()||!decodeState(r.p,len,current))return false;
+            transition=have&&!previous.unknown&&previous.session.phase==Session::Phase::running&&
+                same(previous.session)&&current.unknown&&current.session.phase==Session::Phase::unresolved&&same(current.session);
+            if(eligible&&(!current.unknown||current.session.phase!=Session::Phase::unresolved||
+                          !same(current.session)||current.recoveryCause!=RecoveryCause::unspecified))eligible=false;
+            r.p+=len;have=true;
+        }
+        bool proof=false,adverse=false;
+        for(size_t n=0;n<count;++n) {
+            const auto bytes=r.u(2);Event e;
+            if(bytes>r.left()||!decodeEvent(r.p,bytes,e))return false;
+            r.p+=bytes;
+            const auto& s=target.session;
+            const bool identity=e.session==s.id&&e.request==s.request&&e.config==s.config&&e.source==s.source;
+            if(identity&&e.kind==Kind::session_started&&e.started==s.started&&e.plannedSeconds==s.duration&&
+               current.session.phase==Session::Phase::running&&!current.unknown&&same(current.session)) {
+                knownRunning=true;startBoot=e.boot;
+            }
+            const bool terminal=identity&&e.kind==Kind::session_ended&&e.reason==Reason::reboot_interrupted&&
+                e.outcome==Outcome::unknown&&e.outputMs==none&&e.ended==none&&e.started==s.started&&
+                e.plannedSeconds==s.duration&&e.occurrence==s.occurrence;
+            if(terminal&&transition&&knownRunning&&!startBoot.empty()&&e.boot!=startBoot)proof=true;
+            if(e.kind==Kind::fault||(e.kind==Kind::session_ended&&e.outcome==Outcome::unknown&&!terminal))
+                adverse=true;
+        }
+        if(transition)eligible=proof&&!adverse;
+        else if(eligible&&adverse)eligible=false;
+        previous=std::move(current);at+=uint32_t(b.size());
+    }
+    return eligible&&same(previous.session)&&previous.unknown;
 }
 
 bool Journal::verifyTail() {

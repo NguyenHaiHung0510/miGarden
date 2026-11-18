@@ -126,6 +126,34 @@ fake elapsed clock; [test_wifi_profile.py](tests/test_wifi_profile.py) kiểm
 validator offline cùng refusal→restore. Các test này không chứng minh AP thật,
 radio/DHCP hoặc device timing; Parent giữ lane thử hotspot thật.
 
+### Phục hồi phiên bị ngắt do reboot
+
+Boot vẫn đóng đầu ra và không replay START/lịch cũ. Một phiên đã ghi running
+hoặc armed khi reboot có cause bền riêng; nó chặn START cho đến một STOP mới.
+Local STOP đang giữ lúc boot chỉ CLOSE; nhả rồi bấm lại để settle. Remote STOP
+phải khớp boot hiện tại. Lỗi storage/output hoặc unknown không có proof không
+được xóa bằng STOP. Không cần UTC mới để ghi nhận STOP local; clock/gate bình
+thường vẫn phải đạt trước START tiếp theo.
+
+Một commit ghi cùng lúc: khoản dự phòng đủ **thời lượng dự kiến**, đã settle
+phiên, và report `recovered` cho đúng ID của phiên gốc. Report terminal unknown
+và duration null giữ nguyên. Khoản này cộng riêng vào kiểm rolling, không giả
+thành interval đo được, không cho timeline nhảy tới tương lai. Nó hết hạn sau
+180 phút uptime có căn cứ tính từ settle; nếu settle thêm trong cửa sổ, giữ
+cả hai khoản tới mốc conservatively mới hơn. Các lượt đã đo vẫn tính theo
+interval gốc. Nếu còn budget, START mới có thể chạy sau STOP; duplicate
+STOP/reboot/ACK không charge lại.
+
+Journal legacy chỉ nhập cause nếu tìm thấy chuỗi frame CRC hợp lệ khớp
+started/running → reboot terminal unknown của đúng phiên, không có fault
+mâu thuẫn sau đó. ACK không tự xóa frame, nhưng compaction có thể đã xóa proof.
+Nếu không tìm được proof thì giữ khóa, báo operator, không format/reset sổ.
+Tool host read-only `sim recovery-check <private-journal-copy>` trả kết quả
+bool và khoản charge, không in ID hay dữ liệu riêng. Đây là kiểm chứng nguồn
+journal đã được operator tin cậy, không xác thực chữ ký/đọc thiết bị.
+Đưa app nhận và kiểm marker lên trước firmware mới để tránh ACK của reader cũ.
+Xem [wire recovery](../../contracts/zone-a/v1/README.md#reboot-recovery-and-foreground-hint).
+
 ### Simulator không thiết bị
 
 `\.local\n01\host\sim.exe --help` (dùng `.` trước đường dẫn tương đối trong PowerShell). Mỗi process giữ một journal trong RAM, clock mặc định 2026‑11‑18T00:00:00Z và boot synthetic. Không cần socket, serial hoặc credential. Default device ID `qa-controller-a`, có thể truyền `--device-id` cho fixture dùng disposable backend. Mỗi dòng input trả đúng một object JSON (trừ `quit`).

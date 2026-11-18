@@ -3,19 +3,25 @@
 #include <algorithm>
 
 namespace mg {
+inline bool foregroundHint(const Exchange& x,bool idleRequest,bool noSentReports) {
+    return x.retryAfter==2&&x.serverTime!=none&&idleRequest&&noSentReports&&!x.hasConfig&&!x.invalidConfig&&
+        x.candidates.empty()&&x.grants.empty()&&x.stops.empty()&&x.acked.empty();
+}
 class SyncPolicy {
 public:
     bool due(Ms now,bool link,uint64_t change) {
         if (!link) { online_=false; return false; }
         if (blocked_) return false;
-        if (!online_) { online_=true; if (!serverDelay_) next_=now; }
+        if (!online_) { online_=true; if (!serverDelay_&&!failed_) next_=now; }
         return now>=next_ || (!failed_ && !serverDelay_ && change!=sent_);
     }
     void sent(uint64_t c) { sent_=c; }
-    void ok(Ms now,bool active,bool immediate,int retryAfter) {
+    void ok(Ms now,bool active,bool immediate,int retryAfter,int headerRetry=-1,bool idleHint=false) {
         failed_=0;
-        serverDelay_=retryAfter>0;
-        next_=now+(serverDelay_ ? Ms(retryAfter)*second : immediate ? 0 : (active?5:15)*second);
+        serverDelay_=headerRetry>0||(retryAfter>0&&!idleHint);
+        const auto delay=std::max(headerRetry>0?headerRetry:0,serverDelay_&&retryAfter>0?retryAfter:0);
+        next_=now+(serverDelay_ ? Ms(delay)*second : immediate ? 0 :
+                   idleHint&&retryAfter==2&&!active ? 2*second : (active?5:15)*second);
     }
     void transient(Ms now,uint32_t random,int retryAfter=-1) {
         constexpr int delays[]={5,15,30,60};

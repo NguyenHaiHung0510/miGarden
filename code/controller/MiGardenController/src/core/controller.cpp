@@ -20,6 +20,7 @@ void Controller::boot() {
     // Do not consume a held-at-boot STOP; tick takes it as a new fence.
     auto d = output_.read();
     observedStops_ = d.stopHeld ? d.stops - 1 : d.stops;
+    localRecoveryArmed_=!d.stopHeld;
     if (bootId_.empty() || !journal_.restore(state_)) { breakStorage(); return; }
     const auto bootTime=clock_.now();
     if (state_.accountingFloor!=none && bootTime.mono>=0) {
@@ -28,6 +29,14 @@ void Controller::boot() {
         // last durable point, then age them only by this boot's elapsed time.
         anchor_={bootTime.mono,state_.accountingFloor,Quality::holdover};
     }
+    if(journal_.inferredReboot()) {
+        // Persist provenance before compaction is allowed to drop old proof.
+        // If no safe append remains, keep the journal and require operator review.
+        if(Journal::maxLog-journal_.bytes()<Journal::maxFrame||!journal_.verifyTail()||!journal_.commit(&state_)) {
+            state_.recoveryCause=RecoveryCause::unspecified;
+            breakStorage();return;
+        }
+    }
     if (state_.session.phase==Session::Phase::armed || state_.session.phase==Session::Phase::running ||
         state_.pending.receivedSequence) {
         Ledger next=state_;
@@ -35,21 +44,17 @@ void Controller::boot() {
         std::vector<Event> records;
         if (next.session.phase==Session::Phase::armed || next.session.phase==Session::Phase::running) {
             const auto original=next.session;
+            next.recoveryCause=!next.unknown&&next.recoveryCause!=RecoveryCause::other?
+                (original.phase==Session::Phase::running?RecoveryCause::reboot_running:RecoveryCause::reboot_armed):
+                RecoveryCause::other;
             next.unknown=true;
-            possible_=true;
             next.session.phase=Session::Phase::unresolved;
             if (journal_.queued() < backlogMax) {
-                if (original.phase==Session::Phase::running) {
-                    auto e=fromSession(next,Kind::session_ended,now,original);
-                    e.reason=Reason::reboot_interrupted; e.outcome=Outcome::unknown;
-                    records.push_back(e);
-                } else {
-                    auto e=fromSession(next,Kind::fault,now,original);
-                    e.session={}; // armed reservation does not prove a session started
-                    e.reason=Reason::outcome_unknown;
-                    records.push_back(e);
-                }
-            } else ++gaps_;
+                // For armed, started_at stays null and no session_started is made.
+                auto e=fromSession(next,Kind::session_ended,now,original);
+                e.reason=Reason::reboot_interrupted;e.outcome=Outcome::unknown;
+                records.push_back(e);
+            } else {++gaps_;next.recoveryCause=RecoveryCause::other;}
         }
         if (next.pending.receivedSequence) {
             if (journal_.queued()+records.size()<backlogMax) cancelPending(next,records,now,Reason::stale_boot);
@@ -74,6 +79,7 @@ bool Controller::observe(Sample s) {
             save(std::move(next),reports,true);
         }
         possible_=true;
+        state_.recoveryCause=RecoveryCause::other;
         return false;
     }
     lastMonotonic_=s.mono;
@@ -181,8 +187,9 @@ void Controller::finish(Ledger& l, std::vector<Event>& out, Sample now, Drive dr
     const Ms elapsed=(drive.onAt==monoStart_ && !drive.on && drive.offAt>=monoStart_)
         ? drive.offAt-monoStart_ : none;
     auto e=fromSession(l,Kind::session_ended,now,s);
-    if (elapsed<0 || s.accountedAt>maxUtc-elapsed || why==Reason::unsafe_output) {
+    if (elapsed<0 || s.accountedAt>maxUtc-elapsed || why==Reason::unsafe_output||why==Reason::storage_fault) {
         l.unknown=true; possible_=true; l.session.phase=Session::Phase::unresolved;
+        l.recoveryCause=RecoveryCause::other;
         e.reason=why; e.outcome=Outcome::unknown;
         e.occurred=none; e.quality=Quality::unknown;
     } else {
@@ -211,7 +218,29 @@ void Controller::finish(Ledger& l, std::vector<Event>& out, Sample now, Drive dr
     running_=false; monoStart_=deadline_=none;
 }
 
-void Controller::handleStop(Sample now, Source source, const Id& request, bool stale) {
+bool Controller::settleReboot(Ledger& next,std::vector<Event>& events,Sample now,
+                              const Drive& before,const Drive& after,bool consent) {
+    const bool eligible=next.recoveryCause==RecoveryCause::reboot_running||
+                        next.recoveryCause==RecoveryCause::reboot_armed;
+    if(!consent||!eligible||!next.unknown||next.session.phase!=Session::Phase::unresolved||
+       broken_||possible_||!journal_.healthy()||running_||before.on||after.on||!before.usable||
+       !after.usable||epoch_==UINT32_MAX||now.mono<lastMonotonic_)return false;
+    const auto stamp=accounting(now);
+    const auto charge=Ms(next.session.duration)*second;
+    if(stamp==none||stamp<next.accountingFloor||charge<=0||charge>windowSeconds*second||
+       journal_.queued()+events.size()>=backlogMax)return false;
+    if(!journal_.verifyTail()){breakStorage();return false;}
+    const auto debt=recoveryCharge(next,stamp);
+    if(debt>windowSeconds*second-charge)return false;
+    auto e=fromSession(next,Kind::recovered,now,next.session);
+    e.reason=Reason::reboot_interrupted_recovered;
+    next.recoveryDebt=debt+charge;next.recoveryDebtAt=stamp;
+    next.accountingFloor=std::max(next.accountingFloor,stamp);
+    next.unknown=false;next.session={};next.recoveryCause=RecoveryCause::unspecified;
+    events.push_back(e);
+    return true;
+}
+void Controller::handleStop(Sample now, Source source, const Id& request, bool stale,bool allowRecovery) {
     const auto before=output_.read();
     const bool stoppedByInput=running_ && before.offReason==Reason::stopped;
     const auto why=source==Source::remote ? Reason::remote_stop : Reason::stopped;
@@ -223,6 +252,9 @@ void Controller::handleStop(Sample now, Source source, const Id& request, bool s
     if (broken_ || !journal_.healthy()) { ++gaps_; breakStorage(); return; }
     Ledger next=state_;
     std::vector<Event> events;
+    if(!stale&&before.on&&!running_) {
+        possible_=true;next.unknown=true;next.recoveryCause=RecoveryCause::other;
+    }
     if (!stale) {
         finish(next,events,now,after,after.offReason==Reason::deadline ? Reason::deadline : why);
         if (next.pending.receivedSequence) {
@@ -244,11 +276,12 @@ void Controller::handleStop(Sample now, Source source, const Id& request, bool s
             (before.on || stoppedByInput ? Outcome::close_requested : Outcome::already_off);
         next.deferredStops.push_back(e);
     } else { ++gaps_; if (!stale) remoteStopCapacity_=true; }
+    const bool settled=!stale&&settleReboot(next,events,now,before,after,allowRecovery);
     // Do not consume the last terminal slot reporting a stale STOP while active.
     if (!stale && after.on) {
-        possible_=true; next.unknown=true;
+        possible_=true; next.unknown=true;next.recoveryCause=RecoveryCause::other;
     }
-    if (!events.empty() || state_.pending.receivedSequence!=next.pending.receivedSequence ||
+    if (!events.empty() || settled || state_.pending.receivedSequence!=next.pending.receivedSequence ||
         state_.deferredStops.size()!=next.deferredStops.size())
         save(std::move(next),events,!stale);
 }
@@ -385,7 +418,8 @@ void Controller::start(Source source, Id request, int32_t duration, Ms at, const
         const auto end=stamp-windowSeconds*second;
         auto used=std::find_if(next.history.begin(),next.history.end(),[&](const Range& r){return r.end>end;});
         next.history.erase(next.history.begin(),used);
-        if (stamp>maxUtc-length || rollingPeak(next.history,{stamp,stamp+length})>next.applied.policy.cumulative*second)
+        if (stamp>maxUtc-length || rollingPeak(next.history,{stamp,stamp+length})+
+            recoveryCharge(next,stamp)>next.applied.policy.cumulative*second)
             why=Reason::rolling_limit;
         else if (next.history.size()>=intervalMax) why=Reason::interval_capacity;
     }
@@ -400,6 +434,7 @@ void Controller::start(Source source, Id request, int32_t duration, Ms at, const
         return;
     }
     if (!journal_.verifyTail() || !journal_.prepare(5)) { breakStorage(); return; }
+    if(!recoveryCharge(next,stamp)){next.recoveryDebt=0;next.recoveryDebtAt=none;}
     if (i) { next.pending={}; offeredSequence_=0; pendingExpires_=none; }
     else cancelPending(next,reports,t,Reason::busy);
     next.accountingFloor=std::max(next.accountingFloor,stamp);
@@ -469,9 +504,11 @@ void Controller::tick(bool localStart, bool busyEdge, const Exchange* x, const s
     const bool busyAtArrival=running_ || busyEdge;
     if (d.stops!=observedStops_) {
         observedStops_=d.stops;
-        handleStop(now,Source::local_button,newId("st"));
+        handleStop(now,Source::local_button,newId("st"),false,localRecoveryArmed_);
+        localRecoveryArmed_=false;
         priority=Reason::stopped;
     }
+    if(!d.stopHeld)localRecoveryArmed_=true;
     if (x) for (const auto& s : x->stops) {
         if (!s.target || s.request.empty()) continue;
         const bool deferred=std::any_of(state_.deferredStops.begin(),state_.deferredStops.end(),[&](const Event& e) {
@@ -503,7 +540,7 @@ void Controller::tick(bool localStart, bool busyEdge, const Exchange* x, const s
     } else if (!running_ && d.on) {
         output_.close(Reason::unsafe_output); possible_=true; ++change_;
         if (!broken_) {
-            Ledger next=state_; next.unknown=true;
+            Ledger next=state_; next.unknown=true;next.recoveryCause=RecoveryCause::other;
             auto e=make(next,Kind::fault,now,Source::none,Reason::unsafe_output);
             save(std::move(next),{e},true);
         }

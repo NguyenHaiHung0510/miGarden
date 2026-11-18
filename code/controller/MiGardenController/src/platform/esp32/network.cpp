@@ -162,10 +162,9 @@ void Network::work() {
         auto reply=std::move(job->reply);
         if (connected) {
             auto r=exchangeHttps(provision_,job->request);
-            reply->exchange.retryAfter=r.retry;
+            reply->headerRetry=r.retry;
             if (r.status==200) {
                 reply->accepted=decodeExchange(r.body,reply->exchange)==WireError::none;
-                if (r.retry>=0) reply->exchange.retryAfter=std::max(r.retry,reply->exchange.retryAfter);
                 status_=reply->accepted?idle:wire_error;
             } else if (r.status==401 || r.status==403) status_=auth_error;
             else if (r.status==409) status_=serial_conflict;
@@ -189,10 +188,13 @@ void Network::after(const Reply& r,Controller& c) {
     if (r.accepted) {
         // If old backlog remains or a candidate just caused a durable receipt,
         // follow immediately; a stable duplicate/no-ACK reply uses normal cadence.
-        policy_.ok(monoNow(),!c.idle(),(!r.exchange.acked.empty() && c.queued()) ||
-                   (!r.exchange.candidates.empty() && c.change()!=lastSubmitted_),r.exchange.retryAfter);
+        const auto& x=r.exchange;
+        const bool hint=foregroundHint(x,r.idleRequest,r.sent.empty());
+        const bool progress=(!x.acked.empty()&&c.queued())||c.change()!=lastSubmitted_;
+        const int delay=x.retryAfter==2&&!hint?-1:x.retryAfter;
+        policy_.ok(monoNow(),!c.idle(),progress,delay,r.headerRetry,hint);
     } else if (status_>=auth_error) policy_.permanent();
-    else policy_.transient(monoNow(),esp_random(),r.exchange.retryAfter);
+    else policy_.transient(monoNow(),esp_random(),std::max(r.exchange.retryAfter,r.headerRetry));
 }
 void Network::submit(Controller& c) {
     if (!outbound_ || inFlight_ || c.maintenance()) return;
@@ -206,6 +208,7 @@ void Network::submit(Controller& c) {
     if (job) job->reply.reset(new(std::nothrow) Reply);
     if (!job || !job->reply) { status_=queue_error; policy_.permanent(); return; }
     const auto records=c.reports();
+    job->reply->idleRequest=c.idle()&&records.empty()&&!c.ledger().pending.receivedSequence;
     if (!encodeExchange(provision_.device,c.bootId(),c.snapshot(),records,job->request)) {
         status_=wire_error; policy_.permanent(); return;
     }

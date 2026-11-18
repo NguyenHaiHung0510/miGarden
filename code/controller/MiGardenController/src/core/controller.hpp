@@ -62,6 +62,7 @@ private:
     std::vector<uint64_t> startSeen_, staleStops_;
     std::vector<Id> stopSeen_;
     bool remoteStopCapacity_=false;
+    bool localRecoveryArmed_=false;
     Id lastRejectedConfig_;
     Reason lastConfigReason_ = Reason::none;
 
@@ -75,7 +76,8 @@ private:
     Id newId(const char*);
     bool save(Ledger&&, const std::vector<Event>& = {}, bool critical = false);
     void breakStorage();
-    void handleStop(Sample, Source, const Id&, bool stale = false);
+    void handleStop(Sample, Source, const Id&, bool stale = false,bool allowRecovery=true);
+    bool settleReboot(Ledger&,std::vector<Event>&,Sample,const Drive&,const Drive&,bool);
     void flushStopReceipts();
     void finish(Ledger&, std::vector<Event>&, Sample, Drive, Reason);
     void rejected(Sample, Source, Reason, const Id&, const Id& config = {});
