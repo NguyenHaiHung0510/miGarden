@@ -113,13 +113,6 @@ bool tokenValid(std::string_view s) {
               c=='-' || c=='_' || c=='.' || c=='~' || c=='+' || c=='/' || c=='=')) return false;
     return true;
 }
-bool passwordValid(std::string_view s) {
-    if (s.empty()) return true;
-    if (s.size()<8 || s.size()>64) return false;
-    if (s.size()==64) for (char c:s)
-        if (!((c>='0'&&c<='9') || (c>='a'&&c<='f') || (c>='A'&&c<='F'))) return false;
-    return true;
-}
 bool decodeProvision(const char* data,size_t size,Provision& p) {
     if (!size || size>provisionMax || std::memchr(data,0,size)) return false;
     // Local framing is exact-length JSON. An ArduinoJson zero-copy char*
@@ -128,8 +121,7 @@ bool decodeProvision(const char* data,size_t size,Provision& p) {
     if (deserializeJson(doc,data,size,DeserializationOption::NestingLimit(2))) return false;
     auto o=doc.as<JsonObjectConst>();
     if (o.isNull() || !readText(o["device_id"],p.device) || !visible(p.device.view()) ||
-        !readText(o["wifi_ssid"],p.ssid) || p.ssid.empty() ||
-        !readText(o["wifi_password"],p.password) || !passwordValid(p.password.view()) ||
+        !decodeWifiProfile(o,p) ||
         !readText(o["base_url"],p.baseUrl) ||
         !origin(p.baseUrl.view()) || !readText(o["device_token"],p.token) || !tokenValid(p.token.view()) ||
         !o["ca_pem"].is<JsonString>()) return false;
@@ -403,7 +395,9 @@ ProvisionStatus saveProvision(const char* data,size_t size) {
     Provision checked;
     return committed==ESP_OK && loadProvision(checked)==ProvisionStatus::ok &&
         checked.device==next.device && checked.baseUrl==next.baseUrl && checked.ca==next.ca &&
-        checked.token==next.token && checked.ssid==next.ssid && checked.password==next.password ?
+        checked.token==next.token && checked.ssid==next.ssid && checked.password==next.password &&
+        checked.hasFallback==next.hasFallback && checked.fallbackSsid==next.fallbackSsid &&
+        checked.fallbackPassword==next.fallbackPassword ?
         ProvisionStatus::ok : ProvisionStatus::storage_error;
 }
 #endif

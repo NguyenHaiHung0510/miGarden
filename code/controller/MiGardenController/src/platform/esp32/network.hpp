@@ -1,6 +1,7 @@
 #pragma once
 #include "platform.hpp"
 #include "../../core/sync_policy.hpp"
+#include "../../connectivity/wifi_policy.hpp"
 #include <atomic>
 #include <freertos/queue.h>
 
@@ -20,6 +21,8 @@ public:
     void submit(Controller&);
     void fence() { ++generation_; }
     const char* status() const;
+    unsigned wifiSlot()const{return wifiSlot_.load();}
+    const char* wifiPhase()const{return WifiPolicy::label(wifiPhase_.load());}
 #ifdef MG_LAB
     int wifiStatus() const { return wifiStatus_.load(); }
     unsigned disconnectReason() const { return disconnectReason_.load(); }
@@ -30,6 +33,9 @@ private:
     QueueHandle_t outbound_=nullptr, inbound_=nullptr;
     std::atomic<bool> wifi_{false};
     std::atomic<unsigned> status_{0};
+    std::atomic<unsigned> wifiSlot_{0};
+    std::atomic<WifiPolicy::Phase> wifiPhase_{WifiPolicy::Phase::ready};
+    std::atomic<uint32_t> disconnects_{0};
 #ifdef MG_LAB
     std::atomic<int> wifiStatus_{0};
     std::atomic<unsigned> disconnectReason_{0};

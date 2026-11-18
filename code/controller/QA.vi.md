@@ -15,6 +15,16 @@ kết quả USB bootstrap seed làm kết quả của candidate N01.
 
 ## Đủ 54 dòng Step 07
 
+Wi-Fi successor (A139/A140/A142): [wifi_tests.cpp](tests/wifi_tests.cpp) kiểm
+preferred-first, fallback sau15s, healthy sticky/no-secondary-warning,
+disconnect về preferred, both-down hữu hạn/backoff trần60s, legacy, paired
+fields/ASCII/length refusal→restore và START/STOP/lịch/deadline trong outage.
+[test_wifi_profile.py](tests/test_wifi_profile.py) kiểm cùng guard ở offline
+validator; current commissioner test dùng release hai mạng và LAB legacy để
+kiểm giữ nguyên bytes/NVS. Actual AP/hotspot, DHCP, disconnect, TLS và timing
+trên successor build là NOT_RUN trong lane builder. Mapping54 dòng cũ giữ
+nguyên ý nghĩa, không chuyển thành physical acceptance.
+
 Delta FD1–FD5/current-board tooling:
 
 | ID | Contract / test | Giới hạn |

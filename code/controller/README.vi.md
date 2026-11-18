@@ -80,18 +80,51 @@ LAB `DIAG` có thêm `wifi_status` (numeric SDK WiFi.status) và
 `disconnect_reason` (numeric reason từ event disconnect gần nhất, 0 nếu chưa
 có event). Hai số giúp phân biệt chưa thấy AP, auth và link timeout; chúng không
 chứng minh nguyên nhân cuối. Không SSID/password/token/BSSID/IP trong DIAG.
+`wifi_slot` là 1 (preferred), 2 (fallback) hoặc 0 (đang backoff/chưa thử);
+`wifi_phase` là READY/TRYING/CONNECTED/BACKOFF. Release cũng chỉ in slot/phase,
+không in mạng hoặc credential.
 
 Lệnh LAB `NETINFO` trả duy nhất `NETINFO <IPv4>` hoặc `NETINFO LINK_PENDING`, chỉ khi parent yêu cầu; giữ kết quả ở receipt riêng. Parent có thể chuẩn bị relay/firewall với luật mặc định đóng, lấy IP từ UART sau DHCP rồi chỉ mở cho địa chỉ đó. Firmware tự thử kết nối khi clock sẵn sàng, kể cả khi relay vẫn đóng.
 
 Firmware ghi đúng slot inactive đã xác minh, kiểm SHA input và SHA toàn bộ bytes đọc lại từ flash, rồi kiểm image bằng ESP-IDF trước khi chọn boot. Có marker N01 cho adapter tương thích; nguồn tin cho build ID/digest vẫn là manifest đã review ở host. Từ chối flash encryption/secure boot hoặc app đang pending verify; không đổi các cờ đó. Hai giây đầu có thể chưa hiện target trong INFO; app trì hoãn xác nhận rollback mặc định và chỉ xác nhận khi đã vào vòng điều khiển an toàn, serial đã hoạt động. Đây không xác nhận TLS, config, journal hoặc output vật lý; bootloader đang cài và rollback khi bootloop vẫn chưa test. Cần giữ ROM recovery đã được parent kiểm trước khi dùng unattended. Lỗi/lost receipt gần activation là unknown: ngừng writer, chờ thụ động marker, đối chiếu boot/slot/build/digest với giao dịch đã lưu trước khi bất kỳ retry. Sau timeout quiet/resync v1 giảm nhầm đuôi binary, không chứng minh chống được tail vô hạn; chỉ dùng sender stop-and-wait và không thêm writer khác.
 
-Provision cho parent giữ file JSON riêng: đúng các trường `device_id`, `wifi_ssid`, `wifi_password`, `base_url`, `device_token`, `ca_pem`. `base_url` là origin HTTPS DNS/IPv4 (có thể có port, không thêm path); CA PEM là trust root dùng cho origin, không có private key. Dùng UTF‑8 không BOM. Gửi cổng parent đã lease ở 115200:
+Provision cho parent giữ file JSON riêng: các trường `device_id`, `wifi_ssid`, `wifi_password`, `base_url`, `device_token`, `ca_pem`; có thể thêm đúng một cặp `wifi_fallback_ssid`, `wifi_fallback_password`. Mạng trong hai trường cũ là preferred; cặp optional là secondary. `base_url` là origin HTTPS DNS/IPv4 (có thể có port, không thêm path); CA PEM là trust root dùng cho origin, không có private key. Dùng UTF‑8 không BOM. Gửi cổng parent đã lease ở 115200:
 
 1. Gửi ASCII `PROVISION <số-byte>\n` (1..8.192), đợi đúng `PROVISION_READY`.
 2. Gửi đúng các byte file, không newline thêm/mix lệnh và không in file hoặc payload. Nếu lỗi/timeout, dừng writer, quan sát thụ động `RESYNC READY` khi có raw frame đang dở.
 3. `PROVISION_OK reboot_required=1` nghĩa blob đã commit và đọc kiểm trong NVS namespace LAB `mg-lab-v1`, key `profile-v1`. Sau đó lệnh `REBOOT` riêng. Fail trả mã chung. Chỉ đổi Wi‑Fi/password/token của đúng identity/origin/CA; không chuyển safety state sang server khác bằng provision.
 
 Release đọc blob riêng ở `mg-rel-v1/profile-v1` (NVS key `profile-v1`); không nhận file qua UART. Production trust root và thiết lập `fixture_verified:true` cần quy trình Owner đã kiểm mạch/fixture; ảnh release chưa có profile nào. Không tự provision production. TLS kiểm chain/name của API; riêng LAB IPAddress SAN được [Mbed TLS 3.6.6 hỗ trợ](https://github.com/Mbed-TLS/mbedtls/blob/v3.6.6/library/x509_crt.c#L2697-L2714). Device phải có clock qua SNTP trước TLS. HTTP không follow redirect; thực hiện retry 5/15/30/60 giây cộng jitter và Retry-After; lỗi xác thực/cấu hình dừng retry đến khi có can thiệp. Số đo TLS đúng/sai CA, SAN/IP, latency, heap và flash runtime chờ bench.
+
+### Hai mạng Wi-Fi được lưu sẵn
+
+Lúc offline, thử preferred tối đa15 giây rồi secondary tối đa15 giây nếu
+đã provision. Nếu vẫn offline, ngắt attempt và đợi5/10/20/40/60 giây (trần60),
+rồi bắt đầu vòng mới từ preferred. Profile cũ không có cặp optional vẫn dùng
+được; chỉ thử một mạng rồi backoff. Thời gian là elapsed monotonic trong task
+network; scheduler, START/STOP và output deadline tiếp tục ở task riêng.
+Không có vòng đợi kết nối hoặc quét AP trong control task.
+
+Mạng preferred là đường bình thường. Không có hotspot secondary thì không
+phát cảnh báo hoặc tìm nó khi preferred đang nối tốt. Khi đã nối secondary,
+giữ link đó cho tới khi mất link; không ép chuyển khi preferred xuất hiện lại.
+Lần reconnect sau mất link quay về preferred. Backoff reset sau kết nối tốt.
+Đây là thứ tự thử kết nối, không là chọn theo RSSI hoặc tự roaming.
+
+SSID 1..32 và passphrase đều là ASCII printable (space được phép,
+control/DEL/non-ASCII bị từ chối). Password rỗng giữ ý nghĩa open network
+của profile cũ; nếu có password thì 8..63 ký tự hoặc đúng64 ký tự hex.
+Cặp secondary phải đủ cả hai key và có SSID khác preferred theo exact bytes
+(có phân biệt case); null/empty SSID hoặc quá một secondary bị từ chối ở
+commissioning validator. Credential nằm trong blob private ban đầu, không
+hardcode, không lưu mỗi lần retry và không đổi journal/id/token/CA/wire.
+General USB profile replacement được hoãn; việc hỗ trợ hai mạng không cho
+phép commissioner ghi đè namespace hoặc LAB profile đang có.
+
+[wifi_tests.cpp](tests/wifi_tests.cpp) dùng đúng parser/policy của firmware và
+fake elapsed clock; [test_wifi_profile.py](tests/test_wifi_profile.py) kiểm
+validator offline cùng refusal→restore. Các test này không chứng minh AP thật,
+radio/DHCP hoặc device timing; Parent giữ lane thử hotspot thật.
 
 ### Simulator không thiết bị
 

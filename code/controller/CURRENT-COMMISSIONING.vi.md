@@ -52,6 +52,16 @@ và release cần `fixture_verified:true`. Identity đúng alphabet của app
 HTTPS DNS/IPv4 tương thích firmware (không userinfo/path/query/leading/trailing dot),
 CA PEM đơn có CA-basic-constraints/validity/keyCertSign khi có KeyUsage.
 LAB phải giữ đúng **bytes đã lưu**, không canonicalize rồi rewrite NVS.
+Hai key Wi-Fi cũ là preferred. Cặp optional
+`wifi_fallback_ssid, wifi_fallback_password` lưu secondary duy nhất:
+hoặc không có cả hai (legacy), hoặc đủ cả hai, khác preferred theo exact SSID.
+Cả hai mạng dùng SSID1..32 ASCII printable, password rỗng hoặc8..63 ASCII
+printable hoặc64 hex. Half-pair/null/duplicate/control/DEL/non-ASCII/quá dài
+bị từ chối. Khi preferred hoạt động, secondary không xuất hiện vẫn là normal.
+Xem [thứ tự kết nối và backoff](README.vi.md#hai-mạng-wi-fi-được-lưu-sẵn).
+Parent có thể tạo release JSON ban đầu chứa cả hai mạng; LAB plan phải match
+exact bytes LAB đang lưu, kể cả profile legacy một mạng. Không dùng plan này
+để thêm secondary vào profile LAB hiện hữu hoặc thay namespace đã commission.
 
 Parent cung cấp file private device binding:
 `{protocol,zone_id,binding_ref,device_id,token_hash,environment,app_ref}`.

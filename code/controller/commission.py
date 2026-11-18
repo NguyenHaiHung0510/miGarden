@@ -68,15 +68,23 @@ def profile_bytes(data: bytes, profile: str) -> bytes:
     need(len(data) <= 8192 and b"\0" not in data, "INVALID_PROFILE_SIZE")
     p = load_unique(data)
     required = {"device_id", "wifi_ssid", "wifi_password", "base_url", "device_token", "ca_pem"}
-    need(isinstance(p, dict) and required <= p.keys() and p.keys() <= required | {"fixture_verified"},
+    fallback = {"wifi_fallback_ssid", "wifi_fallback_password"}
+    need(isinstance(p, dict) and required <= p.keys() and p.keys() <= required | fallback | {"fixture_verified"},
          "INVALID_PROFILE_KEYS")
     for key in required:
         need(isinstance(p[key], str) and "\0" not in p[key], "INVALID_PROFILE_FIELD")
     need(bool(re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,127}", p["device_id"])), "INVALID_DEVICE_ID")
-    need(0 < len(p["wifi_ssid"].encode()) <= 32 and len(p["wifi_password"].encode()) <= 64, "INVALID_WIFI_SIZE")
-    pw = p["wifi_password"].encode()
-    need(not pw or 8 <= len(pw) < 64 or len(pw) == 64 and bool(re.fullmatch(rb"[0-9a-fA-F]{64}", pw)),
-         "INVALID_WIFI_PASSWORD")
+    def wifi(ssid, password):
+        need(isinstance(ssid, str) and isinstance(password, str), "INVALID_WIFI_FIELD")
+        need(all(32 <= ord(c) <= 126 for c in ssid + password), "INVALID_WIFI_ASCII")
+        need(0 < len(ssid) <= 32 and len(password) <= 64, "INVALID_WIFI_SIZE")
+        need(not password or 8 <= len(password) < 64 or len(password) == 64 and
+             bool(re.fullmatch("[0-9a-fA-F]{64}", password)), "INVALID_WIFI_PASSWORD")
+    wifi(p["wifi_ssid"], p["wifi_password"])
+    need(not (p.keys() & fallback) or fallback <= p.keys(), "WIFI_FALLBACK_PAIR_REQUIRED")
+    if fallback <= p.keys():
+        wifi(p["wifi_fallback_ssid"], p["wifi_fallback_password"])
+        need(p["wifi_fallback_ssid"] != p["wifi_ssid"], "WIFI_DUPLICATE_SSID")
     url = urlsplit(p["base_url"])
     try:
         port = url.port
