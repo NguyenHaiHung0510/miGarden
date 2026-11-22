@@ -82,8 +82,10 @@ The server gates before opening a DB session. A successful durable exchange
 sets the six-hour reconciliation deadline. Authenticated human activity keeps
 a five-minute window; actual watering and a newly committed terminal report
 keep a ten-minute tail. Repeated OFF snapshots or health never renew it.
-Cold hydrate is single flight. Failed full attempts wait 5 s, 30 s, then six
-hours; genuine work does not bypass that hard fault bound. Every permitted
+Cold hydrate is single flight. Failed authenticated exchanges retry at 5, 15,
+30, then up to 60 seconds. The six-hour deadline applies to normal idle
+reconciliation. A routing hint that has yet to recognize the credential receives
+a transient response until the next bounded database lookup. Every permitted
 full exchange checks credentials/revocation in the database and only publishes
 ACKs after the outer commit. Process state schedules work and grants no rights.
 Multiple server processes each have a bounded gate; this is not a shared lease.
@@ -98,7 +100,7 @@ A lost outer commit still cannot ACK. At idle the ordinary six-hour exchange
 carries a sample, so gaps between samples cannot establish a crash or outage.
 
 [Extended schema](quiet-health.schema.json) and [compatibility vectors](quiet-health.vectors.json)
-supplement the unchanged legacy schema/vectors. The app carries exact mirrors
+supplement the unchanged legacy schema/vectors. The app carries the same test vectors
 under `backend/tests/fixtures/migarden/`. Apply additive schema, release a
 backward-compatible app, then coordinate the separately authorized app-only
 firmware flash. App rollback keeps 0023/data; production migration downgrade
