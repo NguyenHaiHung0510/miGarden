@@ -16,11 +16,12 @@ public:
         return now>=next_ || (!failed_ && !serverDelay_ && change!=sent_);
     }
     void sent(uint64_t c) { sent_=c; }
-    void ok(Ms now,bool active,bool immediate,int retryAfter,int headerRetry=-1,bool idleHint=false) {
+    void ok(Ms now,bool active,bool immediate,int retryAfter,int headerRetry=-1,bool idleHint=false,bool negotiated=false) {
         failed_=0;
         serverDelay_=headerRetry>0||(retryAfter>0&&!idleHint);
         const auto delay=std::max(headerRetry>0?headerRetry:0,serverDelay_&&retryAfter>0?retryAfter:0);
         next_=now+(serverDelay_ ? Ms(delay)*second : immediate ? 0 :
+                   negotiated ? (active||retryAfter==2?2:5)*second :
                    idleHint&&retryAfter==2&&!active ? 2*second : (active?5:15)*second);
     }
     void transient(Ms now,uint32_t random,int retryAfter=-1) {

@@ -3,6 +3,7 @@
 #include <esp_http_client.h>
 #include <esp_log.h>
 #include <esp_random.h>
+#include <esp_system.h>
 #include <esp_sntp.h>
 #include <esp_tls.h>
 #include <memory>
@@ -81,6 +82,7 @@ Result exchangeHttps(const Provision& profile,const std::string& payload) {
     const bool configured=esp_http_client_set_header(h,"Authorization",auth.c_str())==ESP_OK &&
         esp_http_client_set_header(h,"Content-Type","application/json")==ESP_OK &&
         esp_http_client_set_header(h,"Accept","application/json")==ESP_OK &&
+        esp_http_client_set_header(h,"X-MiGarden-Extension","quiet-health-v1")==ESP_OK &&
         esp_http_client_set_header(h,"Connection","close")==ESP_OK &&
         esp_http_client_set_post_field(h,payload.data(),payload.size())==ESP_OK;
     const auto code=configured?esp_http_client_perform(h):ESP_FAIL;
@@ -97,6 +99,7 @@ Result exchangeHttps(const Provision& profile,const std::string& payload) {
 struct Network::Job {
     std::unique_ptr<Reply> reply;
     std::string request;
+    bool health=false;
 };
 bool Network::begin(Provision&& p) {
     provision_=std::move(p);
@@ -163,9 +166,14 @@ void Network::work() {
         if (connected) {
             auto r=exchangeHttps(provision_,job->request);
             reply->headerRetry=r.retry;
-            if (r.status==200) {
+            if (r.status==200 || r.status==202) {
                 reply->accepted=decodeExchange(r.body,reply->exchange)==WireError::none;
+                if (reply->accepted && ((r.status==202)!=reply->exchange.waiting)) reply->accepted=false;
                 status_=reply->accepted?idle:wire_error;
+            } else if (r.status==422 && job->health) {
+                // The old strict v1 server rejects the optional root. Retry the
+                // exact control/report payload without health; no ACK was given.
+                reply->downgraded=true; status_=idle;
             } else if (r.status==401 || r.status==403) status_=auth_error;
             else if (r.status==409) status_=serial_conflict;
             else if (r.tls) status_=tls_error;
@@ -185,14 +193,25 @@ Network::Reply* Network::take() {
     return p;
 }
 void Network::after(const Reply& r,Controller& c) {
+    if (r.downgraded) {
+        quietHealth_=false;
+        policy_.ok(monoNow(),!c.idle(),true,-1,r.headerRetry);
+        return;
+    }
     if (r.accepted) {
         // If old backlog remains or a candidate just caused a durable receipt,
         // follow immediately; a stable duplicate/no-ACK reply uses normal cadence.
         const auto& x=r.exchange;
+        if (x.waiting) {
+            policy_.ok(monoNow(),false,c.change()!=lastSubmitted_,5,r.headerRetry,true,true);
+            return; // not authenticated freshness, no controller input or ACK
+        }
+        quietHealth_=x.quietHealth;
         const bool hint=foregroundHint(x,r.idleRequest,r.sent.empty());
         const bool progress=(!x.acked.empty()&&c.queued())||c.change()!=lastSubmitted_;
         const int delay=x.retryAfter==2&&!hint?-1:x.retryAfter;
-        policy_.ok(monoNow(),!c.idle(),progress,delay,r.headerRetry,hint);
+        const bool soft=hint||(x.quietHealth&&(x.retryAfter<0||x.retryAfter==2));
+        policy_.ok(monoNow(),!c.idle(),progress,delay,r.headerRetry,soft,quietHealth_);
     } else if (status_>=auth_error) policy_.permanent();
     else policy_.transient(monoNow(),esp_random(),std::max(r.exchange.retryAfter,r.headerRetry));
 }
@@ -209,7 +228,16 @@ void Network::submit(Controller& c) {
     if (!job || !job->reply) { status_=queue_error; policy_.permanent(); return; }
     const auto records=c.reports();
     job->reply->idleRequest=c.idle()&&records.empty()&&!c.ledger().pending.receivedSequence;
-    if (!encodeExchange(provision_.device,c.bootId(),c.snapshot(),records,job->request)) {
+    Health health;
+    health.build=buildId; health.uptime=s.time.mono/second;
+    health.freeHeap=ESP.getFreeHeap(); health.minimumHeap=ESP.getMinFreeHeap();
+    health.resetReason=unsigned(esp_reset_reason()); health.pending=c.queued();
+    health.gaps=c.evidenceGaps(); health.wifi=wifiPhase();
+    const auto current=status_.load();
+    health.sync=current==idle?"OK":current==transient_error?"RETRY":
+        current==wifi_pending?"WIFI_PENDING":current==clock_pending?"CLOCK_PENDING":"UNKNOWN";
+    job->health=quietHealth_;
+    if (!encodeExchange(provision_.device,c.bootId(),s,records,job->request,job->health?&health:nullptr)) {
         status_=wire_error; policy_.permanent(); return;
     }
     for (const auto& e:records) job->reply->sent.push_back(eventId(e));

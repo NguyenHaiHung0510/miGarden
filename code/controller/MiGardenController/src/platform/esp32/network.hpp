@@ -15,6 +15,7 @@ public:
         std::vector<EventId> sent;
         bool accepted=false;
         bool idleRequest=false;
+        bool downgraded=false;
         uint32_t generation=0;
         int32_t headerRetry=-1;
     };
@@ -43,6 +44,7 @@ private:
     std::atomic<unsigned> disconnectReason_{0};
 #endif
     bool inFlight_=false;
+    bool quietHealth_=false;
     uint32_t generation_=0;
     uint64_t lastSubmitted_=0;
     SyncPolicy policy_;

@@ -697,6 +697,33 @@ void syncCadence() {
     CHECK(!s.due(30000,false,2) && !s.due(30001,true,2));
     s.transient(90303,1000); CHECK(s.next()==151303);
     s.permanent(); CHECK(!s.due(200000,true,3));
+    // Negotiated wait is soft; real local/backlog/context changes cut it short.
+    SyncPolicy n;
+    CHECK(n.due(0,true,1)); n.sent(1);
+    n.ok(0,false,false,5,-1,true,true);
+    CHECK(n.next()==5000 && !n.due(4999,true,1) && n.due(1,true,2));
+    n.sent(2); n.ok(10,true,false,2,-1,true,true); CHECK(n.next()==2010);
+    n.ok(20,false,false,2,30,true,true);
+    CHECK(n.next()==30020 && !n.due(21,true,3)); // hard header cannot be bypassed
+    n.ok(30,true,false,30,-1,false,true);
+    CHECK(n.next()==30030 && !n.due(31,true,3)); // poisoned report retry is hard
+    n.ok(40,false,false,-1); CHECK(n.next()==15040); // old peer rollback
+    for(Ms hour=1;hour<=6;++hour) {
+        n.ok(hour*3600*second,false,false,5,-1,true,true);
+        CHECK(n.next()==hour*3600*second+5000);
+    }
+    Exchange wait;
+    CHECK(decodeExchange(R"({"protocol":"migarden.wait.v1","retry_after_seconds":5})",wait)==WireError::none);
+    CHECK(wait.waiting&&wait.serverTime==none&&wait.acked.empty()&&wait.grants.empty());
+    CHECK(decodeExchange(R"({"protocol":"migarden.wait.v1","retry_after_seconds":5,"acked_event_ids":["fake"]})",wait)==WireError::shape);
+    Fixture f;
+    Health h; h.build="synthetic-n03n04"; h.uptime=999; h.freeHeap=12345; h.minimumHeap=10000;
+    std::string payload;
+    CHECK(encodeExchange(id("synthetic-device"),f.c->bootId(),f.c->snapshot(),{},payload,&h));
+    JsonDocument doc; CHECK(!deserializeJson(doc,payload));
+    CHECK(doc["health"]["build_id"]=="synthetic-n03n04" && doc["health"]["uptime_seconds"]==999);
+    CHECK(encodeExchange(id("synthetic-device"),f.c->bootId(),f.c->snapshot(),{},payload));
+    CHECK(!deserializeJson(doc,payload) && doc["health"].isNull());
 }
 void timeCodec() {
     char t[32]; Ms v=0;

@@ -58,3 +58,48 @@ can wake immediately; a `Retry-After` HTTP header and error backoff remain
 hard waits. Without the hint the base is 15 s idle / 5 s active. First page
 open can still wait the remainder of the previous idle interval; no
 physical latency guarantee follows.
+
+## Negotiated quiet and optional health (N03/N04)
+
+The v1 request/response and persistent journal remain the rollback contract.
+New firmware offers `X-MiGarden-Extension: quiet-health-v1` with an ordinary v1
+body first. Only a committed authenticated 200 response containing
+`extension: quiet-health-v1` enables the optional `health` root. An old server
+ignores the offer. If rollback reaches an old strict server while health is
+enabled, its 422 makes the sender retry the unchanged control/reports without
+health and use legacy cadence. No report is acknowledged by that rejection.
+
+For an offered request the new server can return HTTP 202 with exactly
+`{"protocol":"migarden.wait.v1","retry_after_seconds":5}`. This is only a
+soft transport wait: no server time, identity, last-seen proof, config, command,
+grant or ACK. The controller does not receive this object as an exchange input.
+It keeps its local clock, scheduler, journal and safety gates. Local events,
+backlog and context changes interrupt only soft waiting; HTTP Retry-After and
+transient/error backoff stay hard. Ordinary negotiated idle transport is 5 s;
+full foreground/active exchange uses a 2 s hint. Legacy remains 15 s/5 s.
+
+The server gates before opening a DB session. A successful durable exchange
+sets the six-hour reconciliation deadline. Authenticated human activity keeps
+a five-minute window; actual watering and a newly committed terminal report
+keep a ten-minute tail. Repeated OFF snapshots or health never renew it.
+Cold hydrate is single flight. Failed full attempts wait 5 s, 30 s, then six
+hours; genuine work does not bypass that hard fault bound. Every permitted
+full exchange checks credentials/revocation in the database and only publishes
+ACKs after the outer commit. Process state schedules work and grants no rights.
+Multiple server processes each have a bounded gate; this is not a shared lease.
+
+Optional health contains bounded build/boot, uptime, reset code, free/min heap,
+filtered connectivity status, pending reports and evidence gaps, with source
+clock quality and server receive time. It rides existing eligible exchanges,
+creates no health wake/timer and never controls admission or accounting.
+The app's additive 0023 table allows one durable row per server UTC hour/Zone;
+health validation/savepoint failure leaves the main report contract intact.
+A lost outer commit still cannot ACK. At idle the ordinary six-hour exchange
+carries a sample, so gaps between samples cannot establish a crash or outage.
+
+[Extended schema](quiet-health.schema.json) and [compatibility vectors](quiet-health.vectors.json)
+supplement the unchanged legacy schema/vectors. The app carries exact mirrors
+under `backend/tests/fixtures/migarden/`. Apply additive schema, release a
+backward-compatible app, then coordinate the separately authorized app-only
+firmware flash. App rollback keeps 0023/data; production migration downgrade
+is not a rollback step. Host/build proof does not establish device or flow.

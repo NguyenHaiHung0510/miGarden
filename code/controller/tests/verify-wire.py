@@ -24,6 +24,12 @@ def run(sim: Path) -> None:
     for name, v in vectors.items():
         assert oracle.is_valid(v["document"]) == v["valid"], name
     print(f"PASS schema vectors {len(vectors)}/{len(vectors)}")
+    extended = Draft202012Validator(read_json(WIRE / "quiet-health.schema.json"), format_checker=FormatChecker())
+    extended_vectors = read_json(WIRE / "quiet-health.vectors.json")
+    for v in extended_vectors:
+        assert extended.is_valid(v["document"]) == v["valid"], v["name"]
+        assert oracle.is_valid(v["document"]) == v["legacy_valid"], v["name"] + " legacy"
+    print(f"PASS quiet-health compatibility vectors {len(extended_vectors)}/{len(extended_vectors)}")
     docs = {k: v["document"] for k, v in vectors.items() if v["valid"]}
 
     with subprocess.Popen([sim], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
