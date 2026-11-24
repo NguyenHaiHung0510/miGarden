@@ -1,6 +1,6 @@
 # miGarden — Bước 10: Triển khai firmware và module microSched
 
-17/11/2026 · Asia/Saigon. **Thiết kế để triển khai, chưa phải kết quả đã build hoặc nghiệm thu.** Đích bàn giao là firmware nạp được vào ESP32 và miGarden dùng được trong microSched cho **đủ 5 use case** của [02](02-process-specification.vi.md). Hai phần dùng chung một phiên bản hợp đồng giao tiếp, được phát triển song song sau khi khóa hợp đồng, rồi nghiệm thu qua từng luồng hoàn chỉnh.
+Thiết kế gốc ngày 17/11/2026, giờ Việt Nam. Khi phát hành v1.0.0, controller và module web của Khu A đã tích hợp theo wire v1. [Mốc tích hợp](../releases/v1.0.0.vi.md) ghi source, build đã nạp và phạm vi đã kiểm. Các mục bên dưới giữ thiết kế của năm use case trong [02](02-process-specification.vi.md) và điều kiện nghiệm thu riêng của từng luồng.
 
 **N01 · 18/11:** [Wire v1 Zone A](../../contracts/zone-a/v1/README.md) ghi hợp đồng đã khóa cho batch và [gói firmware](../../code/controller/README.vi.md) ghi cách build, chạy host và kiểm trên bo. Các mô tả “đề xuất” dưới đây giữ ngữ cảnh thiết kế; kết quả phần mềm, board, tủ và nước vẫn được xác nhận riêng.
 

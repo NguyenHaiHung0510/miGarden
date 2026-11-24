@@ -66,6 +66,10 @@ Device rollback must demonstrate persistence/schema compatibility and safe physi
 
 ## Integration and release
 
+The [v1.0.0 record](releases/v1.0.0.vi.md) pins the Zone A firmware source, the application revision at cutover and the host test run. The first boot with the load disconnected and the first health sample are separate from the watering demonstrations. The next field work follows the contained-water and field procedure once the remaining water line is installed.
+
+Record a fresh app revision, firmware source, build identifier and observations for any new rollout. The controller reports health for diagnosis. An authenticated health sample alone supplies neither an output position nor evidence of flow.
+
 miGarden system image/scene and microSched adapter release independently. Bind both source refs, command/schema/config/policy/scene versions and compatibility results. Adapter migrations and required checks follow the microSched repository; deployment alone does not apply or prove a schema migration. Backup/redeploy must not replay pending OPEN.
 
 Retain actual commands, environment, outputs and limitations with each release. Use current 01–04 traceability to plan affected checks; the old [specification acceptance list](specification.md#18-test-acceptance-và-traceability) is historical reference, not the new release oracle. Follow [content rules](representation.md#public-content-and-private-sources) for publishable artifacts. Documentation/fixture checks do not grant field acceptance.

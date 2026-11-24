@@ -50,6 +50,8 @@ timing bound tại thiết bị và tủ vẫn UNVERIFIED.
 
 ### Build và test host
 
+Xem [v1.0.0](../../docs/releases/v1.0.0.vi.md) để đối chiếu source firmware hiện trường, build ID, revision microSched và lượt host CI. Khi chạy simulator, dùng hợp đồng và vectors từ cùng cây source.
+
 Dùng PowerShell, Arduino CLI 1.6.0, Arduino-ESP32 3.3.12, GNU g++17 trở lên (đã test g++ 15.1), Python với `jsonschema` cho kiểm shape. Dependency [ArduinoJson 7.4.3](https://github.com/bblanchon/ArduinoJson/releases/tag/v7.4.3) lấy từ tag, script xác nhận commit `77771d3c07668e01d8f52acb03910c1110bb373f`.
 
 ```powershell

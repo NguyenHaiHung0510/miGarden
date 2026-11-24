@@ -21,6 +21,8 @@
 | 09 | [Device and Component Integration](09-device-and-component-integration.vi.md) — từ nguồn tới đầu chờ, [đồ thị lắp đặt](09-device-and-component-integration.vi.md#installation-graph) | Bản thiết kế tích hợp để duyệt; chưa nghiệm thu |
 | 10 | [Application Development](10-application-development.vi.md) — stack/module, luồng bàn giao, giao thức, QA và phát hành | Đã duyệt hướng chia pha/kiến trúc và UI C; firmware candidate N01 chờ nghiệm thu tích hợp |
 
+Mốc [v1.0.0](../releases/v1.0.0.vi.md) ghi các phần đã triển khai tại Khu A, source firmware đã nạp và app tương thích. Đường ống dọc lan can tới chậu nằm trong đợt lắp tiếp theo.
+
 [Bảy cảnh walkthrough offline](walkthrough/index.html) có dữ liệu synthetic, thẻ nguồn, SVG và PNG. Có thể mở trực tiếp file HTML sau khi clone; không cần server, tài khoản, Internet hoặc thư mục riêng. [Hướng dẫn và nguồn hình](walkthrough/README.vi.md) giải thích cách đọc và dựng lại dữ liệu. Đây là ví dụ về thiết kế, khác [viewer model-v0](../../viewer/README.md) đang biểu diễn hiện trường.
 
 ## Phạm vi chung và truy vết thay đổi
