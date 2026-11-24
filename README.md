@@ -4,8 +4,11 @@ miGarden là hệ tưới cây mình làm cho ban công. Mình đặt lịch, xe
 
 Phần IoT của Khu A đã hoàn thành. Nhà mình đang sửa, nên việc còn lại là đi ống nước dọc lan can tới các chậu.
 
+**Báo cáo môn IoT và ứng dụng** · [PDF](bao-cao-migarden.pdf) · [DOCX](bao-cao-migarden.docx)
+
 ## Xem Khu A hoạt động
 
+- [Xem giới thiệu đầy đủ trên microSched](https://microsched.fly.dev/home?lang=vi&view=migarden)
 - [Tưới trực tiếp từ app điện thoại](https://youtube.com/shorts/I9efHbQY3Gw)
 - [Giới thiệu tổng quan hệ thống đã lắp](https://youtube.com/shorts/FNwqNWv7YZo)
 
