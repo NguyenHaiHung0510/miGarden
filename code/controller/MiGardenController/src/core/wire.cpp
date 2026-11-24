@@ -150,6 +150,12 @@ WireError decodeExchange(std::string_view body,Exchange& result) {
         if (body[i]!=' ' && body[i]!='\t' && body[i]!='\r' && body[i]!='\n') return WireError::syntax;
     const auto root=doc.as<Obj>();
     if (root.isNull()) return WireError::shape;
+    if (equal(root["protocol"],"migarden.wait.v1")) {
+        if (root.size()!=2 || !root["retry_after_seconds"].is<int>() ||
+            root["retry_after_seconds"].as<int>()!=5) return WireError::shape;
+        Exchange x; x.waiting=true; x.retryAfter=5;
+        result=std::move(x); return WireError::none;
+    }
     if (!equal(root["protocol"],protocol)) return WireError::protocol_version;
     for (auto key:{"desired_config","retry_after_seconds"}) if (!root[key].is<JsonVariantConst>()) return WireError::shape;
     const auto cs=root["candidates"].as<JsonArrayConst>(), gs=root["grants"].as<JsonArrayConst>(),
@@ -158,6 +164,7 @@ WireError decodeExchange(std::string_view body,Exchange& result) {
     if (cs.size()>remoteBatchMax || gs.size()>remoteBatchMax || ss.size()>remoteBatchMax || ack.size()>batchMax)
         return WireError::bounds;
     Exchange x;
+    x.quietHealth=equal(root["extension"],"quiet-health-v1");
     const bool timing=utc(root["server_time"],x.serverTime);
     // A valid STOP can still close even when a different action or desired bundle
     // is malformed. Malformed OPEN data has no path into the arbiter.
@@ -180,7 +187,7 @@ WireError decodeExchange(std::string_view body,Exchange& result) {
     return WireError::none;
 }
 
-bool encodeExchange(const Id& device,const BootId& boot,const Snapshot& s,const std::vector<Event>& reports,std::string& out) {
+bool encodeExchange(const Id& device,const BootId& boot,const Snapshot& s,const std::vector<Event>& reports,std::string& out,const Health* health) {
     if (!visible(device.view()) || !visible(boot.view()) || reports.size()>batchMax) return false;
     JsonDocument doc;
     doc["protocol"]=protocol; doc["device_id"]=device.view(); doc["boot_id"]=boot.view();
@@ -188,6 +195,17 @@ bool encodeExchange(const Id& device,const BootId& boot,const Snapshot& s,const 
     snapshot(doc["snapshot"].to<JsonObject>(),s);
     auto a=doc["reports"].to<JsonArray>();
     for (auto& e:reports) event(a.add<JsonObject>(),e);
+    if (health) {
+        auto h=doc["health"].to<JsonObject>();
+        h["build_id"]=health->build; h["boot_id"]=boot.view();
+        putUtc(h["sampled_at"],s.time.usable()?s.time.wall:none);
+        h["time_quality"]=label(s.time.usable()?s.time.quality:Quality::unknown);
+        h["uptime_seconds"]=health->uptime;
+        h["reset_reason"]=health->resetReason;
+        h["free_heap"]=health->freeHeap; h["minimum_heap"]=health->minimumHeap;
+        h["wifi_phase"]=health->wifi; h["sync_status"]=health->sync;
+        h["pending_reports"]=health->pending; h["evidence_gaps"]=health->gaps;
+    }
     const size_t n=measureJson(doc);
     if (doc.overflowed() || n>requestBytes) return false;
     out.clear(); out.reserve(n);

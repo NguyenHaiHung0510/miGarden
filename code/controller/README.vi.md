@@ -1,5 +1,12 @@
 # MiGardenController · Zone A v1
 
+N03/N04 bổ sung transport thương lượng `quiet-health-v1` và health tùy chọn;
+[wire](../../contracts/zone-a/v1/README.md#negotiated-quiet-and-optional-health-n03n04)
+giữ đầy đủ handshake, wait, retry hữu hạn và rollback. Peer cũ vẫn dùng v1 cũ.
+Nhịp mới là 5 giây hỏi Fly khi nhàn, hint 2 giây khi foreground/active; wait
+không phải báo cáo xác thực hay ACK. Health chỉ đi kèm exchange, không đổi
+arbiter/journal/partition/pin/limits. Build app-only chưa phải nghiệm thu bo.
+
 Đây là firmware Zone A và simulator chạy cùng lõi C++17. LAB dùng output **ảo** để kiểm logic/network trên bo USB. Release dùng GPIO27 active HIGH, START IO33 và STOP IO32 active LOW theo [Step 09](../../docs/design/09-device-and-component-integration.vi.md#buttons). Cả hai dùng [wire v1](../../contracts/zone-a/v1/README.md). Việc build hoặc chạy LAB chưa chứng minh mạch, van hay dòng nước. [Ma trận QA](QA.vi.md) chỉ rõ phần đã kiểm ở host và phần còn phải chạy.
 
 Nếu nút, lịch và web cùng muốn bắt đầu, chúng dùng cùng phiên duy nhất và cùng sổ giới hạn. STOP đi trước; START đến lúc bận hoặc có mặt cùng STOP bị từ chối. Nút mặc định 900 giây, một lượt tối đa 1.800 giây, tổng tối đa 7.200 giây trong bất kỳ 10.800 giây nào. Ba giá trị đầu có thể chỉnh trong một bundle; cửa sổ giữ nguyên. Trước bundle đầu tiên, thiết bị luôn đóng. Không kèm lịch bật sẵn.

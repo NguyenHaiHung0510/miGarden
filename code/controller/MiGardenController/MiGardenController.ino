@@ -69,7 +69,7 @@ void loop() {
     bool wasBusy=false;
     const bool start=output.startEdge(wasBusy);
     std::unique_ptr<Network::Reply> in(network.take());
-    if (in && in->accepted) controller->tick(start,wasBusy,&in->exchange,in->sent);
+    if (in && in->accepted && !in->exchange.waiting) controller->tick(start,wasBusy,&in->exchange,in->sent);
     else controller->tick(start,wasBusy);
     if (in) network.after(*in,*controller);
     network.submit(*controller);

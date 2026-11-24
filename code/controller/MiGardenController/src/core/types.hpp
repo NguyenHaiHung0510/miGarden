@@ -173,6 +173,7 @@ struct Snapshot {
 };
 struct Exchange {
     bool hasConfig = false, invalidConfig = false;
+    bool quietHealth = false, waiting = false;
     Config config;
     Ms serverTime = none; // transport provenance only; never sets controller clock
     std::vector<Intent> candidates;
