@@ -61,6 +61,8 @@ physical latency guarantee follows.
 
 ## Negotiated quiet and optional health (N03/N04)
 
+The [v1.0.0 compatibility record](../../../docs/releases/v1.0.0.vi.md) links the controller source and the app revision observed at cutover. Use a matching wire revision and run both sides of the exchange when qualifying a new pair.
+
 The v1 request/response and persistent journal remain the rollback contract.
 New firmware offers `X-MiGarden-Extension: quiet-health-v1` with an ordinary v1
 body first. Only a committed authenticated 200 response containing
